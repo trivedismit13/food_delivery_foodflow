@@ -1,0 +1,10 @@
+CREATE UNIQUE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_restaurants_city ON restaurants(city);
+CREATE INDEX idx_restaurants_cuisine ON restaurants(cuisine);
+CREATE INDEX idx_menu_items_restaurant ON menu_items(restaurant_id);
+CREATE INDEX idx_menu_items_category ON menu_items(category);
+CREATE INDEX idx_orders_user ON orders(user_id);
+CREATE INDEX idx_orders_restaurant ON orders(restaurant_id);
+CREATE INDEX idx_orders_date ON orders(order_date);
+CREATE UNIQUE INDEX idx_payments_order ON payments(order_id);
+CREATE INDEX idx_ratings_restaurant ON ratings(restaurant_id);

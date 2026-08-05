@@ -1,0 +1,117 @@
+package com.foodflow.controller;
+
+import com.foodflow.dto.request.*;
+import com.foodflow.dto.response.*;
+import com.foodflow.model.FoodDrop;
+import com.foodflow.service.DropService;
+import com.foodflow.service.DropOrderService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+import com.foodflow.security.UserDetailsImpl;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/drops")
+@RequiredArgsConstructor
+public class DropController {
+
+    private final DropService dropService;
+    private final DropOrderService dropOrderService;
+
+    // --- Creator Endpoints ---
+    
+    @PostMapping
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<ApiResponse<FoodDropResponse>> createDrop(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @Valid @RequestBody CreateDropRequest request) {
+        FoodDropResponse drop = dropService.createDrop(userDetails.getId(), request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created(drop, "Drop created"));
+    }
+
+    @PutMapping("/{dropId}")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<ApiResponse<FoodDropResponse>> updateDrop(
+            @PathVariable Long dropId,
+            @Valid @RequestBody UpdateDropRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(dropService.updateDrop(dropId, request)));
+    }
+
+    @PutMapping("/{dropId}/status")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<ApiResponse<FoodDropResponse>> updateDropStatus(
+            @PathVariable Long dropId,
+            @RequestParam FoodDrop.DropStatus status) {
+        return ResponseEntity.ok(ApiResponse.success(dropService.updateDropStatus(dropId, status)));
+    }
+
+    @PostMapping("/{dropId}/items")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<Void> addItemToDrop(
+            @PathVariable Long dropId,
+            @Valid @RequestBody AddDropItemRequest request) {
+        dropService.addItemToDrop(dropId, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{dropId}/items/{itemId}")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<Void> removeItemFromDrop(
+            @PathVariable Long dropId,
+            @PathVariable Long itemId) {
+        dropService.removeItemFromDrop(dropId, itemId);
+        return ResponseEntity.ok().build();
+    }
+
+    // --- Customer/Discovery Endpoints ---
+    
+    @GetMapping
+    public ResponseEntity<ApiResponse<org.springframework.data.domain.Page<FoodDropResponse>>> getActiveDropsFeed(
+            @RequestParam(required = false) Long cityId,
+            @RequestParam(required = false) Double lat,
+            @RequestParam(required = false) Double lng,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String date,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String query,
+            @org.springframework.data.web.PageableDefault(size = 20) org.springframework.data.domain.Pageable pageable) {
+        
+        org.springframework.data.domain.Page<FoodDropResponse> drops = dropService.getActiveDropsFeed(cityId, lat, lng, type, date, sortBy, query, pageable);
+        return ResponseEntity.ok(ApiResponse.success(drops));
+    }
+
+    @GetMapping("/following")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<List<FoodDropResponse>>> getFollowedCreatorDrops(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(ApiResponse.success(dropService.getFollowedCreatorDrops(userDetails.getId())));
+    }
+
+    @GetMapping("/{dropId}")
+    public ResponseEntity<ApiResponse<FoodDropResponse>> getDropById(@PathVariable Long dropId) {
+        return ResponseEntity.ok(ApiResponse.success(dropService.getDropById(dropId)));
+    }
+
+    @GetMapping("/creator/{creatorId}")
+    public ResponseEntity<ApiResponse<List<FoodDropResponse>>> getCreatorDrops(@PathVariable Long creatorId) {
+        return ResponseEntity.ok(ApiResponse.success(dropService.getCreatorDrops(creatorId, null)));
+    }
+
+    // --- Order Placement ---
+    
+    @PostMapping("/{dropId}/orders")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('OWNER')")
+    public ResponseEntity<ApiResponse<OrderResponse>> placeDropOrder(
+            @PathVariable Long dropId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @Valid @RequestBody PlaceDropOrderRequest request) {
+        request.setDropId(dropId);
+        return ResponseEntity.ok(ApiResponse.success(dropOrderService.placeDropOrder(userDetails.getId(), request)));
+    }
+}

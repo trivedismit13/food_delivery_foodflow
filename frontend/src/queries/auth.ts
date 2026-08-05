@@ -1,0 +1,113 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
+import { apiClient } from '@/lib/api'
+import { handleApiError } from '@/lib/errorHandler'
+import { useAuthStore } from '@/store/authStore'
+import type { AuthResponse, LoginRequest, RegisterRequest } from '@/types/api'
+
+export function useLogin() {
+  const { setAuth } = useAuthStore()
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  
+  return useMutation({
+    mutationFn: async (credentials: LoginRequest) => {
+      // apiClient interceptor already unwraps ApiResponse<AuthResponse>
+      // So response.data is AuthResponse directly
+      const response = await apiClient.post<AuthResponse>('/auth/login', credentials)
+      return response.data
+    },
+    
+    onSuccess: (authResponse) => {
+      // Store auth state (token goes to localStorage via persist middleware)
+      setAuth(authResponse)
+      
+      // Clear any cached queries from previous session
+      queryClient.clear()
+      
+      // Role-based redirect
+      if (authResponse.role === 'OWNER' || authResponse.role === 'ADMIN') {
+        navigate('/dashboard/creator')
+      } else {
+        // Check if there's a redirect URL in query params
+        const params = new URLSearchParams(window.location.search)
+        const redirectTo = params.get('redirect')
+        navigate(redirectTo || '/')
+      }
+      
+      toast.success(`Welcome back, ${authResponse.name.split(' ')[0]}!`)
+    },
+    
+    onError: (error) => {
+      handleApiError(error)
+    },
+  })
+}
+
+export function useRegister() {
+  const { setAuth } = useAuthStore()
+  const navigate = useNavigate()
+  return useMutation({
+    mutationFn: async (userData: RegisterRequest) => {
+      const response = await apiClient.post<AuthResponse>('/auth/register', userData)
+      return response.data
+    },
+    onSuccess: (authResponse) => {
+      setAuth(authResponse)
+      navigate('/')
+      toast.success(`Welcome to FoodFlow, ${authResponse.name.split(' ')[0]}!`)
+    },
+    onError: (error) => {
+      handleApiError(error)
+    }
+  })
+}
+
+export function useGoogleAuth() {
+  const { setAuth } = useAuthStore()
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  
+  return useMutation({
+    mutationFn: async (credentials: { googleToken: string }) => {
+      const response = await apiClient.post<AuthResponse>('/auth/google', credentials)
+      return response.data
+    },
+    onSuccess: (authResponse) => {
+      setAuth(authResponse)
+      queryClient.clear()
+      
+      if (authResponse.role === 'OWNER' || authResponse.role === 'ADMIN') {
+        navigate('/dashboard/creator')
+      } else {
+        const params = new URLSearchParams(window.location.search)
+        const redirectTo = params.get('redirect')
+        navigate(redirectTo || '/')
+      }
+      toast.success(`Signed in with Google! Welcome, ${authResponse.name.split(' ')[0]}!`)
+    },
+    onError: (error) => {
+      handleApiError(error)
+    }
+  })
+}
+
+export function useRegisterCreator() {
+  const { setAuth } = useAuthStore()
+  const navigate = useNavigate()
+  return useMutation({
+    mutationFn: async (creatorData: any) => {
+      const response = await apiClient.post<AuthResponse>('/auth/register-creator', creatorData)
+      return response.data
+    },
+    onSuccess: (authResponse) => {
+      setAuth(authResponse)
+      toast.success("Welcome! Complete verification to start selling.")
+      navigate('/dashboard/creator/verification')
+    },
+    onError: (error) => {
+      handleApiError(error)
+    }
+  })
+}

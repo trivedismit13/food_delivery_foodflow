@@ -1,0 +1,222 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-1234-56789abcdef0",
+		"name": "FoodFlow API Complete",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Users",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type","value": "application/json"}],
+						"url": {"raw": "http://localhost:8080/api/users/register","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","users","register"]},
+						"body": {"mode": "raw","raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.new@user.com\",\n  \"phone\": \"9998887776\",\n  \"password\": \"secret\",\n  \"role\": \"CUSTOMER\"\n}"}
+					}
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/api/users/5","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","users","5"]}
+					}
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type","value": "application/json"}],
+						"url": {"raw": "http://localhost:8080/api/users/5","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","users","5"]},
+						"body": {"mode": "raw","raw": "{\n  \"name\": \"John Updated\",\n  \"phone\": \"1112223334\"\n}"}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Restaurants",
+			"item": [
+				{
+					"name": "Create Restaurant",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type","value": "application/json"}],
+						"url": {"raw": "http://localhost:8080/api/restaurants","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","restaurants"]},
+						"body": {"mode": "raw","raw": "{\n  \"owner\": {\"userId\": 1},\n  \"name\": \"Taco Fiesta\",\n  \"city\": \"Austin\",\n  \"pincode\": \"73301\",\n  \"cuisine\": \"Mexican\"\n}"}
+					}
+				},
+				{
+					"name": "Get All Restaurants",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/api/restaurants?page=0&size=20","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","restaurants"],"query": [{"key": "page","value": "0"},{"key": "size","value": "20"}]}
+					}
+				},
+				{
+					"name": "Get Restaurant by ID",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/api/restaurants/1","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","restaurants","1"]}
+					}
+				},
+				{
+					"name": "Search Restaurants by City/Cuisine",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/api/restaurants/search?city=New York&cuisine=Italian","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","restaurants","search"],"query": [{"key": "city","value": "New York"},{"key": "cuisine","value": "Italian"}]}
+					}
+				},
+				{
+					"name": "Delete (Soft) Restaurant",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/api/restaurants/15","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","restaurants","15"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Menu",
+			"item": [
+				{
+					"name": "Add Menu Item",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type","value": "application/json"}],
+						"url": {"raw": "http://localhost:8080/api/restaurants/1/menu","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","restaurants","1","menu"]},
+						"body": {"mode": "raw","raw": "{\n  \"restaurant\": {\"restaurantId\": 1},\n  \"name\": \"Extra Spicy Chicken\",\n  \"description\": \"Very spicy!\",\n  \"price\": 18.99,\n  \"isVeg\": false,\n  \"category\": \"Main Course\",\n  \"availableQty\": 20\n}"}
+					}
+				},
+				{
+					"name": "Get Menu for Restaurant",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/api/restaurants/1/menu?veg=true","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","restaurants","1","menu"],"query": [{"key": "veg","value": "true"}]}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Orders",
+			"item": [
+				{
+					"name": "Place Order (Transactional)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type","value": "application/json"}],
+						"url": {"raw": "http://localhost:8080/api/orders","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","orders"]},
+						"body": {"mode": "raw","raw": "{\n  \"userId\": 5,\n  \"restaurantId\": 1,\n  \"items\": [\n    {\n      \"itemId\": 1,\n      \"quantity\": 2\n    }\n  ]\n}"}
+					}
+				},
+				{
+					"name": "Update Order Status",
+					"request": {
+						"method": "PUT",
+						"url": {"raw": "http://localhost:8080/api/orders/1/status?status=PREPARING","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","orders","1","status"],"query": [{"key": "status","value": "PREPARING"}]}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Payments",
+			"item": [
+				{
+					"name": "Update Payment Webhook",
+					"request": {
+						"method": "PUT",
+						"url": {"raw": "http://localhost:8080/api/payments/1/status?status=SUCCESS","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","payments","1","status"],"query": [{"key": "status","value": "SUCCESS"}]}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Ratings",
+			"item": [
+				{
+					"name": "Submit Rating",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type","value": "application/json"}],
+						"url": {"raw": "http://localhost:8080/api/ratings","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","ratings"]},
+						"body": {"mode": "raw","raw": "{\n  \"user\": {\"userId\": 5},\n  \"restaurant\": {\"restaurantId\": 1},\n  \"ratingValue\": 3.5,\n  \"foodQualityRating\": 4.5,\n  \"deliveryRating\": 2.0,\n  \"packagingRating\": 3.0,\n  \"reviewText\": \"Food was great but delivery was late and cold.\"\n}"}
+					}
+				},
+				{
+					"name": "Get Rating Breakdown",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/api/restaurants/1/ratings/breakdown","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","restaurants","1","ratings","breakdown"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "7. Reels",
+			"item": [
+				{
+					"name": "Get Discovery Feed",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/api/reels","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","reels"]}
+					}
+				},
+				{
+					"name": "Increment View Count",
+					"request": {
+						"method": "PUT",
+						"url": {"raw": "http://localhost:8080/api/reels/1/view","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","reels","1","view"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "8. Analytics",
+			"item": [
+				{
+					"name": "Top Dishes",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/api/analytics/restaurants/1/top-dishes","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","analytics","restaurants","1","top-dishes"]}
+					}
+				},
+				{
+					"name": "Revenue Rank by City",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/api/analytics/restaurants/revenue-rank-by-city","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","analytics","restaurants","revenue-rank-by-city"]}
+					}
+				},
+				{
+					"name": "Revenue Category (High/Med/Low)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/api/analytics/restaurants/revenue-category","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","analytics","restaurants","revenue-category"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "9. Insights (AI)",
+			"item": [
+				{
+					"name": "Auto Insights (Rule Based)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/api/insights/restaurants/1/auto","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","insights","restaurants","1","auto"]}
+					}
+				},
+				{
+					"name": "Query Insights (RAG)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type","value": "application/json"}],
+						"url": {"raw": "http://localhost:8080/api/insights/query","protocol": "http","host": ["localhost"],"port": "8080","path": ["api","insights","query"]},
+						"body": {"mode": "raw","raw": "{\n  \"restaurantId\": 1,\n  \"question\": \"Why did my revenue drop last week?\"\n}"}
+					}
+				}
+			]
+		}
+	]
+}

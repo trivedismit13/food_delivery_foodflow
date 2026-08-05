@@ -1,0 +1,16 @@
+import { Navigate } from 'react-router-dom';
+import { useAuthStore } from '@/store/authStore';
+
+export function GuestRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, user } = useAuthStore();
+  
+  if (isAuthenticated) {
+    // Redirect based on role
+    if (user?.role === 'OWNER') {
+      return <Navigate to="/dashboard/creator" replace />;
+    }
+    return <Navigate to="/" replace />;
+  }
+  
+  return <>{children}</>;
+}

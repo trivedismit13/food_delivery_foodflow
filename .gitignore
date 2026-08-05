@@ -1,0 +1,64 @@
+# ==========================================
+# FRONTEND - Node / Vite
+# ==========================================
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+.env.*.local
+
+# Keep environment template
+!.env.example
+
+
+# ==========================================
+# BACKEND - Java / Maven
+# ==========================================
+
+# Maven build output
+target/
+
+# Locally installed Maven
+.maven/
+
+# Local JDK
+.jdk*/
+jdk*/
+
+
+# ==========================================
+# IDE FILES
+# ==========================================
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+
+# ==========================================
+# LOGS / TEMPORARY FILES
+# ==========================================
+
+*.log
+lint_output.txt
+
+
+# ==========================================
+# OPERATING SYSTEM FILES
+# ==========================================
+
+.DS_Store
+Thumbs.db

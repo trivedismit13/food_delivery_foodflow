@@ -1,0 +1,2 @@
+ALTER TABLE food_drops
+ADD COLUMN version BIGINT DEFAULT 0;

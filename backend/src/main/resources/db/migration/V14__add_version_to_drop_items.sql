@@ -1,0 +1,2 @@
+ALTER TABLE drop_items
+ADD COLUMN version BIGINT DEFAULT 0;

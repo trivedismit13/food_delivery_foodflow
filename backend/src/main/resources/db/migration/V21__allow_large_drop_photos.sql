@@ -1,0 +1,2 @@
+ALTER TABLE food_drops
+MODIFY COLUMN drop_photo_url LONGTEXT NULL;
