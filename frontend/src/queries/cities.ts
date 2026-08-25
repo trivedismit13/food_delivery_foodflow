@@ -28,7 +28,7 @@ export function useSearchCities(query: string) {
 }
 
 export async function reverseGeocodeCity(lat: number, lng: number): Promise<City> {
-  const response = await apiClient.get<{ data: City }>(`/location/reverse-geocode?lat=${lat}&lng=${lng}`);
+  const response = await apiClient.post<{ data: City }>(`/location/reverse-geocode`, { lat, lng });
   const city = response.data?.data;
   if (!city) throw new Error('No city found near your location');
   return city;

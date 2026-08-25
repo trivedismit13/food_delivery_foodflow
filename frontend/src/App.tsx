@@ -32,6 +32,7 @@ import CreatorProfilePage from './pages/creators/CreatorProfilePage'
 import OrderTrackingPage from './pages/OrderTrackingPage'
 import NotificationsPage from './pages/NotificationsPage'
 import NotFoundPage from './pages/NotFoundPage'
+import CartPage from './pages/CartPage'
 
 // Dashboards
 import CustomerDashboardPage from './pages/dashboard/CustomerDashboardPage'
@@ -93,6 +94,13 @@ function App() {
           <Route path="/notifications" element={
             <ProtectedRoute allowedRoles={['CUSTOMER', 'OWNER', 'ADMIN']}>
               <NotificationsPage />
+            </ProtectedRoute>
+          } />
+          
+          {/* Cart */}
+          <Route path="/cart" element={
+            <ProtectedRoute allowedRoles={['CUSTOMER', 'OWNER', 'ADMIN']}>
+              <CartPage />
             </ProtectedRoute>
           } />
           

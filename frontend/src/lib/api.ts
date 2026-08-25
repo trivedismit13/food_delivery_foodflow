@@ -58,9 +58,8 @@ apiClient.interceptors.response.use(
     // ── 401 Unauthorized ──────────────────────────────────────────────
     if (response.status === 401) {
       // Token expired or invalid
-      // Clear auth state and redirect to login
+      // Clear auth state and let ProtectedRoute handle redirection to login
       useAuthStore.getState().logout()
-      window.location.href = '/auth/login?reason=session_expired'
       throw new AuthError('Session expired. Please sign in again.')
     }
     

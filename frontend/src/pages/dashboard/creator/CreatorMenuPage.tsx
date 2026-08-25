@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Plus, Edit2, Trash2, Search, X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -6,14 +6,16 @@ import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
 import { apiClient } from '@/lib/api';
 import type { MenuItemResponse } from '@/types/api';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMenu, useCreateMenuItem, useUpdateMenuItem, useDeleteMenuItem } from '@/queries/menu';
 
 export default function CreatorMenuPage() {
   const { creatorProfile } = useAuthStore();
+  const queryClient = useQueryClient();
   const [isSlideoverOpen, setIsSlideoverOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
-  const [isSaving, setIsSaving] = useState(false);
-  const [menuItems, setMenuItems] = useState<MenuItemResponse[]>([]);
+  
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -23,26 +25,24 @@ export default function CreatorMenuPage() {
     isVeg: true,
   });
 
-  const categories = useMemo(() => ['All', ...new Set(menuItems.map(item => item.category))], [menuItems]);
+  const { data: menuItems = [], isLoading: isLoadingMenu } = useMenu(creatorProfile?.restaurantId);
 
-  const filteredMenu = useMemo(() => menuItems.filter(item => {
+  const categories = useMemo<string[]>(() => ['All', ...Array.from(new Set<string>(menuItems.map((item: MenuItemResponse) => item.category)))], [menuItems]);
+
+  const filteredMenu = useMemo<MenuItemResponse[]>(() => menuItems.filter((item: MenuItemResponse) => {
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = activeCategory === 'All' || item.category === activeCategory;
     return matchesSearch && matchesCategory;
   }), [menuItems, searchQuery, activeCategory]);
 
-  const loadMenu = async () => {
-    if (!creatorProfile?.restaurantId) return;
+  const createMenuMutation = useCreateMenuItem(creatorProfile?.restaurantId);
+  const deleteMenuMutation = useDeleteMenuItem(creatorProfile?.restaurantId);
 
-    try {
-      const response = await apiClient.get<MenuItemResponse[]>(`/creators/${creatorProfile.restaurantId}/menu`);
-      setMenuItems(response.data || []);
-    } catch (error) {
-      toast.error('Unable to load your menu right now.');
-    }
-  };
+  // We should also handle onSuccess differently since it's now in the hook, but let's override it or just use a toast effect.
+  // Actually, wait, useCreateMenuItem does not show toast inside the hook.
+  // We can wrap the mutate call.
 
-  const handleSaveItem = async (e: React.FormEvent) => {
+  const handleSaveItem = (e: React.FormEvent) => {
     e.preventDefault();
     if (!creatorProfile?.restaurantId) {
       toast.error('You need to be signed in as a creator to manage menu items.');
@@ -59,50 +59,31 @@ export default function CreatorMenuPage() {
       return;
     }
 
-    setIsSaving(true);
-    try {
-      const payload = {
-        name: trimmedName,
-        description: form.description.trim(),
-        price,
-        isVeg: form.isVeg,
-        category: trimmedCategory,
-        availableQty,
-      };
-
-      const response = await apiClient.post<MenuItemResponse>(`/restaurants/${creatorProfile.restaurantId}/menu`, payload);
-      setMenuItems(prev => [response.data, ...prev]);
-      setForm({ name: '', description: '', price: '', category: '', availableQty: '', isVeg: true });
-      setIsSlideoverOpen(false);
-      toast.success('Menu item saved successfully!');
-    } catch (error: unknown) {
-      const message = error instanceof Error
-        ? error.message
-        : 'Could not save the menu item.';
-      toast.error(message);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleDeleteItem = async (itemId: number) => {
-    try {
-      await apiClient.delete(`/menu/${itemId}`);
-      setMenuItems(prev => prev.filter(item => item.menuItemId !== itemId));
-      toast.success('Menu item removed.');
-    } catch (error) {
-      toast.error('Could not delete the menu item.');
-    }
+    createMenuMutation.mutate({
+      name: trimmedName,
+      description: form.description.trim(),
+      price,
+      isVeg: form.isVeg,
+      category: trimmedCategory,
+      availableQty,
+    }, {
+      onSuccess: () => {
+        setForm({ name: '', description: '', price: '', category: '', availableQty: '', isVeg: true });
+        setIsSlideoverOpen(false);
+        toast.success('Menu item saved successfully!');
+      },
+      onError: (error: any) => {
+        const message = error instanceof Error
+          ? error.message
+          : 'Could not save the menu item.';
+        toast.error(message);
+      }
+    });
   };
 
   const handleInputChange = (field: string, value: string | number | boolean) => {
     setForm(prev => ({ ...prev, [field]: value }));
   };
-
-  useEffect(() => {
-    if (!creatorProfile?.restaurantId) return;
-    void loadMenu();
-  }, [creatorProfile?.restaurantId]);
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto flex flex-col h-full overflow-hidden">
@@ -154,7 +135,12 @@ export default function CreatorMenuPage() {
 
       {/* Menu List */}
       <div className="flex-1 overflow-y-auto min-h-0 bg-white border border-stone-200 rounded-2xl shadow-sm">
-        {filteredMenu.length === 0 ? (
+        {isLoadingMenu ? (
+          <div className="h-full flex flex-col items-center justify-center p-12 text-center text-stone-500">
+            <Loader2 className="w-8 h-8 animate-spin mb-4" />
+            <p>Loading menu...</p>
+          </div>
+        ) : filteredMenu.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center p-12 text-center">
             <div className="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center text-2xl mb-4">🍽️</div>
             <p className="text-stone-900 font-semibold mb-1">No items found</p>
@@ -162,7 +148,7 @@ export default function CreatorMenuPage() {
           </div>
         ) : (
           <div className="divide-y divide-stone-100">
-            {filteredMenu.map(item => (
+            {filteredMenu.map((item: MenuItemResponse) => (
               <div key={item.menuItemId} className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-stone-50 transition-colors">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-1">
@@ -185,7 +171,10 @@ export default function CreatorMenuPage() {
                     <button className="w-8 h-8 flex items-center justify-center text-stone-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors">
                       <Edit2 size={16} />
                     </button>
-                    <button onClick={() => handleDeleteItem(item.menuItemId)} className="w-8 h-8 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                    <button onClick={() => deleteMenuMutation.mutate(item.menuItemId, {
+                      onSuccess: () => toast.success('Menu item removed.'),
+                      onError: () => toast.error('Could not delete the menu item.')
+                    })} className="w-8 h-8 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" disabled={deleteMenuMutation.isPending}>
                       <Trash2 size={16} />
                     </button>
                   </div>
@@ -281,10 +270,10 @@ export default function CreatorMenuPage() {
                 <button 
                   type="submit" 
                   form="menuForm"
-                  disabled={isSaving}
+                  disabled={createMenuMutation.isPending}
                   className="w-full bg-stone-900 hover:bg-stone-800 disabled:bg-stone-300 text-white font-bold rounded-xl py-3.5 transition-colors shadow-sm flex items-center justify-center gap-2"
                 >
-                  {isSaving ? <Loader2 className="animate-spin" size={20} /> : "Save Item"}
+                  {createMenuMutation.isPending ? <Loader2 className="animate-spin" size={20} /> : "Save Item"}
                 </button>
               </div>
             </motion.div>

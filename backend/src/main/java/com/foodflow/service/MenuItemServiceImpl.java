@@ -31,6 +31,12 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
+    public MenuItem getMenuItemById(Long itemId) {
+        return menuItemRepository.findById(itemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Menu item not found: " + itemId));
+    }
+
+    @Override
     public MenuItem updateMenuItem(Long itemId, MenuItem details) {
         return menuItemRepository.findById(itemId).map(item -> {
             item.setName(details.getName());

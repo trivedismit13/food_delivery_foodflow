@@ -14,9 +14,12 @@ import java.util.Date;
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    // In a real application, you'd read this from application.properties
     private final String jwtSecret = "foodflowSecretKeyWhichMustBeAtLeast256BitsLongForHmacSha256!";
     private final int jwtExpirationMs = 86400000; // 24 hours
+
+    public int getJwtExpirationMs() {
+        return jwtExpirationMs;
+    }
 
     private Key key() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());

@@ -48,6 +48,7 @@ public class CreatorController {
     private final CreatorVerificationRepository verificationRepository;
     private final MenuItemRepository menuItemRepository;
     private final RatingRepository ratingRepository;
+    private final org.springframework.context.ApplicationEventPublisher eventPublisher;
 
     @GetMapping
     public ResponseEntity<ApiResponse<Page<CreatorSummary>>> listCreators(
@@ -144,8 +145,14 @@ public class CreatorController {
             
             // Atomic increment
             restaurantRepository.findById(creatorId).ifPresent(r -> {
-                r.setFollowerCount(r.getFollowerCount() + 1);
-                restaurantRepository.save(r);
+                restaurantRepository.incrementFollowerCount(creatorId);
+                
+                eventPublisher.publishEvent(new com.foodflow.event.NewFollowerEvent(
+                    this,
+                    r.getOwner().getUserId(),
+                    userDetails.getId(),
+                    userDetails.getName()
+                ));
             });
         }
         
@@ -164,10 +171,7 @@ public class CreatorController {
                 creatorFollowRepository.delete(follow);
                 
                 restaurantRepository.findById(creatorId).ifPresent(r -> {
-                    if (r.getFollowerCount() > 0) {
-                        r.setFollowerCount(r.getFollowerCount() - 1);
-                        restaurantRepository.save(r);
-                    }
+                    restaurantRepository.decrementFollowerCount(creatorId);
                 });
             });
             
@@ -199,7 +203,7 @@ public class CreatorController {
         
         // Fetch active drop
         List<FoodDrop> openDrops = foodDropRepository.findByCreatorRestaurantIdAndStatusIn(
-            r.getRestaurantId(), List.of(FoodDrop.DropStatus.OPEN));
+            r.getRestaurantId(), List.of(FoodDrop.DropStatus.OPEN), org.springframework.data.domain.Pageable.unpaged()).getContent();
             
         if (!openDrops.isEmpty()) {
             cs.setActiveDrop(mapToFoodDropResponse(openDrops.get(0)));
@@ -233,7 +237,7 @@ public class CreatorController {
         });
         
         List<FoodDrop> activeDrops = foodDropRepository.findByCreatorRestaurantIdAndStatusIn(
-            r.getRestaurantId(), List.of(FoodDrop.DropStatus.ANNOUNCED, FoodDrop.DropStatus.OPEN));
+            r.getRestaurantId(), List.of(FoodDrop.DropStatus.ANNOUNCED, FoodDrop.DropStatus.OPEN), org.springframework.data.domain.Pageable.unpaged()).getContent();
             
         cr.setActiveDrops(activeDrops.stream().map(this::mapToFoodDropResponse).collect(Collectors.toList()));
         

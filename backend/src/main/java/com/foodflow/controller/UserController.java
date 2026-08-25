@@ -2,8 +2,11 @@ package com.foodflow.controller;
 
 import com.foodflow.dto.request.UserRequest;
 import com.foodflow.dto.response.ApiResponse;
+import com.foodflow.dto.response.UserResponse;
 import com.foodflow.model.User;
 import com.foodflow.service.UserService;
+import com.foodflow.repository.RestaurantRepository;
+import com.foodflow.dto.response.CreatorSummary;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,31 +19,49 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final RestaurantRepository restaurantRepository;
 
 
 
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse<User>> getCurrentUser(@org.springframework.security.core.annotation.AuthenticationPrincipal com.foodflow.security.UserDetailsImpl userDetails) {
+    public ResponseEntity<ApiResponse<UserResponse>> getCurrentUser(@org.springframework.security.core.annotation.AuthenticationPrincipal com.foodflow.security.UserDetailsImpl userDetails) {
         return userService.getUserById(userDetails.getId())
-                .map(u -> ResponseEntity.ok(ApiResponse.success(u)))
+                .map(u -> {
+                    UserResponse response = UserResponse.fromEntity(u);
+                    if (com.foodflow.model.Role.OWNER.equals(u.getRole())) {
+                        restaurantRepository.findByOwnerUserId(u.getUserId()).ifPresent(r -> {
+                            response.setCreatorProfile(CreatorSummary.builder()
+                                    .restaurantId(r.getRestaurantId())
+                                    .name(r.getName())
+                                    .creatorType(r.getCreatorType())
+                                    .verificationLevel(r.getVerificationLevel())
+                                    .avgRating(r.getAvgRating())
+                                    .followerCount(r.getFollowerCount())
+                                    .totalOrdersCompleted(r.getTotalOrdersCompleted())
+                                    .isAcceptingOrders(r.getIsAcceptingOrders())
+                                    .build());
+                        });
+                    }
+                    return ResponseEntity.ok(ApiResponse.success(response));
+                })
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("User not found", 404)));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> getUserById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
-                .map(u -> ResponseEntity.ok(ApiResponse.success(u)))
+                .map(u -> ResponseEntity.ok(ApiResponse.success(UserResponse.fromEntity(u))))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("User not found", 404)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
+    public ResponseEntity<ApiResponse<UserResponse>> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
         user.setPassword(request.getPassword());
         user.setRole(request.getRole());
-        return ResponseEntity.ok(ApiResponse.success(userService.updateUser(id, user)));
+        return ResponseEntity.ok(ApiResponse.success(UserResponse.fromEntity(userService.updateUser(id, user))));
     }
 }

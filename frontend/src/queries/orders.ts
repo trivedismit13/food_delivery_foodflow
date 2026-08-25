@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
-import type { Page, OrderResponse, OrderStatus, PlaceDropOrderRequest } from '@/types/api'
+import type { PageResponse, OrderResponse, OrderStatus, PlaceDropOrderRequest } from '@/types/api'
 
 export function useUserOrders(page = 0) {
   const { user } = useAuthStore()
@@ -9,7 +9,7 @@ export function useUserOrders(page = 0) {
   return useQuery({
     queryKey: ['orders', user?.userId, page],
     queryFn: async () => {
-      const response = await apiClient.get<Page<OrderResponse>>(
+      const response = await apiClient.get<PageResponse<OrderResponse>>(
         `/orders/users/${user?.userId}/orders?page=${page}&size=20`
       )
       return response.data
@@ -49,6 +49,23 @@ export function useUpdateOrderStatus() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['order', data.orderId] })
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+      if (data.dropId) {
+        queryClient.invalidateQueries({ queryKey: ['dropOrders', data.dropId] })
+      }
+    },
+  })
+}
+
+export function usePlaceDropOrder() {
+  const queryClient = useQueryClient()
+  
+  return useMutation({
+    mutationFn: async (request: PlaceDropOrderRequest) => {
+      const { data } = await apiClient.post<OrderResponse>(`/drops/${request.dropId}/orders`, request)
+      return data
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['orders'] })
     },
   })

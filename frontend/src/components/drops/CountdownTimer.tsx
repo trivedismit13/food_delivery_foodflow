@@ -3,12 +3,13 @@ import { useCountdown } from '@/hooks/useCountdown';
 
 interface CountdownTimerProps {
   cutoffTime: string;
+  minutesUntilCutoff?: number | null;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
-export function CountdownTimer({ cutoffTime, size = 'sm', className }: CountdownTimerProps) {
-  const timeLeft = useCountdown(cutoffTime);
+export function CountdownTimer({ cutoffTime, minutesUntilCutoff, size = 'sm', className }: CountdownTimerProps) {
+  const timeLeft = useCountdown(cutoffTime, minutesUntilCutoff);
   
   if (timeLeft.isPast) {
     return (

@@ -4,18 +4,23 @@ import { ArrowLeft, Download, CheckCircle, Clock, AlertTriangle, Play, CheckSqua
 import { cn } from '@/lib/utils';
 import { DropStatus } from '@/components/drops/DropCard';
 
-import { useDropById, useUpdateDropStatus, useDropOrders } from '@/queries/drops';
+import { useAuthStore } from '@/store/authStore';
 
+import { useDropById, useUpdateDropStatus, useDropOrders, useCancelDrop } from '@/queries/drops';
+import { useUpdateOrderStatus } from '@/queries/orders';
+import { OrderStatus } from '@/types/api';
 type Tab = 'Details' | 'Orders';
 
 export default function ManageDropPage() {
   const { dropId } = useParams();
   const [activeTab, setActiveTab] = useState<Tab>('Orders');
+  const { user, creatorProfile } = useAuthStore();
   
-  const { data: drop, isLoading: isLoadingDrop } = useDropById(Number(dropId));
+  const { data: drop, isLoading: isLoadingDrop, error: dropError } = useDropById(Number(dropId));
   const { data: orders = [], isLoading: isLoadingOrders } = useDropOrders(Number(dropId));
   const updateStatusMutation = useUpdateDropStatus();
-
+  const cancelDropMutation = useCancelDrop();
+  const updateOrderStatusMutation = useUpdateOrderStatus();
   const revenue = orders.reduce((sum, order) => sum + order.totalAmount, 0);
 
   const itemsToPrepareMap: Record<string, number> = {};
@@ -27,7 +32,7 @@ export default function ManageDropPage() {
   const itemsToPrepare = Object.entries(itemsToPrepareMap).map(([name, qty]) => ({ name, qty }));
 
   const handleStatusChange = () => {
-    if (!drop) return;
+    if (!drop || updateStatusMutation.isPending) return;
     let newStatus = '';
     
     if (drop.status === 'DRAFT') newStatus = 'ANNOUNCED';
@@ -41,8 +46,20 @@ export default function ManageDropPage() {
     }
   };
 
+  const handleCancelDrop = () => {
+    if (window.confirm("Are you sure you want to cancel this drop?")) {
+      cancelDropMutation.mutate(Number(dropId));
+    }
+  };
+
   if (isLoadingDrop) return <div className="p-8 text-center">Loading drop details...</div>;
+  if (dropError) return <div className="p-8 text-center text-red-500 font-bold">You are not authorized to view this drop or it does not exist.</div>;
   if (!drop) return <div className="p-8 text-center text-red-500">Drop not found.</div>;
+  
+  if (drop.creator?.restaurantId !== creatorProfile?.restaurantId) {
+    return <div className="p-8 text-center text-red-500 font-bold">You are not authorized to view this drop.</div>;
+  }
+
 
 
   const getStatusColor = (status: DropStatus) => {
@@ -82,13 +99,18 @@ export default function ManageDropPage() {
           {drop.status !== 'COMPLETED' && drop.status !== 'CANCELLED' && (
             <button 
               onClick={handleStatusChange}
-              className="w-full md:w-auto bg-stone-900 hover:bg-stone-800 text-white font-semibold py-2.5 px-5 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2"
+              disabled={updateStatusMutation.isPending}
+              className="w-full md:w-auto bg-stone-900 hover:bg-stone-800 disabled:bg-stone-400 text-white font-semibold py-2.5 px-5 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2"
             >
-              {drop.status === 'DRAFT' && <><CheckSquare size={18} /> Publish Drop</>}
-              {drop.status === 'ANNOUNCED' && <><Play size={18} /> Open for Orders</>}
-              {drop.status === 'OPEN' && <><Clock size={18} /> Close Orders</>}
-              {drop.status === 'CUTOFF' && <><CheckCircle size={18} /> Mark as Ready</>}
-              {drop.status === 'READY' && <><CheckCircle size={18} /> Complete Drop</>}
+              {updateStatusMutation.isPending ? "Updating..." : (
+                <>
+                  {drop.status === 'DRAFT' && <><CheckSquare size={18} /> Publish Drop</>}
+                  {drop.status === 'ANNOUNCED' && <><Play size={18} /> Open for Orders</>}
+                  {drop.status === 'OPEN' && <><Clock size={18} /> Close Orders</>}
+                  {drop.status === 'CUTOFF' && <><CheckCircle size={18} /> Mark as Ready</>}
+                  {drop.status === 'READY' && <><CheckCircle size={18} /> Complete Drop</>}
+                </>
+              )}
             </button>
           )}
         </div>
@@ -159,6 +181,7 @@ export default function ManageDropPage() {
                         <th className="p-4 font-semibold text-stone-500">Customer</th>
                         <th className="p-4 font-semibold text-stone-500">Items</th>
                         <th className="p-4 font-semibold text-stone-500">Collection</th>
+                        <th className="p-4 font-semibold text-stone-500">Status</th>
                         <th className="p-4 font-semibold text-stone-500 text-right">Total</th>
                       </tr>
                     </thead>
@@ -175,10 +198,30 @@ export default function ManageDropPage() {
                           </td>
                           <td className="p-4">
                             <span className={cn(
-                              "px-2 py-1 text-xs font-semibold rounded bg-stone-100 text-stone-700"
+                              "px-2 py-1 text-xs font-semibold rounded bg-stone-100 text-stone-700 block mb-1 w-fit"
                             )}>
-                              {drop.pickupStartTime ? new Date(drop.pickupStartTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Pickup'}
+                              {/* @ts-ignore - Assuming OrderResponse might have these fields in actual API */}
+                              {order.isDelivery ? 'Delivery' : 'Pickup'}
                             </span>
+                            <span className="text-xs text-stone-500">
+                              {/* @ts-ignore */}
+                              {order.isDelivery && order.deliveryAddress ? order.deliveryAddress : (order.pickupTime ? new Date(order.pickupTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Drop Time')}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <select 
+                              value={order.status}
+                              onChange={(e) => updateOrderStatusMutation.mutate({ id: order.orderId, status: e.target.value as OrderStatus })}
+                              disabled={updateOrderStatusMutation.isPending}
+                              className="text-sm bg-white border border-stone-200 rounded-lg px-2 py-1 outline-none focus:border-orange-500"
+                            >
+                              <option value="PLACED">Placed</option>
+                              <option value="PREPARING">Preparing</option>
+                              <option value="READY">Ready</option>
+                              <option value="ON_THE_WAY">On the Way</option>
+                              <option value="DELIVERED">Delivered</option>
+                              <option value="CANCELLED">Cancelled</option>
+                            </select>
                           </td>
                           <td className="p-4 font-bold text-stone-900 text-right">₹{order.totalAmount}</td>
                         </tr>
@@ -218,27 +261,27 @@ export default function ManageDropPage() {
                 <p className="text-xs text-stone-500 mb-3 text-center">Next Action</p>
                 
                 {drop.status === 'DRAFT' && (
-                  <button onClick={handleStatusChange} className="w-full bg-blue-500 text-white font-bold py-3 rounded-xl hover:bg-blue-600 transition flex justify-center gap-2 items-center">
+                  <button disabled={updateStatusMutation.isPending} onClick={handleStatusChange} className="w-full bg-blue-500 text-white disabled:opacity-50 font-bold py-3 rounded-xl hover:bg-blue-600 transition flex justify-center gap-2 items-center">
                     Publish Drop <Play size={16}/>
                   </button>
                 )}
                 {drop.status === 'ANNOUNCED' && (
-                  <button onClick={handleStatusChange} className="w-full bg-green-500 text-white font-bold py-3 rounded-xl hover:bg-green-600 transition flex justify-center gap-2 items-center">
+                  <button disabled={updateStatusMutation.isPending} onClick={handleStatusChange} className="w-full bg-green-500 text-white disabled:opacity-50 font-bold py-3 rounded-xl hover:bg-green-600 transition flex justify-center gap-2 items-center">
                     Open for Orders <Play size={16}/>
                   </button>
                 )}
                 {drop.status === 'OPEN' && (
-                  <button onClick={handleStatusChange} className="w-full bg-amber-500 text-white font-bold py-3 rounded-xl hover:bg-amber-600 transition flex justify-center gap-2 items-center">
+                  <button disabled={updateStatusMutation.isPending} onClick={handleStatusChange} className="w-full bg-amber-500 text-white disabled:opacity-50 font-bold py-3 rounded-xl hover:bg-amber-600 transition flex justify-center gap-2 items-center">
                     Close Order Window <Clock size={16}/>
                   </button>
                 )}
                 {drop.status === 'CUTOFF' && (
-                  <button onClick={handleStatusChange} className="w-full bg-stone-900 text-white font-bold py-3 rounded-xl shadow-lg shadow-green-500/20 hover:bg-stone-800 transition flex justify-center gap-2 items-center">
+                  <button disabled={updateStatusMutation.isPending} onClick={handleStatusChange} className="w-full bg-stone-900 text-white disabled:opacity-50 font-bold py-3 rounded-xl shadow-lg shadow-green-500/20 hover:bg-stone-800 transition flex justify-center gap-2 items-center">
                     Mark Food as Ready <CheckCircle size={16}/>
                   </button>
                 )}
                 {drop.status === 'READY' && (
-                  <button onClick={handleStatusChange} className="w-full bg-stone-200 text-stone-800 font-bold py-3 rounded-xl hover:bg-stone-300 transition flex justify-center gap-2 items-center">
+                  <button disabled={updateStatusMutation.isPending} onClick={handleStatusChange} className="w-full bg-stone-200 text-stone-800 disabled:opacity-50 font-bold py-3 rounded-xl hover:bg-stone-300 transition flex justify-center gap-2 items-center">
                     Mark as Completed
                   </button>
                 )}
@@ -251,7 +294,10 @@ export default function ManageDropPage() {
 
             {(drop.status === 'DRAFT' || drop.status === 'ANNOUNCED') && (
               <div className="p-4 bg-red-50 border-t border-red-100">
-                <button className="w-full flex items-center justify-center gap-2 text-red-600 font-semibold text-sm hover:underline">
+                <button 
+                  onClick={handleCancelDrop}
+                  disabled={cancelDropMutation.isPending}
+                  className="w-full flex items-center justify-center gap-2 text-red-600 font-semibold text-sm hover:underline disabled:opacity-50">
                   <AlertTriangle size={16} /> Cancel this drop
                 </button>
               </div>

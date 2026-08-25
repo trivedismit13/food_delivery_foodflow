@@ -1,24 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
 import { Bell } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { apiClient as api } from '@/lib/api';
-import { useAuthStore } from '@/store/authStore';
+import { useUnreadCount } from '@/queries/notifications';
 
 export function NotificationBell() {
-  const { isAuthenticated } = useAuthStore();
-
-  const { data } = useQuery({
-    queryKey: ['notifications', 'unread-count'],
-    queryFn: async () => {
-      // return (await api.get('/notifications/unread-count')).data;
-      return { count: 3 }; // Mocking for now since endpoint might not exist
-    },
-    enabled: isAuthenticated,
-    refetchInterval: 30000, // Poll every 30s
-  });
-
-  const unreadCount = data?.count || 0;
+  const { data: unreadCount = 0 } = useUnreadCount();
 
   return (
     <Link 

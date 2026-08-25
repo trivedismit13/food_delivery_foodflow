@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class VerificationController {
     private final com.foodflow.service.VerificationService verificationService;
+    private final com.foodflow.service.security.CreatorAuthorizationService authorizationService;
 
     @GetMapping
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<com.foodflow.dto.response.ApiResponse<com.foodflow.model.CreatorVerification>> getVerificationStatus(@PathVariable Long creatorId) {
+        authorizationService.assertCreatorOwnsVerification(creatorId);
         return ResponseEntity.ok(com.foodflow.dto.response.ApiResponse.success(verificationService.getVerificationStatus(creatorId)));
     }
 
@@ -22,6 +24,7 @@ public class VerificationController {
     public ResponseEntity<com.foodflow.dto.response.ApiResponse<com.foodflow.model.CreatorVerification>> submitLevel1(
             @PathVariable Long creatorId,
             @jakarta.validation.Valid @RequestBody com.foodflow.dto.request.VerificationRequest request) {
+        authorizationService.assertCreatorOwnsVerification(creatorId);
         return ResponseEntity.ok(com.foodflow.dto.response.ApiResponse.success(verificationService.submitLevel1(creatorId, request)));
     }
 
@@ -30,6 +33,7 @@ public class VerificationController {
     public ResponseEntity<com.foodflow.dto.response.ApiResponse<com.foodflow.model.CreatorVerification>> submitLevel2(
             @PathVariable Long creatorId,
             @jakarta.validation.Valid @RequestBody com.foodflow.dto.request.Level2VerificationRequest request) {
+        authorizationService.assertCreatorOwnsVerification(creatorId);
         return ResponseEntity.ok(com.foodflow.dto.response.ApiResponse.success(verificationService.submitLevel2(creatorId, request)));
     }
 

@@ -31,7 +31,7 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
     // (Simplifying period logic to just a days parameter for SQL, handled in service)
     @Query(value = "SELECT SUM(total_amount) " +
                    "FROM orders " +
-                   "WHERE status = 'DELIVERED' AND order_date >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :days DAY)", nativeQuery = true)
+                   "WHERE status != 'CANCELLED' AND order_date >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :days DAY)", nativeQuery = true)
     Double findTotalRevenue(@Param("days") int days);
 
     // 4. GET /api/analytics/restaurants/top-rated?limit=10
@@ -71,7 +71,7 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
     @Query(value = "SELECT r.cuisine, SUM(o.total_amount) as revenue " +
                    "FROM restaurants r " +
                    "JOIN orders o ON r.restaurant_id = o.restaurant_id " +
-                   "WHERE o.status = 'DELIVERED' " +
+                   "WHERE o.status != 'CANCELLED' " +
                    "GROUP BY r.cuisine " +
                    "ORDER BY revenue DESC", nativeQuery = true)
     List<Object[]> findRevenueByCuisine();
@@ -81,7 +81,7 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
                    "RANK() OVER (PARTITION BY r.city ORDER BY SUM(o.total_amount) DESC) AS rankInCity " +
                    "FROM orders o " +
                    "JOIN restaurants r ON o.restaurant_id = r.restaurant_id " +
-                   "WHERE o.status = 'DELIVERED' " +
+                   "WHERE o.status != 'CANCELLED' " +
                    "GROUP BY r.restaurant_id, r.name, r.city " +
                    "ORDER BY r.city, rankInCity", nativeQuery = true)
     List<RevenueRankProjection> findRevenueRankByCity();
@@ -165,7 +165,7 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
                    "    fd.title, " +
                    "    fd.max_orders, " +
                    "    fd.current_orders, " +
-                   "    TIMESTAMPDIFF(HOUR, fd.created_at, fd.updated_at) AS hours_to_sellout, " +
+                   "    COALESCE(TIMESTAMPDIFF(HOUR, fd.created_at, fd.updated_at), -1) AS hours_to_sellout, " +
                    "    fd.drop_date " +
                    "FROM food_drops fd " +
                    "WHERE fd.creator_id = :creatorId " +
@@ -184,7 +184,7 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
                    "JOIN order_items oi ON o.order_id = oi.order_id " +
                    "JOIN menu_items mi ON oi.item_id = mi.item_id " +
                    "WHERE o.restaurant_id = :creatorId " +
-                   "AND o.status = 'DELIVERED' " +
+                   "AND o.status != 'CANCELLED' " +
                    "GROUP BY mi.item_id, mi.name " +
                    "ORDER BY total_ordered DESC " +
                    "LIMIT 10", nativeQuery = true)
@@ -198,13 +198,21 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
                    "    COUNT(DISTINCT o.user_id) AS unique_customers " +
                    "FROM orders o " +
                    "WHERE o.restaurant_id = :creatorId " +
-                   "AND o.status = 'DELIVERED' " +
+                   "AND o.status != 'CANCELLED' " +
                    "AND o.order_date >= DATE_SUB(CURDATE(), INTERVAL :weeks WEEK) " +
                    "GROUP BY YEARWEEK(o.order_date) " +
                    "ORDER BY week ASC", nativeQuery = true)
     List<Object[]> findWeeklyRevenueTrend(
         @Param("creatorId") Long creatorId, 
         @Param("weeks") int weeks);
+
+    // 17b. Total unique customers in last N days
+    @Query(value = "SELECT COUNT(DISTINCT o.user_id) " +
+                   "FROM orders o " +
+                   "WHERE o.restaurant_id = :creatorId " +
+                   "AND o.status != 'CANCELLED' " +
+                   "AND o.order_date >= DATE_SUB(CURDATE(), INTERVAL :days DAY)", nativeQuery = true)
+    Integer findTotalUniqueCustomers(@Param("creatorId") Long creatorId, @Param("days") int days);
 
     // 18. Best day of week for a creator
     @Query(value = "SELECT " +
@@ -238,7 +246,7 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
                    "    SELECT user_id, COUNT(*) AS order_count " +
                    "    FROM orders " +
                    "    WHERE restaurant_id = :creatorId " +
-                   "    AND status = 'DELIVERED' " +
+                   "    AND status != 'CANCELLED' " +
                    "    GROUP BY user_id " +
                    ") customer_orders", nativeQuery = true)
     Object findRepeatCustomerRate(@Param("creatorId") Long creatorId);

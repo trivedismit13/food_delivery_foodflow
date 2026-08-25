@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { apiClient } from '@/lib/api'
 import { handleApiError } from '@/lib/errorHandler'
-import type { Page, CreatorResponse } from '@/types/api'
+import type { PageResponse, CreatorResponse } from '@/types/api'
 
 export interface CreatorFilters {
   city?: string
@@ -13,7 +13,7 @@ export interface CreatorFilters {
 
 export function useCreators(filters?: CreatorFilters) {
   return useQuery({
-    queryKey: ['creators', filters],
+    queryKey: ['creators', filters?.city, filters],
     queryFn: async () => {
       const params = new URLSearchParams()
       if (filters?.city) params.append('city', filters.city)
@@ -21,7 +21,7 @@ export function useCreators(filters?: CreatorFilters) {
       if (filters?.page !== undefined) params.append('page', String(filters.page))
       if (filters?.size !== undefined) params.append('size', String(filters.size))
       
-      const response = await apiClient.get<Page<CreatorResponse>>(
+      const response = await apiClient.get<PageResponse<CreatorResponse>>(
         `/creators?${params.toString()}`
       )
       return response.data
@@ -76,22 +76,12 @@ export function useUnfollowCreator() {
   })
 }
 
-export function useCreatorMenu(creatorId: number | undefined) {
-  return useQuery({
-    queryKey: ['creator-menu', creatorId],
-    queryFn: async () => {
-      const response = await apiClient.get<any[]>(`/creators/${creatorId}/menu`)
-      return response.data
-    },
-    enabled: !!creatorId,
-  })
-}
 
 export function useCreatorRatings(creatorId: number | undefined) {
   return useQuery({
     queryKey: ['creator-ratings', creatorId],
     queryFn: async () => {
-      const response = await apiClient.get<Page<any>>(`/creators/${creatorId}/ratings`)
+      const response = await apiClient.get<PageResponse<any>>(`/creators/${creatorId}/ratings`)
       return response.data
     },
     enabled: !!creatorId,

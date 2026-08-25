@@ -3,10 +3,11 @@ import { useAuthStore } from '@/store/authStore';
 import { Link } from 'react-router-dom';
 import { Plus, Package, CheckCircle, BarChart3, ChevronDown, Clock, ArrowRight, Star, Loader2 } from 'lucide-react';
 import { useCreatorDashboard, useAutoInsights } from '@/queries/creatorAnalytics';
+import { useCreatorDrops, useUpdateDropStatus, useCancelDrop } from '@/queries/drops';
 import { motion } from 'framer-motion';
 
 export default function CreatorDashboardHome() {
-  const { user } = useAuthStore();
+  const { user, creatorProfile } = useAuthStore();
   const [activeDropOrderExpanded, setActiveDropOrderExpanded] = useState(false);
 
   // Time based greeting
@@ -17,23 +18,28 @@ export default function CreatorDashboardHome() {
   const { data: dashboard, isLoading: isDashboardLoading } = useCreatorDashboard('WEEK');
   const { data: insights, isLoading: isInsightsLoading } = useAutoInsights();
 
-  // MOCK DATA
-  const verificationLevel = 2;
-  const mockActiveDrop = {
-    id: 1,
-    title: "Sunday Special Mutton Biryani",
-    status: "CUTOFF",
-    maxOrders: 20,
-    currentOrders: 20,
-    revenue: 7000,
-    cutoffTime: "Order window closed",
-    itemsToPrepare: [
-      { name: "Mutton Dum Biryani (Serves 2)", qty: 20 },
-      { name: "Double Ka Meetha", qty: 15 }
-    ]
+  const { data: drops, isLoading: isDropsLoading } = useCreatorDrops(creatorProfile?.restaurantId);
+  const activeDrop = drops?.find(d => ['DRAFT', 'ANNOUNCED', 'OPEN', 'CUTOFF', 'READY'].includes(d.status));
+  const { mutate: updateDropStatus, isPending: isUpdatingStatus } = useUpdateDropStatus();
+  const { mutate: cancelDrop, isPending: isCancelling } = useCancelDrop();
+
+  // Verification
+  const verificationLevel = creatorProfile?.verificationLevel || 1;
+
+  const percentFilled = activeDrop ? (activeDrop.currentOrders / activeDrop.maxOrders) * 100 : 0;
+  const activeDropRevenue = activeDrop ? activeDrop.items.reduce((sum, item) => sum + (item.quantityOrdered * (item.dropPrice ?? item.price)), 0) : 0;
+
+  const handleMarkReady = () => {
+    if (activeDrop) {
+      updateDropStatus({ dropId: activeDrop.dropId, status: 'READY' });
+    }
   };
 
-  const percentFilled = (mockActiveDrop.currentOrders / mockActiveDrop.maxOrders) * 100;
+  const handleCancelDrop = () => {
+    if (activeDrop) {
+      cancelDrop(activeDrop.dropId);
+    }
+  };
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-8">
@@ -67,7 +73,7 @@ export default function CreatorDashboardHome() {
             <Package className="w-8 h-8 text-stone-400 group-hover:text-orange-500 transition-colors" />
             <span className="font-bold">Update Menu</span>
           </Link>
-          <Link to={`/dashboard/creator/drops/${mockActiveDrop.id}`} className="bg-white border border-stone-200 rounded-2xl p-5 hover:border-orange-300 hover:shadow-warm-sm transition-all text-stone-700 flex flex-col justify-between h-32 group">
+          <Link to={activeDrop ? `/dashboard/creator/drops/${activeDrop.dropId}` : '/dashboard/creator/drops'} className="bg-white border border-stone-200 rounded-2xl p-5 hover:border-orange-300 hover:shadow-warm-sm transition-all text-stone-700 flex flex-col justify-between h-32 group">
             <CheckCircle className="w-8 h-8 text-stone-400 group-hover:text-orange-500 transition-colors" />
             <span className="font-bold">Mark Drop as Ready</span>
           </Link>
@@ -82,85 +88,109 @@ export default function CreatorDashboardHome() {
       <section>
         <h2 className="font-display text-2xl font-bold text-stone-900 mb-4">Your Active Drops</h2>
         
-        {/* Management Drop Card */}
-        <div className="bg-white rounded-3xl p-6 md:p-8 border border-stone-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-6 border-b border-stone-100">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <span className="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full uppercase tracking-wider">
-                  Cooking / Prep
-                </span>
-                <span className="text-sm font-semibold text-stone-400 flex items-center gap-1">
-                  <Clock size={14} /> {mockActiveDrop.cutoffTime}
+        {isDropsLoading ? (
+          <div className="bg-white rounded-3xl p-6 md:p-8 border border-stone-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)] flex justify-center items-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
+          </div>
+        ) : activeDrop ? (
+          <div className="bg-white rounded-3xl p-6 md:p-8 border border-stone-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-6 border-b border-stone-100">
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full uppercase tracking-wider">
+                    {activeDrop.status}
+                  </span>
+                  <span className="text-sm font-semibold text-stone-400 flex items-center gap-1">
+                    <Clock size={14} /> {new Date(`1970-01-01T${activeDrop.orderCutoffTime}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} Cutoff
+                  </span>
+                </div>
+                <h3 className="text-2xl font-bold text-stone-900">{activeDrop.title}</h3>
+              </div>
+              
+              <Link to={`/dashboard/creator/drops/${activeDrop.dropId}`} className="px-4 py-2 bg-stone-100 text-stone-700 rounded-xl text-sm font-semibold hover:bg-stone-200 transition-colors">
+                Manage Drop
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div className="bg-stone-50 rounded-2xl p-5 border border-stone-100">
+                <div className="flex justify-between items-end mb-3">
+                  <span className="text-sm font-semibold text-stone-500 uppercase tracking-wider">Slots Filled</span>
+                  <span className="text-2xl font-bold text-stone-900">{activeDrop.currentOrders} <span className="text-base text-stone-400 font-normal">/ {activeDrop.maxOrders}</span></span>
+                </div>
+                <div className="w-full h-3 bg-stone-200 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-green-500 rounded-full" 
+                    style={{ width: `${percentFilled}%` }}
+                  />
+                </div>
+                {percentFilled >= 100 && <p className="text-xs text-green-600 font-bold mt-2">Sold Out!</p>}
+              </div>
+
+              <div className="bg-stone-50 rounded-2xl p-5 border border-stone-100 flex flex-col justify-center">
+                <span className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-1">Revenue Earned</span>
+                <span className="text-3xl font-display font-bold text-stone-900 flex items-center gap-2">
+                  ₹{activeDropRevenue} <span className="text-sm text-stone-400 font-normal mt-2">in pre-orders</span>
                 </span>
               </div>
-              <h3 className="text-2xl font-bold text-stone-900">{mockActiveDrop.title}</h3>
             </div>
-            
-            <Link to={`/dashboard/creator/drops/${mockActiveDrop.id}`} className="px-4 py-2 bg-stone-100 text-stone-700 rounded-xl text-sm font-semibold hover:bg-stone-200 transition-colors">
-              Manage Drop
+
+            <div className="border border-stone-200 rounded-2xl overflow-hidden mb-8">
+              <div className="bg-stone-50 p-4 border-b border-stone-200 flex justify-between items-center cursor-pointer" onClick={() => setActiveDropOrderExpanded(!activeDropOrderExpanded)}>
+                <h4 className="font-bold text-stone-800">Items to Prepare</h4>
+                <ChevronDown className={`text-stone-400 transition-transform ${activeDropOrderExpanded ? 'rotate-180' : ''}`} />
+              </div>
+              {activeDropOrderExpanded && (
+                <div className="p-0">
+                  <table className="w-full text-left text-sm">
+                    <thead>
+                      <tr className="border-b border-stone-100">
+                        <th className="p-4 font-semibold text-stone-500">Item Name</th>
+                        <th className="p-4 font-semibold text-stone-500 text-right">Qty Ordered</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {activeDrop.items.map((item, i) => (
+                        <tr key={i} className="border-b border-stone-50 last:border-0">
+                          <td className="p-4 font-medium text-stone-900">{item.name}</td>
+                          <td className="p-4 font-bold text-orange-600 text-right text-lg">{item.quantityOrdered}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button 
+                onClick={handleMarkReady} 
+                disabled={isUpdatingStatus || activeDrop.status === 'READY'}
+                className="flex-1 bg-stone-900 text-white font-bold py-4 rounded-xl shadow-sm hover:bg-stone-800 transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
+              >
+                {activeDrop.status === 'READY' ? 'Marked as Ready' : 'Mark Drop as Ready'} <CheckCircle size={18} />
+              </button>
+              <button 
+                onClick={handleCancelDrop} 
+                disabled={isCancelling}
+                className="px-6 bg-white border-2 border-stone-200 text-stone-600 font-bold py-4 rounded-xl hover:border-stone-300 transition-colors disabled:opacity-50"
+              >
+                Cancel Drop
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white rounded-3xl p-6 md:p-8 border border-stone-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)] text-center py-16">
+            <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Package size={28} />
+            </div>
+            <h3 className="text-xl font-bold text-stone-900 mb-2">No Active Drops</h3>
+            <p className="text-stone-500 mb-6 max-w-md mx-auto">You don't have any drops currently being prepared. Create a new drop to start taking orders.</p>
+            <Link to="/dashboard/creator/drops/new" className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600 transition-colors shadow-sm shadow-orange-500/20">
+              <Plus size={20} /> Create New Drop
             </Link>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <div className="bg-stone-50 rounded-2xl p-5 border border-stone-100">
-              <div className="flex justify-between items-end mb-3">
-                <span className="text-sm font-semibold text-stone-500 uppercase tracking-wider">Slots Filled</span>
-                <span className="text-2xl font-bold text-stone-900">{mockActiveDrop.currentOrders} <span className="text-base text-stone-400 font-normal">/ {mockActiveDrop.maxOrders}</span></span>
-              </div>
-              <div className="w-full h-3 bg-stone-200 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-green-500 rounded-full" 
-                  style={{ width: `${percentFilled}%` }}
-                />
-              </div>
-              {percentFilled === 100 && <p className="text-xs text-green-600 font-bold mt-2">Sold Out!</p>}
-            </div>
-
-            <div className="bg-stone-50 rounded-2xl p-5 border border-stone-100 flex flex-col justify-center">
-              <span className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-1">Revenue Earned</span>
-              <span className="text-3xl font-display font-bold text-stone-900 flex items-center gap-2">
-                ₹{mockActiveDrop.revenue} <span className="text-sm text-stone-400 font-normal mt-2">in pre-orders</span>
-              </span>
-            </div>
-          </div>
-
-          <div className="border border-stone-200 rounded-2xl overflow-hidden mb-8">
-            <div className="bg-stone-50 p-4 border-b border-stone-200 flex justify-between items-center cursor-pointer" onClick={() => setActiveDropOrderExpanded(!activeDropOrderExpanded)}>
-              <h4 className="font-bold text-stone-800">Items to Prepare</h4>
-              <ChevronDown className={`text-stone-400 transition-transform ${activeDropOrderExpanded ? 'rotate-180' : ''}`} />
-            </div>
-            {activeDropOrderExpanded && (
-              <div className="p-0">
-                <table className="w-full text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-stone-100">
-                      <th className="p-4 font-semibold text-stone-500">Item Name</th>
-                      <th className="p-4 font-semibold text-stone-500 text-right">Qty Ordered</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockActiveDrop.itemsToPrepare.map((item, i) => (
-                      <tr key={i} className="border-b border-stone-50 last:border-0">
-                        <td className="p-4 font-medium text-stone-900">{item.name}</td>
-                        <td className="p-4 font-bold text-orange-600 text-right text-lg">{item.qty}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-3">
-            <button className="flex-1 bg-stone-900 text-white font-bold py-4 rounded-xl shadow-sm hover:bg-stone-800 transition-colors flex justify-center items-center gap-2">
-              Mark Drop as Ready <CheckCircle size={18} />
-            </button>
-            <button className="px-6 bg-white border-2 border-stone-200 text-stone-600 font-bold py-4 rounded-xl hover:border-stone-300 transition-colors">
-              Cancel Drop
-            </button>
-          </div>
-        </div>
+        )}
       </section>
 
       {/* SECTION 3 & 4: KPIs & Insights */}

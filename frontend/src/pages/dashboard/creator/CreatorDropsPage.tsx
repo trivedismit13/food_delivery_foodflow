@@ -23,7 +23,7 @@ export default function CreatorDropsPage() {
       date: formatDropDate(drop.dropDate),
       maxOrders: drop.maxOrders,
       currentOrders: drop.currentOrders,
-      revenue: 0,
+      revenue: drop.items ? drop.items.reduce((sum, item) => sum + (item.quantityOrdered * (item.dropPrice ?? item.price)), 0) : 0,
       recentOrders: [] as Array<{ id: string; name: string; items: string }>,
     })),
     [drops]

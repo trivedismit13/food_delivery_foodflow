@@ -5,11 +5,12 @@ import { CountdownTimer } from '@/components/drops/CountdownTimer';
 import type { DropStatus } from '@/components/drops/DropCard';
 import { VerificationBadge } from '@/components/creators/VerificationBadge';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Star, Clock, MapPin, Loader2, Minus, Plus, CreditCard, Wallet, Banknote } from 'lucide-react';
+import { Shield, Star, Clock, MapPin, Loader2, Minus, Plus, CreditCard, Wallet, Banknote, AlertCircle, CheckCircle2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
 import { useDropRealtime } from '@/hooks/useDropRealtime';
 import { useDropById, usePlaceDropOrder } from '@/queries/drops';
+import type { PaymentMethod } from '@/types/order';
 
 export default function DropDetailPage() {
   const { dropId } = useParams();
@@ -24,7 +25,10 @@ export default function DropDetailPage() {
 
   const { data: drop, isLoading: isDropLoading } = useDropById(Number(dropId));
   const placeOrderMutation = usePlaceDropOrder();
-  const isPlacingOrder = placeOrderMutation.isPending;
+
+  type CheckoutState = 'idle' | 'loading' | 'success' | 'error' | 'sold_out';
+  const [checkoutState, setCheckoutState] = useState<CheckoutState>('idle');
+  const [checkoutError, setCheckoutError] = useState<string>('');
 
   useDropRealtime(dropId ? Number(dropId) : undefined, (update) => {
     if (update.isSoldOut) {
@@ -49,9 +53,11 @@ export default function DropDetailPage() {
     { id: 3, name: "Amit V.", rating: 5, text: "Consistent quality every single time. The salan is exceptionally good.", date: "1 month ago" }
   ];
 
-  const isSoldOut = drop.currentOrders >= drop.maxOrders || drop.isSoldOut;
+  const isSoldOut = drop.status !== 'OPEN' || drop.isSoldOut;
   const percentFilled = Math.min((drop.currentOrders / drop.maxOrders) * 100, 100);
-  const timeToCutoffMs = new Date(drop.orderCutoffTime).getTime() - now.getTime();
+  const timeToCutoffMs = drop.minutesUntilCutoff != null 
+    ? drop.minutesUntilCutoff * 60 * 1000 
+    : new Date(drop.orderCutoffTime).getTime() - now.getTime();
   const isClosingSoon = timeToCutoffMs > 0 && timeToCutoffMs < 1000 * 60 * 60 * 2;
 
   // Order Calculations
@@ -87,6 +93,24 @@ export default function DropDetailPage() {
       return;
     }
 
+    if (collectionMethod === 'delivery' && !deliveryAddress.trim()) {
+      toast.error("Please provide a delivery address");
+      return;
+    }
+
+    const hasExceeded = drop.items?.some(item => {
+      const qty = selectedItems[item.itemId] || 0;
+      return qty > item.quantityAvailable;
+    });
+
+    if (hasExceeded) {
+      toast.error("Some items exceed available stock. Please reduce the quantity.");
+      return;
+    }
+
+    setCheckoutState('loading');
+    setCheckoutError('');
+
     try {
       await placeOrderMutation.mutateAsync({
         dropId: drop.dropId,
@@ -94,10 +118,14 @@ export default function DropDetailPage() {
           itemId: Number(itemId),
           quantity
         })),
+        paymentMethod: paymentMethod.toUpperCase() as PaymentMethod,
+        pickupTime: collectionMethod === 'pickup' ? selectedTimeSlot : undefined,
         isDelivery: collectionMethod === 'delivery',
         deliveryAddress: collectionMethod === 'delivery' ? deliveryAddress : undefined,
-        specialInstructions
+        specialInstructions: specialInstructions || undefined
       } as any);
+
+      setCheckoutState('success');
 
       // confetti logic inside onSuccess in hook or here
       const duration = 3 * 1000;
@@ -127,8 +155,16 @@ export default function DropDetailPage() {
 
       toast.success("Pre-order confirmed! 🎉");
       
-    } catch (e) {
-      // Error handled by mutation hook
+    } catch (e: any) {
+      const status = e?.response?.status;
+      const msg = e?.response?.data?.message || e?.message || '';
+      
+      if (status === 409 || msg.toLowerCase().includes('sold out') || msg.toLowerCase().includes('conflict') || msg.toLowerCase().includes('insufficient')) {
+        setCheckoutState('sold_out');
+      } else {
+        setCheckoutState('error');
+        setCheckoutError(msg || 'Failed to place order. Please try again.');
+      }
     }
   };
 
@@ -179,7 +215,7 @@ export default function DropDetailPage() {
                 </div>
                 <div className="w-px h-12 bg-stone-200 hidden md:block"></div>
                 <div className="shrink-0">
-                  <CountdownTimer cutoffTime={drop.orderCutoffTime} size="lg" />
+                  <CountdownTimer cutoffTime={drop.orderCutoffTime} minutesUntilCutoff={drop.minutesUntilCutoff} size="lg" />
                 </div>
               </div>
             </section>
@@ -274,7 +310,7 @@ export default function DropDetailPage() {
                     </div>
                     <div>
                       <h3 className="font-display text-2xl font-bold">{drop.creator?.name}</h3>
-                      <p className="text-stone-400">{drop.creator?.creatorType} • {(drop.creator as any)?.city || 'Local Area'}</p>
+                      <p className="text-stone-400">{drop.creator?.creatorType} • Local Area</p>
                     </div>
                   </div>
                   
@@ -283,7 +319,7 @@ export default function DropDetailPage() {
                   </button>
                 </div>
 
-                <p className="text-stone-300 leading-relaxed mb-8">{(drop.creator as any)?.bio || 'This creator is passionate about bringing the best homemade food to your table.'}</p>
+                <p className="text-stone-300 leading-relaxed mb-8">This creator is passionate about bringing the best homemade food to your table.</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-stone-800">
                   <div>
@@ -351,7 +387,31 @@ export default function DropDetailPage() {
           <div className="w-full lg:w-[40%]">
             <div className="sticky top-24 bg-white rounded-3xl p-6 md:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-stone-100">
               
-              <h2 className="font-display text-2xl font-bold text-stone-900 mb-6">Reserve Your Slot</h2>
+              {checkoutState === 'success' ? (
+                <div className="text-center py-12">
+                  <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle2 size={40} />
+                  </div>
+                  <h2 className="font-display text-3xl font-bold text-stone-900 mb-4">Order Confirmed!</h2>
+                  <p className="text-stone-600 mb-8">Your pre-order has been successfully placed. We'll keep you updated.</p>
+                  <Link to="/orders" className="w-full inline-flex justify-center bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg rounded-xl py-4 transition-colors shadow-sm">
+                    View My Orders
+                  </Link>
+                </div>
+              ) : checkoutState === 'sold_out' ? (
+                <div className="text-center py-12">
+                  <div className="w-20 h-20 bg-stone-100 text-stone-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <AlertCircle size={40} />
+                  </div>
+                  <h2 className="font-display text-3xl font-bold text-stone-900 mb-4">Sold Out</h2>
+                  <p className="text-stone-600 mb-8">We're sorry, but the items you requested just sold out. Please check out other drops!</p>
+                  <button onClick={() => window.location.reload()} className="w-full inline-flex justify-center bg-stone-900 hover:bg-stone-800 text-white font-bold text-lg rounded-xl py-4 transition-colors shadow-sm">
+                    Refresh Availability
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <h2 className="font-display text-2xl font-bold text-stone-900 mb-6">Reserve Your Slot</h2>
 
               {isClosingSoon && (
                 <div className="mb-6 bg-red-50 border border-red-100 rounded-xl p-3 flex gap-3 animate-pulse">
@@ -423,7 +483,7 @@ export default function DropDetailPage() {
                     <motion.div key="pickup" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-4 overflow-hidden">
                       <div className="bg-orange-50 text-orange-900 p-4 rounded-xl text-sm flex gap-3">
                         <MapPin size={18} className="shrink-0 text-orange-500" />
-                        <p>{(drop.creator as any)?.pickupAddress || 'Creator local address will be shown after booking.'}</p>
+                        <p>Creator local address will be shown after booking.</p>
                       </div>
                       <div>
                         <label className="text-sm font-medium text-stone-700 block mb-2">Select Pickup Time</label>
@@ -483,6 +543,16 @@ export default function DropDetailPage() {
               </div>
 
               {/* Primary Action Button */}
+              {checkoutState === 'error' && (
+                <div className="mb-6 bg-red-50 border border-red-100 rounded-xl p-4 flex gap-3">
+                  <AlertCircle className="text-red-500 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-bold text-red-900">Checkout failed</h4>
+                    <p className="text-sm text-red-800">{checkoutError}</p>
+                  </div>
+                </div>
+              )}
+
               {!isAuthenticated ? (
                 <button 
                   onClick={() => navigate('/auth/login?redirect=/drops/' + drop.dropId)}
@@ -493,10 +563,10 @@ export default function DropDetailPage() {
               ) : drop.status === 'OPEN' && !isSoldOut ? (
                 <button 
                   onClick={handlePlaceOrder}
-                  disabled={totalItems === 0 || isPlacingOrder || (collectionMethod === 'delivery' && !deliveryAddress)}
+                  disabled={totalItems === 0 || checkoutState === 'loading' || (collectionMethod === 'delivery' && !deliveryAddress.trim())}
                   className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-stone-200 disabled:text-stone-400 text-white font-bold text-lg rounded-xl py-4 transition-colors shadow-sm flex justify-center items-center gap-2"
                 >
-                  {isPlacingOrder ? <><Loader2 className="animate-spin" size={20}/> Confirming...</> : `Confirm Pre-order — ₹${orderTotal}`}
+                  {checkoutState === 'loading' ? <><Loader2 className="animate-spin" size={20}/> Confirming...</> : `Confirm Pre-order — ₹${orderTotal}`}
                 </button>
               ) : drop.status === 'ANNOUNCED' ? (
                 <button className="w-full bg-white border-2 border-orange-500 text-orange-500 hover:bg-orange-50 font-bold rounded-xl py-4 transition-colors">
@@ -514,6 +584,8 @@ export default function DropDetailPage() {
               <p className="text-center text-xs text-stone-400 mt-4 flex items-center justify-center gap-2">
                 <span>🔒 Secure payment</span> • <span>No cancellation after cutoff</span>
               </p>
+                </>
+              )}
 
             </div>
           </div>

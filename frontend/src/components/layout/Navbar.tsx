@@ -5,6 +5,7 @@ import { useStore } from '@/store/useStore';
 import { useAuthStore } from '@/store/authStore';
 import { useLocationStore } from '@/store/locationStore';
 import { LocationPrompt } from '@/components/location/LocationPrompt';
+import { useUnreadCount } from '@/queries/notifications';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -18,7 +19,7 @@ export default function Navbar() {
   
   const { isAuthenticated, user, creatorProfile, isCreator, isCustomer, logout } = useAuthStore();
   const { cityName } = useLocationStore();
-  const unreadCount = 2; // Stub for notifications
+  const { data: unreadCount = 0 } = useUnreadCount();
 
   const handleLogout = () => {
     logout();

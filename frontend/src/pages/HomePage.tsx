@@ -189,7 +189,7 @@ export default function HomePage() {
                     followerCount={creator.followerCount}
                     totalOrders={creator.totalOrdersCompleted}
                     verificationLevel={creator.verificationLevel}
-                    hasActiveDrop={creator.isOpen}
+                    hasActiveDrop={creator.isAcceptingOrders}
                     topCategories={creator.cuisine ? creator.cuisine.split(',') : undefined}
                   />
                 </div>

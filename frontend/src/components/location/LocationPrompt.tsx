@@ -4,6 +4,8 @@ import { useLocationStore } from '@/store/locationStore';
 import { useSearchCities, reverseGeocodeCity } from '@/queries/cities';
 import type { City } from '@/queries/cities';
 import { toast } from 'sonner';
+import { locationService, LocationServiceError } from '@/services/locationService';
+
 
 interface Props {
   onClose: () => void;
@@ -16,50 +18,36 @@ export function LocationPrompt({ onClose, canSkip = true }: Props) {
   const { data: searchResults, isLoading: isSearching } = useSearchCities(query);
   const { setLocation } = useLocationStore();
 
-  const handleDetectLocation = useCallback(() => {
+  const handleDetectLocation = useCallback(async () => {
     setIsDetecting(true);
-    if (!navigator.geolocation) {
-      toast.error('Geolocation is not supported by your browser');
+    try {
+      const coords = await locationService.getCurrentPosition();
+      try {
+        const city = await reverseGeocodeCity(coords.latitude, coords.longitude);
+        setLocation({
+          cityId: city.cityId,
+          cityName: city.cityName,
+          lat: city.latitude,
+          lng: city.longitude,
+          source: 'GPS',
+        });
+        toast.success(`📍 Location set to ${city.cityName}`);
+        onClose();
+      } catch (err: any) {
+        const errorMsg = err.response?.data?.message || 'Your location is outside our service area.';
+        toast.error(errorMsg);
+      }
+    } catch (err: any) {
+      if (err instanceof LocationServiceError) {
+        if (err.code === 1) toast.error('Location access denied. Please search for your city below.');
+        else if (err.code === 3) toast.error('Location request timed out. Please try again or search below.');
+        else toast.error(err.message || 'Error getting location');
+      } else {
+        toast.error('Error getting location');
+      }
+    } finally {
       setIsDetecting(false);
-      return;
     }
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { latitude, longitude } = position.coords;
-          const city = await reverseGeocodeCity(latitude, longitude);
-          // GPS found a city in our DB — use it with full geodata
-          setLocation({
-            cityId: city.cityId,
-            cityName: city.cityName,
-            lat: city.latitude,
-            lng: city.longitude,
-          });
-          toast.success(`📍 Location set to ${city.cityName}`);
-          onClose();
-        } catch {
-          // GPS worked but city not in DB — use raw coordinates with a generic label
-          // This way we still store lat/lng for future proximity filtering
-          const { latitude, longitude } = position.coords;
-          setLocation({
-            cityId: null,
-            cityName: 'My Location',
-            lat: latitude,
-            lng: longitude,
-          });
-          toast.success('📍 Using your current coordinates');
-          onClose();
-        } finally {
-          setIsDetecting(false);
-        }
-      },
-      () => {
-        toast.error('Location access denied. Please search for your city below.');
-        setIsDetecting(false);
-      },
-      { timeout: 10000 }
-    );
   }, [setLocation, onClose]);
 
   const handleSelectCity = useCallback((city: City) => {
@@ -68,6 +56,7 @@ export function LocationPrompt({ onClose, canSkip = true }: Props) {
       cityName: city.cityName,
       lat: city.latitude,
       lng: city.longitude,
+      source: 'MANUAL',
     });
     toast.success(`📍 Location set to ${city.cityName}`);
     onClose();
@@ -82,6 +71,7 @@ export function LocationPrompt({ onClose, canSkip = true }: Props) {
       cityName: trimmed,
       lat: null,
       lng: null,
+      source: 'MANUAL',
     });
     toast.success(`📍 Location set to ${trimmed}`);
     onClose();

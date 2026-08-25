@@ -18,6 +18,7 @@ public class PlaceDropOrderRequest {
     private Long dropId;
 
     @NotEmpty(message = "At least one item is required")
+    @jakarta.validation.Valid
     private List<ItemRequest> items;
 
     @NotNull(message = "Payment method is required")
@@ -39,6 +40,7 @@ public class PlaceDropOrderRequest {
         private Long itemId;
 
         @NotNull(message = "Quantity is required")
+        @jakarta.validation.constraints.Min(value = 1, message = "Quantity must be at least 1")
         private Integer quantity;
     }
 }

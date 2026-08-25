@@ -4,8 +4,8 @@ import { DropCard } from '@/components/drops/DropCard';
 import { useAuthStore } from '@/store/authStore';
 import { Upload, X, Search, Plus, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useCreatorMenu } from '@/queries/creators';
 import { useCreateDrop } from '@/queries/drops';
+import { useMenu } from '@/queries/menu';
 import { ValidationError } from '@/lib/api';
 
 export default function CreateDropPage() {
@@ -30,7 +30,7 @@ export default function CreateDropPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch Menu Catalog
-  const { data: menuItems = [] } = useCreatorMenu(creatorProfile?.restaurantId);
+  const { data: menuItems = [], isLoading: isLoadingMenu } = useMenu(creatorProfile?.restaurantId);
   const createDropMutation = useCreateDrop();
 
   const normalizedMenuItems = (menuItems as any[]).map((item) => ({
@@ -100,7 +100,7 @@ export default function CreateDropPage() {
     title: title || "Your Drop Title",
     creatorId: user?.userId || 1,
     creatorName: user?.name || "Creator",
-    creatorVerificationLevel: 2 as const,
+    creatorVerificationLevel: creatorProfile?.verificationLevel || 1,
     status: 'ANNOUNCED' as const,
     maxOrders: parseInt(maxOrders) || 0,
     currentOrders: 0,
@@ -121,6 +121,40 @@ export default function CreateDropPage() {
       toast.error("Please fill in all required fields and add at least one item.");
       return;
     }
+
+    const maxOrdersNum = parseInt(maxOrders, 10);
+    if (isNaN(maxOrdersNum) || maxOrdersNum <= 0) {
+      toast.error("Total Maximum Orders must be greater than 0.");
+      return;
+    }
+
+    const invalidItem = selectedItems.find(item => {
+      const qty = parseInt(item.availableQty || '1', 10);
+      const price = parseFloat(item.dropPrice || item.price || '0');
+      return isNaN(qty) || qty <= 0 || isNaN(price) || price < 0;
+    });
+
+    if (invalidItem) {
+      toast.error("Item quantities must be > 0 and prices >= 0.");
+      return;
+    }
+
+    if (pickupStart) {
+      const cutoffDate = new Date(cutoffTime);
+      const pickupStartDate = new Date(`${dropDate}T${pickupStart}:00`);
+      if (cutoffDate >= pickupStartDate) {
+        toast.error("Order cutoff time must be before pickup start time.");
+        return;
+      }
+      
+      if (pickupEnd) {
+        const pickupEndDate = new Date(`${dropDate}T${pickupEnd}:00`);
+        if (pickupStartDate >= pickupEndDate) {
+          toast.error("Pickup start time must be before pickup end time.");
+          return;
+        }
+      }
+    }
     
     setIsSaving(true);
     try {
@@ -128,9 +162,9 @@ export default function CreateDropPage() {
         title,
         description,
         dropDate,
-        orderCutoffTime: cutoffTime,
-        pickupStartTime: pickupStart ? `${dropDate}T${pickupStart}:00` : undefined,
-        pickupEndTime: pickupEnd ? `${dropDate}T${pickupEnd}:00` : undefined,
+        orderCutoffTime: new Date(cutoffTime).toISOString(),
+        pickupStartTime: pickupStart ? new Date(`${dropDate}T${pickupStart}:00`).toISOString() : undefined,
+        pickupEndTime: pickupEnd ? new Date(`${dropDate}T${pickupEnd}:00`).toISOString() : undefined,
         maxOrders: parseInt(maxOrders),
         isDeliveryAvailable: offerDelivery,
         deliveryCharge: offerDelivery && deliveryCharge ? parseFloat(deliveryCharge) : undefined,

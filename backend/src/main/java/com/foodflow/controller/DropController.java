@@ -88,9 +88,10 @@ public class DropController {
 
     @GetMapping("/following")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiResponse<List<FoodDropResponse>>> getFollowedCreatorDrops(
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(ApiResponse.success(dropService.getFollowedCreatorDrops(userDetails.getId())));
+    public ResponseEntity<ApiResponse<org.springframework.data.domain.Page<FoodDropResponse>>> getFollowedCreatorDrops(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @org.springframework.data.web.PageableDefault(size = 20) org.springframework.data.domain.Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.success(dropService.getFollowedCreatorDrops(userDetails.getId(), pageable)));
     }
 
     @GetMapping("/{dropId}")
@@ -99,8 +100,10 @@ public class DropController {
     }
 
     @GetMapping("/creator/{creatorId}")
-    public ResponseEntity<ApiResponse<List<FoodDropResponse>>> getCreatorDrops(@PathVariable Long creatorId) {
-        return ResponseEntity.ok(ApiResponse.success(dropService.getCreatorDrops(creatorId, null)));
+    public ResponseEntity<ApiResponse<org.springframework.data.domain.Page<FoodDropResponse>>> getCreatorDrops(
+            @PathVariable Long creatorId,
+            @org.springframework.data.web.PageableDefault(size = 20) org.springframework.data.domain.Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.success(dropService.getCreatorDrops(creatorId, null, pageable)));
     }
 
     // --- Order Placement ---
@@ -113,5 +116,14 @@ public class DropController {
             @Valid @RequestBody PlaceDropOrderRequest request) {
         request.setDropId(dropId);
         return ResponseEntity.ok(ApiResponse.success(dropOrderService.placeDropOrder(userDetails.getId(), request)));
+    }
+
+    @PostMapping("/{dropId}/orders/{orderId}/cancel")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('OWNER')")
+    public ResponseEntity<ApiResponse<Void>> cancelDropOrder(
+            @PathVariable Long dropId,
+            @PathVariable Long orderId) {
+        dropOrderService.cancelDropOrder(orderId);
+        return ResponseEntity.ok(ApiResponse.success(null, "Order cancelled successfully", 200));
     }
 }

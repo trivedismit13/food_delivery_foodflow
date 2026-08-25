@@ -14,6 +14,8 @@ public interface CityRepository extends JpaRepository<City, Long> {
     
     List<City> findByCityNameStartingWithIgnoreCaseAndIsActiveTrueOrderByPopulationDesc(String cityName);
 
+    Optional<City> findByCityNameIgnoreCaseAndIsActiveTrue(String cityName);
+
     @Query(value = "SELECT * FROM cities " +
                    "WHERE is_active = true " +
                    "ORDER BY (6371 * ACOS(COS(RADIANS(:lat)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude) - RADIANS(:lng)) + SIN(RADIANS(:lat)) * SIN(RADIANS(latitude)))) ASC LIMIT 1", nativeQuery = true)

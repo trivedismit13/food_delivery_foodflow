@@ -36,6 +36,7 @@ public class DropServiceImpl implements DropService {
     private final NotificationService notificationService;
     private final MenuItemRepository menuItemRepository;
     private final com.foodflow.repository.OrderRepository orderRepository;
+    private final com.foodflow.service.security.CreatorAuthorizationService authorizationService;
 
     @Override
     @Transactional
@@ -130,6 +131,7 @@ public class DropServiceImpl implements DropService {
     @Override
     @Transactional
     public FoodDropResponse updateDrop(Long dropId, UpdateDropRequest request) {
+        authorizationService.assertCreatorOwnsDrop(dropId);
         FoodDrop drop = dropRepository.findById(dropId)
             .orElseThrow(() -> new ResourceNotFoundException("Drop not found: " + dropId));
 
@@ -154,6 +156,7 @@ public class DropServiceImpl implements DropService {
     @Override
     @Transactional
     public FoodDropResponse updateDropStatus(Long dropId, FoodDrop.DropStatus newStatus) {
+        authorizationService.assertCreatorOwnsDrop(dropId);
         FoodDrop drop = dropRepository.findById(dropId)
             .orElseThrow(() -> new ResourceNotFoundException("Drop not found: " + dropId));
         
@@ -218,15 +221,15 @@ public class DropServiceImpl implements DropService {
     }
 
     @Override
-    public List<FoodDropResponse> getCreatorDrops(Long creatorId, List<FoodDrop.DropStatus> statuses) {
-        List<FoodDrop> drops;
+    public org.springframework.data.domain.Page<FoodDropResponse> getCreatorDrops(Long creatorId, List<FoodDrop.DropStatus> statuses, org.springframework.data.domain.Pageable pageable) {
+        org.springframework.data.domain.Page<FoodDrop> drops;
         if (statuses != null && !statuses.isEmpty()) {
-            drops = dropRepository.findByCreatorOwnerUserIdAndStatusIn(creatorId, statuses);
+            drops = dropRepository.findByCreatorOwnerUserIdAndStatusIn(creatorId, statuses, pageable);
         } else {
             drops = dropRepository.findByCreatorOwnerUserIdAndStatusIn(creatorId, 
-                List.of(FoodDrop.DropStatus.values()));
+                List.of(FoodDrop.DropStatus.values()), pageable);
         }
-        return drops.stream().map(this::mapToResponse).collect(Collectors.toList());
+        return drops.map(this::mapToResponse);
     }
 
     @Override
@@ -253,14 +256,15 @@ public class DropServiceImpl implements DropService {
     }
 
     @Override
-    public List<FoodDropResponse> getFollowedCreatorDrops(Long userId) {
-        List<FoodDrop> drops = dropRepository.findDropsFromFollowedCreators(userId);
-        return drops.stream().map(this::mapToResponse).collect(Collectors.toList());
+    public org.springframework.data.domain.Page<FoodDropResponse> getFollowedCreatorDrops(Long userId, org.springframework.data.domain.Pageable pageable) {
+        org.springframework.data.domain.Page<FoodDrop> drops = dropRepository.findDropsFromFollowedCreators(userId, pageable);
+        return drops.map(this::mapToResponse);
     }
 
     @Override
     @Transactional
     public void addItemToDrop(Long dropId, AddDropItemRequest request) {
+        authorizationService.assertCreatorOwnsDrop(dropId);
         FoodDrop drop = dropRepository.findById(dropId)
             .orElseThrow(() -> new ResourceNotFoundException("Drop not found: " + dropId));
 
@@ -281,6 +285,7 @@ public class DropServiceImpl implements DropService {
     @Override
     @Transactional
     public void removeItemFromDrop(Long dropId, Long itemId) {
+        authorizationService.assertCreatorOwnsDrop(dropId);
         FoodDrop drop = dropRepository.findById(dropId)
             .orElseThrow(() -> new ResourceNotFoundException("Drop not found: " + dropId));
 
@@ -364,7 +369,7 @@ public class DropServiceImpl implements DropService {
             FoodDrop.DropStatus.ANNOUNCED, List.of(FoodDrop.DropStatus.OPEN, FoodDrop.DropStatus.CANCELLED),
             FoodDrop.DropStatus.OPEN, List.of(FoodDrop.DropStatus.CUTOFF, FoodDrop.DropStatus.CANCELLED),
             FoodDrop.DropStatus.CUTOFF, List.of(FoodDrop.DropStatus.READY, FoodDrop.DropStatus.CANCELLED),
-            FoodDrop.DropStatus.READY, List.of(FoodDrop.DropStatus.COMPLETED),
+            FoodDrop.DropStatus.READY, List.of(FoodDrop.DropStatus.COMPLETED, FoodDrop.DropStatus.CANCELLED),
             FoodDrop.DropStatus.COMPLETED, List.of(),
             FoodDrop.DropStatus.CANCELLED, List.of()
         );

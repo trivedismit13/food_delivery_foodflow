@@ -44,11 +44,14 @@ class MenuControllerTest {
     @MockBean
     private JwtUtils jwtUtils;
 
+    @MockBean
+    private com.foodflow.security.UserDetailsServiceImpl userDetailsService;
+
     @Test
     void createMenuItemShouldResolveRestaurantFromRepository() throws Exception {
         Restaurant restaurant = new Restaurant();
         restaurant.setRestaurantId(7L);
-        when(restaurantRepository.getReferenceById(7L)).thenReturn(restaurant);
+        when(restaurantRepository.findById(7L)).thenReturn(java.util.Optional.of(restaurant));
         when(menuItemService.createMenuItem(any(MenuItem.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         MenuItemRequest request = new MenuItemRequest();
@@ -68,6 +71,6 @@ class MenuControllerTest {
         verify(menuItemService).createMenuItem(captor.capture());
         assertThat(captor.getValue().getRestaurant()).isNotNull();
         assertThat(captor.getValue().getRestaurant().getRestaurantId()).isEqualTo(7L);
-        verify(restaurantRepository).getReferenceById(7L);
+        verify(restaurantRepository).findById(7L);
     }
 }

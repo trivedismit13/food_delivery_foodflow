@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { VerificationBadge } from '../creators/VerificationBadge';
 import { CountdownTimer } from './CountdownTimer';
@@ -9,6 +9,7 @@ import type { FoodDropResponse } from '@/types/api';
 export type DropStatus = 'DRAFT' | 'ANNOUNCED' | 'OPEN' | 'CUTOFF' | 'READY' | 'COMPLETED' | 'CANCELLED';
 
 export function DropCard(drop: FoodDropResponse) {
+  const navigate = useNavigate();
   const {
     dropId, title, creator, dropPhotoUrl, status, maxOrders, currentOrders, 
     orderCutoffTime, dropDate, pickupStartTime, pickupEndTime, 
@@ -51,9 +52,9 @@ export function DropCard(drop: FoodDropResponse) {
   };
 
   return (
-    <Link 
-      to={`/drops/${dropId}`}
-      className="group block h-full bg-white rounded-3xl border border-stone-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col hover:-translate-y-1 hover:border-orange-200"
+    <div
+      onClick={() => navigate(`/drops/${dropId}`)}
+      className="group block h-full bg-white rounded-3xl border border-stone-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col hover:-translate-y-1 hover:border-orange-200 cursor-pointer"
     >
       {/* Image Header */}
       <div className="relative h-48 bg-stone-100 overflow-hidden shrink-0">
@@ -110,6 +111,7 @@ export function DropCard(drop: FoodDropResponse) {
 
         <div className="space-y-3 mt-auto">
           {/* Progress Bar for open drops */}
+
           {(status === 'OPEN' || status === 'ANNOUNCED') && (
             <div>
               <div className="flex justify-between text-xs font-medium mb-1.5">
@@ -152,6 +154,6 @@ export function DropCard(drop: FoodDropResponse) {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

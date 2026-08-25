@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface PaymentService {
     Optional<Payment> getPaymentByOrderId(Long orderId);
     Payment updatePaymentStatus(Long paymentId, PaymentStatus status);
+    Payment processPayment(Payment payment);
 }

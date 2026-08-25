@@ -5,7 +5,7 @@ import { apiClient } from '@/lib/api'
 import { handleApiError } from '@/lib/errorHandler'
 import { useAuthStore } from '@/store/authStore'
 import type { 
-  Page, 
+  PageResponse, 
   FoodDropResponse, 
   PlaceDropOrderRequest, 
   OrderResponse,
@@ -42,10 +42,10 @@ function buildParams(filters?: DropFilters): string {
 
 export function useActiveDropsFeed(filters?: DropFilters) {
   return useQuery({
-    queryKey: ['drops', 'feed', filters],
+    queryKey: ['drops', filters?.cityId, 'feed', filters],
     queryFn: async () => {
       const params = buildParams(filters)
-      const response = await apiClient.get<Page<FoodDropResponse>>(
+      const response = await apiClient.get<PageResponse<FoodDropResponse>>(
         `/drops?${params}`
       )
       return response.data
@@ -171,6 +171,28 @@ export function useUpdateDropStatus() {
       queryClient.invalidateQueries({ queryKey: ['drop', variables.dropId] })
       queryClient.invalidateQueries({ queryKey: ['dropOrders', variables.dropId] })
       toast.success(`Drop status updated to ${variables.status}`)
+    },
+    onError: (error: any) => {
+      handleApiError(error)
+    }
+  })
+}
+
+export function useCancelDrop() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (dropId: number) => {
+      const response = await apiClient.put<FoodDropResponse>(
+        `/drops/${dropId}/status?status=CANCELLED`
+      )
+      return response.data
+    },
+    onSuccess: (data, dropId) => {
+      queryClient.invalidateQueries({ queryKey: ['drop', dropId] })
+      queryClient.invalidateQueries({ queryKey: ['dropOrders', dropId] })
+      queryClient.invalidateQueries({ queryKey: ['drops'] })
+      toast.success('Drop cancelled successfully')
     },
     onError: (error: any) => {
       handleApiError(error)

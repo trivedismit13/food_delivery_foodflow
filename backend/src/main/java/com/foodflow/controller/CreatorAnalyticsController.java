@@ -17,12 +17,14 @@ public class CreatorAnalyticsController {
 
     private final AnalyticsService analyticsService;
     private final com.foodflow.service.impl.InsightService insightService;
+    private final com.foodflow.service.security.CreatorAuthorizationService authorizationService;
 
     @GetMapping("/dashboard")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<ApiResponse<CreatorDashboardResponse>> getDashboard(
             @PathVariable Long creatorId,
             @RequestParam(defaultValue = "WEEK") String period) {
+        authorizationService.assertCreatorOwnsAnalytics(creatorId);
         return ResponseEntity.ok(ApiResponse.success(analyticsService.getCreatorDashboard(creatorId, period)));
     }
 
@@ -31,6 +33,7 @@ public class CreatorAnalyticsController {
     public ResponseEntity<ApiResponse<List<WeeklyTrendResponse>>> getWeeklyTrend(
             @PathVariable Long creatorId,
             @RequestParam(defaultValue = "12") int weeks) {
+        authorizationService.assertCreatorOwnsAnalytics(creatorId);
         return ResponseEntity.ok(ApiResponse.success(analyticsService.getCreatorWeeklyTrend(creatorId, weeks)));
     }
 
@@ -39,6 +42,7 @@ public class CreatorAnalyticsController {
     public ResponseEntity<ApiResponse<org.springframework.data.domain.Page<TopItemResponse>>> getTopItems(
             @PathVariable Long creatorId,
             @org.springframework.data.web.PageableDefault(size = 20) org.springframework.data.domain.Pageable pageable) {
+        authorizationService.assertCreatorOwnsAnalytics(creatorId);
         return ResponseEntity.ok(ApiResponse.success(analyticsService.getCreatorTopItems(creatorId, pageable)));
     }
 
@@ -46,6 +50,7 @@ public class CreatorAnalyticsController {
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<ApiResponse<RepeatCustomerResponse>> getRepeatCustomers(
             @PathVariable Long creatorId) {
+        authorizationService.assertCreatorOwnsAnalytics(creatorId);
         return ResponseEntity.ok(ApiResponse.success(analyticsService.getCreatorRepeatCustomerRate(creatorId)));
     }
 
@@ -54,6 +59,7 @@ public class CreatorAnalyticsController {
     public ResponseEntity<ApiResponse<org.springframework.data.domain.Page<DropPerformanceResponse>>> getDropPerformance(
             @PathVariable Long creatorId,
             @org.springframework.data.web.PageableDefault(size = 20) org.springframework.data.domain.Pageable pageable) {
+        authorizationService.assertCreatorOwnsAnalytics(creatorId);
         return ResponseEntity.ok(ApiResponse.success(analyticsService.getDropPerformanceHistory(creatorId, pageable)));
     }
 
@@ -61,6 +67,7 @@ public class CreatorAnalyticsController {
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<ApiResponse<BestDayResponse>> getBestDay(
             @PathVariable Long creatorId) {
+        authorizationService.assertCreatorOwnsAnalytics(creatorId);
         return ResponseEntity.ok(ApiResponse.success(analyticsService.getBestDayOfWeek(creatorId)));
     }
 
@@ -71,6 +78,7 @@ public class CreatorAnalyticsController {
     public ResponseEntity<ApiResponse<InsightResponse>> askInsight(
             @PathVariable Long creatorId,
             @RequestBody Map<String, String> request) {
+        authorizationService.assertCreatorOwnsAnalytics(creatorId);
         String question = request.getOrDefault("question", "");
         return ResponseEntity.ok(ApiResponse.success(insightService.generateCreatorInsight(creatorId, question)));
     }
@@ -79,6 +87,7 @@ public class CreatorAnalyticsController {
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<ApiResponse<List<InsightResponse>>> getAutoInsight(
             @PathVariable Long creatorId) {
+        authorizationService.assertCreatorOwnsAnalytics(creatorId);
         return ResponseEntity.ok(ApiResponse.success(insightService.generateAutoInsights(creatorId)));
     }
 }

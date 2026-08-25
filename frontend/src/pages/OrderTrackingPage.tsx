@@ -32,10 +32,12 @@ export default function OrderTrackingPage() {
 
   const currentStatus = order.status
   let currentStepIndex = steps.findIndex(s => s.id === currentStatus)
-  // Fallback for ON_THE_WAY since we replaced it with READY in the steps array, but we might receive it
+  // Fallback for ON_THE_WAY since we replaced it with READY in the steps array
   if (currentStatus === 'ON_THE_WAY') {
     currentStepIndex = 2; // maps to the 3rd step (index 2)
   }
+
+  const isTerminal = currentStatus === 'DELIVERED' || currentStatus === 'CANCELLED'
 
   // Banner logic
   const renderBanner = () => {
@@ -82,6 +84,16 @@ export default function OrderTrackingPage() {
         </div>
       )
     }
+    if (currentStatus === 'CANCELLED') {
+      return (
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-8 flex items-center shadow-sm">
+          <div>
+            <h3 className="text-red-800 font-bold text-lg">Order Cancelled ❌</h3>
+            <p className="text-red-700 text-sm">This order has been cancelled and will not be processed.</p>
+          </div>
+        </div>
+      )
+    }
     return null
   }
 
@@ -100,73 +112,75 @@ export default function OrderTrackingPage() {
         <div className="flex flex-col md:flex-row gap-8">
           
           {/* Left: Timeline */}
-          <div className="md:w-[55%]">
-            <div className="bg-white rounded-2xl p-6 shadow-warm-sm border border-stone-100">
-              <h2 className="text-lg font-bold text-stone-800 mb-6">Status</h2>
-              
-              <div className="relative pl-4">
-                {/* Connecting Line background */}
-                <div className="absolute top-4 bottom-4 left-[27px] w-0.5 bg-stone-100"></div>
+          {currentStatus !== 'CANCELLED' && (
+            <div className="md:w-[55%]">
+              <div className="bg-white rounded-2xl p-6 shadow-warm-sm border border-stone-100">
+                <h2 className="text-lg font-bold text-stone-800 mb-6">Status</h2>
                 
-                {/* Active Connecting Line */}
-                <motion.div 
-                  initial={{ height: 0 }}
-                  animate={{ height: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                  className="absolute top-4 left-[27px] w-0.5 bg-brand-500 origin-top"
-                ></motion.div>
+                <div className="relative pl-4">
+                  {/* Connecting Line background */}
+                  <div className="absolute top-4 bottom-4 left-[27px] w-0.5 bg-stone-100"></div>
+                  
+                  {/* Active Connecting Line */}
+                  <motion.div 
+                    initial={{ height: 0 }}
+                    animate={{ height: `${(Math.max(0, currentStepIndex) / (steps.length - 1)) * 100}%` }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className="absolute top-4 left-[27px] w-0.5 bg-brand-500 origin-top"
+                  ></motion.div>
 
-                <div className="space-y-8 relative z-10">
-                  {steps.map((step, index) => {
-                    const isCompleted = index < currentStepIndex || currentStatus === 'DELIVERED'
-                    const isCurrent = index === currentStepIndex
+                  <div className="space-y-8 relative z-10">
+                    {steps.map((step, index) => {
+                      const isCompleted = index < currentStepIndex || currentStatus === 'DELIVERED'
+                      const isCurrent = index === currentStepIndex
 
-                    return (
-                      <div key={step.id} className="flex gap-4 items-start">
-                        {/* Dot / Icon */}
-                        <div className={cn(
-                          "w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm transition-colors duration-300 border-2",
-                          isCompleted ? "bg-brand-500 border-brand-500 text-white" :
-                          isCurrent ? "bg-white border-brand-500" :
-                          "bg-white border-stone-200 text-transparent"
-                        )}>
-                          {isCompleted ? (
-                            <Check className="w-3 h-3 stroke-[3]" />
-                          ) : isCurrent ? (
-                            <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-                          ) : null}
-                        </div>
-                        
-                        {/* Content */}
-                        <div className="flex-1 pb-1">
-                          <h4 className={cn(
-                            "font-semibold transition-colors duration-300",
-                            isCompleted || isCurrent ? "text-stone-800" : "text-stone-400"
+                      return (
+                        <div key={step.id} className="flex gap-4 items-start">
+                          {/* Dot / Icon */}
+                          <div className={cn(
+                            "w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm transition-colors duration-300 border-2",
+                            isCompleted ? "bg-brand-500 border-brand-500 text-white" :
+                            isCurrent ? "bg-white border-brand-500" :
+                            "bg-white border-stone-200 text-transparent"
                           )}>
-                            {step.label}
-                          </h4>
-                          {step.time && (
-                            <p className={cn(
-                              "text-xs mt-1 transition-colors duration-300",
-                              isCompleted || isCurrent ? "text-stone-500" : "text-stone-300"
+                            {isCompleted ? (
+                              <Check className="w-3 h-3 stroke-[3]" />
+                            ) : isCurrent ? (
+                              <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                            ) : null}
+                          </div>
+                          
+                          {/* Content */}
+                          <div className="flex-1 pb-1">
+                            <h4 className={cn(
+                              "font-semibold transition-colors duration-300",
+                              isCompleted || isCurrent ? "text-stone-800" : "text-stone-400"
                             )}>
-                              {step.time}
-                            </p>
-                          )}
+                              {step.label}
+                            </h4>
+                            {step.time && (
+                              <p className={cn(
+                                "text-xs mt-1 transition-colors duration-300",
+                                isCompleted || isCurrent ? "text-stone-500" : "text-stone-300"
+                              )}>
+                                {step.time}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    )
-                  })}
+                      )
+                    })}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Right: Details & Map Placeholder */}
-          <div className="md:w-[45%] flex flex-col gap-6">
+          <div className={cn("flex flex-col gap-6", currentStatus === 'CANCELLED' ? "w-full" : "md:w-[45%]")}>
             
             {/* Delivery Partner */}
-            {currentStepIndex >= 2 && (
+            {currentStepIndex >= 2 && currentStatus !== 'CANCELLED' && (
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -189,12 +203,14 @@ export default function OrderTrackingPage() {
             )}
 
             {/* Map Placeholder */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-warm-sm border border-stone-100 h-[200px] relative">
-              <div className="absolute inset-0 bg-stone-100 flex flex-col items-center justify-center text-stone-400">
-                <MapPin className="w-8 h-8 mb-2 opacity-50" />
-                <span className="text-sm font-medium">Map View</span>
+            {currentStatus !== 'CANCELLED' && (
+              <div className="bg-white rounded-2xl overflow-hidden shadow-warm-sm border border-stone-100 h-[200px] relative">
+                <div className="absolute inset-0 bg-stone-100 flex flex-col items-center justify-center text-stone-400">
+                  <MapPin className="w-8 h-8 mb-2 opacity-50" />
+                  <span className="text-sm font-medium">Map View</span>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Order Details Summary */}
             <div className="bg-white rounded-2xl p-5 shadow-warm-sm border border-stone-100">

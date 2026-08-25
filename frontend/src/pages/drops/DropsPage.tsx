@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DropCard } from '@/components/drops/DropCard';
 import { useAuthStore } from '@/store/authStore';
 import { useLocationStore } from '@/store/locationStore';
@@ -22,10 +22,15 @@ export default function DropsPage() {
   const [activeType, setActiveType] = useState('All');
   const [activeSort, setActiveSort] = useState('Closing Soonest');
   const [isLocationOpen, setIsLocationOpen] = useState(false);
+  const [page, setPage] = useState(0);
   
   const { cityId, lat, lng, cityName } = useLocationStore();
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query') || undefined;
+
+  useEffect(() => {
+    setPage(0);
+  }, [cityId, lat, lng, query]);
 
   const { data: feedData, isLoading: isFeedLoading, isPlaceholderData } = useActiveDropsFeed({ 
     cityId: cityId || undefined,
@@ -33,7 +38,8 @@ export default function DropsPage() {
     lng: lng || undefined,
     type: activeType !== 'All' ? typeMapping[activeType] : undefined,
     sortBy: activeSort === 'Closing Soonest' ? 'closingSoonest' : 'newest',
-    query
+    query,
+    page
   });
   const { data: followedDropsData = [] } = useFollowedCreatorDrops();
 
@@ -57,6 +63,16 @@ export default function DropsPage() {
   let filteredDrops = drops;
   if (activeStatus === 'Open Now') filteredDrops = filteredDrops.filter(d => d.status === 'OPEN');
   if (activeStatus === 'Coming Soon') filteredDrops = filteredDrops.filter(d => d.status === 'ANNOUNCED');
+
+  const handleTypeChange = (type: string) => {
+    setActiveType(type);
+    setPage(0);
+  };
+
+  const handleStatusChange = (status: string) => {
+    setActiveStatus(status);
+    setPage(0);
+  };
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -97,7 +113,7 @@ export default function DropsPage() {
             {['All', 'Open Now', 'Coming Soon', 'Closing Soon'].map(status => (
               <button 
                 key={status}
-                onClick={() => setActiveStatus(status)}
+                onClick={() => handleStatusChange(status)}
                 className={`whitespace-nowrap px-4 py-2 rounded-full text-sm transition-colors border ${
                   activeStatus === status ? 'bg-stone-800 text-white border-stone-800' : 'bg-white text-stone-600 border-stone-200 hover:bg-stone-50'
                 }`}
@@ -112,7 +128,7 @@ export default function DropsPage() {
             {['All', 'Baked Goods', 'Meals', 'Desserts', 'Tiffin'].map(type => (
               <button 
                 key={type}
-                onClick={() => setActiveType(type)}
+                onClick={() => handleTypeChange(type)}
                 className={`whitespace-nowrap px-4 py-2 rounded-full text-sm transition-colors border ${
                   activeType === type ? 'bg-stone-800 text-white border-stone-800' : 'bg-white text-stone-600 border-stone-200 hover:bg-stone-50'
                 }`}
@@ -141,13 +157,13 @@ export default function DropsPage() {
           {activeStatus !== 'All' && (
             <div className="inline-flex items-center gap-1 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-medium">
               Status: {activeStatus}
-              <button onClick={() => setActiveStatus('All')} className="hover:text-orange-500"><X size={12} /></button>
+              <button onClick={() => handleStatusChange('All')} className="hover:text-orange-500"><X size={12} /></button>
             </div>
           )}
           {activeType !== 'All' && (
             <div className="inline-flex items-center gap-1 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-medium">
               Type: {activeType}
-              <button onClick={() => setActiveType('All')} className="hover:text-orange-500"><X size={12} /></button>
+              <button onClick={() => handleTypeChange('All')} className="hover:text-orange-500"><X size={12} /></button>
             </div>
           )}
         </div>
@@ -239,10 +255,24 @@ export default function DropsPage() {
                  <div className="text-center text-sm text-stone-400 mt-4">Updating results...</div>
               )}
 
-              {/* LOAD MORE */}
-              <div className="mt-12 flex justify-center">
-                <button className="bg-white border border-stone-200 text-stone-700 font-semibold rounded-xl px-8 py-3 hover:bg-stone-50 transition-colors shadow-sm">
-                  Load more drops
+              {/* PAGINATION */}
+              <div className="mt-12 flex justify-between items-center">
+                <button 
+                  onClick={() => setPage(p => Math.max(0, p - 1))}
+                  disabled={feedData?.first || page === 0}
+                  className="bg-white border border-stone-200 text-stone-700 font-semibold rounded-xl px-6 py-3 hover:bg-stone-50 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                <span className="text-sm font-medium text-stone-600">
+                  Page {page + 1} of {feedData?.totalPages || 1}
+                </span>
+                <button 
+                  onClick={() => setPage(p => p + 1)}
+                  disabled={feedData?.last || (feedData?.totalPages ? page >= feedData.totalPages - 1 : false)}
+                  className="bg-white border border-stone-200 text-stone-700 font-semibold rounded-xl px-6 py-3 hover:bg-stone-50 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next Page
                 </button>
               </div>
             </>

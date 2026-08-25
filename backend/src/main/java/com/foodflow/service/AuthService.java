@@ -69,7 +69,7 @@ public class AuthService {
                 .email(user.getEmail())
                 .role(user.getRole().name())
                 .token(jwt)
-                .expiresIn(86400000)
+                .expiresIn(jwtUtils.getJwtExpirationMs())
                 .tokenType("Bearer")
                 .creatorProfile(null)
                 .build();
@@ -123,7 +123,7 @@ public class AuthService {
                 .email(userDetails.getUsername()) // getUsername returns email in UserDetailsImpl
                 .role(userDetails.getRole())
                 .token(jwt)
-                .expiresIn(86400000)
+                .expiresIn(jwtUtils.getJwtExpirationMs())
                 .tokenType("Bearer")
                 .creatorProfile(creatorProfile)
                 .build();
@@ -186,12 +186,26 @@ public class AuthService {
         Authentication auth = new UsernamePasswordAuthenticationToken(UserDetailsImpl.build(user), null, UserDetailsImpl.build(user).getAuthorities());
         String token = jwtUtils.generateJwtToken(auth);
         
+        CreatorSummary creatorProfile = CreatorSummary.builder()
+                .restaurantId(restaurant.getRestaurantId())
+                .name(restaurant.getName())
+                .creatorType(restaurant.getCreatorType())
+                .verificationLevel(restaurant.getVerificationLevel())
+                .avgRating(restaurant.getAvgRating())
+                .followerCount(restaurant.getFollowerCount())
+                .totalOrdersCompleted(restaurant.getTotalOrdersCompleted())
+                .isAcceptingOrders(restaurant.getIsAcceptingOrders())
+                .build();
+        
         AuthResponse authResponse = AuthResponse.builder()
-        .token(token)
-        .userId(user.getUserId())
-        .name(user.getName())
-        .email(user.getEmail())
-        .role(user.getRole().name())
+                .token(token)
+                .userId(user.getUserId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .role(user.getRole().name())
+                .expiresIn(jwtUtils.getJwtExpirationMs())
+                .tokenType("Bearer")
+                .creatorProfile(creatorProfile)
                 .build();
         
         return authResponse;

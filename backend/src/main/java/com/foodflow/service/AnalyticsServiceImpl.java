@@ -96,18 +96,19 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         Object summaryObj = analyticsRepository.findCreatorSummary(creatorId);
         if (summaryObj instanceof Object[] summaryRow && summaryRow.length > 4) {
             res.setCreatorName((String) summaryRow[1]);
-            res.setFollowerCount(((Number) summaryRow[3]).intValue());
+            res.setFollowerCount(summaryRow[3] != null ? ((Number) summaryRow[3]).intValue() : 0);
         }
 
         List<Object[]> weeklyTrend = analyticsRepository.findWeeklyRevenueTrend(creatorId, days / 7);
         java.math.BigDecimal totalRev = java.math.BigDecimal.ZERO;
         int totalOrders = 0;
-        int uniqueCustomers = 0;
+        int uniqueCustomers = analyticsRepository.findTotalUniqueCustomers(creatorId, days) != null ? analyticsRepository.findTotalUniqueCustomers(creatorId, days) : 0;
 
         for (Object[] row : weeklyTrend) {
-            totalOrders += ((Number) row[1]).intValue();
-            totalRev = totalRev.add(new java.math.BigDecimal(row[2].toString()));
-            uniqueCustomers += ((Number) row[3]).intValue();
+            totalOrders += row[1] != null ? ((Number) row[1]).intValue() : 0;
+            if (row[2] != null) {
+                totalRev = totalRev.add(new java.math.BigDecimal(row[2].toString()));
+            }
         }
 
         res.setTotalRevenue(totalRev);
@@ -118,7 +119,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         
         Object repeatRate = analyticsRepository.findRepeatCustomerRate(creatorId);
         if (repeatRate instanceof Object[] repeatRow && repeatRow.length > 2) {
-             res.setRepeatCustomerRate(((Number) repeatRow[2]).doubleValue());
+             res.setRepeatCustomerRate(repeatRow[2] != null ? ((Number) repeatRow[2]).doubleValue() : 0.0);
         }
 
         res.setTotalUniqueCustomers(uniqueCustomers);
@@ -134,10 +135,10 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         List<com.foodflow.dto.response.WeeklyTrendResponse> result = new java.util.ArrayList<>();
         for (Object[] row : trend) {
             com.foodflow.dto.response.WeeklyTrendResponse res = new com.foodflow.dto.response.WeeklyTrendResponse();
-            res.setWeek(row[0].toString());
-            res.setOrders(((Number) row[1]).intValue());
-            res.setRevenue(new java.math.BigDecimal(row[2].toString()));
-            res.setUniqueCustomers(((Number) row[3]).intValue());
+            res.setWeek(row[0] != null ? row[0].toString() : "N/A");
+            res.setOrders(row[1] != null ? ((Number) row[1]).intValue() : 0);
+            res.setRevenue(row[2] != null ? new java.math.BigDecimal(row[2].toString()) : java.math.BigDecimal.ZERO);
+            res.setUniqueCustomers(row[3] != null ? ((Number) row[3]).intValue() : 0);
             result.add(res);
         }
         return result;
@@ -149,9 +150,9 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         List<com.foodflow.dto.response.TopItemResponse> result = new java.util.ArrayList<>();
         for (Object[] row : items) {
             com.foodflow.dto.response.TopItemResponse res = new com.foodflow.dto.response.TopItemResponse();
-            res.setItemName(row[0].toString());
-            res.setTotalOrders(((Number) row[1]).intValue());
-            res.setTotalRevenue(new java.math.BigDecimal(row[2].toString()));
+            res.setItemName(row[0] != null ? row[0].toString() : "N/A");
+            res.setTotalOrders(row[1] != null ? ((Number) row[1]).intValue() : 0);
+            res.setTotalRevenue(row[2] != null ? new java.math.BigDecimal(row[2].toString()) : java.math.BigDecimal.ZERO);
             result.add(res);
         }
         return new org.springframework.data.domain.PageImpl<>(result, pageable, result.size());
@@ -162,9 +163,9 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         com.foodflow.dto.response.RepeatCustomerResponse res = new com.foodflow.dto.response.RepeatCustomerResponse();
         Object repeatRate = analyticsRepository.findRepeatCustomerRate(creatorId);
         if (repeatRate instanceof Object[] row && row.length > 2) {
-            res.setRepeatCustomers(((Number) row[0]).intValue());
-            res.setTotalCustomers(((Number) row[1]).intValue());
-            res.setRepeatRatePercent(((Number) row[2]).doubleValue());
+            res.setRepeatCustomers(row[0] != null ? ((Number) row[0]).intValue() : 0);
+            res.setTotalCustomers(row[1] != null ? ((Number) row[1]).intValue() : 0);
+            res.setRepeatRatePercent(row[2] != null ? ((Number) row[2]).doubleValue() : 0.0);
         } else {
             res.setRepeatCustomers(0);
             res.setTotalCustomers(0);
@@ -179,10 +180,10 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         List<com.foodflow.dto.response.DropPerformanceResponse> result = new java.util.ArrayList<>();
         for (Object[] row : drops) {
             com.foodflow.dto.response.DropPerformanceResponse res = new com.foodflow.dto.response.DropPerformanceResponse();
-            res.setDropTitle(row[0].toString());
-            res.setMaxOrders(((Number) row[1]).intValue());
-            res.setCurrentOrders(((Number) row[2]).intValue());
-            res.setHoursToSellout(((Number) row[3]).intValue());
+            res.setDropTitle(row[0] != null ? row[0].toString() : "N/A");
+            res.setMaxOrders(row[1] != null ? ((Number) row[1]).intValue() : 0);
+            res.setCurrentOrders(row[2] != null ? ((Number) row[2]).intValue() : 0);
+            res.setHoursToSellout(row[3] != null ? ((Number) row[3]).intValue() : 0);
             result.add(res);
         }
         return new org.springframework.data.domain.PageImpl<>(result, pageable, result.size());
@@ -194,9 +195,9 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         List<Object[]> bestDay = analyticsRepository.findBestDayOfWeekForCreator(creatorId);
         if (!bestDay.isEmpty()) {
             Object[] row = bestDay.get(0);
-            res.setDayOfWeek(row[0].toString());
-            res.setAvgFillRate(((Number) row[1]).doubleValue());
-            res.setDropCount(((Number) row[2]).intValue());
+            res.setDayOfWeek(row[0] != null ? row[0].toString() : "N/A");
+            res.setAvgFillRate(row[1] != null ? ((Number) row[1]).doubleValue() : 0.0);
+            res.setDropCount(row[2] != null ? ((Number) row[2]).intValue() : 0);
             res.setAvgOrdersPerDrop(row[3] != null ? ((Number) row[3]).doubleValue() : 0.0);
         } else {
             res.setDayOfWeek("N/A");

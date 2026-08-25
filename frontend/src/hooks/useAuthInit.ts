@@ -15,9 +15,12 @@ export function useAuthInit() {
     apiClient.get('/users/me')
       .then((response) => {
         // Token valid — update user data in case anything changed
+        // Preserve creatorProfile since /users/me doesn't return it
+        const currentProfile = useAuthStore.getState().creatorProfile
         setAuth({
           ...response.data,
           token: token,  // keep existing token
+          creatorProfile: response.data.creatorProfile || currentProfile,
         })
       })
       .catch(() => {

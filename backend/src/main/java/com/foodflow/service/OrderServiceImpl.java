@@ -27,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
     private final MenuItemRepository menuItemRepository;
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
-    private final PaymentRepository paymentRepository;
+    private final PaymentService paymentService;
 
     @Override
     @Transactional
@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
                 .method(paymentMethod != null ? paymentMethod : PaymentMethod.CARD)
                 .status(PaymentStatus.PENDING)
                 .build();
-        paymentRepository.save(payment);
+        paymentService.processPayment(payment);
 
         return mapToResponse(order);
     }
@@ -147,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderResponse mapToResponse(Order order) {
         List<OrderItem> orderItems = orderItemRepository.findByOrderOrderId(order.getOrderId());
-        Payment payment = paymentRepository.findByOrderOrderId(order.getOrderId()).orElse(null);
+        Payment payment = paymentService.getPaymentByOrderId(order.getOrderId()).orElse(null);
 
         List<OrderItemResponse> itemResponses = orderItems.stream().map(item -> OrderItemResponse.builder()
                 .orderItemId(item.getOrderItemId())
@@ -167,6 +167,11 @@ public class OrderServiceImpl implements OrderService {
                 .orderDate(order.getOrderDate())
                 .items(itemResponses)
                 .paymentStatus(payment != null ? payment.getStatus() : null)
+                .dropId(order.getDrop() != null ? order.getDrop().getDropId() : null)
+                .isDelivery(order.getIsDelivery())
+                .deliveryAddress(order.getDeliveryAddress())
+                .pickupTime(order.getPickupTime())
+                .specialInstructions(order.getSpecialInstructions())
                 .build();
     }
 }

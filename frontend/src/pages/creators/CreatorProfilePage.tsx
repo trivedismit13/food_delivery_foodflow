@@ -8,12 +8,13 @@ import { VerificationBadge } from '@/components/creators/VerificationBadge';
 import { DropCard } from '@/components/drops/DropCard';
 import { 
   useCreatorById, 
-  useCreatorMenu, 
   useCreatorRatings, 
   useFollowCreator, 
   useUnfollowCreator,
   useFollowStatus 
 } from '@/queries/creators';
+import { useMenu } from '@/queries/menu';
+import type { MenuItemResponse } from '@/types/menu';
 
 export default function CreatorProfilePage() {
   const { creatorId } = useParams();
@@ -25,7 +26,7 @@ export default function CreatorProfilePage() {
   const isOwner = user?.role === 'OWNER' && user?.userId === id;
   
   const { data: creator, isLoading } = useCreatorById(id);
-  const { data: menu, isLoading: isLoadingMenu } = useCreatorMenu(id);
+  const { data: menuItems = [], isLoading: isLoadingMenu } = useMenu(id);
   const { data: ratings, isLoading: isLoadingRatings } = useCreatorRatings(id);
   const { data: isFollowing, isLoading: isLoadingFollowStatus } = useFollowStatus(user ? id : undefined);
   
@@ -83,6 +84,19 @@ export default function CreatorProfilePage() {
               <span className="flex items-center gap-1"><Star size={16} className="fill-orange-400 text-orange-400" /> {creator.avgRating.toFixed(1)}</span>
               <span>{creator.cuisine}</span>
               <span className="px-2 py-0.5 bg-stone-200 rounded-md text-xs">{creator.creatorType.replace('_', ' ')}</span>
+            </div>
+            
+            <div className="flex flex-col gap-1 mt-3 text-sm font-medium text-stone-600">
+              {creator.offersDelivery ? (
+                <span className="flex items-center gap-1.5"><Check size={14} className="text-green-500" /> Delivery available (within {creator.deliveryRadiusKm}km)</span>
+              ) : (
+                <span className="flex items-center gap-1.5 text-stone-400"><span className="w-3.5 h-3.5 flex items-center justify-center font-bold text-[10px]">✕</span> No delivery</span>
+              )}
+              {creator.offersPickup ? (
+                <span className="flex items-center gap-1.5"><Check size={14} className="text-green-500" /> Pickup available {creator.pickupAddress ? `at ${creator.pickupAddress}` : ''}</span>
+              ) : (
+                <span className="flex items-center gap-1.5 text-stone-400"><span className="w-3.5 h-3.5 flex items-center justify-center font-bold text-[10px]">✕</span> No pickup</span>
+              )}
             </div>
             
             <p className="mt-4 text-stone-700 max-w-2xl leading-relaxed">
@@ -181,21 +195,8 @@ export default function CreatorProfilePage() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {/* Map real activeDrops once we format DropCard to take DropSummary or FoodDropResponse */}
                     {activeDrops.map(drop => (
-                       <div key={drop.dropId} className="bg-white rounded-2xl p-4 shadow-sm border border-stone-100">
-                          <div className="flex justify-between items-start mb-2">
-                             <h3 className="font-bold">{drop.title}</h3>
-                             <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full font-bold">{drop.status}</span>
-                          </div>
-                          <p className="text-sm text-stone-500 mb-4">{drop.description}</p>
-                          <div className="text-sm font-medium text-stone-600">
-                            Cutoff: {new Date(drop.orderCutoffTime).toLocaleString()}
-                          </div>
-                          <Link to={`/drops/${drop.dropId}`} className="block mt-4 text-center bg-orange-50 text-orange-600 font-bold py-2 rounded-xl hover:bg-orange-100 transition-colors">
-                             View Details
-                          </Link>
-                       </div>
+                      <DropCard key={drop.dropId} {...drop} />
                     ))}
                   </div>
                 )}
@@ -215,14 +216,14 @@ export default function CreatorProfilePage() {
           <div>
             {isLoadingMenu ? (
                <Loader2 className="animate-spin text-orange-500 mx-auto" />
-            ) : menu?.length === 0 ? (
+            ) : menuItems?.length === 0 ? (
               <div className="bg-white rounded-2xl p-12 text-center border border-stone-100">
                 <h3 className="text-lg font-semibold text-stone-800 mb-2">No Menu Items</h3>
                 <p className="text-stone-500">This creator sells exclusively through drops right now.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {menu?.map(item => (
+                {menuItems?.map((item: MenuItemResponse) => (
                   <div key={item.menuItemId} className="bg-white p-4 rounded-2xl border border-stone-100 flex justify-between gap-4">
                     <div>
                       <h4 className="font-bold text-stone-800">{item.name}</h4>

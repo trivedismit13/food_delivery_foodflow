@@ -9,7 +9,7 @@ import type {
   DropPerformanceResponse, 
   BestDayResponse, 
   InsightResponse,
-  Page 
+  PageResponse 
 } from '@/types/api'
 
 export function useCreatorDashboard(period = 'LAST_30_DAYS') {
@@ -53,7 +53,7 @@ export function useCreatorTopItems(page = 0, size = 20) {
   return useQuery({
     queryKey: ['creator-top-items', creatorId, page, size],
     queryFn: async () => {
-      const response = await apiClient.get<Page<TopItemResponse>>(
+      const response = await apiClient.get<PageResponse<TopItemResponse>>(
         `/creators/${creatorId}/analytics/top-items?page=${page}&size=${size}`
       )
       return response.data
@@ -87,7 +87,7 @@ export function useDropPerformance(page = 0, size = 20) {
   return useQuery({
     queryKey: ['creator-drop-performance', creatorId, page, size],
     queryFn: async () => {
-      const response = await apiClient.get<Page<DropPerformanceResponse>>(
+      const response = await apiClient.get<PageResponse<DropPerformanceResponse>>(
         `/creators/${creatorId}/analytics/drop-performance?page=${page}&size=${size}`
       )
       return response.data

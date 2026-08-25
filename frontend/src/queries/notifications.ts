@@ -1,7 +1,7 @@
 import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
-import type { Page, NotificationResponse } from '@/types/api'
+import type { PageResponse, NotificationResponse } from '@/types/api'
 
 export function useUnreadCount() {
   const { isAuthenticated } = useAuthStore()
@@ -24,14 +24,14 @@ export function useNotifications() {
   return useInfiniteQuery({
     queryKey: ['notifications'],
     queryFn: async ({ pageParam = 0 }) => {
-      const response = await apiClient.get<Page<NotificationResponse>>(
+      const response = await apiClient.get<PageResponse<NotificationResponse>>(
         `/notifications?page=${pageParam}&size=20`
       )
       return response.data
     },
     getNextPageParam: (lastPage) => {
-      if (lastPage.isLast) return undefined
-      return lastPage.currentPage + 1
+      if (lastPage.last) return undefined
+      return lastPage.number + 1
     },
     enabled: isAuthenticated,
     staleTime: 0,

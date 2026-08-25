@@ -25,16 +25,16 @@ public class DropSchedulerService {
     private final CreatorFollowRepository creatorFollowRepository;
     private final OrderRepository orderRepository;
     private final RestaurantRepository restaurantRepository;
+    private final com.foodflow.service.DropService dropService;
 
     // Runs every 15 minutes
-    @Scheduled(fixedRate = 900000)
+    @Scheduled(cron = "0 0/15 * * * ?")
     @Transactional
     public void processDropStatusTransitions() {
         
         List<FoodDrop> pastCutoff = dropRepository.findDropsPastCutoff();
         pastCutoff.forEach(drop -> {
-            drop.setStatus(FoodDrop.DropStatus.CUTOFF);
-            dropRepository.save(drop);
+            dropService.updateDropStatus(drop.getDropId(), FoodDrop.DropStatus.CUTOFF);
             
             notificationService.sendNotification(
                 drop.getCreator().getOwner().getUserId(),
@@ -49,7 +49,7 @@ public class DropSchedulerService {
     }
 
     // Runs every hour
-    @Scheduled(fixedRate = 3600000)
+    @Scheduled(cron = "0 0 * * * ?")
     public void sendClosingSoonAlerts() {
         
         List<FoodDrop> closingSoon = dropRepository.findDropsClosingSoon(2);
@@ -78,18 +78,44 @@ public class DropSchedulerService {
         });
     }
 
-    @Scheduled(cron = "0 0 7 * * *")
+    @Scheduled(cron = "0 0 7 * * ?")
+    @Transactional
     public void sendMorningCreatorDigest() {
         
         List<Restaurant> activeCreators = restaurantRepository
             .findByIsAcceptingOrdersTrue();
         
         activeCreators.forEach(creator -> {
+            List<FoodDrop> todayDrops = dropRepository.findByCreatorRestaurantIdAndStatusIn(
+                creator.getRestaurantId(),
+                List.of(FoodDrop.DropStatus.OPEN, FoodDrop.DropStatus.ANNOUNCED, FoodDrop.DropStatus.CUTOFF, FoodDrop.DropStatus.READY),
+                org.springframework.data.domain.Pageable.unpaged()
+            ).stream().filter(d -> d.getDropDate() != null && d.getDropDate().equals(java.time.LocalDate.now())).toList();
+            
+            int totalOrders = todayDrops.stream().mapToInt(FoodDrop::getCurrentOrders).sum();
+            java.math.BigDecimal revenue = java.math.BigDecimal.ZERO;
+            
+            for (FoodDrop d : todayDrops) {
+                List<com.foodflow.model.Order> orders = orderRepository.findByDropDropIdAndStatusNot(d.getDropId(), com.foodflow.model.OrderStatus.CANCELLED);
+                for (com.foodflow.model.Order o : orders) {
+                    if (o.getTotalAmount() != null) {
+                        revenue = revenue.add(o.getTotalAmount());
+                    }
+                }
+            }
+            
+            String message;
+            if (todayDrops.isEmpty()) {
+                message = "You have 0 drops scheduled for today. Create one to get started!";
+            } else {
+                message = String.format("You have %d drop(s) today. Orders received: %d. Estimated Revenue: $%.2f.", todayDrops.size(), totalOrders, revenue);
+            }
+            
             notificationService.sendNotification(
                 creator.getOwner().getUserId(),
                 Notification.NotificationType.CREATOR_DIGEST,
                 "Good Morning, Chef!",
-                "Here is your morning digest. Check your dashboard for today's drop updates and new orders!",
+                message,
                 Notification.ReferenceType.NONE,
                 null
             );

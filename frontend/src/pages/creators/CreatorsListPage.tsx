@@ -105,17 +105,17 @@ export default function CreatorsListPage() {
           {data && data.totalPages > 1 && (
              <div className="mt-12 flex justify-center gap-2">
                <button 
-                 disabled={data.isFirst}
+                 disabled={data.first}
                  onClick={() => setPage(p => Math.max(0, p - 1))}
                  className="px-4 py-2 border border-stone-200 rounded-lg bg-white disabled:opacity-50"
                >
                  Previous
                </button>
                <div className="px-4 py-2 font-medium text-stone-600">
-                 Page {data.currentPage + 1} of {data.totalPages}
+                 Page {data.number + 1} of {data.totalPages}
                </div>
                <button 
-                 disabled={data.isLast}
+                 disabled={data.last}
                  onClick={() => setPage(p => p + 1)}
                  className="px-4 py-2 border border-stone-200 rounded-lg bg-white disabled:opacity-50"
                >

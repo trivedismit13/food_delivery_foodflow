@@ -1,4 +1,4 @@
-import { useEffect, Fragment } from 'react';
+import { useEffect, useRef, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, ArrowRight, Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
@@ -15,6 +15,25 @@ export default function NotificationsPage() {
   const { mutate: markAsRead } = useMarkAsRead();
 
   const notifications = data?.pages.flatMap(page => page.content) || [];
+
+  const observerTarget = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handleMarkAllAsRead = () => {
     markAllRead();
@@ -142,7 +161,7 @@ export default function NotificationsPage() {
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 mb-1">
                           <h4 className="font-bold text-stone-900 text-[15px]">{notification.title}</h4>
                           <span className="text-xs text-stone-400 font-medium whitespace-nowrap shrink-0">
-                            {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
+                            {notification.timeAgo || formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
                           </span>
                         </div>
                         <p className="text-sm text-stone-600 leading-relaxed pr-6">{notification.message}</p>
@@ -165,7 +184,7 @@ export default function NotificationsPage() {
               </div>
             ))}
             {hasNextPage && (
-              <div className="pt-8 text-center">
+              <div ref={observerTarget} className="pt-8 text-center">
                 <button
                   onClick={() => fetchNextPage()}
                   disabled={isFetchingNextPage}

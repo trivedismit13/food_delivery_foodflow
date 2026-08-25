@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { StatusBadge } from '@/components/ui/StatusBadge';
-import { MapPin, User, Package, Users, History, Edit2, Bell } from 'lucide-react';
+import { MapPin, User, Package, Users, History, Edit2, Bell, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
 import { CreatorCard } from '@/components/creators/CreatorCard';
 import { DropCard, DropStatus } from '@/components/drops/DropCard';
+import { useUserOrders } from '@/queries/orders';
+import { useNavigate } from 'react-router-dom';
 
 export default function CustomerDashboardPage() {
   const [activeTab, setActiveTab] = useState('Orders');
   const [ordersTypeFilter, setOrdersTypeFilter] = useState<'All' | 'Pre-orders' | 'Regular Orders'>('Pre-orders');
   const { user } = useAuthStore();
+  const navigate = useNavigate();
+  
+  const { data: ordersPage, isLoading: isOrdersLoading } = useUserOrders(0);
+  const userOrders = ordersPage?.content || [];
   
   // Mock Data
   const now = new Date();
@@ -59,46 +65,10 @@ export default function CustomerDashboardPage() {
     description: "Slow cooked overnight with premium basmati rice."
   };
 
-  const mockOrders = [
-    {
-      orderId: 1042,
-      restaurantName: "Priya's Kitchen",
-      type: 'PRE_ORDER',
-      items: [{ quantity: 2, itemName: 'Mutton Dum Biryani' }],
-      orderDate: now.toISOString(),
-      pickupDate: new Date(now.getTime() + 1000 * 60 * 60 * 24).toLocaleDateString('en-US', { weekday: 'long' }),
-      pickupWindow: "12:00 PM - 2:00 PM",
-      pickupAddress: "Bandra West, Mumbai 400050",
-      totalAmount: 700,
-      status: 'ACCEPTED' as any
-    },
-    {
-      orderId: 1040,
-      restaurantName: "The Sugar Studio",
-      type: 'PRE_ORDER',
-      items: [{ quantity: 1, itemName: 'Box of 6 Cupcakes' }],
-      orderDate: new Date(now.getTime() - 1000 * 60 * 60 * 2).toISOString(),
-      pickupDate: "Today",
-      pickupWindow: "4:00 PM - 6:00 PM",
-      pickupAddress: "Andheri East, Mumbai 400069",
-      totalAmount: 400,
-      status: 'READY' as any
-    },
-    {
-      orderId: 1022,
-      restaurantName: "Biryani Blues",
-      type: 'REGULAR',
-      items: [{ quantity: 1, itemName: 'Chicken Biryani' }],
-      orderDate: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 5).toISOString(),
-      totalAmount: 250,
-      status: 'DELIVERED' as any
-    }
-  ];
-
-  const filteredOrders = mockOrders.filter(o => 
+  const filteredOrders = userOrders.filter(o => 
     ordersTypeFilter === 'All' ? true : 
-    ordersTypeFilter === 'Pre-orders' ? o.type === 'PRE_ORDER' : 
-    o.type === 'REGULAR'
+    ordersTypeFilter === 'Pre-orders' ? !!o.dropId : 
+    !o.dropId
   );
 
   const tabs = [
@@ -181,7 +151,13 @@ export default function CustomerDashboardPage() {
                 </div>
 
                 <div className="space-y-4">
-                  {filteredOrders.map(order => (
+                  {isOrdersLoading ? (
+                    <div className="py-12 flex flex-col items-center justify-center bg-white rounded-2xl border border-stone-100">
+                      <Loader2 className="w-8 h-8 text-orange-500 animate-spin mb-4" />
+                      <p className="text-stone-500">Loading your orders...</p>
+                    </div>
+                  ) : filteredOrders.length > 0 ? (
+                    filteredOrders.map(order => (
                     <div key={order.orderId} className={cn(
                       "bg-white rounded-2xl border transition-all shadow-sm flex flex-col overflow-hidden",
                       order.status === 'READY' ? "border-green-400 shadow-green-100" : "border-stone-100 hover:border-orange-200"
@@ -195,7 +171,7 @@ export default function CustomerDashboardPage() {
                       
                       <div className="p-5 flex flex-col sm:flex-row gap-5 sm:items-center">
                         <div className="w-16 h-16 bg-stone-50 rounded-xl flex-shrink-0 flex items-center justify-center text-3xl border border-stone-100">
-                          {order.type === 'PRE_ORDER' ? '🍱' : '🛵'}
+                          {!!order.dropId ? '🍱' : '🛵'}
                         </div>
                         
                         <div className="flex-1 min-w-0">
@@ -203,7 +179,7 @@ export default function CustomerDashboardPage() {
                             <h3 className="font-bold text-stone-900 text-lg truncate">{order.restaurantName}</h3>
                             <span className="text-stone-300">•</span>
                             <span className="text-xs font-semibold text-stone-500">FF-{order.orderId}</span>
-                            {order.type === 'PRE_ORDER' && (
+                            {!!order.dropId && (
                               <span className="ml-2 bg-orange-100 text-orange-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Pre-order</span>
                             )}
                           </div>
@@ -211,19 +187,11 @@ export default function CustomerDashboardPage() {
                             {order.items?.map(i => `${i.quantity} × ${i.itemName}`).join(', ')}
                           </p>
                           
-                          {order.type === 'PRE_ORDER' ? (
+                          {!!order.dropId ? (
                             <div className="flex flex-wrap gap-x-6 gap-y-2 bg-stone-50 p-3 rounded-xl border border-stone-100">
                               <div className="flex items-center gap-2 text-sm text-stone-700">
                                 <span className="text-stone-400">📅</span> 
-                                <span>Pickup: <span className="font-semibold">{order.pickupDate}</span></span>
-                              </div>
-                              <div className="flex items-center gap-2 text-sm text-stone-700">
-                                <span className="text-stone-400">🕒</span> 
-                                <span className="font-semibold">{order.pickupWindow}</span>
-                              </div>
-                              <div className="flex items-center gap-2 text-sm text-stone-700 w-full mt-1">
-                                <span className="text-stone-400"><MapPin size={14}/></span> 
-                                <span className="truncate">{order.pickupAddress}</span>
+                                <span>Ordered on: <span className="font-semibold">{new Date(order.orderDate).toLocaleDateString()}</span></span>
                               </div>
                             </div>
                           ) : (
@@ -240,7 +208,7 @@ export default function CustomerDashboardPage() {
                           )}
                           
                           <div className="flex gap-2 mt-4 w-full sm:w-auto">
-                            {order.status === 'DELIVERED' || order.status === 'COMPLETED' ? (
+                            {order.status === 'DELIVERED' ? (
                               <button className="flex-1 sm:flex-none px-5 py-2 rounded-xl border border-orange-500 text-orange-600 text-sm font-semibold hover:bg-orange-50 transition-colors">
                                 Rate Creator
                               </button>
@@ -253,12 +221,11 @@ export default function CustomerDashboardPage() {
                         </div>
                       </div>
                     </div>
-                  ))}
-                  
-                  {filteredOrders.length === 0 && (
+                  ))) : (
                     <div className="text-center py-16 bg-white rounded-2xl border border-stone-100">
-                      <p className="text-stone-500 mb-4">No {ordersTypeFilter.toLowerCase()} found.</p>
-                      <Button variant="secondary">Browse Drops</Button>
+                      <Package className="w-12 h-12 text-stone-200 mx-auto mb-4" />
+                      <p className="text-stone-500 mb-6">No {ordersTypeFilter.toLowerCase()} found.</p>
+                      <Button onClick={() => navigate('/drops')}>Discover Drops</Button>
                     </div>
                   )}
                 </div>

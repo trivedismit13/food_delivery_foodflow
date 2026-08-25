@@ -53,10 +53,6 @@ public class FoodDrop {
     @Column(nullable = false)
     @Builder.Default
     private Integer currentOrders = 0;
-    
-    @Version
-    private Long version;
-
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private DropStatus status = DropStatus.DRAFT;

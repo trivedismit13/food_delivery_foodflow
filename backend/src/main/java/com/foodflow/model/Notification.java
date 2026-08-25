@@ -39,6 +39,9 @@ public class Notification {
 
     private Long referenceId;
 
+    @Column(unique = true)
+    private String eventKey;
+
     @Builder.Default
     private Boolean isRead = false;
 

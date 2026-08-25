@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
 import { connectWebSocket, disconnectWebSocket } from '@/lib/websocket'
-import type { NotificationResponse, Page } from '@/types/api'
+import type { NotificationResponse, PageResponse } from '@/types/api'
 
 // Simple helper to generate toast content and navigation target
 function getNotificationToast(notification: NotificationResponse) {
@@ -45,7 +45,7 @@ export function useWebSocket() {
       // 2. Add notification to top of notifications list
       queryClient.setQueryData(
         ['notifications'],
-        (old: InfiniteData<Page<NotificationResponse>> | undefined) => {
+        (old: InfiniteData<PageResponse<NotificationResponse>> | undefined) => {
           if (!old) return old
           const newPages = [...old.pages]
           newPages[0] = {

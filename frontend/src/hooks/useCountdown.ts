@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react';
 
-export function calculateTimeLeft(targetTime: string) {
-  const difference = new Date(targetTime).getTime() - new Date().getTime();
+export function calculateTimeLeft(targetTime: string | number) {
+  let difference = 0;
+  if (typeof targetTime === 'number') {
+    difference = targetTime - new Date().getTime(); // targetTime can be the target timestamp directly
+  } else {
+    difference = new Date(targetTime).getTime() - new Date().getTime();
+  }
   
   if (difference <= 0) {
-    return { days: 0, hours: 0, minutes: 0, seconds: 0, isPast: true, totalMs: difference };
+    return { days: 0, hours: 0, minutes: 0, seconds: 0, isPast: true, totalMs: 0 };
   }
   
   return {
@@ -17,15 +22,30 @@ export function calculateTimeLeft(targetTime: string) {
   };
 }
 
-export function useCountdown(targetTime: string) {
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(targetTime));
+export function useCountdown(targetTime: string, serverMinutesUntilCutoff?: number | null) {
+  // If server provided minutesUntilCutoff, compute target absolute timestamp based on it
+  const initialTarget = serverMinutesUntilCutoff != null 
+    ? Date.now() + (serverMinutesUntilCutoff * 60 * 1000) 
+    : targetTime;
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(initialTarget));
   
   useEffect(() => {
+    // Avoid running interval if already past
+    if (calculateTimeLeft(initialTarget).isPast) {
+      setTimeLeft(calculateTimeLeft(initialTarget));
+      return;
+    }
+
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft(targetTime));
+      const nextTimeLeft = calculateTimeLeft(initialTarget);
+      setTimeLeft(nextTimeLeft);
+      if (nextTimeLeft.isPast) {
+        clearInterval(timer);
+      }
     }, 1000);
     return () => clearInterval(timer);
-  }, [targetTime]);
+  }, [initialTarget]);
   
   return timeLeft;
 }

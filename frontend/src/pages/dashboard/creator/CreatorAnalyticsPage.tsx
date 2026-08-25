@@ -1,61 +1,72 @@
 import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, PieChart, Pie, Cell, ScatterChart, Scatter, ZAxis } from 'recharts';
-import { Star, TrendingUp, TrendingDown, Users, Package, ArrowRight, Loader2 } from 'lucide-react';
+import { Star, TrendingUp, TrendingDown, Users, Package, ArrowRight, Loader2, Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useCreatorDashboard, useDropPerformance, useBestDay, useCreatorRepeatCustomers, useAskInsight } from '@/queries/creatorAnalytics';
+import { 
+  useCreatorDashboard, 
+  useDropPerformance, 
+  useBestDay, 
+  useCreatorRepeatCustomers, 
+  useAskInsight,
+  useCreatorWeeklyTrend,
+  useCreatorTopItems,
+  useAutoInsights
+} from '@/queries/creatorAnalytics';
 import { motion } from 'framer-motion';
 
 export default function CreatorAnalyticsPage() {
+  const [period, setPeriod] = useState('LAST_30_DAYS');
   const [insightQuery, setInsightQuery] = useState('');
-  const [insightLoading, setInsightLoading] = useState(false);
   const [insightResponse, setInsightResponse] = useState<string | null>(null);
 
-  const { data: dashboard, isLoading: isDashboardLoading } = useCreatorDashboard('WEEK');
-  const { data: dropPerformanceData } = useDropPerformance(0, 5);
-  const { data: bestDayDataAPI } = useBestDay();
-  const { data: repeatCustomersAPI } = useCreatorRepeatCustomers();
+  const { data: dashboard, isLoading: isDashboardLoading, isError: isDashboardError } = useCreatorDashboard(period);
+  const { data: dropPerformanceData, isLoading: isDropsLoading } = useDropPerformance(0, 5);
+  const { data: bestDayDataAPI, isLoading: isBestDayLoading } = useBestDay();
+  const { data: repeatCustomersAPI, isLoading: isRepeatLoading } = useCreatorRepeatCustomers();
+  const { data: weeklyTrendData, isLoading: isTrendLoading } = useCreatorWeeklyTrend(12);
+  const { data: topItemsData, isLoading: isTopItemsLoading } = useCreatorTopItems(0, 20);
+  const { data: autoInsights, isLoading: isAutoInsightsLoading } = useAutoInsights();
   
-  const { mutate: askInsight } = useAskInsight();
+  const { mutate: askInsight, isPending: isAskInsightPending } = useAskInsight();
 
-  // MOCK DATA for remaining non-API sections
-  const bestDayData = [
-    { day: 'Mon', fillRate: 45 },
-    { day: 'Tue', fillRate: 50 },
-    { day: 'Wed', fillRate: 55 },
-    { day: 'Thu', fillRate: 60 },
-    { day: 'Fri', fillRate: 85 },
-    { day: 'Sat', fillRate: 95 },
-    { day: 'Sun', fillRate: 98 },
-  ];
+  const trendChartData = weeklyTrendData ? [...weeklyTrendData].reverse().map(trend => ({
+    week: trend.week,
+    revenue: trend.revenue,
+    orders: trend.orders
+  })) : [];
 
   const repeatCustomersData = repeatCustomersAPI ? [
     { name: 'Repeat', value: repeatCustomersAPI.repeatCustomers, color: '#f97316' },
     { name: 'One-time', value: repeatCustomersAPI.totalCustomers - repeatCustomersAPI.repeatCustomers, color: '#e7e5e4' },
-  ] : [
-    { name: 'Repeat', value: 65, color: '#f97316' },
-    { name: 'One-time', value: 35, color: '#e7e5e4' },
-  ];
+  ] : [];
 
-  const scatterData = [
-    { name: "Mutton Biryani", frequency: 85, margin: 150, category: 'STAR' },
-    { name: "Double Ka Meetha", frequency: 40, margin: 80, category: 'WORKHORSE' },
-    { name: "Chicken 65", frequency: 30, margin: 120, category: 'HIDDEN GEM' },
-    { name: "Veg Pulao", frequency: 15, margin: 40, category: 'REVIEW' },
-  ];
+  const scatterData = topItemsData?.content.map(item => {
+    const avgValue = item.totalOrders > 0 ? item.totalRevenue / item.totalOrders : 0;
+    let category = 'STAR';
+    if (item.totalOrders > 5 && avgValue > 150) category = 'STAR';
+    else if (item.totalOrders <= 5 && avgValue > 150) category = 'HIDDEN GEM';
+    else if (item.totalOrders > 5 && avgValue <= 150) category = 'WORKHORSE';
+    else category = 'REVIEW';
+    
+    return {
+      name: item.itemName,
+      frequency: item.totalOrders,
+      margin: avgValue,
+      totalRevenue: item.totalRevenue,
+      category
+    };
+  }) || [];
 
   const handleAskInsight = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!insightQuery.trim()) return;
+    if (!insightQuery.trim() || isAskInsightPending) return;
     
-    setInsightLoading(true);
     askInsight(insightQuery, {
       onSuccess: (data) => {
         setInsightResponse(data.insight);
-        setInsightLoading(false);
       },
       onError: () => {
         setInsightResponse("Sorry, there was an error generating your insight.");
-        setInsightLoading(false);
       }
     });
   };
@@ -64,9 +75,25 @@ export default function CreatorAnalyticsPage() {
     <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-10">
       
       {/* Header */}
-      <div>
-        <h1 className="font-display text-3xl font-bold text-stone-900 mb-2">Analytics</h1>
-        <p className="text-stone-500">Understand your performance and grow your business.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-bold text-stone-900 mb-2">Analytics</h1>
+          <p className="text-stone-500">Understand your performance and grow your business.</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Calendar size={18} className="text-stone-500" />
+          <select 
+            value={period}
+            onChange={(e) => setPeriod(e.target.value)}
+            className="bg-white border border-stone-200 text-stone-700 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block p-2"
+          >
+            <option value="LAST_7_DAYS">Last 7 Days</option>
+            <option value="LAST_30_DAYS">Last 30 Days</option>
+            <option value="THIS_MONTH">This Month</option>
+            <option value="LAST_MONTH">Last Month</option>
+            <option value="ALL_TIME">All Time</option>
+          </select>
+        </div>
       </div>
 
       {/* KPI Row */}
@@ -102,25 +129,33 @@ export default function CreatorAnalyticsPage() {
       {/* TWO COLUMNS: Best Day & Repeat Customers */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         
-        {/* Best Day Analysis */}
-        <div className="bg-white rounded-3xl p-6 md:p-8 border border-stone-100 shadow-sm">
-          <h2 className="font-display text-xl font-bold text-stone-900 mb-6">Best Day Analysis</h2>
-          <div className="h-48 mb-6">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={bestDayData}>
-                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#78716c' }} />
-                <Tooltip cursor={{ fill: '#f5f5f4' }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }} />
-                <Bar dataKey="fillRate" fill="#f97316" radius={[4, 4, 0, 0]} barSize={32} />
-              </BarChart>
-            </ResponsiveContainer>
+        {/* Weekly Trend & Best Day */}
+        <div className="bg-white rounded-3xl p-6 md:p-8 border border-stone-100 shadow-sm flex flex-col">
+          <h2 className="font-display text-xl font-bold text-stone-900 mb-6">Revenue Trend (12 Weeks)</h2>
+          <div className="h-48 mb-6 flex-1">
+            {isTrendLoading ? (
+              <div className="w-full h-full flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-stone-300" />
+              </div>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={trendChartData}>
+                  <XAxis dataKey="week" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#78716c' }} />
+                  <Tooltip cursor={{ fill: '#f5f5f4' }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }} />
+                  <Bar dataKey="revenue" fill="#f97316" radius={[4, 4, 0, 0]} barSize={32} />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
           </div>
 
-          <div className="bg-orange-50 p-4 rounded-xl border border-orange-100">
+          <div className="bg-orange-50 p-4 rounded-xl border border-orange-100 mt-auto">
             <p className="text-sm text-orange-900 font-medium">
-              {bestDayDataAPI ? (
+              {isBestDayLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin inline-block mr-2" />
+              ) : bestDayDataAPI ? (
                 <>Your drops perform best on <span className="font-bold">{bestDayDataAPI.dayOfWeek}s</span> with <span className="font-bold">{bestDayDataAPI.avgFillRate.toFixed(1)}% average fill rate</span>. Consider scheduling your next drop for a {bestDayDataAPI.dayOfWeek}.</>
               ) : (
-                <>Your drops perform best on <span className="font-bold">Sundays</span> with <span className="font-bold">98% average fill rate</span>. Consider scheduling your next drop for a Sunday.</>
+                <>Not enough data to determine your best performing day yet.</>
               )}
             </p>
           </div>
@@ -133,37 +168,45 @@ export default function CreatorAnalyticsPage() {
           <div className="flex gap-4 mb-8">
             <div>
               <p className="text-3xl font-bold text-orange-600">
-                {repeatCustomersAPI ? repeatCustomersAPI.repeatRatePercent.toFixed(0) : 65}%
+                {isRepeatLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : `${repeatCustomersAPI?.repeatRatePercent.toFixed(0) || 0}%`}
               </p>
               <p className="text-xs font-semibold text-stone-500 uppercase">Repeat rate</p>
             </div>
             <div className="w-px bg-stone-200"></div>
             <div>
               <p className="text-3xl font-bold text-stone-900">
-                {repeatCustomersAPI ? repeatCustomersAPI.totalCustomers : 142}
+                {isRepeatLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : repeatCustomersAPI?.totalCustomers || 0}
               </p>
               <p className="text-xs font-semibold text-stone-500 uppercase">Unique customers</p>
             </div>
           </div>
 
           <div className="h-48 relative flex items-center justify-center">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={repeatCustomersData} innerRadius={60} outerRadius={80} paddingAngle={2} dataKey="value" stroke="none">
-                  {repeatCustomersData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-            {/* Center Text */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <Star className="text-orange-500 fill-orange-500 w-8 h-8 mb-1" />
-            </div>
+            {isRepeatLoading ? (
+              <Loader2 className="w-8 h-8 animate-spin text-stone-300" />
+            ) : repeatCustomersData.length > 0 ? (
+              <>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={repeatCustomersData} innerRadius={60} outerRadius={80} paddingAngle={2} dataKey="value" stroke="none">
+                      {repeatCustomersData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+                {/* Center Text */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <Star className="text-orange-500 fill-orange-500 w-8 h-8 mb-1" />
+                </div>
+              </>
+            ) : (
+               <div className="text-stone-400 text-sm">No customer data</div>
+            )}
           </div>
 
           <p className="text-center text-sm font-medium text-stone-600 mt-4">
-            Customers who've ordered multiple times: <span className="font-bold text-stone-900">{repeatCustomersAPI ? repeatCustomersAPI.repeatCustomers : 42}</span>
+            Customers who've ordered multiple times: <span className="font-bold text-stone-900">{isRepeatLoading ? '-' : repeatCustomersAPI?.repeatCustomers || 0}</span>
           </p>
         </div>
 
@@ -187,7 +230,14 @@ export default function CreatorAnalyticsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100">
-              {dropPerformanceData?.content.map((drop, i) => {
+              {isDropsLoading ? (
+                <tr>
+                  <td colSpan={6} className="p-8 text-center text-stone-500">
+                    <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" />
+                    Loading drop performance...
+                  </td>
+                </tr>
+              ) : dropPerformanceData?.content.map((drop, i) => {
                 const fillRate = drop.maxOrders > 0 ? (drop.currentOrders / drop.maxOrders) * 100 : 0;
                 return (
                   <tr key={i} className={cn("transition-colors", fillRate === 100 ? "bg-amber-50/30" : "hover:bg-stone-50")}>
@@ -213,7 +263,7 @@ export default function CreatorAnalyticsPage() {
                   </tr>
                 );
               })}
-              {(!dropPerformanceData || dropPerformanceData.content.length === 0) && (
+              {(!isDropsLoading && (!dropPerformanceData || dropPerformanceData.content.length === 0)) && (
                 <tr>
                   <td colSpan={6} className="p-4 text-center text-stone-500">No drop performance data available.</td>
                 </tr>
@@ -231,33 +281,45 @@ export default function CreatorAnalyticsPage() {
         </div>
         
         <div className="h-80 w-full relative mb-8">
-          <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-              <XAxis type="number" dataKey="frequency" name="Order Frequency" stroke="#d6d3d1" tick={{ fill: '#78716c', fontSize: 12 }} />
-              <YAxis type="number" dataKey="margin" name="Margin (₹)" stroke="#d6d3d1" tick={{ fill: '#78716c', fontSize: 12 }} />
-              <ZAxis type="category" dataKey="name" name="Item" />
-              <Tooltip 
-                cursor={{ strokeDasharray: '3 3' }} 
-                contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: '12px' }}
-                itemStyle={{ color: '#1c1917', fontWeight: 600 }}
-              />
-              <Scatter data={scatterData} fill="#f97316">
-                {scatterData.map((entry, index) => {
-                  let color = '#f97316'; // orange default
-                  if (entry.category === 'STAR') color = '#22c55e'; // green
-                  if (entry.category === 'HIDDEN GEM') color = '#3b82f6'; // blue
-                  if (entry.category === 'WORKHORSE') color = '#f59e0b'; // amber
-                  if (entry.category === 'REVIEW') color = '#ef4444'; // red
-                  
-                  return <Cell key={`cell-${index}`} fill={color} />;
-                })}
-              </Scatter>
-            </ScatterChart>
-          </ResponsiveContainer>
-          
-          {/* Quadrant Lines (visual guides) */}
-          <div className="absolute inset-x-12 top-1/2 h-px bg-stone-200 border-t border-dashed pointer-events-none"></div>
-          <div className="absolute inset-y-8 left-1/2 w-px bg-stone-200 border-l border-dashed pointer-events-none"></div>
+          {isTopItemsLoading ? (
+            <div className="w-full h-full flex items-center justify-center">
+              <Loader2 className="w-8 h-8 animate-spin text-stone-300" />
+            </div>
+          ) : scatterData.length === 0 ? (
+            <div className="w-full h-full flex items-center justify-center text-stone-500">
+              No item data available.
+            </div>
+          ) : (
+            <>
+              <ResponsiveContainer width="100%" height="100%">
+                <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                  <XAxis type="number" dataKey="frequency" name="Order Frequency" stroke="#d6d3d1" tick={{ fill: '#78716c', fontSize: 12 }} />
+                  <YAxis type="number" dataKey="margin" name="Avg Value (₹)" stroke="#d6d3d1" tick={{ fill: '#78716c', fontSize: 12 }} />
+                  <ZAxis type="category" dataKey="name" name="Item" />
+                  <Tooltip 
+                    cursor={{ strokeDasharray: '3 3' }} 
+                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', padding: '12px' }}
+                    itemStyle={{ color: '#1c1917', fontWeight: 600 }}
+                  />
+                  <Scatter data={scatterData} fill="#f97316">
+                    {scatterData.map((entry, index) => {
+                      let color = '#f97316'; // orange default
+                      if (entry.category === 'STAR') color = '#22c55e'; // green
+                      if (entry.category === 'HIDDEN GEM') color = '#3b82f6'; // blue
+                      if (entry.category === 'WORKHORSE') color = '#f59e0b'; // amber
+                      if (entry.category === 'REVIEW') color = '#ef4444'; // red
+                      
+                      return <Cell key={`cell-${index}`} fill={color} />;
+                    })}
+                  </Scatter>
+                </ScatterChart>
+              </ResponsiveContainer>
+              
+              {/* Quadrant Lines (visual guides) */}
+              <div className="absolute inset-x-12 top-1/2 h-px bg-stone-200 border-t border-dashed pointer-events-none"></div>
+              <div className="absolute inset-y-8 left-1/2 w-px bg-stone-200 border-l border-dashed pointer-events-none"></div>
+            </>
+          )}
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -278,6 +340,41 @@ export default function CreatorAnalyticsPage() {
             <p className="text-xs text-red-600">Low orders, low margin. Consider removing.</p>
           </div>
         </div>
+      </div>
+
+      {/* Auto Insights Section */}
+      <div className="bg-white rounded-3xl p-6 md:p-8 border border-stone-100 shadow-sm">
+        <div className="mb-6">
+          <h2 className="font-display text-xl font-bold text-stone-900 flex items-center gap-2">
+            <Star className="text-orange-500 fill-orange-500 w-5 h-5" /> 
+            AI Insights
+          </h2>
+          <p className="text-sm text-stone-500">Automatically generated insights based on your recent activity.</p>
+        </div>
+        
+        {isAutoInsightsLoading ? (
+          <div className="flex justify-center items-center py-8">
+            <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
+          </div>
+        ) : autoInsights && autoInsights.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {autoInsights.map((insight, index) => (
+              <div key={index} className="bg-orange-50 rounded-2xl p-5 border border-orange-100">
+                <h3 className="font-bold text-orange-900 mb-2">{insight.question}</h3>
+                <p className="text-sm text-orange-800 leading-relaxed">{insight.insight}</p>
+                {insight.confidence > 0 && (
+                  <div className="mt-3 text-xs font-semibold text-orange-600/70 uppercase tracking-wider">
+                    Confidence: {(insight.confidence * 100).toFixed(0)}%
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8 text-stone-500 bg-stone-50 rounded-2xl border border-stone-100 border-dashed">
+            No insights available yet. Keep growing your business to generate insights!
+          </div>
+        )}
       </div>
 
       {/* AI Insight Chat Panel */}
@@ -305,10 +402,10 @@ export default function CreatorAnalyticsPage() {
               />
               <button 
                 type="submit" 
-                disabled={insightLoading || !insightQuery.trim()}
+                disabled={isAskInsightPending || !insightQuery.trim()}
                 className="bg-orange-500 hover:bg-orange-600 disabled:bg-stone-700 text-white px-6 py-3 rounded-xl font-bold transition-colors shrink-0"
               >
-                {insightLoading ? <Loader2 size={20} className="animate-spin" /> : "Ask"}
+                {isAskInsightPending ? <Loader2 size={20} className="animate-spin" /> : "Ask"}
               </button>
             </form>
 

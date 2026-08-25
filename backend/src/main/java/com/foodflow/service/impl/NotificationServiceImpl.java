@@ -33,6 +33,9 @@ public class NotificationServiceImpl implements NotificationService {
     public void sendNotification(Long userId, Notification.NotificationType type, 
                                  String title, String message, 
                                  Notification.ReferenceType refType, Long refId) {
+        
+        String eventKey = type.name() + ":" + userId + ":" + (refId != null ? refId : java.time.LocalDate.now().toString());
+
         Notification notification = Notification.builder()
                 .user(userRepository.getReferenceById(userId))
                 .type(type)
@@ -40,9 +43,16 @@ public class NotificationServiceImpl implements NotificationService {
                 .message(message)
                 .referenceType(refType)
                 .referenceId(refId)
+                .eventKey(eventKey)
                 .isRead(false)
                 .build();
-        notification = notificationRepository.save(notification);
+        
+        try {
+            notification = notificationRepository.save(notification);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            // Idempotency: Ignore duplicate notifications
+            return;
+        }
         
         NotificationResponse response = NotificationResponse.builder()
                 .notificationId(notification.getNotificationId())

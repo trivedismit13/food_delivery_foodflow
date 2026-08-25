@@ -6,6 +6,7 @@ import com.foodflow.model.*;
 import com.foodflow.repository.*;
 import com.foodflow.service.DropOrderService;
 import com.foodflow.service.NotificationService;
+import com.foodflow.service.PaymentService;
 import com.foodflow.dto.request.PlaceDropOrderRequest;
 import com.foodflow.dto.response.OrderResponse;
 import com.foodflow.websocket.DropWebSocketService;
@@ -27,16 +28,15 @@ public class DropOrderServiceImpl implements DropOrderService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final PaymentRepository paymentRepository;
-    private final NotificationService notificationService;
+    private final PaymentService paymentService;
     private final RestaurantRepository restaurantRepository;
-    private final DropWebSocketService webSocketService;
+    private final org.springframework.context.ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
     public OrderResponse placeDropOrder(Long userId, PlaceDropOrderRequest request) {
         
-        FoodDrop drop = dropRepository.findById(request.getDropId())
+        FoodDrop drop = dropRepository.findByIdWithLock(request.getDropId())
             .orElseThrow(() -> new ResourceNotFoundException("Drop not found"));
         
         if (!drop.isAcceptingOrders()) {
@@ -52,7 +52,10 @@ public class DropOrderServiceImpl implements DropOrderService {
         List<OrderItem> orderItems = new ArrayList<>();
         BigDecimal totalAmount = BigDecimal.ZERO;
         
-        for (PlaceDropOrderRequest.ItemRequest itemRequest : request.getItems()) {
+        List<PlaceDropOrderRequest.ItemRequest> sortedItems = new ArrayList<>(request.getItems());
+        sortedItems.sort(java.util.Comparator.comparing(PlaceDropOrderRequest.ItemRequest::getItemId));
+        
+        for (PlaceDropOrderRequest.ItemRequest itemRequest : sortedItems) {
             DropItem dropItem = dropItemRepository
                 .findByDropAndItemWithLock(drop.getDropId(), itemRequest.getItemId())
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -72,6 +75,18 @@ public class DropOrderServiceImpl implements DropOrderService {
             
             dropItem.setQuantityOrdered(dropItem.getQuantityOrdered() + itemRequest.getQuantity());
             dropItemRepository.save(dropItem);
+            
+            int remaining = dropItem.getQuantityAvailable() - dropItem.getQuantityOrdered();
+            if (remaining <= 5 && (remaining + itemRequest.getQuantity()) > 5) {
+                eventPublisher.publishEvent(new com.foodflow.event.LowStockEvent(
+                    this,
+                    drop.getCreator().getOwner().getUserId(),
+                    drop.getDropId(),
+                    drop.getTitle(),
+                    dropItem.getMenuItem().getName(),
+                    remaining
+                ));
+            }
             
             BigDecimal itemPrice = dropItem.getEffectivePrice();
             BigDecimal itemTotal = itemPrice.multiply(BigDecimal.valueOf(itemRequest.getQuantity()));
@@ -116,25 +131,20 @@ public class DropOrderServiceImpl implements DropOrderService {
             .amount(totalAmount)
             .status(PaymentStatus.PENDING) // modified to enum mapping
             .build();
-        paymentRepository.save(payment);
-        
-        notificationService.sendNotification(
-            userId,
-            Notification.NotificationType.ORDER_CONFIRMED,
-            "Order Confirmed!",
-            "Your pre-order for " + drop.getTitle() + " is confirmed. " +
-            "Collection: " + drop.getPickupStartTime(),
-            Notification.ReferenceType.ORDER,
-            savedOrder.getOrderId()
-        );
+        paymentService.processPayment(payment);
         
         restaurantRepository.incrementTotalOrders(drop.getCreator().getRestaurantId());
         
-        webSocketService.broadcastDropUpdate(
+        eventPublisher.publishEvent(new com.foodflow.event.DropOrderConfirmedEvent(
+            this,
+            userId,
+            savedOrder.getOrderId(),
+            drop.getTitle(),
+            drop.getPickupStartTime() != null ? drop.getPickupStartTime().toString() : "N/A",
             drop.getDropId(),
             drop.getCurrentOrders(),
             drop.getMaxOrders()
-        );
+        ));
         
         List<com.foodflow.dto.response.OrderItemResponse> itemResponses = orderItems.stream()
             .map(item -> com.foodflow.dto.response.OrderItemResponse.builder()
@@ -156,17 +166,33 @@ public class DropOrderServiceImpl implements DropOrderService {
             .orderDate(savedOrder.getOrderDate())
             .items(itemResponses)
             .paymentStatus(payment.getStatus())
+            .dropId(savedOrder.getDrop() != null ? savedOrder.getDrop().getDropId() : null)
+            .isDelivery(savedOrder.getIsDelivery())
+            .deliveryAddress(savedOrder.getDeliveryAddress())
+            .pickupTime(savedOrder.getPickupTime())
+            .specialInstructions(savedOrder.getSpecialInstructions())
             .build();
     }
 
     @Override
     @Transactional
-    public void cancelDropOrder(Long orderId, Long userId) {
+    public void cancelDropOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
             .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
             
-        if (!order.getUser().getUserId().equals(userId)) {
-            throw new InvalidOrderException("You can only cancel your own orders");
+        String email = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByEmail(email)
+            .orElseThrow(() -> new com.foodflow.exception.ResourceNotFoundException("User not found"));
+            
+        boolean isOwner = order.getUser().getUserId().equals(currentUser.getUserId());
+        boolean isCreator = false;
+        FoodDrop drop = order.getDrop();
+        if (drop != null && drop.getCreator() != null && drop.getCreator().getOwner() != null) {
+            isCreator = drop.getCreator().getOwner().getUserId().equals(currentUser.getUserId());
+        }
+        
+        if (!isOwner && !isCreator) {
+            throw new InvalidOrderException("You do not have permission to cancel this order");
         }
         
         if (order.getStatus() != OrderStatus.PLACED) {
@@ -177,7 +203,6 @@ public class DropOrderServiceImpl implements DropOrderService {
         orderRepository.save(order);
         
         // Decrement drop order count
-        FoodDrop drop = order.getDrop();
         if (drop != null) {
             drop.setCurrentOrders(Math.max(0, drop.getCurrentOrders() - 1));
             dropRepository.save(drop);
@@ -188,9 +213,16 @@ public class DropOrderServiceImpl implements DropOrderService {
                 dropItemRepository.findByDropAndItemWithLock(drop.getDropId(), item.getMenuItem().getItemId())
                     .ifPresent(dropItem -> {
                         dropItem.setQuantityOrdered(Math.max(0, dropItem.getQuantityOrdered() - item.getQuantity()));
+                        dropItem.setQuantityAvailable(dropItem.getQuantityAvailable() + item.getQuantity());
                         dropItemRepository.save(dropItem);
                     });
             }
         }
+        
+        paymentService.getPaymentByOrderId(orderId).ifPresent(payment -> {
+            paymentService.updatePaymentStatus(payment.getPaymentId(), PaymentStatus.CANCELLED);
+        });
+        
+        eventPublisher.publishEvent(new com.foodflow.event.DropOrderCancelledEvent(this, orderId));
     }
 }

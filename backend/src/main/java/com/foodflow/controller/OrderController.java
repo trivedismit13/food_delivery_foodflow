@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final OrderService orderService;
+    private final com.foodflow.service.security.CreatorAuthorizationService authorizationService;
 
     @PostMapping
     public ResponseEntity<ApiResponse<OrderResponse>> placeOrder(@Valid @RequestBody PlaceOrderRequest request) {
@@ -39,17 +40,23 @@ public class OrderController {
     }
 
     @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<OrderResponse>> updateOrderStatus(@PathVariable Long id, @RequestParam OrderStatus status) {
+        authorizationService.assertCreatorOwnsOrderRestaurant(id);
         return ResponseEntity.ok(ApiResponse.success(orderService.updateOrderStatus(id, status)));
     }
 
     @GetMapping("/users/{userId}/orders")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Page<OrderResponse>>> getUserOrders(@PathVariable Long userId, Pageable pageable) {
+        authorizationService.assertUserMatches(userId);
         return ResponseEntity.ok(ApiResponse.success(orderService.getUserOrders(userId, pageable)));
     }
 
     @GetMapping("/restaurants/{restaurantId}/orders")
+    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Page<OrderResponse>>> getRestaurantOrders(@PathVariable Long restaurantId, Pageable pageable) {
+        authorizationService.assertCreatorOwnsRestaurant(restaurantId);
         return ResponseEntity.ok(ApiResponse.success(orderService.getRestaurantOrders(restaurantId, pageable)));
     }
 

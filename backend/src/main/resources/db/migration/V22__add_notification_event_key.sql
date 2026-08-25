@@ -1,0 +1,1 @@
+ALTER TABLE notifications ADD COLUMN event_key VARCHAR(255) UNIQUE;

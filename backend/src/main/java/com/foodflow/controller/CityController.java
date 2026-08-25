@@ -24,14 +24,13 @@ public class CityController {
         return ResponseEntity.ok(ApiResponse.success(cities));
     }
 
-    @GetMapping("/location/reverse-geocode")
-    public ResponseEntity<ApiResponse<City>> reverseGeocode(
-            @RequestParam Double lat,
-            @RequestParam Double lng) {
-        City city = cityService.reverseGeocode(lat, lng);
-        if (city == null) {
+    @PostMapping("/location/reverse-geocode")
+    public ResponseEntity<ApiResponse<com.foodflow.dto.response.LocationResponse>> reverseGeocode(
+            @jakarta.validation.Valid @RequestBody com.foodflow.dto.request.LocationRequest request) {
+        com.foodflow.dto.response.LocationResponse location = cityService.reverseGeocode(request.getLat(), request.getLng());
+        if (location == null || location.getCityId() == null) {
             return ResponseEntity.badRequest().body(ApiResponse.error("Location not found in service area", 400));
         }
-        return ResponseEntity.ok(ApiResponse.success(city));
+        return ResponseEntity.ok(ApiResponse.success(location));
     }
 }

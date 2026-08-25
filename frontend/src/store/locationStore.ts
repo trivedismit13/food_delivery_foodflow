@@ -1,15 +1,23 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-interface LocationState {
+export type LocationStatus = 'UNKNOWN' | 'REQUESTING' | 'READY' | 'ERROR'
+export type LocationSource = 'GPS' | 'MANUAL'
+
+export interface UserLocation {
   cityId: number | null
   cityName: string | null
   lat: number | null
   lng: number | null
-  // Backward compat
-  city: string | null
-  setLocation: (location: { cityId: number | null; cityName: string | null; lat: number | null; lng: number | null }) => void
-  setCity: (city: string | null) => void
+  source: LocationSource | null
+  status: LocationStatus
+  error?: string
+}
+
+interface LocationState extends UserLocation {
+  setLocation: (location: Partial<UserLocation>) => void
+  setError: (error: string) => void
+  setRequesting: () => void
   clearLocation: () => void
 }
 
@@ -20,13 +28,18 @@ export const useLocationStore = create<LocationState>()(
       cityName: null,
       lat: null,
       lng: null,
-      city: null,
-      setLocation: (location) => set({
+      source: null,
+      status: 'UNKNOWN',
+      error: undefined,
+      setLocation: (location) => set((state) => ({
+        ...state,
         ...location,
-        city: location.cityName,
-      }),
-      setCity: (city) => set({ city, cityName: city }),
-      clearLocation: () => set({ cityId: null, cityName: null, lat: null, lng: null, city: null }),
+        status: 'READY',
+        error: undefined
+      })),
+      setError: (error) => set({ status: 'ERROR', error }),
+      setRequesting: () => set({ status: 'REQUESTING', error: undefined }),
+      clearLocation: () => set({ cityId: null, cityName: null, lat: null, lng: null, source: null, status: 'UNKNOWN', error: undefined }),
     }),
     {
       name: 'foodflow-location',
