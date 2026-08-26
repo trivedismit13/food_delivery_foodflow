@@ -9,7 +9,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Toaster } from 'sonner'
 import { useAuthInit } from './hooks/useAuthInit'
 import { useAuthStore } from './store/authStore'
-import { useWebSocket } from './hooks/useWebSocket'
+
 import { queryClient } from './lib/queryClient'
 
 
@@ -17,7 +17,7 @@ import { queryClient } from './lib/queryClient'
 // Auth Pages
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
-import CreatorRegisterPage from './pages/auth/CreatorRegisterPage'
+import SellerRegisterPage from './pages/auth/SellerRegisterPage'
 
 // Core Pages
 import HomePage from './pages/HomePage'
@@ -53,7 +53,7 @@ import AdminVerificationPage from './pages/admin/AdminVerificationPage'
 
 function App() {
   useAuthInit()  // verify token on every page load
-  useWebSocket() // handle real-time notifications
+
   const { isLoading } = useAuthStore()
   
   if (isLoading) {
@@ -81,32 +81,32 @@ function App() {
           {/* Auth routes (redirect to / if already logged in) */}
           <Route path="/auth/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
           <Route path="/auth/register" element={<GuestRoute><RegisterPage /></GuestRoute>} />
-          <Route path="/auth/register/creator" element={<GuestRoute><CreatorRegisterPage /></GuestRoute>} />
+          <Route path="/auth/register/creator" element={<GuestRoute><SellerRegisterPage /></GuestRoute>} />
           
           {/* Order tracking */}
           <Route path="/orders/:orderId/track" element={
-            <ProtectedRoute allowedRoles={['CUSTOMER', 'OWNER', 'ADMIN']}>
+            <ProtectedRoute allowedRoles={['CUSTOMER', 'SELLER', 'ADMIN']}>
               <OrderTrackingPage />
             </ProtectedRoute>
           } />
           
           {/* Notifications */}
           <Route path="/notifications" element={
-            <ProtectedRoute allowedRoles={['CUSTOMER', 'OWNER', 'ADMIN']}>
+            <ProtectedRoute allowedRoles={['CUSTOMER', 'SELLER', 'ADMIN']}>
               <NotificationsPage />
             </ProtectedRoute>
           } />
           
           {/* Cart */}
           <Route path="/cart" element={
-            <ProtectedRoute allowedRoles={['CUSTOMER', 'OWNER', 'ADMIN']}>
+            <ProtectedRoute allowedRoles={['CUSTOMER', 'SELLER', 'ADMIN']}>
               <CartPage />
             </ProtectedRoute>
           } />
           
           {/* Customer dashboard */}
           <Route path="/dashboard/customer" element={
-            <ProtectedRoute allowedRoles={['CUSTOMER', 'OWNER', 'ADMIN']}>
+            <ProtectedRoute allowedRoles={['CUSTOMER', 'SELLER', 'ADMIN']}>
               <CustomerDashboardPage />
             </ProtectedRoute>
           } />
@@ -116,7 +116,7 @@ function App() {
           
           {/* Creator dashboard — nested routes */}
           <Route path="/dashboard/creator" element={
-            <ProtectedRoute allowedRoles={['OWNER', 'ADMIN']}>
+            <ProtectedRoute allowedRoles={['SELLER', 'ADMIN']}>
               <CreatorDashboardLayout />
             </ProtectedRoute>
           }>

@@ -15,9 +15,6 @@ import type {
 import { ConflictError, ValidationError } from '@/lib/api'
 
 export interface DropFilters {
-  cityId?: number
-  lat?: number
-  lng?: number
   date?: string
   type?: string
   sortBy?: string
@@ -28,9 +25,6 @@ export interface DropFilters {
 
 function buildParams(filters?: DropFilters): string {
   const params = new URLSearchParams()
-  if (filters?.cityId) params.append('cityId', String(filters.cityId))
-  if (filters?.lat !== undefined) params.append('lat', String(filters.lat))
-  if (filters?.lng !== undefined) params.append('lng', String(filters.lng))
   if (filters?.date) params.append('date', filters.date)
   if (filters?.type) params.append('type', filters.type)
   if (filters?.sortBy) params.append('sortBy', filters.sortBy)
@@ -42,7 +36,7 @@ function buildParams(filters?: DropFilters): string {
 
 export function useActiveDropsFeed(filters?: DropFilters) {
   return useQuery({
-    queryKey: ['drops', filters?.cityId, 'feed', filters],
+    queryKey: ['drops', 'feed', filters],
     queryFn: async () => {
       const params = buildParams(filters)
       const response = await apiClient.get<PageResponse<FoodDropResponse>>(

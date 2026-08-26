@@ -40,7 +40,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}/status")
-    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SELLER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<OrderResponse>> updateOrderStatus(@PathVariable Long id, @RequestParam OrderStatus status) {
         authorizationService.assertCreatorOwnsOrderRestaurant(id);
         return ResponseEntity.ok(ApiResponse.success(orderService.updateOrderStatus(id, status)));
@@ -54,14 +54,14 @@ public class OrderController {
     }
 
     @GetMapping("/restaurants/{restaurantId}/orders")
-    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SELLER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Page<OrderResponse>>> getRestaurantOrders(@PathVariable Long restaurantId, Pageable pageable) {
         authorizationService.assertCreatorOwnsRestaurant(restaurantId);
         return ResponseEntity.ok(ApiResponse.success(orderService.getRestaurantOrders(restaurantId, pageable)));
     }
 
     @GetMapping("/drops/{dropId}/orders")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<java.util.List<OrderResponse>>> getDropOrders(@PathVariable Long dropId) {
         return ResponseEntity.ok(ApiResponse.success(orderService.getDropOrders(dropId)));
     }

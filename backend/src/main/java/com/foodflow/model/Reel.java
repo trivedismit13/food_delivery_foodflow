@@ -31,13 +31,7 @@ public class Reel {
     @Column(name = "media_url", nullable = false, length = 255)
     private String mediaUrl;
 
-    @Column(name = "view_count")
-    @Builder.Default
-    private Integer viewCount = 0;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "drop_id")
-    private FoodDrop drop;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;

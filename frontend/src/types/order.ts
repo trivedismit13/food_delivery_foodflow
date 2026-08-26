@@ -24,7 +24,7 @@ export interface OrderResponse {
   paymentStatus: PaymentStatus;
   dropId?: number;
   isDelivery?: boolean;
-  deliveryAddress?: string;
+
   pickupTime?: string;
   specialInstructions?: string;
 }
@@ -56,5 +56,5 @@ export interface PlaceDropOrderRequest {
   pickupTime?: string;
   specialInstructions?: string;
   isDelivery: boolean;
-  deliveryAddress?: string;
+
 }

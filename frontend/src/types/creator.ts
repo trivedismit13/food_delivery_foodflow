@@ -37,7 +37,7 @@ export interface CreatorResponse {
   totalOrdersCompleted: number;
   isAcceptingOrders: boolean;
   offersDelivery: boolean;
-  deliveryRadiusKm: number;
+
   offersPickup: boolean;
   pickupAddress: string | null;
   verification?: any;
@@ -60,7 +60,6 @@ export interface CreatorRegistrationRequest {
   offersPickup: boolean;
   pickupAddress?: string;
   offersDelivery: boolean;
-  deliveryRadius?: number;
-  deliveryCharge?: number;
+
   instagramHandle?: string;
 }

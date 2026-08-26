@@ -1,4 +1,4 @@
-export type UserRole = 'CUSTOMER' | 'OWNER' | 'ADMIN';
+export type UserRole = 'CUSTOMER' | 'SELLER' | 'ADMIN';
 
 export interface AuthResponse {
   userId: number;

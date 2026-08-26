@@ -33,17 +33,8 @@ public class Restaurant {
     @Column(nullable = false, length = 150)
     private String name;
 
-    @Column(name = "city_id")
-    private Long cityId;
-
-    @Column(nullable = false, length = 100)
+    @Column(length = 200)
     private String city;
-
-    @Column
-    private Double latitude;
-
-    @Column
-    private Double longitude;
 
     @Column(length = 20)
     private String pincode;
@@ -68,14 +59,6 @@ public class Restaurant {
 
     @Column(name = "pickup_address", columnDefinition = "TEXT")
     private String pickupAddress;
-
-    @Column(name = "accepts_delivery")
-    @Builder.Default
-    private Boolean acceptsDelivery = false;
-
-    @Column(name = "delivery_radius_km")
-    @Builder.Default
-    private Integer deliveryRadiusKm = 3;
 
     @Column(name = "verification_level", columnDefinition = "TINYINT")
     @Builder.Default

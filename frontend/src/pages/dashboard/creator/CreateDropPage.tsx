@@ -22,8 +22,7 @@ export default function CreateDropPage() {
   const [cutoffTime, setCutoffTime] = useState('');
   const [pickupStart, setPickupStart] = useState('');
   const [pickupEnd, setPickupEnd] = useState('');
-  const [offerDelivery, setOfferDelivery] = useState(false);
-  const [deliveryCharge, setDeliveryCharge] = useState('');
+
   const [maxOrders, setMaxOrders] = useState('');
   const [specialNotes, setSpecialNotes] = useState('');
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
@@ -166,8 +165,6 @@ export default function CreateDropPage() {
         pickupStartTime: pickupStart ? new Date(`${dropDate}T${pickupStart}:00`).toISOString() : undefined,
         pickupEndTime: pickupEnd ? new Date(`${dropDate}T${pickupEnd}:00`).toISOString() : undefined,
         maxOrders: parseInt(maxOrders),
-        isDeliveryAvailable: offerDelivery,
-        deliveryCharge: offerDelivery && deliveryCharge ? parseFloat(deliveryCharge) : undefined,
         dropPhotoUrl: photoUrl || undefined,
         specialNotes,
         items: selectedItems.map((item) => ({
@@ -336,28 +333,6 @@ export default function CreateDropPage() {
               </div>
             </div>
 
-            <label className="flex items-center gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50">
-              <input 
-                type="checkbox" 
-                checked={offerDelivery} 
-                onChange={(e) => setOfferDelivery(e.target.checked)}
-                className="w-5 h-5 text-orange-500 rounded border-stone-300 focus:ring-orange-500"
-              />
-              <span className="font-semibold text-stone-800">I will offer delivery for this drop</span>
-            </label>
-
-            {offerDelivery && (
-              <div className="pl-8">
-                <label className="block text-sm font-semibold text-stone-700 mb-2">Flat Delivery Charge (₹)</label>
-                <input 
-                  type="number" 
-                  value={deliveryCharge}
-                  onChange={(e) => setDeliveryCharge(e.target.value)}
-                  placeholder="e.g. 50"
-                  className="w-1/3 bg-stone-50 border border-stone-200 rounded-xl px-4 py-2 focus:outline-none focus:border-orange-500"
-                />
-              </div>
-            )}
           </section>
 
           {/* Section 3: Items */}

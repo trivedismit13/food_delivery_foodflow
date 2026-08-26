@@ -55,7 +55,6 @@ export function RatingModal({ restaurantId, isOpen, onClose }: RatingModalProps)
         restaurantId,
         ratingValue,
         foodQualityRating: foodQuality || undefined,
-        deliveryRating: delivery || undefined,
         packagingRating: packaging || undefined,
         reviewText: reviewText || undefined,
       },

@@ -7,7 +7,6 @@ import com.foodflow.repository.OrderRepository;
 import com.foodflow.repository.UserRepository;
 import com.foodflow.service.NotificationService;
 import com.foodflow.dto.response.NotificationResponse;
-import com.foodflow.websocket.DropWebSocketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +26,6 @@ public class NotificationServiceImpl implements NotificationService {
     private final CreatorFollowRepository creatorFollowRepository;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
-    private final DropWebSocketService webSocketService;
 
     @Override
     public void sendNotification(Long userId, Notification.NotificationType type, 
@@ -65,8 +63,6 @@ public class NotificationServiceImpl implements NotificationService {
                 .createdAt(notification.getCreatedAt() != null ? notification.getCreatedAt() : LocalDateTime.now())
                 .timeAgo("Just now")
                 .build();
-                
-        webSocketService.sendUserNotification(userId, response);
     }
 
     @Override

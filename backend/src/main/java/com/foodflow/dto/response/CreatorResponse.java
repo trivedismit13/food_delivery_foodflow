@@ -19,8 +19,7 @@ public class CreatorResponse extends CreatorSummary {
     private String instagramHandle;
     private Boolean offersPickup;
     private String pickupAddress;
-    private Boolean offersDelivery;
-    private Integer deliveryRadiusKm;
+
     
     // Verifications and active drops
     private Object verification; // Can map CreatorVerification to a smaller DTO later or just send it raw for now

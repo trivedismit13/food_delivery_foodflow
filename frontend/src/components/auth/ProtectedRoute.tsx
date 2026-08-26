@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  allowedRoles?: ('CUSTOMER' | 'OWNER' | 'ADMIN')[];
+  allowedRoles?: ('CUSTOMER' | 'SELLER' | 'ADMIN')[];
   redirectTo?: string;
 }
 

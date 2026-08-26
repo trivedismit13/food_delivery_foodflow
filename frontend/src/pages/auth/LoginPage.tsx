@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { useLogin } from '@/queries/auth';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, UtensilsCrossed } from 'lucide-react';
-import { GoogleLogin } from '@react-oauth/google';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -31,10 +30,6 @@ export default function LoginPage() {
     loginMutation.mutate(data);
   };
 
-  const handleGoogleSuccess = (credentialResponse: any) => {
-    // In a real app, send credentialResponse.credential to your backend
-    console.log('Google login success:', credentialResponse);
-  };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-white">
@@ -146,15 +141,6 @@ export default function LoginPage() {
             <div className="flex-1 border-t border-stone-200" />
           </div>
 
-          <div className="flex justify-center w-full [&>div]:w-full">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => console.log('Login Failed')}
-              shape="rectangular"
-              size="large"
-              width="360"
-            />
-          </div>
 
           <p className="text-center text-sm text-stone-600 mt-8">
             New here?{' '}

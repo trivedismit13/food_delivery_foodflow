@@ -6,7 +6,7 @@ export function GuestRoute({ children }: { children: React.ReactNode }) {
   
   if (isAuthenticated) {
     // Redirect based on role
-    if (user?.role === 'OWNER') {
+    if (user?.role === 'SELLER') {
       return <Navigate to="/dashboard/creator" replace />;
     }
     return <Navigate to="/" replace />;

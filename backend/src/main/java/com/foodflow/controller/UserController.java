@@ -28,7 +28,7 @@ public class UserController {
         return userService.getUserById(userDetails.getId())
                 .map(u -> {
                     UserResponse response = UserResponse.fromEntity(u);
-                    if (com.foodflow.model.Role.OWNER.equals(u.getRole())) {
+                    if (com.foodflow.model.Role.SELLER.equals(u.getRole())) {
                         restaurantRepository.findByOwnerUserId(u.getUserId()).ifPresent(r -> {
                             response.setCreatorProfile(CreatorSummary.builder()
                                     .restaurantId(r.getRestaurantId())
@@ -50,7 +50,24 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
-                .map(u -> ResponseEntity.ok(ApiResponse.success(UserResponse.fromEntity(u))))
+                .map(u -> {
+                    UserResponse response = UserResponse.fromEntity(u);
+                    if (com.foodflow.model.Role.SELLER.equals(u.getRole())) {
+                        restaurantRepository.findByOwnerUserId(u.getUserId()).ifPresent(r -> {
+                            response.setCreatorProfile(CreatorSummary.builder()
+                                    .restaurantId(r.getRestaurantId())
+                                    .name(r.getName())
+                                    .creatorType(r.getCreatorType())
+                                    .verificationLevel(r.getVerificationLevel())
+                                    .avgRating(r.getAvgRating())
+                                    .followerCount(r.getFollowerCount())
+                                    .totalOrdersCompleted(r.getTotalOrdersCompleted())
+                                    .isAcceptingOrders(r.getIsAcceptingOrders())
+                                    .build());
+                        });
+                    }
+                    return ResponseEntity.ok(ApiResponse.success(response));
+                })
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("User not found", 404)));
     }
 

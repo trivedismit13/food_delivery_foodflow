@@ -8,7 +8,6 @@ import com.foodflow.dto.response.ApiResponse;
 import com.foodflow.dto.response.AuthResponse;
 import com.foodflow.model.User;
 import com.foodflow.service.AuthService;
-import com.foodflow.service.GoogleAuthService;
 import com.foodflow.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final GoogleAuthService googleAuthService;
     private final UserService userService;
 
     @PostMapping("/login")
@@ -43,10 +41,4 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(authResponse, "Creator account created successfully", 201));
     }
 
-    @PostMapping("/google")
-    public ResponseEntity<ApiResponse<AuthResponse>> googleAuth(
-            @Valid @RequestBody GoogleAuthRequest request) {
-        AuthResponse authResponse = googleAuthService.authenticateWithGoogle(request.getGoogleToken());
-        return ResponseEntity.ok(ApiResponse.success(authResponse, "Google auth successful", 200));
-    }
 }

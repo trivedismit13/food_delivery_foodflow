@@ -22,6 +22,6 @@ public class PlaceOrderRequest {
     @jakarta.validation.Valid
     private List<OrderItemRequest> items;
 
-    // Default to CARD if not provided
-    private PaymentMethod paymentMethod = PaymentMethod.CARD;
+    // Default to CASH if not provided
+    private PaymentMethod paymentMethod = PaymentMethod.CASH;
 }

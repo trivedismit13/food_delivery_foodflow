@@ -69,11 +69,8 @@ public class DropServiceImpl implements DropService {
             .description(request.getDescription())
             .dropDate(request.getDropDate())
             .orderCutoffTime(request.getOrderCutoffTime())
-            .pickupStartTime(request.getPickupStartTime())
-            .pickupEndTime(request.getPickupEndTime())
+            .pickupTime(request.getPickupTime())
             .maxOrders(request.getMaxOrders())
-            .isDeliveryAvailable(request.getIsDeliveryAvailable() != null ? request.getIsDeliveryAvailable() : false)
-            .deliveryCharge(request.getDeliveryCharge())
             .dropPhotoUrl(request.getDropPhotoUrl())
             .specialNotes(request.getSpecialNotes())
             .status(FoodDrop.DropStatus.ANNOUNCED)
@@ -143,8 +140,7 @@ public class DropServiceImpl implements DropService {
         if (request.getDescription() != null) drop.setDescription(request.getDescription());
         if (request.getDropDate() != null) drop.setDropDate(request.getDropDate());
         if (request.getOrderCutoffTime() != null) drop.setOrderCutoffTime(request.getOrderCutoffTime());
-        if (request.getPickupStartTime() != null) drop.setPickupStartTime(request.getPickupStartTime());
-        if (request.getPickupEndTime() != null) drop.setPickupEndTime(request.getPickupEndTime());
+        if (request.getPickupTime() != null) drop.setPickupTime(request.getPickupTime());
         if (request.getMaxOrders() != null) drop.setMaxOrders(request.getMaxOrders());
         if (request.getDropPhotoUrl() != null) drop.setDropPhotoUrl(request.getDropPhotoUrl());
         if (request.getSpecialNotes() != null) drop.setSpecialNotes(request.getSpecialNotes());
@@ -233,7 +229,7 @@ public class DropServiceImpl implements DropService {
     }
 
     @Override
-    public org.springframework.data.domain.Page<FoodDropResponse> getActiveDropsFeed(Long cityId, Double lat, Double lng, String creatorType, String date, String sortBy, String query, org.springframework.data.domain.Pageable pageable) {
+    public org.springframework.data.domain.Page<FoodDropResponse> getActiveDropsFeed(String creatorType, String date, String sortBy, String query, org.springframework.data.domain.Pageable pageable) {
         
         org.springframework.data.domain.Pageable sortedPageable = pageable;
         if ("closingSoonest".equals(sortBy)) {
@@ -248,9 +244,9 @@ public class DropServiceImpl implements DropService {
             );
         }
 
-        // Use native query to filter by location radius
-        org.springframework.data.domain.Page<FoodDrop> drops = dropRepository.findActiveDropsWithLocation(
-            cityId, lat, lng, creatorType, date, query, sortedPageable
+        // Use native query to fetch active drops
+        org.springframework.data.domain.Page<FoodDrop> drops = dropRepository.findActiveDrops(
+            creatorType, date, query, sortedPageable
         );
         return drops.map(this::mapToResponse);
     }
@@ -305,8 +301,7 @@ public class DropServiceImpl implements DropService {
         response.setDescription(drop.getDescription());
         response.setDropDate(drop.getDropDate());
         response.setOrderCutoffTime(drop.getOrderCutoffTime());
-        response.setPickupStartTime(drop.getPickupStartTime());
-        response.setPickupEndTime(drop.getPickupEndTime());
+        response.setPickupTime(drop.getPickupTime());
         response.setMaxOrders(drop.getMaxOrders());
         response.setCurrentOrders(drop.getCurrentOrders());
         response.setAvailableSlots(drop.availableSlots());
@@ -314,8 +309,6 @@ public class DropServiceImpl implements DropService {
         response.setStatus(drop.getStatus().name());
         response.setDropPhotoUrl(drop.getDropPhotoUrl());
         response.setSpecialNotes(drop.getSpecialNotes());
-        response.setIsDeliveryAvailable(drop.getIsDeliveryAvailable());
-        response.setDeliveryCharge(drop.getDeliveryCharge());
 
         // Minutes until cutoff
         if (drop.getOrderCutoffTime() != null && drop.getOrderCutoffTime().isAfter(LocalDateTime.now())) {

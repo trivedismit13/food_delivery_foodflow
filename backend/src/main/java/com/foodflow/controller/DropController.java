@@ -27,7 +27,7 @@ public class DropController {
     // --- Creator Endpoints ---
     
     @PostMapping
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<FoodDropResponse>> createDrop(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @Valid @RequestBody CreateDropRequest request) {
@@ -36,7 +36,7 @@ public class DropController {
     }
 
     @PutMapping("/{dropId}")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<FoodDropResponse>> updateDrop(
             @PathVariable Long dropId,
             @Valid @RequestBody UpdateDropRequest request) {
@@ -44,7 +44,7 @@ public class DropController {
     }
 
     @PutMapping("/{dropId}/status")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<FoodDropResponse>> updateDropStatus(
             @PathVariable Long dropId,
             @RequestParam FoodDrop.DropStatus status) {
@@ -52,7 +52,7 @@ public class DropController {
     }
 
     @PostMapping("/{dropId}/items")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<Void> addItemToDrop(
             @PathVariable Long dropId,
             @Valid @RequestBody AddDropItemRequest request) {
@@ -61,7 +61,7 @@ public class DropController {
     }
 
     @DeleteMapping("/{dropId}/items/{itemId}")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<Void> removeItemFromDrop(
             @PathVariable Long dropId,
             @PathVariable Long itemId) {
@@ -73,16 +73,13 @@ public class DropController {
     
     @GetMapping
     public ResponseEntity<ApiResponse<org.springframework.data.domain.Page<FoodDropResponse>>> getActiveDropsFeed(
-            @RequestParam(required = false) Long cityId,
-            @RequestParam(required = false) Double lat,
-            @RequestParam(required = false) Double lng,
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String date,
             @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) String query,
             @org.springframework.data.web.PageableDefault(size = 20) org.springframework.data.domain.Pageable pageable) {
         
-        org.springframework.data.domain.Page<FoodDropResponse> drops = dropService.getActiveDropsFeed(cityId, lat, lng, type, date, sortBy, query, pageable);
+        org.springframework.data.domain.Page<FoodDropResponse> drops = dropService.getActiveDropsFeed(type, date, sortBy, query, pageable);
         return ResponseEntity.ok(ApiResponse.success(drops));
     }
 
@@ -109,7 +106,7 @@ public class DropController {
     // --- Order Placement ---
     
     @PostMapping("/{dropId}/orders")
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('OWNER')")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('SELLER')")
     public ResponseEntity<ApiResponse<OrderResponse>> placeDropOrder(
             @PathVariable Long dropId,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -119,7 +116,7 @@ public class DropController {
     }
 
     @PostMapping("/{dropId}/orders/{orderId}/cancel")
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('OWNER')")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('SELLER')")
     public ResponseEntity<ApiResponse<Void>> cancelDropOrder(
             @PathVariable Long dropId,
             @PathVariable Long orderId) {

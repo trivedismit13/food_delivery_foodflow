@@ -1,24 +1,20 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { MapPin, ShoppingCart, Search, Menu, Bell } from 'lucide-react';
+import { ShoppingCart, Search, Menu, Bell } from 'lucide-react';
 import { useState } from 'react';
 import { useStore } from '@/store/useStore';
 import { useAuthStore } from '@/store/authStore';
-import { useLocationStore } from '@/store/locationStore';
-import { LocationPrompt } from '@/components/location/LocationPrompt';
 import { useUnreadCount } from '@/queries/notifications';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   
   const navigate = useNavigate();
   
   const cartCount = useStore((s) => s.items.reduce((sum, i) => sum + i.quantity, 0));
   
   const { isAuthenticated, user, creatorProfile, isCreator, isCustomer, logout } = useAuthStore();
-  const { cityName } = useLocationStore();
   const { data: unreadCount = 0 } = useUnreadCount();
 
   const handleLogout = () => {
@@ -137,17 +133,6 @@ export default function Navbar() {
                 All Creators
               </Link>
             </div>
-            
-            {/* Global Location Button */}
-            <div className="hidden md:flex items-center border-l border-stone-200 pl-6 ml-2">
-              <button 
-                onClick={() => setIsLocationModalOpen(true)}
-                className="flex items-center gap-1.5 text-sm font-medium text-stone-600 hover:text-orange-500 transition-colors bg-stone-50 px-3 py-1.5 rounded-full border border-stone-200"
-              >
-                <MapPin className="w-3.5 h-3.5 text-orange-500" />
-                <span className="max-w-[120px] truncate">{cityName || 'Set Location'}</span>
-              </button>
-            </div>
           </div>
 
           <form 
@@ -225,10 +210,6 @@ export default function Navbar() {
         </div>
       )}
 
-      {/* Location Modal */}
-      {isLocationModalOpen && (
-        <LocationPrompt onClose={() => setIsLocationModalOpen(false)} />
-      )}
     </>
   );
 }

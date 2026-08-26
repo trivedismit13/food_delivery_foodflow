@@ -29,9 +29,7 @@ public class CreatorRegistrationRequest {
     @NotBlank(message = "City is required")
     private String city;
 
-    private Long cityId;
-    private Double latitude;
-    private Double longitude;
+
 
     @NotBlank(message = "Cuisine is required")
     private String cuisine;
@@ -41,9 +39,7 @@ public class CreatorRegistrationRequest {
     private Boolean offersPickup;
     private String pickupAddress;
 
-    private Boolean offersDelivery;
-    private Integer deliveryRadius;
-    private Double deliveryCharge;
+
 
     private String instagramHandle;
 }

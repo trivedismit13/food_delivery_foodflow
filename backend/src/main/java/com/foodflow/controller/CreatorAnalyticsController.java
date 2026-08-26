@@ -20,7 +20,7 @@ public class CreatorAnalyticsController {
     private final com.foodflow.service.security.CreatorAuthorizationService authorizationService;
 
     @GetMapping("/dashboard")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<CreatorDashboardResponse>> getDashboard(
             @PathVariable Long creatorId,
             @RequestParam(defaultValue = "WEEK") String period) {
@@ -29,7 +29,7 @@ public class CreatorAnalyticsController {
     }
 
     @GetMapping("/weekly-trend")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<List<WeeklyTrendResponse>>> getWeeklyTrend(
             @PathVariable Long creatorId,
             @RequestParam(defaultValue = "12") int weeks) {
@@ -38,7 +38,7 @@ public class CreatorAnalyticsController {
     }
 
     @GetMapping("/top-items")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<org.springframework.data.domain.Page<TopItemResponse>>> getTopItems(
             @PathVariable Long creatorId,
             @org.springframework.data.web.PageableDefault(size = 20) org.springframework.data.domain.Pageable pageable) {
@@ -47,7 +47,7 @@ public class CreatorAnalyticsController {
     }
 
     @GetMapping("/repeat-customers")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<RepeatCustomerResponse>> getRepeatCustomers(
             @PathVariable Long creatorId) {
         authorizationService.assertCreatorOwnsAnalytics(creatorId);
@@ -55,7 +55,7 @@ public class CreatorAnalyticsController {
     }
 
     @GetMapping("/drop-performance")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<org.springframework.data.domain.Page<DropPerformanceResponse>>> getDropPerformance(
             @PathVariable Long creatorId,
             @org.springframework.data.web.PageableDefault(size = 20) org.springframework.data.domain.Pageable pageable) {
@@ -64,7 +64,7 @@ public class CreatorAnalyticsController {
     }
 
     @GetMapping("/best-day")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<BestDayResponse>> getBestDay(
             @PathVariable Long creatorId) {
         authorizationService.assertCreatorOwnsAnalytics(creatorId);
@@ -74,7 +74,7 @@ public class CreatorAnalyticsController {
     // --- AI Insight ---
 
     @PostMapping("/insight")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<InsightResponse>> askInsight(
             @PathVariable Long creatorId,
             @RequestBody Map<String, String> request) {
@@ -84,7 +84,7 @@ public class CreatorAnalyticsController {
     }
 
     @GetMapping("/insight/auto")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<List<InsightResponse>>> getAutoInsight(
             @PathVariable Long creatorId) {
         authorizationService.assertCreatorOwnsAnalytics(creatorId);

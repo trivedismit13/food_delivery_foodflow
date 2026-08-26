@@ -35,7 +35,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    private com.foodflow.model.Role role;
 
     @Version
     private Long version;

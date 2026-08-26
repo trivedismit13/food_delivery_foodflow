@@ -33,16 +33,6 @@ public class RestaurantController {
             CreatorVerification v = restaurant.getVerification();
             verificationResponse = CreatorVerificationResponse.builder()
                 .verificationId(v.getVerificationId())
-                .aadhaarVerified(v.getAadhaarVerified())
-                .phoneVerified(v.getPhoneVerified())
-                .foodLicenceNumber(v.getFoodLicenceNumber())
-                .foodLicenceUrl(v.getFoodLicenceUrl())
-                .kitchenPhotoUrl1(v.getKitchenPhotoUrl1())
-                .kitchenPhotoUrl2(v.getKitchenPhotoUrl2())
-                .ingredientDeclaration(v.getIngredientDeclaration())
-                .inspectionPassed(v.getInspectionPassed())
-                .inspectionDate(v.getInspectionDate())
-                .inspectionNotes(v.getInspectionNotes())
                 .currentLevel(v.getCurrentLevel())
                 .levelUpdatedAt(v.getLevelUpdatedAt())
                 .rejectionReason(v.getRejectionReason())
@@ -55,19 +45,13 @@ public class RestaurantController {
                 .restaurantId(restaurant.getRestaurantId())
                 .ownerId(restaurant.getOwner() != null ? restaurant.getOwner().getUserId() : null)
                 .name(restaurant.getName())
-                .cityId(restaurant.getCityId())
                 .city(restaurant.getCity())
-                .latitude(restaurant.getLatitude())
-                .longitude(restaurant.getLongitude())
-                .pincode(restaurant.getPincode())
                 .cuisine(restaurant.getCuisine())
                 .isOpen(restaurant.getIsOpen())
                 .creatorType(restaurant.getCreatorType() != null ? restaurant.getCreatorType().name() : null)
                 .bio(restaurant.getBio())
                 .instagramHandle(restaurant.getInstagramHandle())
                 .pickupAddress(restaurant.getPickupAddress())
-                .acceptsDelivery(restaurant.getAcceptsDelivery())
-                .deliveryRadiusKm(restaurant.getDeliveryRadiusKm())
                 .verificationLevel(restaurant.getVerificationLevel())
                 .totalOrdersCompleted(restaurant.getTotalOrdersCompleted())
                 .followerCount(restaurant.getFollowerCount())
@@ -80,7 +64,7 @@ public class RestaurantController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SELLER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<RestaurantResponse>> createRestaurant(@Valid @RequestBody CreateRestaurantRequest request) {
         Restaurant restaurant = new Restaurant();
         User owner = new User();
@@ -106,10 +90,7 @@ public class RestaurantController {
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Restaurant not found", 404)));
     }
 
-    @GetMapping("/city/{city}")
-    public ResponseEntity<ApiResponse<Page<RestaurantResponse>>> getRestaurantsByCity(@PathVariable String city, Pageable pageable) {
-        return ResponseEntity.ok(ApiResponse.success(restaurantService.searchRestaurants(city, null, pageable).map(this::mapToDto)));
-    }
+
 
     @GetMapping("/cuisine/{cuisine}")
     public ResponseEntity<ApiResponse<Page<RestaurantResponse>>> getRestaurantsByCuisine(@PathVariable String cuisine, Pageable pageable) {
@@ -117,14 +98,13 @@ public class RestaurantController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<Page<RestaurantResponse>>> searchRestaurants(@RequestParam(required = false) String city,
-                                                                           @RequestParam(required = false) String cuisine,
+    public ResponseEntity<ApiResponse<Page<RestaurantResponse>>> searchRestaurants(@RequestParam(required = false) String cuisine,
                                                                            Pageable pageable) {
-        return ResponseEntity.ok(ApiResponse.success(restaurantService.searchRestaurants(city, cuisine, pageable).map(this::mapToDto)));
+        return ResponseEntity.ok(ApiResponse.success(restaurantService.searchRestaurants(null, cuisine, pageable).map(this::mapToDto)));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SELLER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<RestaurantResponse>> updateRestaurant(@PathVariable Long id, @Valid @RequestBody CreateRestaurantRequest request) {
         authorizationService.assertCreatorOwnsRestaurant(id);
         Restaurant restaurant = new Restaurant();
@@ -141,7 +121,7 @@ public class RestaurantController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SELLER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> deleteRestaurant(@PathVariable Long id) {
         authorizationService.assertCreatorOwnsRestaurant(id);
         restaurantService.deleteRestaurant(id);

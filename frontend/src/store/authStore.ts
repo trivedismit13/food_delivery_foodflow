@@ -59,7 +59,7 @@ export const useAuthStore = create<AuthState>()(
 
       setLoading: (loading: boolean) => set({ isLoading: loading }),
 
-      isCreator: () => get().user?.role === 'OWNER',
+      isCreator: () => get().user?.role === 'SELLER',
       isAdmin: () => get().user?.role === 'ADMIN',
       isCustomer: () => get().user?.role === 'CUSTOMER',
     }),

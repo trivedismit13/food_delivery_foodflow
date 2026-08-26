@@ -27,7 +27,7 @@ export function useLogin() {
       queryClient.clear()
       
       // Role-based redirect
-      if (authResponse.role === 'OWNER' || authResponse.role === 'ADMIN') {
+      if (authResponse.role === 'SELLER' || authResponse.role === 'ADMIN') {
         navigate('/dashboard/creator')
       } else {
         // Check if there's a redirect URL in query params
@@ -64,34 +64,6 @@ export function useRegister() {
   })
 }
 
-export function useGoogleAuth() {
-  const { setAuth } = useAuthStore()
-  const queryClient = useQueryClient()
-  const navigate = useNavigate()
-  
-  return useMutation({
-    mutationFn: async (credentials: { googleToken: string }) => {
-      const response = await apiClient.post<AuthResponse>('/auth/google', credentials)
-      return response.data
-    },
-    onSuccess: (authResponse) => {
-      setAuth(authResponse)
-      queryClient.clear()
-      
-      if (authResponse.role === 'OWNER' || authResponse.role === 'ADMIN') {
-        navigate('/dashboard/creator')
-      } else {
-        const params = new URLSearchParams(window.location.search)
-        const redirectTo = params.get('redirect')
-        navigate(redirectTo || '/')
-      }
-      toast.success(`Signed in with Google! Welcome, ${authResponse.name.split(' ')[0]}!`)
-    },
-    onError: (error) => {
-      handleApiError(error)
-    }
-  })
-}
 
 export function useRegisterCreator() {
   const { setAuth } = useAuthStore()

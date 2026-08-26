@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react';
 import { DropCard } from '@/components/drops/DropCard';
 import { useAuthStore } from '@/store/authStore';
-import { useLocationStore } from '@/store/locationStore';
 import { useSearchParams } from 'react-router-dom';
-import { X, ChevronDown } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useActiveDropsFeed, useFollowedCreatorDrops } from '@/queries/drops';
-import { NoLocationBanner } from '@/components/location/NoLocationBanner';
-import { LocationPrompt } from '@/components/location/LocationPrompt';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const typeMapping: Record<string, string> = {
@@ -21,21 +18,16 @@ export default function DropsPage() {
   const [activeStatus, setActiveStatus] = useState('All');
   const [activeType, setActiveType] = useState('All');
   const [activeSort, setActiveSort] = useState('Closing Soonest');
-  const [isLocationOpen, setIsLocationOpen] = useState(false);
   const [page, setPage] = useState(0);
   
-  const { cityId, lat, lng, cityName } = useLocationStore();
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query') || undefined;
 
   useEffect(() => {
     setPage(0);
-  }, [cityId, lat, lng, query]);
+  }, [query]);
 
   const { data: feedData, isLoading: isFeedLoading, isPlaceholderData } = useActiveDropsFeed({ 
-    cityId: cityId || undefined,
-    lat: lat || undefined,
-    lng: lng || undefined,
     type: activeType !== 'All' ? typeMapping[activeType] : undefined,
     sortBy: activeSort === 'Closing Soonest' ? 'closingSoonest' : 'newest',
     query,
@@ -137,19 +129,8 @@ export default function DropsPage() {
               </button>
             ))}
           </div>
-
-          <div className="w-full md:w-auto flex items-center shrink-0">
-            <button
-              onClick={() => setIsLocationOpen(true)}
-              className="flex items-center gap-1.5 w-full md:w-auto px-4 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm text-stone-700 hover:bg-orange-50 hover:border-orange-300 transition-colors"
-            >
-              <span className="font-medium">{cityName || '📍 Set Location'}</span>
-              <ChevronDown size={16} className="text-stone-400" />
-            </button>
           </div>
-          {isLocationOpen && <LocationPrompt canSkip={true} onClose={() => setIsLocationOpen(false)} />}
         </div>
-      </div>
 
       {/* ACTIVE FILTERS (Pills) */}
       {(activeStatus !== 'All' || activeType !== 'All') && (
@@ -170,7 +151,6 @@ export default function DropsPage() {
       )}
 
       <div className="container mx-auto px-4 py-8 space-y-12">
-        <NoLocationBanner />
         
         {/* PERSONALIZED FEED (Auth only) */}
         {isAuthenticated && followedDrops.length > 0 && (
@@ -218,19 +198,11 @@ export default function DropsPage() {
                 🧑‍🍳
               </div>
               <h3 className="font-display text-2xl font-bold text-stone-900 mb-2">
-                {cityName ? `No drops available in ${cityName} right now` : 'No drops available right now'}
+                No drops available right now
               </h3>
               <p className="text-stone-500 mb-8 max-w-md mx-auto">
-                {cityName 
-                  ? "We couldn't find any creators dropping food near this location. Try expanding your search or check back later."
-                  : "Follow your favourite creators to get notified when they announce their next delicious drop."}
+                Follow your favourite creators to get notified when they announce their next delicious drop.
               </p>
-              <button 
-                onClick={() => setIsLocationOpen(true)}
-                className="bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl px-8 py-3 transition-colors shadow-sm"
-              >
-                Change Location
-              </button>
             </div>
           ) : (
             <>

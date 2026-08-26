@@ -13,14 +13,14 @@ public class VerificationController {
     private final com.foodflow.service.security.CreatorAuthorizationService authorizationService;
 
     @GetMapping
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<com.foodflow.dto.response.ApiResponse<com.foodflow.model.CreatorVerification>> getVerificationStatus(@PathVariable Long creatorId) {
         authorizationService.assertCreatorOwnsVerification(creatorId);
         return ResponseEntity.ok(com.foodflow.dto.response.ApiResponse.success(verificationService.getVerificationStatus(creatorId)));
     }
 
     @PutMapping("/level-1")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<com.foodflow.dto.response.ApiResponse<com.foodflow.model.CreatorVerification>> submitLevel1(
             @PathVariable Long creatorId,
             @jakarta.validation.Valid @RequestBody com.foodflow.dto.request.VerificationRequest request) {
@@ -29,7 +29,7 @@ public class VerificationController {
     }
 
     @PutMapping("/level-2")
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<com.foodflow.dto.response.ApiResponse<com.foodflow.model.CreatorVerification>> submitLevel2(
             @PathVariable Long creatorId,
             @jakarta.validation.Valid @RequestBody com.foodflow.dto.request.Level2VerificationRequest request) {

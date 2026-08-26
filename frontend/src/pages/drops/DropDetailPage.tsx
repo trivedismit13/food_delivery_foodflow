@@ -17,11 +17,8 @@ export default function DropDetailPage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
   const [selectedItems, setSelectedItems] = useState<Record<number, number>>({});
-  const [collectionMethod, setCollectionMethod] = useState<'pickup' | 'delivery'>('pickup');
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>('12:00 PM');
-  const [deliveryAddress, setDeliveryAddress] = useState('');
   const [specialInstructions, setSpecialInstructions] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'upi' | 'wallet' | 'cod'>('upi');
 
   const { data: drop, isLoading: isDropLoading } = useDropById(Number(dropId));
   const placeOrderMutation = usePlaceDropOrder();
@@ -67,7 +64,7 @@ export default function DropDetailPage() {
   }, 0) || 0;
   
   const totalItems = Object.values(selectedItems).reduce((sum, qty) => sum + qty, 0);
-  const orderTotal = itemTotal + (collectionMethod === 'delivery' && drop.deliveryCharge ? drop.deliveryCharge : 0);
+  const orderTotal = itemTotal;
 
   const handleQtyChange = (itemId: number, delta: number, max: number) => {
     setSelectedItems(prev => {
@@ -93,10 +90,6 @@ export default function DropDetailPage() {
       return;
     }
 
-    if (collectionMethod === 'delivery' && !deliveryAddress.trim()) {
-      toast.error("Please provide a delivery address");
-      return;
-    }
 
     const hasExceeded = drop.items?.some(item => {
       const qty = selectedItems[item.itemId] || 0;
@@ -118,10 +111,8 @@ export default function DropDetailPage() {
           itemId: Number(itemId),
           quantity
         })),
-        paymentMethod: paymentMethod.toUpperCase() as PaymentMethod,
-        pickupTime: collectionMethod === 'pickup' ? selectedTimeSlot : undefined,
-        isDelivery: collectionMethod === 'delivery',
-        deliveryAddress: collectionMethod === 'delivery' ? deliveryAddress : undefined,
+        paymentMethod: 'CASH',
+        pickupTime: selectedTimeSlot,
         specialInstructions: specialInstructions || undefined
       } as any);
 
@@ -446,12 +437,7 @@ export default function DropDetailPage() {
                     <span>Item Total</span>
                     <span>₹{itemTotal}</span>
                   </div>
-                  {collectionMethod === 'delivery' && drop.deliveryCharge !== undefined && (
-                    <div className="flex justify-between text-sm text-stone-600">
-                      <span>Delivery Partner Fee</span>
-                      <span>₹{drop.deliveryCharge}</span>
-                    </div>
-                  )}
+
                   <div className="flex justify-between text-lg font-bold text-stone-900 pt-2 border-t border-stone-200 mt-2">
                     <span>Total</span>
                     <span>₹{orderTotal}</span>
@@ -459,60 +445,25 @@ export default function DropDetailPage() {
                 </div>
               </div>
 
-              {/* Collection Toggle */}
-              <div className="mb-6 space-y-3">
-                <h3 className="text-sm font-semibold text-stone-700">How would you like to get it?</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <label className={`relative flex flex-col p-4 cursor-pointer rounded-xl border-2 transition-all ${collectionMethod === 'pickup' ? 'border-orange-500 bg-orange-50/30' : 'border-stone-100 bg-white hover:border-orange-200'}`}>
-                    <input type="radio" name="collection" value="pickup" checked={collectionMethod === 'pickup'} onChange={() => setCollectionMethod('pickup')} className="absolute opacity-0" />
-                    <span className="font-semibold text-stone-900 mb-1">Pickup</span>
-                    <span className="text-xs text-stone-500">Collect yourself</span>
-                  </label>
-                  <label className={`relative flex flex-col p-4 cursor-pointer rounded-xl border-2 transition-all ${collectionMethod === 'delivery' ? 'border-orange-500 bg-orange-50/30' : 'border-stone-100 bg-white hover:border-orange-200'}`}>
-                    <input type="radio" name="collection" value="delivery" checked={collectionMethod === 'delivery'} onChange={() => setCollectionMethod('delivery')} className="absolute opacity-0" />
-                    <span className="font-semibold text-stone-900 mb-1">Delivery</span>
-                    <span className="text-xs text-stone-500">+₹{drop.deliveryCharge || 0}</span>
-                  </label>
+              <div className="mb-6 space-y-4">
+                <div className="bg-orange-50 text-orange-900 p-4 rounded-xl text-sm flex gap-3">
+                  <MapPin size={18} className="shrink-0 text-orange-500" />
+                  <p>Creator local address will be shown after booking.</p>
                 </div>
-              </div>
-
-              {/* Dynamic Collection Details */}
-              <div className="mb-6">
-                <AnimatePresence mode="wait">
-                  {collectionMethod === 'pickup' ? (
-                    <motion.div key="pickup" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-4 overflow-hidden">
-                      <div className="bg-orange-50 text-orange-900 p-4 rounded-xl text-sm flex gap-3">
-                        <MapPin size={18} className="shrink-0 text-orange-500" />
-                        <p>Creator local address will be shown after booking.</p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-stone-700 block mb-2">Select Pickup Time</label>
-                        <div className="flex flex-wrap gap-2">
-                          {['12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM'].map(time => (
-                            <button 
-                              key={time}
-                              onClick={() => setSelectedTimeSlot(time)}
-                              className={`px-3 py-1.5 rounded-lg text-sm transition-colors border ${selectedTimeSlot === time ? 'bg-orange-500 border-orange-500 text-white font-medium' : 'bg-white border-stone-200 text-stone-600 hover:border-orange-300'}`}
-                            >
-                              {time}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    <motion.div key="delivery" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-2 overflow-hidden">
-                      <label className="text-sm font-medium text-stone-700 block">Delivery Address</label>
-                      <textarea 
-                        rows={2}
-                        value={deliveryAddress}
-                        onChange={(e) => setDeliveryAddress(e.target.value)}
-                        placeholder="Enter full address for delivery..."
-                        className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 resize-none text-sm"
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div>
+                  <label className="text-sm font-medium text-stone-700 block mb-2">Select Pickup Time</label>
+                  <div className="flex flex-wrap gap-2">
+                    {['12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM'].map(time => (
+                      <button 
+                        key={time}
+                        onClick={() => setSelectedTimeSlot(time)}
+                        className={`px-3 py-1.5 rounded-lg text-sm transition-colors border ${selectedTimeSlot === time ? 'bg-orange-500 border-orange-500 text-white font-medium' : 'bg-white border-stone-200 text-stone-600 hover:border-orange-300'}`}
+                      >
+                        {time}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <div className="mb-6">
@@ -529,16 +480,12 @@ export default function DropDetailPage() {
               {/* Payment Method */}
               <div className="mb-8">
                 <label className="text-sm font-medium text-stone-700 block mb-2">Payment Method</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <label className={`flex items-center justify-center gap-2 p-3 rounded-xl border cursor-pointer transition-colors ${paymentMethod === 'upi' ? 'bg-stone-900 border-stone-900 text-white' : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'}`}>
-                    <input type="radio" name="payment" value="upi" checked={paymentMethod === 'upi'} onChange={() => setPaymentMethod('upi')} className="hidden" />
-                    <span className="font-semibold text-sm">UPI</span>
-                  </label>
-                  <label className={`flex items-center justify-center gap-2 p-3 rounded-xl border cursor-pointer transition-colors ${paymentMethod === 'card' ? 'bg-stone-900 border-stone-900 text-white' : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'}`}>
-                    <input type="radio" name="payment" value="card" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} className="hidden" />
-                    <CreditCard size={16} />
-                    <span className="font-semibold text-sm">Card</span>
-                  </label>
+                <div className="bg-stone-50 border border-stone-200 rounded-xl p-4 flex gap-3">
+                  <Banknote className="text-stone-500 shrink-0" />
+                  <div>
+                    <h4 className="text-sm font-bold text-stone-900">Cash on Pickup</h4>
+                    <p className="text-sm text-stone-500">Pay the creator directly when you collect your food.</p>
+                  </div>
                 </div>
               </div>
 
@@ -563,7 +510,7 @@ export default function DropDetailPage() {
               ) : drop.status === 'OPEN' && !isSoldOut ? (
                 <button 
                   onClick={handlePlaceOrder}
-                  disabled={totalItems === 0 || checkoutState === 'loading' || (collectionMethod === 'delivery' && !deliveryAddress.trim())}
+                  disabled={totalItems === 0 || checkoutState === 'loading'}
                   className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-stone-200 disabled:text-stone-400 text-white font-bold text-lg rounded-xl py-4 transition-colors shadow-sm flex justify-center items-center gap-2"
                 >
                   {checkoutState === 'loading' ? <><Loader2 className="animate-spin" size={20}/> Confirming...</> : `Confirm Pre-order — ₹${orderTotal}`}

@@ -47,6 +47,12 @@ public class FoodDrop {
     private LocalDateTime pickupStartTime;
     private LocalDateTime pickupEndTime;
 
+    @Column(name = "pickup_time", length = 100)
+    private String pickupTime;
+
+    @Version
+    private Long version;
+
     @Column(nullable = false)
     private Integer maxOrders;
 
@@ -57,11 +63,7 @@ public class FoodDrop {
     @Builder.Default
     private DropStatus status = DropStatus.DRAFT;
 
-    @Builder.Default
-    private Boolean isDeliveryAvailable = false;
-    
-    @Builder.Default
-    private BigDecimal deliveryCharge = BigDecimal.ZERO;
+
 
     private String dropPhotoUrl;
     
@@ -80,11 +82,7 @@ public class FoodDrop {
     @lombok.EqualsAndHashCode.Exclude
     private List<Order> orders = new ArrayList<>();
 
-    @OneToMany(mappedBy = "drop")
-    @Builder.Default
-    @lombok.ToString.Exclude
-    @lombok.EqualsAndHashCode.Exclude
-    private List<Reel> reels = new ArrayList<>();
+
 
     @CreationTimestamp
     private LocalDateTime createdAt;

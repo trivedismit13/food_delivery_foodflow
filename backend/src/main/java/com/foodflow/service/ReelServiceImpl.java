@@ -33,9 +33,6 @@ public class ReelServiceImpl implements ReelService {
 
     @Override
     public void incrementViewCount(Long reelId) {
-        Reel reel = reelRepository.findById(reelId)
-                .orElseThrow(() -> new ResourceNotFoundException("Reel not found"));
-        reel.setViewCount(reel.getViewCount() + 1);
-        reelRepository.save(reel);
+        // No-op for MVP
     }
 }

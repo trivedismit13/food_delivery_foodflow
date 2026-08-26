@@ -52,12 +52,11 @@ public class CreatorController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<Page<CreatorSummary>>> listCreators(
-            @RequestParam(required = false) String city,
             @RequestParam(required = false) String cuisine,
             @RequestParam(required = false) String creatorType,
             @PageableDefault(size = 20) Pageable pageable) {
         
-        Specification<Restaurant> spec = RestaurantSpecification.getCreatorsByFilters(city, cuisine, creatorType);
+        Specification<Restaurant> spec = RestaurantSpecification.getCreatorsByFilters(null, cuisine, creatorType);
         Page<Restaurant> restaurants = restaurantRepository.findAll(spec, pageable);
         
         Page<CreatorSummary> creators = restaurants.map(this::mapToSummary);
@@ -68,6 +67,53 @@ public class CreatorController {
     public ResponseEntity<ApiResponse<CreatorResponse>> getCreatorProfile(@PathVariable Long creatorId) {
         Restaurant restaurant = restaurantRepository.findById(creatorId)
             .orElseThrow(() -> new ResourceNotFoundException("Creator not found: " + creatorId));
+        
+        return ResponseEntity.ok(ApiResponse.success(mapToProfile(restaurant)));
+    }
+
+    @PutMapping("/{creatorId}")
+    @PreAuthorize("hasRole('SELLER')")
+    @org.springframework.transaction.annotation.Transactional
+    public ResponseEntity<ApiResponse<CreatorResponse>> updateCreatorProfile(
+            @PathVariable Long creatorId,
+            @RequestBody com.foodflow.dto.request.UpdateCreatorProfileRequest request,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        
+        Restaurant restaurant = restaurantRepository.findById(creatorId)
+            .orElseThrow(() -> new ResourceNotFoundException("Creator not found: " + creatorId));
+            
+        if (!restaurant.getOwner().getUserId().equals(userDetails.getId())) {
+            throw new com.foodflow.exception.InvalidRequestException("You can only update your own profile");
+        }
+        
+        if (request.getBio() != null) restaurant.setBio(request.getBio());
+        if (request.getCity() != null) restaurant.setCity(request.getCity());
+        if (request.getPickupAddress() != null) restaurant.setPickupAddress(request.getPickupAddress());
+        if (request.getInstagramHandle() != null) restaurant.setInstagramHandle(request.getInstagramHandle());
+        if (request.getCuisine() != null) restaurant.setCuisine(request.getCuisine());
+        
+        restaurantRepository.save(restaurant);
+        
+        return ResponseEntity.ok(ApiResponse.success(mapToProfile(restaurant)));
+    }
+
+    @PutMapping("/{creatorId}/status")
+    @PreAuthorize("hasRole('SELLER')")
+    @org.springframework.transaction.annotation.Transactional
+    public ResponseEntity<ApiResponse<CreatorResponse>> updateCreatorStatus(
+            @PathVariable Long creatorId,
+            @RequestParam boolean isAcceptingOrders,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+            
+        Restaurant restaurant = restaurantRepository.findById(creatorId)
+            .orElseThrow(() -> new ResourceNotFoundException("Creator not found: " + creatorId));
+            
+        if (!restaurant.getOwner().getUserId().equals(userDetails.getId())) {
+            throw new com.foodflow.exception.InvalidRequestException("You can only update your own status");
+        }
+        
+        restaurant.setIsAcceptingOrders(isAcceptingOrders);
+        restaurantRepository.save(restaurant);
         
         return ResponseEntity.ok(ApiResponse.success(mapToProfile(restaurant)));
     }
@@ -91,6 +137,49 @@ public class CreatorController {
         ).collect(Collectors.toList());
         
         return ResponseEntity.ok(ApiResponse.success(responses));
+    }
+
+    @PostMapping("/{creatorId}/menu")
+    @PreAuthorize("hasRole('SELLER')")
+    @org.springframework.transaction.annotation.Transactional
+    public ResponseEntity<ApiResponse<MenuItemResponse>> createCreatorMenu(
+            @PathVariable Long creatorId,
+            @RequestBody com.foodflow.dto.request.MenuItemRequest request,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+            
+        Restaurant restaurant = restaurantRepository.findById(creatorId)
+            .orElseThrow(() -> new ResourceNotFoundException("Creator not found: " + creatorId));
+            
+        if (!restaurant.getOwner().getUserId().equals(userDetails.getId())) {
+            throw new com.foodflow.exception.InvalidRequestException("You can only add items to your own menu");
+        }
+        
+        MenuItem item = new MenuItem();
+        item.setRestaurant(restaurant);
+        item.setName(request.getName());
+        item.setDescription(request.getDescription());
+        item.setPrice(request.getPrice());
+        item.setIsVeg(request.getIsVeg());
+        item.setCategory(request.getCategory());
+        item.setAvailableQty(request.getAvailableQty());
+        item.setIsDeleted(false);
+        
+        MenuItem created = menuItemRepository.save(item);
+        
+        MenuItemResponse response = MenuItemResponse.builder()
+            .menuItemId(created.getItemId())
+            .name(created.getName())
+            .description(created.getDescription())
+            .price(created.getPrice())
+            .imageUrl(null)
+            .isAvailable(created.getAvailableQty() > 0)
+            .isVegetarian(created.getIsVeg())
+            .isVegan(false)
+            .isGlutenFree(false)
+            .category(created.getCategory())
+            .build();
+            
+        return ResponseEntity.status(org.springframework.http.HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
     @GetMapping("/{creatorId}/ratings")
@@ -133,28 +222,37 @@ public class CreatorController {
             @PathVariable Long creatorId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
             
+        Restaurant creator = restaurantRepository.findById(creatorId)
+            .orElseThrow(() -> new ResourceNotFoundException("Creator not found"));
+            
+        if (creator.getOwner().getUserId().equals(userDetails.getId())) {
+            throw new com.foodflow.exception.InvalidRequestException("You cannot follow yourself");
+        }
+            
         boolean exists = creatorFollowRepository.existsByFollowerUserIdAndCreatorRestaurantId(
             userDetails.getId(), creatorId);
             
-        if (!exists) {
-            CreatorFollow follow = CreatorFollow.builder()
-                .follower(userRepository.getReferenceById(userDetails.getId()))
-                .creator(restaurantRepository.getReferenceById(creatorId))
-                .build();
-            creatorFollowRepository.save(follow);
+        if (exists) {
+            throw new com.foodflow.exception.InvalidRequestException("You are already following this creator");
+        }
             
-            // Atomic increment
-            restaurantRepository.findById(creatorId).ifPresent(r -> {
-                restaurantRepository.incrementFollowerCount(creatorId);
-                
-                eventPublisher.publishEvent(new com.foodflow.event.NewFollowerEvent(
-                    this,
-                    r.getOwner().getUserId(),
-                    userDetails.getId(),
-                    userDetails.getName()
+        CreatorFollow follow = CreatorFollow.builder()
+            .follower(userRepository.getReferenceById(userDetails.getId()))
+            .creator(creator)
+            .build();
+        creatorFollowRepository.save(follow);
+        
+        // Atomic increment
+        restaurantRepository.findById(creatorId).ifPresent(r -> {
+            restaurantRepository.incrementFollowerCount(creatorId);
+            
+            eventPublisher.publishEvent(new com.foodflow.event.NewFollowerEvent(
+                this,
+                r.getOwner().getUserId(),
+                userDetails.getId(),
+                userDetails.getName()
                 ));
             });
-        }
         
         return ResponseEntity.ok(ApiResponse.success(Map.of("following", true)));
     }
@@ -229,8 +327,7 @@ public class CreatorController {
         cr.setInstagramHandle(r.getInstagramHandle());
         cr.setOffersPickup(r.getPickupAddress() != null && !r.getPickupAddress().isEmpty());
         cr.setPickupAddress(r.getPickupAddress());
-        cr.setOffersDelivery(r.getAcceptsDelivery());
-        cr.setDeliveryRadiusKm(r.getDeliveryRadiusKm());
+
         
         verificationRepository.findByCreatorRestaurantId(r.getRestaurantId()).ifPresent(v -> {
             cr.setVerification(v); // Assuming frontend handles raw JSON or DTO

@@ -23,7 +23,7 @@ export interface FoodDropResponse {
   isSoldOut: boolean;      
   status: DropStatus;
   isDeliveryAvailable: boolean;
-  deliveryCharge: number;
+
   dropPhotoUrl: string | null;
   specialNotes: string | null;
   creator: CreatorSummary;
@@ -52,7 +52,7 @@ export interface CreateDropRequest {
   pickupEndTime?: string;
   maxOrders: number;
   isDeliveryAvailable: boolean;
-  deliveryCharge?: number;
+
   dropPhotoUrl?: string;
   specialNotes?: string;
   items: {

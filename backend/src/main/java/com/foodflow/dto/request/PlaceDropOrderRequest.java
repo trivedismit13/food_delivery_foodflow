@@ -21,18 +21,7 @@ public class PlaceDropOrderRequest {
     @jakarta.validation.Valid
     private List<ItemRequest> items;
 
-    @NotNull(message = "Payment method is required")
-    private String paymentMethod;
-
-    @Future(message = "Pickup time must be in the future")
-    private LocalDateTime pickupTime;
-
     private String specialInstructions;
-
-    @JsonProperty("isDelivery")
-    private boolean isDelivery;
-
-    private String deliveryAddress;
 
     @Data
     public static class ItemRequest {

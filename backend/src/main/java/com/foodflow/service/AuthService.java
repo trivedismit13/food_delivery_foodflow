@@ -140,7 +140,7 @@ public class AuthService {
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(com.foodflow.model.Role.OWNER);
+        user.setRole(com.foodflow.model.Role.SELLER);
         user.setIsActive(true);
         user.setLastLogin(java.time.LocalDateTime.now());
         
@@ -159,18 +159,11 @@ public class AuthService {
         }
 
         restaurant.setCity(request.getCity());
-        restaurant.setCityId(request.getCityId());
-        restaurant.setLatitude(request.getLatitude());
-        restaurant.setLongitude(request.getLongitude());
-
         restaurant.setCuisine(request.getCuisine());
         restaurant.setBio(request.getBio());
         restaurant.setPickupAddress(request.getPickupAddress());
         
-        restaurant.setAcceptsDelivery(Boolean.TRUE.equals(request.getOffersDelivery()));
-        if (request.getDeliveryRadius() != null) {
-            restaurant.setDeliveryRadiusKm(request.getDeliveryRadius());
-        }
+
         
         restaurant.setInstagramHandle(request.getInstagramHandle());
         restaurant.setVerificationLevel(0);

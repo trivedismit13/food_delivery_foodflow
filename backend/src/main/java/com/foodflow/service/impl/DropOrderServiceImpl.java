@@ -9,7 +9,7 @@ import com.foodflow.service.NotificationService;
 import com.foodflow.service.PaymentService;
 import com.foodflow.dto.request.PlaceDropOrderRequest;
 import com.foodflow.dto.response.OrderResponse;
-import com.foodflow.websocket.DropWebSocketService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,14 +39,21 @@ public class DropOrderServiceImpl implements DropOrderService {
         FoodDrop drop = dropRepository.findByIdWithLock(request.getDropId())
             .orElseThrow(() -> new ResourceNotFoundException("Drop not found"));
         
-        if (!drop.isAcceptingOrders()) {
-            if (drop.isSoldOut()) {
-                throw new InvalidOrderException("This drop is sold out");
-            }
-            if (LocalDateTime.now().isAfter(drop.getOrderCutoffTime())) {
-                throw new InvalidOrderException("Order cutoff has passed for this drop");
-            }
-            throw new InvalidOrderException("This drop is not currently accepting orders");
+        if (LocalDateTime.now().isAfter(drop.getOrderCutoffTime())) {
+            throw new InvalidOrderException(
+                "Order window has closed for this drop. " +
+                "Cutoff was " + drop.getOrderCutoffTime().toString()
+            );
+        }
+        
+        if (drop.getStatus() != FoodDrop.DropStatus.OPEN) {
+            throw new InvalidOrderException(
+                "This drop is not currently accepting orders. Status: " + drop.getStatus()
+            );
+        }
+        
+        if (drop.getCurrentOrders() >= drop.getMaxOrders()) {
+            throw new InvalidOrderException("This drop is sold out");
         }
         
         List<OrderItem> orderItems = new ArrayList<>();
@@ -103,10 +110,6 @@ public class DropOrderServiceImpl implements DropOrderService {
         drop.setCurrentOrders(drop.getCurrentOrders() + 1);
         dropRepository.save(drop);
         
-        if (request.isDelivery() && drop.getIsDeliveryAvailable()) {
-            totalAmount = totalAmount.add(drop.getDeliveryCharge());
-        }
-        
         Order order = Order.builder()
             .user(userRepository.getReferenceById(userId))
             .restaurant(drop.getCreator())
@@ -114,10 +117,8 @@ public class DropOrderServiceImpl implements DropOrderService {
             .orderType(Order.OrderType.DROP_PREORDER)
             .status(OrderStatus.PLACED)
             .totalAmount(totalAmount)
-            .pickupTime(request.getPickupTime())
+            .pickupTime(drop.getPickupTime())
             .specialInstructions(request.getSpecialInstructions())
-            .isDelivery(request.isDelivery())
-            .deliveryAddress(request.getDeliveryAddress())
             .build();
         
         Order savedOrder = orderRepository.save(order);
@@ -127,9 +128,9 @@ public class DropOrderServiceImpl implements DropOrderService {
         
         Payment payment = Payment.builder()
             .order(savedOrder)
-            .method(PaymentMethod.valueOf(request.getPaymentMethod())) // modified to enum mapping
+            .method(PaymentMethod.CASH)
             .amount(totalAmount)
-            .status(PaymentStatus.PENDING) // modified to enum mapping
+            .status(PaymentStatus.PENDING)
             .build();
         paymentService.processPayment(payment);
         
@@ -167,9 +168,7 @@ public class DropOrderServiceImpl implements DropOrderService {
             .items(itemResponses)
             .paymentStatus(payment.getStatus())
             .dropId(savedOrder.getDrop() != null ? savedOrder.getDrop().getDropId() : null)
-            .isDelivery(savedOrder.getIsDelivery())
-            .deliveryAddress(savedOrder.getDeliveryAddress())
-            .pickupTime(savedOrder.getPickupTime())
+            .pickupInfo(savedOrder.getPickupTime())
             .specialInstructions(savedOrder.getSpecialInstructions())
             .build();
     }

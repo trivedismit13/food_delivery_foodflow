@@ -11,7 +11,7 @@ export interface SubmitRatingRequest {
   restaurantId: number;
   ratingValue: number;
   foodQualityRating?: number;
-  deliveryRating?: number;
+
   packagingRating?: number;
   reviewText?: string;
 }

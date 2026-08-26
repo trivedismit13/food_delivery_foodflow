@@ -31,10 +31,8 @@ public class CreatorVerification {
     private Restaurant creator;
 
     @Builder.Default
-    private Boolean aadhaarVerified = false;
-    
-    @Builder.Default
-    private Boolean phoneVerified = false;
+    @Column(name = "phone_otp_verified")
+    private Boolean phoneOtpVerified = false;
 
     private String foodLicenceNumber;
     private String foodLicenceUrl;
@@ -43,24 +41,6 @@ public class CreatorVerification {
     
     @Column(name = "kitchen_photo_url_2")
     private String kitchenPhotoUrl2;
-
-    @Column(columnDefinition = "TEXT")
-    private String ingredientDeclaration;
-
-    @Builder.Default
-    private Boolean inspectionPassed = false;
-    
-    private LocalDate inspectionDate;
-
-    @Column(columnDefinition = "TEXT")
-    private String inspectionNotes;
-
-    @ManyToOne
-    @JoinColumn(name = "inspected_by")
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    @lombok.ToString.Exclude
-    @lombok.EqualsAndHashCode.Exclude
-    private User inspectedBy;
 
     @Builder.Default
     @Column(columnDefinition = "TINYINT")

@@ -83,18 +83,6 @@ public interface FoodDropRepository extends JpaRepository<FoodDrop, Long>, JpaSp
         AND (:type IS NULL OR r.creator_type = :type)
         AND (:dateStr IS NULL OR DATE(fd.drop_date) = :dateStr)
         AND (:searchQuery IS NULL OR LOWER(fd.title) LIKE LOWER(CONCAT('%', :searchQuery, '%')) OR LOWER(fd.description) LIKE LOWER(CONCAT('%', :searchQuery, '%')) OR LOWER(r.name) LIKE LOWER(CONCAT('%', :searchQuery, '%')))
-        AND (
-            :cityId IS NULL
-            OR r.city_id = :cityId
-            OR (
-                :lat IS NOT NULL
-                AND :lng IS NOT NULL
-                AND r.accepts_delivery = true
-                AND r.latitude IS NOT NULL
-                AND r.longitude IS NOT NULL
-                AND (6371 * ACOS(LEAST(1.0, COS(RADIANS(:lat)) * COS(RADIANS(r.latitude)) * COS(RADIANS(r.longitude) - RADIANS(:lng)) + SIN(RADIANS(:lat)) * SIN(RADIANS(r.latitude))))) <= r.delivery_radius_km
-            )
-        )
         ORDER BY fd.order_cutoff_time ASC
         """, 
         countQuery = """
@@ -105,24 +93,9 @@ public interface FoodDropRepository extends JpaRepository<FoodDrop, Long>, JpaSp
         AND (:type IS NULL OR r.creator_type = :type)
         AND (:dateStr IS NULL OR DATE(fd.drop_date) = :dateStr)
         AND (:searchQuery IS NULL OR LOWER(fd.title) LIKE LOWER(CONCAT('%', :searchQuery, '%')) OR LOWER(fd.description) LIKE LOWER(CONCAT('%', :searchQuery, '%')) OR LOWER(r.name) LIKE LOWER(CONCAT('%', :searchQuery, '%')))
-        AND (
-            :cityId IS NULL
-            OR r.city_id = :cityId
-            OR (
-                :lat IS NOT NULL
-                AND :lng IS NOT NULL
-                AND r.accepts_delivery = true
-                AND r.latitude IS NOT NULL
-                AND r.longitude IS NOT NULL
-                AND (6371 * ACOS(LEAST(1.0, COS(RADIANS(:lat)) * COS(RADIANS(r.latitude)) * COS(RADIANS(r.longitude) - RADIANS(:lng)) + SIN(RADIANS(:lat)) * SIN(RADIANS(r.latitude))))) <= r.delivery_radius_km
-            )
-        )
         """,
         nativeQuery = true)
-    org.springframework.data.domain.Page<FoodDrop> findActiveDropsWithLocation(
-        @Param("cityId") Long cityId, 
-        @Param("lat") Double lat, 
-        @Param("lng") Double lng, 
+    org.springframework.data.domain.Page<FoodDrop> findActiveDrops(
         @Param("type") String type, 
         @Param("dateStr") String dateStr, 
         @Param("searchQuery") String searchQuery, 

@@ -16,10 +16,9 @@ public class RestaurantResponse {
     private Long restaurantId;
     private Long ownerId;
     private String name;
-    private Long cityId;
+
     private String city;
-    private Double latitude;
-    private Double longitude;
+
     private String pincode;
     private String cuisine;
     private Boolean isOpen;
@@ -27,8 +26,7 @@ public class RestaurantResponse {
     private String bio;
     private String instagramHandle;
     private String pickupAddress;
-    private Boolean acceptsDelivery;
-    private Integer deliveryRadiusKm;
+
     private Integer verificationLevel;
     private Integer totalOrdersCompleted;
     private Integer followerCount;

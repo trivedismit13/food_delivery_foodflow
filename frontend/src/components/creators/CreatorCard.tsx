@@ -5,7 +5,6 @@ interface CreatorCardProps {
   id: number;
   name: string;
   creatorType: string;
-  city: string;
   bioSnippet: string;
   followerCount: number;
   totalOrders: number;
@@ -16,7 +15,7 @@ interface CreatorCardProps {
 }
 
 export function CreatorCard({
-  id, name, creatorType, city, bioSnippet, followerCount, 
+  id, name, creatorType, bioSnippet, followerCount, 
   totalOrders, verificationLevel, hasActiveDrop, imageUrl, topCategories
 }: CreatorCardProps) {
   

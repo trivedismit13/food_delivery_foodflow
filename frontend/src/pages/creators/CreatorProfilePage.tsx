@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Star, MapPin, Loader2, Bell, Check } from 'lucide-react';
+import { Star, Loader2, Bell, Check } from 'lucide-react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
@@ -23,7 +23,7 @@ export default function CreatorProfilePage() {
   const [activeTab, setActiveTab] = useState('Drops');
   const [dropsSubFilter, setDropsSubFilter] = useState<'Active' | 'Past'>('Active');
   
-  const isOwner = user?.role === 'OWNER' && user?.userId === id;
+  const isOwner = user?.role === 'SELLER' && user?.userId === id;
   
   const { data: creator, isLoading } = useCreatorById(id);
   const { data: menuItems = [], isLoading: isLoadingMenu } = useMenu(id);
@@ -80,24 +80,13 @@ export default function CreatorProfilePage() {
             </div>
             
             <div className="flex items-center gap-4 text-stone-600 text-sm mt-2 font-medium flex-wrap">
-              <span className="flex items-center gap-1"><MapPin size={16} /> {creator.city}</span>
+
               <span className="flex items-center gap-1"><Star size={16} className="fill-orange-400 text-orange-400" /> {creator.avgRating.toFixed(1)}</span>
               <span>{creator.cuisine}</span>
               <span className="px-2 py-0.5 bg-stone-200 rounded-md text-xs">{creator.creatorType.replace('_', ' ')}</span>
             </div>
             
-            <div className="flex flex-col gap-1 mt-3 text-sm font-medium text-stone-600">
-              {creator.offersDelivery ? (
-                <span className="flex items-center gap-1.5"><Check size={14} className="text-green-500" /> Delivery available (within {creator.deliveryRadiusKm}km)</span>
-              ) : (
-                <span className="flex items-center gap-1.5 text-stone-400"><span className="w-3.5 h-3.5 flex items-center justify-center font-bold text-[10px]">✕</span> No delivery</span>
-              )}
-              {creator.offersPickup ? (
-                <span className="flex items-center gap-1.5"><Check size={14} className="text-green-500" /> Pickup available {creator.pickupAddress ? `at ${creator.pickupAddress}` : ''}</span>
-              ) : (
-                <span className="flex items-center gap-1.5 text-stone-400"><span className="w-3.5 h-3.5 flex items-center justify-center font-bold text-[10px]">✕</span> No pickup</span>
-              )}
-            </div>
+
             
             <p className="mt-4 text-stone-700 max-w-2xl leading-relaxed">
               {creator.bio}

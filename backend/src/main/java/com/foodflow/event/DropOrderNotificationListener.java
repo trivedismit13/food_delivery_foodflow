@@ -2,7 +2,6 @@ package com.foodflow.event;
 
 import com.foodflow.model.Notification;
 import com.foodflow.service.NotificationService;
-import com.foodflow.websocket.DropWebSocketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -13,7 +12,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class DropOrderNotificationListener {
 
     private final NotificationService notificationService;
-    private final DropWebSocketService webSocketService;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onDropOrderConfirmed(DropOrderConfirmedEvent event) {
@@ -28,12 +26,7 @@ public class DropOrderNotificationListener {
             event.getOrderId()
         );
 
-        // Broadcast websocket update
-        webSocketService.broadcastDropUpdate(
-            event.getDropId(),
-            event.getCurrentOrders(),
-            event.getMaxOrders()
-        );
+        // Broadcast websocket update removed for MVP
     }
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onNewFollower(NewFollowerEvent event) {

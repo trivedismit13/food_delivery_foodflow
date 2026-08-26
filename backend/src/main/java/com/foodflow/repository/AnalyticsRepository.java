@@ -77,13 +77,13 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
     List<Object[]> findRevenueByCuisine();
 
     // 8. GET /api/analytics/restaurants/revenue-rank-by-city
-    @Query(value = "SELECT r.name as name, r.city as city, SUM(o.total_amount) AS revenue, " +
-                   "RANK() OVER (PARTITION BY r.city ORDER BY SUM(o.total_amount) DESC) AS rankInCity " +
+    @Query(value = "SELECT r.name as name, 'Global' as city, SUM(o.total_amount) AS revenue, " +
+                   "RANK() OVER (ORDER BY SUM(o.total_amount) DESC) AS rankInCity " +
                    "FROM orders o " +
                    "JOIN restaurants r ON o.restaurant_id = r.restaurant_id " +
                    "WHERE o.status != 'CANCELLED' " +
-                   "GROUP BY r.restaurant_id, r.name, r.city " +
-                   "ORDER BY r.city, rankInCity", nativeQuery = true)
+                   "GROUP BY r.restaurant_id, r.name " +
+                   "ORDER BY rankInCity", nativeQuery = true)
     List<RevenueRankProjection> findRevenueRankByCity();
 
     // 9. GET /api/analytics/restaurants/revenue-category
@@ -102,12 +102,11 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
                    "FROM MonthlyRevenue", nativeQuery = true)
     List<RevenueCategoryProjection> findRevenueCategory();
 
-    // 10. GET /api/analytics/restaurants/{id}/top-dishes-in-city
+    // 10. GET /api/analytics/restaurants/{id}/top-dishes-in-city (now global)
     @Query(value = "SELECT mi.name, SUM(oi.quantity) as sold_in_city " +
                    "FROM order_items oi " +
                    "JOIN menu_items mi ON oi.item_id = mi.item_id " +
                    "JOIN restaurants r ON mi.restaurant_id = r.restaurant_id " +
-                   "WHERE r.city = (SELECT city FROM restaurants WHERE restaurant_id = :restaurantId) " +
                    "GROUP BY mi.item_id, mi.name " +
                    "ORDER BY sold_in_city DESC " +
                    "LIMIT 5", nativeQuery = true)

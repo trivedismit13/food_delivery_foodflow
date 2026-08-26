@@ -19,14 +19,12 @@ public class FoodDropResponse {
     private String description;
     private LocalDate dropDate;
     private LocalDateTime orderCutoffTime;
-    private LocalDateTime pickupStartTime;
-    private LocalDateTime pickupEndTime;
+    private String pickupTime;
     private Integer maxOrders;
     private Integer currentOrders;
     private Integer availableSlots;
     private Boolean isSoldOut;
-    private Boolean isDeliveryAvailable;
-    private java.math.BigDecimal deliveryCharge;
+
     private String status;
     private String dropPhotoUrl;
     private String specialNotes;

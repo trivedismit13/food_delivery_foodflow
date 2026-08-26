@@ -28,7 +28,6 @@ public class ReelController {
         reel.setRestaurant(restaurant);
         reel.setTitle(request.getTitle());
         reel.setMediaUrl(request.getMediaUrl());
-        reel.setViewCount(0); // default on creation
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(reelService.uploadReel(reel)));
     }
 

@@ -94,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
         Payment payment = Payment.builder()
                 .order(order)
                 .amount(totalAmount)
-                .method(paymentMethod != null ? paymentMethod : PaymentMethod.CARD)
+                .method(paymentMethod != null ? paymentMethod : PaymentMethod.CASH)
                 .status(PaymentStatus.PENDING)
                 .build();
         paymentService.processPayment(payment);
@@ -168,9 +168,7 @@ public class OrderServiceImpl implements OrderService {
                 .items(itemResponses)
                 .paymentStatus(payment != null ? payment.getStatus() : null)
                 .dropId(order.getDrop() != null ? order.getDrop().getDropId() : null)
-                .isDelivery(order.getIsDelivery())
-                .deliveryAddress(order.getDeliveryAddress())
-                .pickupTime(order.getPickupTime())
+                .pickupInfo(order.getPickupTime())
                 .specialInstructions(order.getSpecialInstructions())
                 .build();
     }

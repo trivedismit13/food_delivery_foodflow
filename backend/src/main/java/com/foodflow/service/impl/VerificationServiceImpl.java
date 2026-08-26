@@ -64,7 +64,6 @@ public class VerificationServiceImpl implements VerificationService {
         verification.setFoodLicenceUrl(request.getFoodLicenceUrl());
         verification.setKitchenPhotoUrl1(request.getKitchenPhotoUrl1());
         verification.setKitchenPhotoUrl2(request.getKitchenPhotoUrl2());
-        verification.setIngredientDeclaration(request.getIngredientDeclaration());
         verification.setRejectionReason(null);
         
         CreatorVerification saved = verificationRepository.save(verification);

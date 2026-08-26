@@ -26,8 +26,6 @@ public class OrderResponse {
     private List<OrderItemResponse> items;
     private PaymentStatus paymentStatus;
     private Long dropId;
-    private Boolean isDelivery;
-    private String deliveryAddress;
-    private LocalDateTime pickupTime;
+    private String pickupInfo;
     private String specialInstructions;
 }

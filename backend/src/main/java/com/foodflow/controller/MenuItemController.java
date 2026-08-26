@@ -62,7 +62,7 @@ public class MenuItemController {
 
     // ─── POST /api/menu-items/{restaurantId} ──────────────────────────────────────────────────
     @PostMapping("/{restaurantId}")
-    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SELLER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<MenuItemResponse>> createMenuItem(
             @PathVariable Long restaurantId,
             @Valid @RequestBody MenuItemRequest request) {
@@ -87,7 +87,7 @@ public class MenuItemController {
 
     // ─── PUT /api/menu-items/{restaurantId}/{menuItemId} ───────────────────────────────────────
     @PutMapping("/{restaurantId}/{menuItemId}")
-    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SELLER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<MenuItemResponse>> updateMenuItem(
             @PathVariable Long restaurantId,
             @PathVariable Long menuItemId,
@@ -116,7 +116,7 @@ public class MenuItemController {
 
     // ─── DELETE /api/menu-items/{restaurantId}/{menuItemId} ───────────────────────────────────────────
     @DeleteMapping("/{restaurantId}/{menuItemId}")
-    @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SELLER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Void>> deleteMenuItem(
             @PathVariable Long restaurantId,
             @PathVariable Long menuItemId) {

@@ -5,7 +5,7 @@ import { handleApiError } from '@/lib/errorHandler'
 import type { PageResponse, CreatorResponse } from '@/types/api'
 
 export interface CreatorFilters {
-  city?: string
+  cuisine?: string
   creatorType?: string
   page?: number
   size?: number
@@ -13,10 +13,10 @@ export interface CreatorFilters {
 
 export function useCreators(filters?: CreatorFilters) {
   return useQuery({
-    queryKey: ['creators', filters?.city, filters],
+    queryKey: ['creators', filters?.cuisine, filters],
     queryFn: async () => {
       const params = new URLSearchParams()
-      if (filters?.city) params.append('city', filters.city)
+      if (filters?.cuisine) params.append('cuisine', filters.cuisine)
       if (filters?.creatorType) params.append('creatorType', filters.creatorType)
       if (filters?.page !== undefined) params.append('page', String(filters.page))
       if (filters?.size !== undefined) params.append('size', String(filters.size))

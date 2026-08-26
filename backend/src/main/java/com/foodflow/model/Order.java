@@ -49,16 +49,11 @@ public class Order {
     @Builder.Default
     private OrderType orderType = OrderType.REGULAR;
 
-    private LocalDateTime pickupTime;
+    @Column(name = "pickup_time", length = 100)
+    private String pickupTime;
 
     @Column(name = "special_instructions", columnDefinition = "TEXT")
     private String specialInstructions;
-
-    @Builder.Default
-    private Boolean isDelivery = false;
-
-    @Column(name = "delivery_address", columnDefinition = "TEXT")
-    private String deliveryAddress;
 
     @Column(name = "order_date", insertable = false, updatable = false)
     private LocalDateTime orderDate;

@@ -6,13 +6,11 @@ import { CreatorSummary } from '@/types/api';
 import { cn } from '@/lib/utils';
 
 export default function CreatorsListPage() {
-  const [city, setCity] = useState('');
   const [cuisine, setCuisine] = useState('');
   const [creatorType, setCreatorType] = useState('');
   const [page, setPage] = useState(0);
 
   const { data, isLoading } = useCreators({
-    city,
     creatorType,
     page,
     size: 20
@@ -27,20 +25,6 @@ export default function CreatorsListPage() {
 
       {/* Filters */}
       <div className="bg-white p-4 rounded-2xl border border-stone-200 mb-8 flex flex-wrap gap-4 items-end shadow-sm">
-        <div className="flex-1 min-w-[200px]">
-          <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">City</label>
-          <div className="relative">
-            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
-            <input 
-              type="text" 
-              placeholder="e.g. Vellore"
-              className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
-              value={city}
-              onChange={(e) => { setCity(e.target.value); setPage(0); }}
-            />
-          </div>
-        </div>
-        
         <div className="flex-1 min-w-[200px]">
           <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Cuisine</label>
           <div className="relative">
@@ -87,7 +71,7 @@ export default function CreatorsListPage() {
             Try adjusting your filters to discover more food creators in your area.
           </p>
           <button 
-            onClick={() => { setCity(''); setCuisine(''); setCreatorType(''); }}
+            onClick={() => { setCuisine(''); setCreatorType(''); }}
             className="bg-stone-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-stone-800 transition-colors"
           >
             Clear Filters

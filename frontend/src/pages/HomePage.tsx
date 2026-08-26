@@ -7,11 +7,8 @@ import { useActiveDropsFeed } from '@/queries/drops';
 import { useCreators } from '@/queries/creators';
 import { DropCardSkeleton } from '@/components/skeletons/DropCardSkeleton';
 import { CreatorCardSkeleton } from '@/components/skeletons/CreatorCardSkeleton';
-import { useLocationStore } from '@/store/locationStore';
-
 export default function HomePage() {
-  const { cityId, lat, lng, cityName } = useLocationStore();
-  const { data: dropsPage, isLoading: isLoadingDrops } = useActiveDropsFeed({ size: 4, cityId: cityId || undefined, lat: lat || undefined, lng: lng || undefined });
+  const { data: dropsPage, isLoading: isLoadingDrops } = useActiveDropsFeed({ size: 4 });
   const drops = dropsPage?.content;
 
   const { data: creatorsPage, isLoading: isLoadingCreators } = useCreators({ size: 6 });
@@ -145,12 +142,10 @@ export default function HomePage() {
             <div className="bg-white rounded-2xl p-8 text-center border border-stone-200 shadow-sm">
               <div className="text-4xl mb-4">🍽️</div>
               <h3 className="font-display font-bold text-xl text-stone-800 mb-2">
-                {cityName ? `No drops found near ${cityName}` : 'No drops available right now'}
+                No drops available right now
               </h3>
               <p className="text-stone-500 mb-6 text-sm max-w-md mx-auto">
-                {cityName 
-                  ? "We couldn't find any creators dropping food in this area. Try searching a different location." 
-                  : "We couldn't find any active drops. Check back later."}
+                We couldn't find any active drops. Check back later.
               </p>
               <Link to="/drops" className="inline-block bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold rounded-lg px-6 py-2.5 transition-colors">
                 Browse all locations
@@ -166,7 +161,7 @@ export default function HomePage() {
           <div className="flex justify-between items-end mb-8">
             <div>
               <h2 className="font-display text-3xl font-bold text-stone-900">
-                {cityName ? `Independent creators in ${cityName}` : 'Independent creators near you'}
+                Independent creators near you
               </h2>
               <p className="text-stone-500 mt-1">Verified chefs, bakers, and food entrepreneurs</p>
             </div>
@@ -184,7 +179,6 @@ export default function HomePage() {
                     id={creator.restaurantId}
                     name={creator.name}
                     creatorType={creator.creatorType}
-                    city={creator.city}
                     bioSnippet={creator.bio || ''}
                     followerCount={creator.followerCount}
                     totalOrders={creator.totalOrdersCompleted}
@@ -199,12 +193,10 @@ export default function HomePage() {
             <div className="bg-white rounded-2xl p-8 text-center border border-stone-200 shadow-sm mx-4 sm:mx-0">
               <div className="text-4xl mb-4">🧑‍🍳</div>
               <h3 className="font-display font-bold text-xl text-stone-800 mb-2">
-                {cityName ? `No creators found in ${cityName}` : 'No creators found'}
+                No creators found
               </h3>
               <p className="text-stone-500 mb-6 text-sm max-w-md mx-auto">
-                {cityName 
-                  ? "We don't have any verified creators in this area yet." 
-                  : "We couldn't find any creators at the moment."}
+                We couldn't find any creators at the moment.
               </p>
               <Link to="/auth/register/creator" className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg px-6 py-2.5 transition-colors">
                 Become a creator

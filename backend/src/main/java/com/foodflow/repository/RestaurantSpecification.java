@@ -6,13 +6,10 @@ import org.springframework.util.StringUtils;
 
 public class RestaurantSpecification {
 
-    public static Specification<Restaurant> getCreatorsByFilters(String city, String cuisine, String creatorType) {
+    public static Specification<Restaurant> getCreatorsByFilters(String dummy_city, String cuisine, String creatorType) {
         return (root, query, criteriaBuilder) -> {
             Specification<Restaurant> spec = Specification.where(isAcceptingOrders(true));
 
-            if (StringUtils.hasText(city)) {
-                spec = spec.and(hasCity(city));
-            }
             if (StringUtils.hasText(cuisine)) {
                 spec = spec.and(hasCuisine(cuisine));
             }
@@ -27,11 +24,6 @@ public class RestaurantSpecification {
     private static Specification<Restaurant> isAcceptingOrders(boolean isAccepting) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("isAcceptingOrders"), isAccepting);
-    }
-
-    private static Specification<Restaurant> hasCity(String city) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(criteriaBuilder.lower(root.get("city")), city.toLowerCase());
     }
 
     private static Specification<Restaurant> hasCuisine(String cuisine) {

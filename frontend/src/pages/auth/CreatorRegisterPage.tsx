@@ -4,9 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRegisterCreator } from '@/queries/auth';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ArrowRight, ArrowLeft, MapPin } from 'lucide-react';
-import { LocationPrompt } from '@/components/location/LocationPrompt';
-import { useLocationStore } from '@/store/locationStore';
+import { Check, ArrowRight, ArrowLeft } from 'lucide-react';
 
 const creatorRegisterSchema = z.object({
   // Step 1: Personal
@@ -18,10 +16,7 @@ const creatorRegisterSchema = z.object({
   // Step 2: Creator Details
   creatorName: z.string().min(2, 'Brand name is required'),
   creatorType: z.string().min(2, 'Creator type is required'),
-  city: z.string().min(2, 'City is required'),
-  cityId: z.number().optional(),
-  latitude: z.number().optional(),
-  longitude: z.number().optional(),
+  city: z.string().optional(),
   cuisine: z.string().min(2, 'Cuisine is required'),
   bio: z.string().max(300, 'Bio too long'),
   
@@ -60,9 +55,7 @@ const CUISINES = [
 
 export default function CreatorRegisterPage() {
   const [step, setStep] = useState(1);
-  const [isLocationPromptOpen, setIsLocationPromptOpen] = useState(false);
   const registerMutation = useRegisterCreator();
-  const locationStore = useLocationStore();
 
   const {
     register,
@@ -212,24 +205,13 @@ export default function CreatorRegisterPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-stone-700 mb-1">City</label>
-                    <div className="flex gap-2">
-                      <input 
-                        type="text" 
-                        {...register('city')} 
-                        readOnly
-                        placeholder="Select your city" 
-                        className="flex-1 bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 outline-none text-stone-500" 
-                      />
-                      <button 
-                        type="button"
-                        onClick={() => setIsLocationPromptOpen(true)}
-                        className="px-4 py-2 bg-orange-100 text-orange-600 rounded-xl font-medium hover:bg-orange-200 flex items-center gap-2 transition-colors"
-                      >
-                        <MapPin size={18} />
-                        Select
-                      </button>
-                    </div>
+                    <label className="block text-sm font-medium text-stone-700 mb-1">City (Optional)</label>
+                    <input 
+                      type="text" 
+                      {...register('city')} 
+                      placeholder="e.g. Mumbai" 
+                      className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 focus:border-orange-400 outline-none" 
+                    />
                     {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city.message}</p>}
                   </div>
 
@@ -335,23 +317,6 @@ export default function CreatorRegisterPage() {
           </form>
         </div>
       </div>
-      
-      {isLocationPromptOpen && (
-        <LocationPrompt
-          canSkip={true}
-          onClose={() => {
-            setIsLocationPromptOpen(false);
-            // FIX Bug 7: read from Zustand store directly, not localStorage
-            const { cityId: cid, cityName: cn, lat: la, lng: lo } = useLocationStore.getState();
-            if (cid && cn) {
-              setValue('city', cn, { shouldValidate: true });
-              setValue('cityId', cid);
-              if (la) setValue('latitude', la);
-              if (lo) setValue('longitude', lo);
-            }
-          }}
-        />
-      )}
     </div>
   );
 }
