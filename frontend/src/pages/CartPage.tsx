@@ -26,7 +26,6 @@ export default function CartPage() {
           quantity: item.quantity,
         })),
         paymentMethod: 'CARD',
-        isDelivery: false,
       },
       {
         onSuccess: (data) => {

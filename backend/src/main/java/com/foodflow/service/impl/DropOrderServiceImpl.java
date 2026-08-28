@@ -141,7 +141,7 @@ public class DropOrderServiceImpl implements DropOrderService {
             userId,
             savedOrder.getOrderId(),
             drop.getTitle(),
-            drop.getPickupStartTime() != null ? drop.getPickupStartTime().toString() : "N/A",
+            drop.getPickupTime() != null ? drop.getPickupTime() : "N/A",
             drop.getDropId(),
             drop.getCurrentOrders(),
             drop.getMaxOrders()

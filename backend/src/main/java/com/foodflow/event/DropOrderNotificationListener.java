@@ -21,7 +21,7 @@ public class DropOrderNotificationListener {
             Notification.NotificationType.ORDER_CONFIRMED,
             "Order Confirmed!",
             "Your pre-order for " + event.getDropTitle() + " is confirmed. " +
-            "Collection: " + event.getPickupStartTime(),
+            "Collection: " + event.getPickupTime(),
             Notification.ReferenceType.ORDER,
             event.getOrderId()
         );

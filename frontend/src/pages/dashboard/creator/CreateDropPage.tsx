@@ -140,8 +140,9 @@ export default function CreateDropPage() {
 
     const cutoffDate = new Date(cutoffTime);
     const dropDateObj = new Date(dropDate);
-    if (cutoffDate >= dropDateObj) {
-      toast.error("Order cutoff time must be before the drop date.");
+    dropDateObj.setHours(23, 59, 59, 999);
+    if (cutoffDate > dropDateObj) {
+      toast.error("Order cutoff time cannot be after the drop date.");
       return;
     }
     

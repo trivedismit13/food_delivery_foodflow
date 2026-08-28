@@ -23,7 +23,6 @@ export interface OrderResponse {
   items: OrderItemResponse[];
   paymentStatus: PaymentStatus;
   dropId?: number;
-  isDelivery?: boolean;
 
   pickupTime?: string;
   specialInstructions?: string;
@@ -55,6 +54,5 @@ export interface PlaceDropOrderRequest {
   paymentMethod: PaymentMethod;
   pickupTime?: string;
   specialInstructions?: string;
-  isDelivery: boolean;
 
 }
