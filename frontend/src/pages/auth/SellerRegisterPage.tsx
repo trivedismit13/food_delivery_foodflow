@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useRegisterCreator } from '@/queries/auth';
 import { ChefHat, ArrowRight, Loader2, Info } from 'lucide-react';
-import { toast } from 'sonner';
 
 export default function SellerRegisterPage() {
-  const navigate = useNavigate();
   const { mutateAsync: registerCreator, isPending: isLoading } = useRegisterCreator();
   const [formData, setFormData] = useState({
     name: '',
@@ -28,7 +26,7 @@ export default function SellerRegisterPage() {
     e.preventDefault();
     try {
       await registerCreator(formData);
-    } catch (error: any) {
+    } catch (error) {
       // Error is handled in the mutation
     }
   };

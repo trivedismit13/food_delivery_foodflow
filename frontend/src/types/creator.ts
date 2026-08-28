@@ -47,7 +47,7 @@ export interface CreatorRegistrationRequest {
   name: string;
   email: string;
   phone: string;
-  password?: string;
+  password: string;
   creatorName: string;
   whatDoYouMake: string;
   bio?: string;
