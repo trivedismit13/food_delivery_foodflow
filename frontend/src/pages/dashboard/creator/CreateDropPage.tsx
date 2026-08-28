@@ -162,7 +162,7 @@ export default function CreateDropPage() {
           quantityAvailable: parseInt(item.availableQty || '1', 10),
           dropPrice: parseFloat(item.dropPrice || item.price || '0')
         }))
-      } as any);
+      });
       // Navigate is handled in onSuccess in the query hook
     } catch (e: any) {
       if (e instanceof ValidationError) {

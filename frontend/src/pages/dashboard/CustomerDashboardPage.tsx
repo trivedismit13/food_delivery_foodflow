@@ -310,18 +310,7 @@ export default function CustomerDashboardPage() {
                         className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 outline-none disabled:opacity-70 text-stone-900 font-medium"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-stone-700">City</label>
-                      <div className="relative">
-                        <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
-                        <input 
-                          type="text" 
-                          defaultValue="Mumbai"
-                          disabled
-                          className="w-full bg-stone-50 border border-stone-200 rounded-xl pl-11 pr-4 py-3 outline-none disabled:opacity-70 text-stone-900 font-medium"
-                        />
-                      </div>
-                    </div>
+                    {/* Customer location data is not required for pickup-based FoodFlow */}
                   </div>
                 </form>
               </div>

@@ -160,6 +160,13 @@ public class DropServiceImpl implements DropService {
         
         validateStatusTransition(drop.getStatus(), newStatus);
         
+        if (newStatus == FoodDrop.DropStatus.OPEN) {
+            if (drop.getPickupLocation() == null || drop.getPickupLocation().trim().isEmpty() ||
+                drop.getPickupTime() == null || drop.getPickupTime().trim().isEmpty()) {
+                throw new InvalidRequestException("Cannot open drop: pickup location and time must be provided.");
+            }
+        }
+        
         drop.setStatus(newStatus);
         FoodDrop saved = dropRepository.save(drop);
         
