@@ -75,7 +75,7 @@ public class CreatorAuthorizationService {
     }
 
     /**
-     * Asserts that the currently authenticated OWNER user owns the restaurant
+     * Asserts that the currently authenticated SELLER user owns the restaurant
      * identified by {@code restaurantId}. ADMIN users are implicitly allowed
      * and skip the ownership check.
      */
@@ -98,7 +98,7 @@ public class CreatorAuthorizationService {
     }
 
     /**
-     * Asserts that the currently authenticated OWNER user owns the restaurant
+     * Asserts that the currently authenticated SELLER user owns the restaurant
      * associated with the given {@code orderId}. ADMIN users are implicitly allowed.
      */
     public void assertCreatorOwnsOrderRestaurant(Long orderId) {

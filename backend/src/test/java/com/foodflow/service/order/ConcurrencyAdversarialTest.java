@@ -78,7 +78,7 @@ public class ConcurrencyAdversarialTest {
         drop.setMaxOrders(2);
         drop.setCurrentOrders(0);
         drop.setStatus(FoodDrop.DropStatus.OPEN);
-        drop.setIsDeliveryAvailable(false);
+        // drop.setIsDeliveryAvailable(true); // obsolete
         drop = dropRepository.save(drop);
         testDropId = drop.getDropId();
 
@@ -118,7 +118,7 @@ public class ConcurrencyAdversarialTest {
                 try {
                     PlaceDropOrderRequest request = new PlaceDropOrderRequest();
                     request.setDropId(testDropId);
-                    request.setPaymentMethod("CARD");
+                    // request.setPaymentMethod("PAY_AT_PICKUP"); // obsolete
                     
                     PlaceDropOrderRequest.ItemRequest itemReq = new PlaceDropOrderRequest.ItemRequest();
                     itemReq.setItemId(testItemId);

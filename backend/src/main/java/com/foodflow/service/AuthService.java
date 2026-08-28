@@ -51,7 +51,7 @@ public class AuthService {
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
+        user.setRole(com.foodflow.model.Role.CUSTOMER);
         user.setIsActive(true);
 
         user = userRepository.save(user);
@@ -100,7 +100,7 @@ public class AuthService {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         CreatorSummary creatorProfile = null;
-        if ("OWNER".equals(userDetails.getRole())) {
+        if ("SELLER".equals(userDetails.getRole())) {
             Optional<Restaurant> restaurantOpt = restaurantRepository.findByOwnerUserId(userDetails.getId());
             if (restaurantOpt.isPresent()) {
                 Restaurant restaurant = restaurantOpt.get();
