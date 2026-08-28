@@ -34,6 +34,13 @@ export const ProtectedRoute = ({
     setTimeout(() => {
       toast.error('Not authorized to access this page');
     }, 0);
+    
+    // Redirect to the appropriate home based on role
+    if (user.role === 'SELLER') {
+      return <Navigate to="/dashboard/creator" replace />;
+    } else if (user.role === 'ADMIN') {
+      return <Navigate to="/admin/verification/pending" replace />;
+    }
     return <Navigate to="/" replace />;
   }
 

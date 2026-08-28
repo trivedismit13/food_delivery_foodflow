@@ -27,8 +27,10 @@ export function useLogin() {
       queryClient.clear()
       
       // Role-based redirect
-      if (authResponse.role === 'SELLER' || authResponse.role === 'ADMIN') {
+      if (authResponse.role === 'SELLER') {
         navigate('/dashboard/creator')
+      } else if (authResponse.role === 'ADMIN') {
+        navigate('/admin/verification/pending')
       } else {
         // Check if there's a redirect URL in query params
         const params = new URLSearchParams(window.location.search)

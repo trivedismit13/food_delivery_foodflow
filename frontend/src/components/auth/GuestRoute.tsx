@@ -8,8 +8,11 @@ export function GuestRoute({ children }: { children: React.ReactNode }) {
     // Redirect based on role
     if (user?.role === 'SELLER') {
       return <Navigate to="/dashboard/creator" replace />;
+    } else if (user?.role === 'ADMIN') {
+      return <Navigate to="/admin/verification/pending" replace />;
+    } else {
+      return <Navigate to="/" replace />;
     }
-    return <Navigate to="/" replace />;
   }
   
   return <>{children}</>;

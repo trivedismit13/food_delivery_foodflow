@@ -18,6 +18,7 @@ import { queryClient } from './lib/queryClient'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
 import SellerRegisterPage from './pages/auth/SellerRegisterPage'
+import SellerLoginPage from './pages/auth/SellerLoginPage'
 
 // Core Pages
 import HomePage from './pages/HomePage'
@@ -80,6 +81,7 @@ function App() {
           
           {/* Auth routes (redirect to / if already logged in) */}
           <Route path="/auth/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
+          <Route path="/auth/login/seller" element={<GuestRoute><SellerLoginPage /></GuestRoute>} />
           <Route path="/auth/register" element={<GuestRoute><RegisterPage /></GuestRoute>} />
           <Route path="/auth/register/creator" element={<GuestRoute><SellerRegisterPage /></GuestRoute>} />
           
@@ -106,7 +108,7 @@ function App() {
           
           {/* Customer dashboard */}
           <Route path="/dashboard/customer" element={
-            <ProtectedRoute allowedRoles={['CUSTOMER', 'SELLER', 'ADMIN']}>
+            <ProtectedRoute allowedRoles={['CUSTOMER']}>
               <CustomerDashboardPage />
             </ProtectedRoute>
           } />
@@ -116,7 +118,7 @@ function App() {
           
           {/* Creator dashboard — nested routes */}
           <Route path="/dashboard/creator" element={
-            <ProtectedRoute allowedRoles={['SELLER', 'ADMIN']}>
+            <ProtectedRoute allowedRoles={['SELLER']}>
               <CreatorDashboardLayout />
             </ProtectedRoute>
           }>

@@ -14,7 +14,7 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-export default function LoginPage() {
+export default function SellerLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const loginMutation = useLogin();
 
@@ -84,7 +84,7 @@ export default function LoginPage() {
           </div>
 
           <div className="mb-8 text-center md:text-left">
-            <h2 className="font-display text-3xl font-bold text-stone-800 mb-2">Customer Sign In</h2>
+            <h2 className="font-display text-3xl font-bold text-stone-800 mb-2">Creator Sign In</h2>
             <p className="text-stone-500">Sign in to continue</p>
           </div>
 
@@ -143,19 +143,15 @@ export default function LoginPage() {
 
 
           <p className="text-center text-sm text-stone-600 mt-8">
-            New here?{' '}
-            <Link to="/auth/register" className="text-orange-500 font-semibold hover:underline">
-              Create account
+            New creator?{' '}
+            <Link to="/auth/register/creator" className="text-orange-500 font-semibold hover:underline">
+              Create seller account
             </Link>
           </p>
 
-          <div className="mt-8 pt-6 border-t border-stone-100 text-center flex flex-col gap-3">
-            <Link to="/auth/login/seller" className="text-stone-600 text-sm font-medium hover:text-orange-500 transition-colors">
-              Are you a creator? Sign in here
-            </Link>
-            <Link to="/auth/register/creator" className="text-orange-500 text-sm font-medium hover:underline flex items-center justify-center gap-1 group">
-              Selling food? Join as a creator 
-              <span className="transition-transform group-hover:translate-x-1">→</span>
+          <div className="mt-8 pt-6 border-t border-stone-100 text-center">
+            <Link to="/auth/login" className="text-stone-600 text-sm font-medium hover:text-orange-500 transition-colors">
+              Looking for food? Sign in as customer
             </Link>
           </div>
         </div>
