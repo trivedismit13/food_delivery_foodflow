@@ -16,7 +16,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const loginMutation = useLogin();
+  const loginMutation = useLogin('CUSTOMER');
 
   const {
     register,

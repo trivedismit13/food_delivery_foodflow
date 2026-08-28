@@ -14,7 +14,7 @@ export default function Navbar() {
   
   const cartCount = useStore((s) => s.items.reduce((sum, i) => sum + i.quantity, 0));
   
-  const { isAuthenticated, user, creatorProfile, isCreator, isCustomer, logout } = useAuthStore();
+  const { isAuthenticated, user, creatorProfile, isCreator, isCustomer, isAdmin, logout } = useAuthStore();
   const { data: unreadCount = 0 } = useUnreadCount();
 
   const handleLogout = () => {
@@ -102,7 +102,31 @@ export default function Navbar() {
             <Link to="/dashboard/creator/analytics" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-stone-700 hover:bg-stone-50">Analytics</Link>
             <Link to="/dashboard/creator/profile" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-stone-700 hover:bg-stone-50">Profile</Link>
             <div className="h-px bg-stone-100 my-2"></div>
-            <Link to="/" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-stone-500 hover:bg-stone-50">Switch to Customer View</Link>
+            <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Sign Out</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const renderAdminActions = () => (
+    <div className="flex items-center gap-5">
+      <Link to="/admin/verification/pending" className="hidden md:flex items-center justify-center px-4 py-2 bg-stone-100 text-stone-700 border border-stone-200 rounded-xl text-sm font-medium hover:bg-stone-200 transition-colors">
+        Admin Portal
+      </Link>
+
+      <div className="relative">
+        <button 
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          className="w-9 h-9 rounded-full bg-stone-800 text-white flex items-center justify-center font-bold text-sm hover:bg-stone-700 transition-colors"
+        >
+          {user?.name?.charAt(0)?.toUpperCase() || 'A'}
+        </button>
+
+        {isDropdownOpen && (
+          <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-stone-100 py-2 z-50">
+            <Link to="/admin/verification/pending" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-2 text-sm text-stone-700 hover:bg-stone-50">Verification Queue</Link>
+            <div className="h-px bg-stone-100 my-2"></div>
             <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Sign Out</button>
           </div>
         )}
@@ -159,7 +183,8 @@ export default function Navbar() {
           <div className="hidden md:flex items-center">
             {!isAuthenticated && renderGuestActions()}
             {isAuthenticated && isCustomer() && renderCustomerActions()}
-            {isAuthenticated && (isCreator() || user?.role === 'ADMIN') && renderCreatorActions()}
+            {isAuthenticated && isCreator() && renderCreatorActions()}
+            {isAuthenticated && isAdmin() && renderAdminActions()}
           </div>
 
           <button 
@@ -179,25 +204,37 @@ export default function Navbar() {
             <div className="flex flex-col gap-4">
               {isAuthenticated ? (
                 <>
-                  {isCreator() ? (
+                  {isAdmin() ? (
+                    <>
+                      <Link to="/admin/verification/pending" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">Verification Queue</Link>
+                      <div className="h-px bg-stone-100 my-2"></div>
+                      <button onClick={handleLogout} className="text-left text-red-600 font-medium">Sign Out</button>
+                    </>
+                  ) : isCreator() ? (
                     <>
                       <Link to="/dashboard/creator" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">Dashboard</Link>
                       <Link to="/dashboard/creator/drops" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">My Drops</Link>
                       <Link to="/dashboard/creator/analytics" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">Analytics</Link>
+                      <Link to="/notifications" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium flex items-center justify-between">
+                        Notifications
+                        {unreadCount > 0 && <span className="bg-orange-500 text-white text-xs px-2 py-0.5 rounded-full">{unreadCount}</span>}
+                      </Link>
+                      <div className="h-px bg-stone-100 my-2"></div>
+                      <button onClick={handleLogout} className="text-left text-red-600 font-medium">Sign Out</button>
                     </>
                   ) : (
                     <>
                       <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">Home</Link>
                       <Link to="/drops" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">Discovery Feed</Link>
                       <Link to="/dashboard/customer" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">My Orders</Link>
+                      <Link to="/notifications" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium flex items-center justify-between">
+                        Notifications
+                        {unreadCount > 0 && <span className="bg-orange-500 text-white text-xs px-2 py-0.5 rounded-full">{unreadCount}</span>}
+                      </Link>
+                      <div className="h-px bg-stone-100 my-2"></div>
+                      <button onClick={handleLogout} className="text-left text-red-600 font-medium">Sign Out</button>
                     </>
                   )}
-                  <Link to="/notifications" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium flex items-center justify-between">
-                    Notifications
-                    {unreadCount > 0 && <span className="bg-orange-500 text-white text-xs px-2 py-0.5 rounded-full">{unreadCount}</span>}
-                  </Link>
-                  <div className="h-px bg-stone-100 my-2"></div>
-                  <button onClick={handleLogout} className="text-left text-red-600 font-medium">Sign Out</button>
                 </>
               ) : (
                 <>

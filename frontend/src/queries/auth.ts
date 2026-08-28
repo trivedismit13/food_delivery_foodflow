@@ -6,7 +6,7 @@ import { handleApiError } from '@/lib/errorHandler'
 import { useAuthStore } from '@/store/authStore'
 import type { AuthResponse, LoginRequest, RegisterRequest } from '@/types/api'
 
-export function useLogin() {
+export function useLogin(expectedRole?: 'CUSTOMER' | 'SELLER') {
   const { setAuth } = useAuthStore()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -20,6 +20,17 @@ export function useLogin() {
     },
     
     onSuccess: (authResponse) => {
+      // Intercept and prevent local login if entry context mismatched
+      if (expectedRole === 'CUSTOMER' && authResponse.role === 'SELLER') {
+        toast.error("This is a Creator account. Please use the Creator Sign In page.", { duration: 5000 })
+        return
+      }
+      
+      if (expectedRole === 'SELLER' && authResponse.role === 'CUSTOMER') {
+        toast.error("This is a Customer account. Please use the Customer Sign In page.", { duration: 5000 })
+        return
+      }
+
       // Store auth state (token goes to localStorage via persist middleware)
       setAuth(authResponse)
       
