@@ -13,10 +13,10 @@ export default function SellerRegisterPage() {
     phone: '',
     password: '',
     creatorName: '',
-    creatorType: 'HOME_CHEF',
-    cuisine: '',
+    whatDoYouMake: '',
     bio: '',
-    instagramHandle: '',
+    city: '',
+    pickupLocation: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -101,15 +101,9 @@ export default function SellerRegisterPage() {
             <div className="space-y-4">
               <h3 className="text-sm font-bold text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-200">Personal Details</h3>
               
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">Full Name</label>
-                  <input type="text" name="name" required value={formData.name} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="John Doe" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">Phone Number</label>
-                  <input type="tel" name="phone" required value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="10-digit number" />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-1">Full Name</label>
+                <input type="text" name="name" required value={formData.name} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="John Doe" />
               </div>
 
               <div>
@@ -121,40 +115,42 @@ export default function SellerRegisterPage() {
                 <label className="block text-sm font-medium text-stone-700 mb-1">Password</label>
                 <input type="password" name="password" required value={formData.password} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="••••••••" />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-1">Phone Number (Optional)</label>
+                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="10-digit number" />
+              </div>
             </div>
 
             <div className="space-y-4 pt-4">
-              <h3 className="text-sm font-bold text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-200">Store Details</h3>
+              <h3 className="text-sm font-bold text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-200">Seller Details</h3>
               
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">Store Name</label>
-                  <input type="text" name="creatorName" required value={formData.creatorName} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="e.g. John's Kitchen" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">Creator Type</label>
-                  <select name="creatorType" value={formData.creatorType} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all">
-                    <option value="HOME_CHEF">Home Chef</option>
-                    <option value="BAKER">Baker</option>
-                    <option value="POPUP">Pop-up</option>
-                    <option value="PROFESSIONAL">Professional</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">Cuisine Specialty</label>
-                  <input type="text" name="cuisine" required value={formData.cuisine} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="e.g. Italian, Desserts" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">Instagram Handle</label>
-                  <input type="text" name="instagramHandle" value={formData.instagramHandle} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="@username" />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-1">Seller / Brand Name</label>
+                <input type="text" name="creatorName" required value={formData.creatorName} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="e.g. John's Kitchen" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-stone-700 mb-1">Bio</label>
+                <label className="block text-sm font-medium text-stone-700 mb-1">What do you make?</label>
+                <input type="text" name="whatDoYouMake" required value={formData.whatDoYouMake} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="e.g. Brownies and dessert boxes" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-1">City (Optional)</label>
+                <input type="text" name="city" value={formData.city} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="e.g. Vellore" />
+              </div>
+            </div>
+
+            <div className="space-y-4 pt-4">
+              <h3 className="text-sm font-bold text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-200">About You</h3>
+
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-1">Pickup Location (Optional)</label>
+                <textarea name="pickupLocation" rows={2} value={formData.pickupLocation} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all resize-none" placeholder="e.g. Near VIT Main Gate" />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-1">Bio (Optional)</label>
                 <textarea name="bio" rows={3} value={formData.bio} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all resize-none" placeholder="Tell customers a bit about yourself and your food..." />
               </div>
             </div>

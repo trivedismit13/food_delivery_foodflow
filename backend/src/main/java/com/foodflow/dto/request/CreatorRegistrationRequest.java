@@ -23,23 +23,15 @@ public class CreatorRegistrationRequest {
     @NotBlank(message = "Brand name is required")
     private String creatorName;
 
-    @NotBlank(message = "Creator type is required")
-    private String creatorType; // Enum string
-
-    @NotBlank(message = "City is required")
     private String city;
 
+    @NotBlank(message = "What do you make is required")
+    private String whatDoYouMake;
 
 
-    @NotBlank(message = "Cuisine is required")
-    private String cuisine;
+
 
     private String bio;
 
-    private Boolean offersPickup;
-    private String pickupAddress;
-
-
-
-    private String instagramHandle;
+    private String pickupLocation;
 }

@@ -5,6 +5,7 @@ import { apiClient } from '@/lib/api'
 import { handleApiError } from '@/lib/errorHandler'
 import { useAuthStore } from '@/store/authStore'
 import type { AuthResponse, LoginRequest, RegisterRequest } from '@/types/api'
+import type { CreatorRegistrationRequest } from '@/types/creator'
 
 export function useLogin(expectedRole?: 'CUSTOMER' | 'SELLER') {
   const { setAuth } = useAuthStore()
@@ -82,7 +83,7 @@ export function useRegisterCreator() {
   const { setAuth } = useAuthStore()
   const navigate = useNavigate()
   return useMutation({
-    mutationFn: async (creatorData: any) => {
+    mutationFn: async (creatorData: CreatorRegistrationRequest) => {
       const response = await apiClient.post<AuthResponse>('/auth/register-creator', creatorData)
       return response.data
     },

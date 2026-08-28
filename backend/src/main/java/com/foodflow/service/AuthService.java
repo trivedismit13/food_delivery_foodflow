@@ -150,22 +150,13 @@ public class AuthService {
         restaurant.setOwner(user);
         restaurant.setName(request.getCreatorName());
         
-        try {
-            restaurant.setCreatorType(Restaurant.CreatorType.valueOf(
-                request.getCreatorType().toUpperCase().replace(" ", "_")
-            ));
-        } catch (Exception e) {
-            restaurant.setCreatorType(Restaurant.CreatorType.HOME_BAKER);
-        }
+        restaurant.setCreatorType(Restaurant.CreatorType.HOME_BAKER);
 
         restaurant.setCity(request.getCity());
-        restaurant.setCuisine(request.getCuisine());
+        restaurant.setCuisine(request.getWhatDoYouMake());
         restaurant.setBio(request.getBio());
-        restaurant.setPickupAddress(request.getPickupAddress());
-        
+        restaurant.setPickupAddress(request.getPickupLocation());
 
-        
-        restaurant.setInstagramHandle(request.getInstagramHandle());
         restaurant.setVerificationLevel(0);
         restaurant.setIsAcceptingOrders(true);
         

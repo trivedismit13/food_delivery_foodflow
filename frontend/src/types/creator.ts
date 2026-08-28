@@ -49,13 +49,8 @@ export interface CreatorRegistrationRequest {
   phone: string;
   password?: string;
   creatorName: string;
-  creatorType: string;
-  city: string;
-
-  cuisine: string;
-  bio: string;
-  offersPickup: boolean;
-  pickupAddress?: string;
-
-  instagramHandle?: string;
+  whatDoYouMake: string;
+  bio?: string;
+  city?: string;
+  pickupLocation?: string;
 }
