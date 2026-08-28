@@ -20,8 +20,8 @@ export default function CreateDropPage() {
   const [photoUrl, setPhotoUrl] = useState('');
   const [dropDate, setDropDate] = useState('');
   const [cutoffTime, setCutoffTime] = useState('');
-  const [pickupStart, setPickupStart] = useState('');
-  const [pickupEnd, setPickupEnd] = useState('');
+  const [pickupLocation, setPickupLocation] = useState('');
+  const [pickupTime, setPickupTime] = useState('');
 
   const [maxOrders, setMaxOrders] = useState('');
   const [specialNotes, setSpecialNotes] = useState('');
@@ -105,8 +105,8 @@ export default function CreateDropPage() {
     currentOrders: 0,
     orderCutoffTime: cutoffTime ? new Date(cutoffTime).toISOString() : new Date().toISOString(),
     dropDate: dropDate ? new Date(dropDate).toISOString() : new Date().toISOString(),
-    pickupWindowStart: pickupStart || "TBD",
-    pickupWindowEnd: pickupEnd || "TBD",
+    pickupLocation: pickupLocation || "TBD",
+    pickupTime: pickupTime || "TBD",
     minPrice: selectedItems.length > 0 
       ? Math.min(...selectedItems.map(i => parseInt(i.dropPrice || i.price))) 
       : 0,
@@ -116,7 +116,7 @@ export default function CreateDropPage() {
   };
 
   const handlePublish = async () => {
-    if (!title || !description || selectedItems.length === 0 || !maxOrders || !dropDate || !cutoffTime) {
+    if (!title || !description || selectedItems.length === 0 || !maxOrders || !dropDate || !cutoffTime || !pickupLocation || !pickupTime) {
       toast.error("Please fill in all required fields and add at least one item.");
       return;
     }
@@ -138,21 +138,11 @@ export default function CreateDropPage() {
       return;
     }
 
-    if (pickupStart) {
-      const cutoffDate = new Date(cutoffTime);
-      const pickupStartDate = new Date(`${dropDate}T${pickupStart}:00`);
-      if (cutoffDate >= pickupStartDate) {
-        toast.error("Order cutoff time must be before pickup start time.");
-        return;
-      }
-      
-      if (pickupEnd) {
-        const pickupEndDate = new Date(`${dropDate}T${pickupEnd}:00`);
-        if (pickupStartDate >= pickupEndDate) {
-          toast.error("Pickup start time must be before pickup end time.");
-          return;
-        }
-      }
+    const cutoffDate = new Date(cutoffTime);
+    const dropDateObj = new Date(dropDate);
+    if (cutoffDate >= dropDateObj) {
+      toast.error("Order cutoff time must be before the drop date.");
+      return;
     }
     
     setIsSaving(true);
@@ -162,8 +152,8 @@ export default function CreateDropPage() {
         description,
         dropDate,
         orderCutoffTime: new Date(cutoffTime).toISOString(),
-        pickupStartTime: pickupStart ? new Date(`${dropDate}T${pickupStart}:00`).toISOString() : undefined,
-        pickupEndTime: pickupEnd ? new Date(`${dropDate}T${pickupEnd}:00`).toISOString() : undefined,
+        pickupLocation,
+        pickupTime,
         maxOrders: parseInt(maxOrders),
         dropPhotoUrl: photoUrl || undefined,
         specialNotes,
@@ -314,20 +304,22 @@ export default function CreateDropPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-stone-700 mb-2">Pickup Start Time</label>
+                <label className="block text-sm font-semibold text-stone-700 mb-2">Pickup Location *</label>
                 <input 
-                  type="time" 
-                  value={pickupStart}
-                  onChange={(e) => setPickupStart(e.target.value)}
+                  type="text" 
+                  value={pickupLocation}
+                  onChange={(e) => setPickupLocation(e.target.value)}
+                  placeholder="e.g. Near VIT Main Gate"
                   className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2 focus:outline-none focus:border-orange-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-stone-700 mb-2">Pickup End Time</label>
+                <label className="block text-sm font-semibold text-stone-700 mb-2">Pickup Time *</label>
                 <input 
-                  type="time" 
-                  value={pickupEnd}
-                  onChange={(e) => setPickupEnd(e.target.value)}
+                  type="text" 
+                  value={pickupTime}
+                  onChange={(e) => setPickupTime(e.target.value)}
+                  placeholder="e.g. 4:00 PM - 6:00 PM"
                   className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2 focus:outline-none focus:border-orange-500"
                 />
               </div>

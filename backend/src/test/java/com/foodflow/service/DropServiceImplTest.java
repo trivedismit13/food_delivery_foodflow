@@ -88,6 +88,8 @@ class DropServiceImplTest {
         request.setDropDate(LocalDate.now().plusDays(1));
         request.setOrderCutoffTime(LocalDateTime.now().plusHours(2));
         request.setMaxOrders(10);
+        request.setPickupLocation("Near VIT Main Gate");
+        request.setPickupTime("12:00 PM - 2:00 PM");
 
         DropItemRequest itemRequest = new DropItemRequest();
         itemRequest.setItemId(10L);

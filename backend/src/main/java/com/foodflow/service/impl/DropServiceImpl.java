@@ -69,6 +69,7 @@ public class DropServiceImpl implements DropService {
             .description(request.getDescription())
             .dropDate(request.getDropDate())
             .orderCutoffTime(request.getOrderCutoffTime())
+            .pickupLocation(request.getPickupLocation())
             .pickupTime(request.getPickupTime())
             .maxOrders(request.getMaxOrders())
             .dropPhotoUrl(request.getDropPhotoUrl())
@@ -140,6 +141,7 @@ public class DropServiceImpl implements DropService {
         if (request.getDescription() != null) drop.setDescription(request.getDescription());
         if (request.getDropDate() != null) drop.setDropDate(request.getDropDate());
         if (request.getOrderCutoffTime() != null) drop.setOrderCutoffTime(request.getOrderCutoffTime());
+        if (request.getPickupLocation() != null) drop.setPickupLocation(request.getPickupLocation());
         if (request.getPickupTime() != null) drop.setPickupTime(request.getPickupTime());
         if (request.getMaxOrders() != null) drop.setMaxOrders(request.getMaxOrders());
         if (request.getDropPhotoUrl() != null) drop.setDropPhotoUrl(request.getDropPhotoUrl());
@@ -302,6 +304,7 @@ public class DropServiceImpl implements DropService {
         response.setDropDate(drop.getDropDate());
         response.setOrderCutoffTime(drop.getOrderCutoffTime());
         response.setPickupTime(drop.getPickupTime());
+        response.setPickupLocation(drop.getPickupLocation());
         response.setMaxOrders(drop.getMaxOrders());
         response.setCurrentOrders(drop.getCurrentOrders());
         response.setAvailableSlots(drop.availableSlots());

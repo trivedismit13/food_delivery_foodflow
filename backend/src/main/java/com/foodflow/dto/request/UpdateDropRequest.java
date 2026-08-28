@@ -16,6 +16,7 @@ public class UpdateDropRequest {
     @Future(message = "Order cutoff time must be in the future")
     private LocalDateTime orderCutoffTime;
     private String pickupTime;
+    private String pickupLocation;
     @jakarta.validation.constraints.Min(value = 1, message = "Max orders must be at least 1")
     private Integer maxOrders;
 

@@ -12,7 +12,7 @@ export function DropCard(drop: FoodDropResponse) {
   const navigate = useNavigate();
   const {
     dropId, title, creator, dropPhotoUrl, status, maxOrders, currentOrders, 
-    orderCutoffTime, dropDate, pickupStartTime, pickupEndTime, 
+    orderCutoffTime, dropDate, pickupLocation, pickupTime, 
     description, items, isSoldOut: apiIsSoldOut
   } = drop;
   
@@ -137,9 +137,12 @@ export function DropCard(drop: FoodDropResponse) {
                 📅 <span className="text-stone-900">{getDayLabel(dropDate)}</span>
               </div>
               
-              <div className="flex items-center gap-1.5 text-stone-600 bg-stone-50 px-2 py-1 rounded-md">
-                🕒 <span className="text-stone-900">
-                  {pickupStartTime ? new Date(pickupStartTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBA'}
+              <div className="flex items-center gap-1.5 text-stone-600 bg-stone-50 px-2 py-1 rounded-md truncate max-w-[120px]" title={pickupLocation}>
+                📍 <span className="text-stone-900 truncate">{pickupLocation}</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-stone-600 bg-stone-50 px-2 py-1 rounded-md truncate max-w-[110px]" title={pickupTime}>
+                🕒 <span className="text-stone-900 truncate">
+                  {pickupTime}
                 </span>
               </div>
             </div>

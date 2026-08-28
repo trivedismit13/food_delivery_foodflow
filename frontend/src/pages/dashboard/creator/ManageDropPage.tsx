@@ -200,12 +200,10 @@ export default function ManageDropPage() {
                             <span className={cn(
                               "px-2 py-1 text-xs font-semibold rounded bg-stone-100 text-stone-700 block mb-1 w-fit"
                             )}>
-                              {/* @ts-ignore - Assuming OrderResponse might have these fields in actual API */}
-                              {order.isDelivery ? 'Delivery' : 'Pickup'}
+                              Pickup
                             </span>
                             <span className="text-xs text-stone-500">
-                              {/* @ts-ignore */}
-                              {order.isDelivery && order.deliveryAddress ? order.deliveryAddress : (order.pickupTime ? new Date(order.pickupTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Drop Time')}
+                              {order.pickupTime || 'Drop Time'}
                             </span>
                           </td>
                           <td className="p-4">

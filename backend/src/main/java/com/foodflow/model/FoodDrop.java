@@ -44,8 +44,8 @@ public class FoodDrop {
     @Column(nullable = false)
     private LocalDateTime orderCutoffTime;
 
-    private LocalDateTime pickupStartTime;
-    private LocalDateTime pickupEndTime;
+    @Column(name = "pickup_location", length = 200)
+    private String pickupLocation;
 
     @Column(name = "pickup_time", length = 100)
     private String pickupTime;

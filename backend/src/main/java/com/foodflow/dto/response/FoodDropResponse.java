@@ -20,6 +20,7 @@ public class FoodDropResponse {
     private LocalDate dropDate;
     private LocalDateTime orderCutoffTime;
     private String pickupTime;
+    private String pickupLocation;
     private Integer maxOrders;
     private Integer currentOrders;
     private Integer availableSlots;

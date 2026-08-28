@@ -29,6 +29,9 @@ public class CreateDropRequest {
     @NotBlank(message = "Pickup time description is required")
     private String pickupTime;
 
+    @NotBlank(message = "Pickup location is required")
+    private String pickupLocation;
+
     @NotNull(message = "Max orders is required")
     @jakarta.validation.constraints.Min(value = 1, message = "Max orders must be at least 1")
     private Integer maxOrders;

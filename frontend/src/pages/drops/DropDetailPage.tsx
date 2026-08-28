@@ -17,7 +17,6 @@ export default function DropDetailPage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
   const [selectedItems, setSelectedItems] = useState<Record<number, number>>({});
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>('12:00 PM');
   const [specialInstructions, setSpecialInstructions] = useState('');
 
   const { data: drop, isLoading: isDropLoading } = useDropById(Number(dropId));
@@ -112,7 +111,7 @@ export default function DropDetailPage() {
           quantity
         })),
         paymentMethod: 'CASH',
-        pickupTime: selectedTimeSlot,
+        pickupTime: drop.pickupTime,
         specialInstructions: specialInstructions || undefined
       } as any);
 
@@ -447,21 +446,17 @@ export default function DropDetailPage() {
 
               <div className="mb-6 space-y-4">
                 <div className="bg-orange-50 text-orange-900 p-4 rounded-xl text-sm flex gap-3">
-                  <MapPin size={18} className="shrink-0 text-orange-500" />
-                  <p>Creator local address will be shown after booking.</p>
+                  <MapPin size={18} className="shrink-0 text-orange-500 mt-0.5" />
+                  <div>
+                    <h4 className="font-bold mb-0.5">Pickup Location</h4>
+                    <p>{drop.pickupLocation}</p>
+                  </div>
                 </div>
-                <div>
-                  <label className="text-sm font-medium text-stone-700 block mb-2">Select Pickup Time</label>
-                  <div className="flex flex-wrap gap-2">
-                    {['12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM'].map(time => (
-                      <button 
-                        key={time}
-                        onClick={() => setSelectedTimeSlot(time)}
-                        className={`px-3 py-1.5 rounded-lg text-sm transition-colors border ${selectedTimeSlot === time ? 'bg-orange-500 border-orange-500 text-white font-medium' : 'bg-white border-stone-200 text-stone-600 hover:border-orange-300'}`}
-                      >
-                        {time}
-                      </button>
-                    ))}
+                <div className="bg-orange-50 text-orange-900 p-4 rounded-xl text-sm flex gap-3">
+                  <Clock size={18} className="shrink-0 text-orange-500 mt-0.5" />
+                  <div>
+                    <h4 className="font-bold mb-0.5">Pickup Time</h4>
+                    <p>{drop.pickupTime}</p>
                   </div>
                 </div>
               </div>

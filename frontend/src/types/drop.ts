@@ -15,14 +15,13 @@ export interface FoodDropResponse {
   description: string;
   dropDate: string;        
   orderCutoffTime: string; 
-  pickupStartTime: string | null;
-  pickupEndTime: string | null;
+  pickupLocation: string;
+  pickupTime: string;
   maxOrders: number;
   currentOrders: number;
   availableSlots: number;  
   isSoldOut: boolean;      
   status: DropStatus;
-  isDeliveryAvailable: boolean;
 
   dropPhotoUrl: string | null;
   specialNotes: string | null;
@@ -48,10 +47,9 @@ export interface CreateDropRequest {
   description: string;
   dropDate: string;        
   orderCutoffTime: string; 
-  pickupStartTime?: string;
-  pickupEndTime?: string;
+  pickupLocation: string;
+  pickupTime: string;
   maxOrders: number;
-  isDeliveryAvailable: boolean;
 
   dropPhotoUrl?: string;
   specialNotes?: string;

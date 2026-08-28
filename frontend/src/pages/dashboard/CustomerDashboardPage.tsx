@@ -59,8 +59,8 @@ export default function CustomerDashboardPage() {
     currentOrders: 18,
     orderCutoffTime: new Date(now.getTime() + 1000 * 60 * 90).toISOString(),
     dropDate: new Date(now.getTime() + 1000 * 60 * 60 * 24).toISOString(),
-    pickupWindowStart: "12:00 PM",
-    pickupWindowEnd: "2:00 PM",
+    pickupLocation: "Near VIT Main Gate",
+    pickupTime: "12:00 PM - 2:00 PM",
     minPrice: 350,
     description: "Slow cooked overnight with premium basmati rice."
   };
@@ -311,12 +311,12 @@ export default function CustomerDashboardPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-stone-700">Default Delivery Location</label>
+                      <label className="block text-sm font-semibold text-stone-700">City</label>
                       <div className="relative">
                         <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
                         <input 
                           type="text" 
-                          defaultValue="Bandra West, Mumbai"
+                          defaultValue="Mumbai"
                           disabled
                           className="w-full bg-stone-50 border border-stone-200 rounded-xl pl-11 pr-4 py-3 outline-none disabled:opacity-70 text-stone-900 font-medium"
                         />
