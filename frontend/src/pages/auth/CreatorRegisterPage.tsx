@@ -23,9 +23,6 @@ const creatorRegisterSchema = z.object({
   // Step 3: Location and Pickup
   offersPickup: z.boolean(),
   pickupAddress: z.string().optional(),
-  offersDelivery: z.boolean(),
-  deliveryRadius: z.number().min(1).max(20).optional(),
-  deliveryCharge: z.number().min(0).optional(),
   instagramHandle: z.string().optional(),
 }).refine(data => {
   if (data.offersPickup && (!data.pickupAddress || data.pickupAddress.trim() === '')) return false;
@@ -33,12 +30,6 @@ const creatorRegisterSchema = z.object({
 }, {
   message: "Pickup address is required if offering pickup",
   path: ["pickupAddress"]
-}).refine(data => {
-  if (data.offersDelivery && data.deliveryCharge === undefined) return false;
-  return true;
-}, {
-  message: "Delivery charge is required if offering delivery",
-  path: ["deliveryCharge"]
 });
 
 type CreatorFormValues = z.infer<typeof creatorRegisterSchema>;
@@ -68,14 +59,10 @@ export default function CreatorRegisterPage() {
     resolver: zodResolver(creatorRegisterSchema),
     defaultValues: {
       offersPickup: true,
-      offersDelivery: false,
-      deliveryRadius: 5,
-      deliveryCharge: 0,
     }
   });
 
   const offersPickup = watch('offersPickup');
-  const offersDelivery = watch('offersDelivery');
   const bio = watch('bio') || '';
 
   const nextStep = async (fieldsToValidate: (keyof CreatorFormValues)[]) => {
@@ -270,25 +257,7 @@ export default function CreatorRegisterPage() {
                     )}
                   </div>
 
-                  <div className="p-4 border border-stone-200 rounded-xl bg-stone-50/50 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <label className="font-medium text-stone-800">Offer Delivery?</label>
-                      <input type="checkbox" {...register('offersDelivery')} className="w-5 h-5 accent-orange-500" />
-                    </div>
-                    
-                    {offersDelivery && (
-                      <div className="animate-in slide-in-from-top-2 grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-stone-700 mb-1">Radius (km)</label>
-                          <input type="number" {...register('deliveryRadius', { valueAsNumber: true })} className="w-full bg-white border border-stone-200 rounded-xl px-4 py-2 focus:border-orange-400 outline-none" />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-stone-700 mb-1">Fee (₹)</label>
-                          <input type="number" {...register('deliveryCharge', { valueAsNumber: true })} className="w-full bg-white border border-stone-200 rounded-xl px-4 py-2 focus:border-orange-400 outline-none" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
+
 
                   <div>
                     <label className="block text-sm font-medium text-stone-700 mb-1">Instagram Handle (Optional)</label>

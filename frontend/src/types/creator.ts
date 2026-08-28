@@ -36,7 +36,6 @@ export interface CreatorResponse {
   followerCount: number;
   totalOrdersCompleted: number;
   isAcceptingOrders: boolean;
-  offersDelivery: boolean;
 
   offersPickup: boolean;
   pickupAddress: string | null;
@@ -52,14 +51,11 @@ export interface CreatorRegistrationRequest {
   creatorName: string;
   creatorType: string;
   city: string;
-  cityId?: number;
-  latitude?: number;
-  longitude?: number;
+
   cuisine: string;
   bio: string;
   offersPickup: boolean;
   pickupAddress?: string;
-  offersDelivery: boolean;
 
   instagramHandle?: string;
 }
