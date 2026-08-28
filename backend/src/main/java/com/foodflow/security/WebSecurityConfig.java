@@ -52,8 +52,6 @@ public class WebSecurityConfig {
                     .requestMatchers("/api/reels/**").permitAll()
                     .requestMatchers("/api/drops/**").permitAll()
                     .requestMatchers("/api/creators/**").permitAll()
-                    .requestMatchers("/api/cities/**").permitAll()
-                    .requestMatchers("/api/location/**").permitAll()
                     .anyRequest().authenticated()
             );
         
