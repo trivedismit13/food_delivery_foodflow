@@ -143,6 +143,9 @@ public class ConcurrencyAdversarialTest {
 
         assertEquals(2, successCount.get(), "Exactly 2 orders should succeed");
         assertEquals(8, failCount.get(), "Exactly 8 orders should fail gracefully");
+        
+        FoodDrop drop = dropRepository.findById(testDropId).orElseThrow();
+        assertEquals(successCount.get(), drop.getCurrentOrders(), "currentOrders must exactly equal the number of successful bookings");
     }
     
     @Test
@@ -237,11 +240,18 @@ public class ConcurrencyAdversarialTest {
         CountDownLatch latch = new CountDownLatch(bookingThreads + 1);
         
         AtomicInteger successCount = new AtomicInteger(0);
+        List<Exception> unexpectedExceptions = new java.util.concurrent.CopyOnWriteArrayList<>();
 
         executorService.execute(() -> {
             try {
+                // Thread-local SecurityContext for cancellation
+                org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(
+                    new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(u.getEmail(), "password")
+                );
                 dropOrderService.cancelDropOrder(response.getOrderId());
-            } catch (Exception e) {} finally {
+            } catch (Exception e) {
+                unexpectedExceptions.add(e);
+            } finally {
                 latch.countDown();
             }
         });
@@ -258,7 +268,10 @@ public class ConcurrencyAdversarialTest {
 
                     dropOrderService.placeDropOrder(testUserId, req);
                     successCount.incrementAndGet();
+                } catch (com.foodflow.exception.InvalidOrderException e) {
+                    // Expected when sold out
                 } catch (Exception e) {
+                    unexpectedExceptions.add(e);
                 } finally {
                     latch.countDown();
                 }
@@ -268,7 +281,19 @@ public class ConcurrencyAdversarialTest {
         latch.await();
         executorService.shutdown();
         
+        org.junit.jupiter.api.Assertions.assertTrue(unexpectedExceptions.isEmpty(), "Unexpected exceptions occurred: " + unexpectedExceptions);
+        
+        Order cancelledOrder = orderRepository.findById(response.getOrderId()).orElseThrow();
+        assertEquals(OrderStatus.CANCELLED, cancelledOrder.getStatus(), "The cancellation should have succeeded");
+        
         FoodDrop drop = dropRepository.findById(testDropId).orElseThrow();
         org.junit.jupiter.api.Assertions.assertTrue(drop.getCurrentOrders() >= 0 && drop.getCurrentOrders() <= drop.getMaxOrders(), "Orders bounds invalid");
+        assertEquals(successCount.get(), drop.getCurrentOrders(), "Final currentOrders should equal the number of successful concurrent bookings");
+        
+        long activeOrders = orderRepository.findAll().stream()
+            .filter(o -> o.getDrop() != null && o.getDrop().getDropId().equals(testDropId) && o.getStatus() != OrderStatus.CANCELLED)
+            .count();
+            
+        assertEquals(activeOrders, drop.getCurrentOrders(), "currentOrders must exactly match the number of active, non-cancelled persisted orders");
     }
 }

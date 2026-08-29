@@ -210,29 +210,30 @@ public class DropOrderServiceImpl implements DropOrderService {
         
         FoodDrop lockedDrop = null;
         if (initialDropRef != null) {
-            lockedDrop = dropRepository.findByIdWithLock(initialDropRef.getDropId()).orElse(null);
+            lockedDrop = dropRepository.findByIdWithLock(initialDropRef.getDropId())
+                .orElseThrow(() -> new ResourceNotFoundException("Drop not found"));
+        } else {
+            throw new InvalidOrderException("Order does not belong to a drop");
         }
         
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
         
         // Decrement drop order count
-        if (lockedDrop != null) {
-            lockedDrop.setCurrentOrders(Math.max(0, lockedDrop.getCurrentOrders() - 1));
-            dropRepository.save(lockedDrop);
+        lockedDrop.setCurrentOrders(Math.max(0, lockedDrop.getCurrentOrders() - 1));
+        dropRepository.save(lockedDrop);
             
-            // Restore item quantities
-            List<OrderItem> items = orderItemRepository.findByOrderOrderId(orderId);
-            // Sort to maintain deterministic locking order
-            items.sort(java.util.Comparator.comparing(item -> item.getMenuItem().getItemId()));
-            
-            for (OrderItem item : items) {
-                dropItemRepository.findByDropAndItemWithLock(lockedDrop.getDropId(), item.getMenuItem().getItemId())
-                    .ifPresent(dropItem -> {
-                        dropItem.setQuantityOrdered(Math.max(0, dropItem.getQuantityOrdered() - item.getQuantity()));
-                        dropItemRepository.save(dropItem);
-                    });
-            }
+        // Restore item quantities
+        List<OrderItem> items = orderItemRepository.findByOrderOrderId(orderId);
+        // Sort to maintain deterministic locking order
+        items.sort(java.util.Comparator.comparing(item -> item.getMenuItem().getItemId()));
+        
+        for (OrderItem item : items) {
+            dropItemRepository.findByDropAndItemWithLock(lockedDrop.getDropId(), item.getMenuItem().getItemId())
+                .ifPresent(dropItem -> {
+                    dropItem.setQuantityOrdered(Math.max(0, dropItem.getQuantityOrdered() - item.getQuantity()));
+                    dropItemRepository.save(dropItem);
+                });
         }
         
         paymentService.getPaymentByOrderId(orderId).ifPresent(payment -> {
