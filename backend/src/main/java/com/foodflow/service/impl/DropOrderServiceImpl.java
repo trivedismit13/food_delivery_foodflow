@@ -59,6 +59,16 @@ public class DropOrderServiceImpl implements DropOrderService {
         List<OrderItem> orderItems = new ArrayList<>();
         BigDecimal totalAmount = BigDecimal.ZERO;
         
+        java.util.Set<Long> uniqueItemIds = new java.util.HashSet<>();
+        for (PlaceDropOrderRequest.ItemRequest itemReq : request.getItems()) {
+            if (!uniqueItemIds.add(itemReq.getItemId())) {
+                throw new InvalidOrderException("Duplicate item ID in request: " + itemReq.getItemId());
+            }
+            if (itemReq.getQuantity() == null || itemReq.getQuantity() < 1) {
+                throw new InvalidOrderException("Item quantity must be at least 1");
+            }
+        }
+        
         List<PlaceDropOrderRequest.ItemRequest> sortedItems = new ArrayList<>(request.getItems());
         sortedItems.sort(java.util.Comparator.comparing(PlaceDropOrderRequest.ItemRequest::getItemId));
         
@@ -185,9 +195,9 @@ public class DropOrderServiceImpl implements DropOrderService {
             
         boolean isOwner = order.getUser().getUserId().equals(currentUser.getUserId());
         boolean isCreator = false;
-        FoodDrop drop = order.getDrop();
-        if (drop != null && drop.getCreator() != null && drop.getCreator().getOwner() != null) {
-            isCreator = drop.getCreator().getOwner().getUserId().equals(currentUser.getUserId());
+        FoodDrop initialDropRef = order.getDrop();
+        if (initialDropRef != null && initialDropRef.getCreator() != null && initialDropRef.getCreator().getOwner() != null) {
+            isCreator = initialDropRef.getCreator().getOwner().getUserId().equals(currentUser.getUserId());
         }
         
         if (!isOwner && !isCreator) {
@@ -198,21 +208,28 @@ public class DropOrderServiceImpl implements DropOrderService {
             throw new InvalidOrderException("Order cannot be cancelled in its current state");
         }
         
+        FoodDrop lockedDrop = null;
+        if (initialDropRef != null) {
+            lockedDrop = dropRepository.findByIdWithLock(initialDropRef.getDropId()).orElse(null);
+        }
+        
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
         
         // Decrement drop order count
-        if (drop != null) {
-            drop.setCurrentOrders(Math.max(0, drop.getCurrentOrders() - 1));
-            dropRepository.save(drop);
+        if (lockedDrop != null) {
+            lockedDrop.setCurrentOrders(Math.max(0, lockedDrop.getCurrentOrders() - 1));
+            dropRepository.save(lockedDrop);
             
             // Restore item quantities
             List<OrderItem> items = orderItemRepository.findByOrderOrderId(orderId);
+            // Sort to maintain deterministic locking order
+            items.sort(java.util.Comparator.comparing(item -> item.getMenuItem().getItemId()));
+            
             for (OrderItem item : items) {
-                dropItemRepository.findByDropAndItemWithLock(drop.getDropId(), item.getMenuItem().getItemId())
+                dropItemRepository.findByDropAndItemWithLock(lockedDrop.getDropId(), item.getMenuItem().getItemId())
                     .ifPresent(dropItem -> {
                         dropItem.setQuantityOrdered(Math.max(0, dropItem.getQuantityOrdered() - item.getQuantity()));
-                        dropItem.setQuantityAvailable(dropItem.getQuantityAvailable() + item.getQuantity());
                         dropItemRepository.save(dropItem);
                     });
             }

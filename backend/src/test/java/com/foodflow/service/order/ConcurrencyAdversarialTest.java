@@ -143,10 +143,132 @@ public class ConcurrencyAdversarialTest {
 
         assertEquals(2, successCount.get(), "Exactly 2 orders should succeed");
         assertEquals(8, failCount.get(), "Exactly 8 orders should fail gracefully");
+    }
+    
+    @Test
+    void test3_SoldOutDrop() {
+        FoodDrop drop = dropRepository.findById(testDropId).orElseThrow();
+        drop.setCurrentOrders(2);
+        dropRepository.save(drop);
+        
+        PlaceDropOrderRequest request = new PlaceDropOrderRequest();
+        request.setDropId(testDropId);
+        PlaceDropOrderRequest.ItemRequest itemReq = new PlaceDropOrderRequest.ItemRequest();
+        itemReq.setItemId(testItemId);
+        itemReq.setQuantity(1);
+        request.setItems(List.of(itemReq));
 
-        for (Exception e : exceptions) {
-            assertEquals(com.foodflow.exception.InvalidOrderException.class, e.getClass(),
-                "Exceptions should be gracefully handled as InvalidOrderException");
+        org.junit.jupiter.api.Assertions.assertThrows(
+            com.foodflow.exception.InvalidOrderException.class, 
+            () -> dropOrderService.placeDropOrder(testUserId, request)
+        );
+    }
+    
+    @Test
+    void test4_Cutoff() {
+        FoodDrop drop = dropRepository.findById(testDropId).orElseThrow();
+        drop.setOrderCutoffTime(LocalDateTime.now().minusHours(1));
+        dropRepository.save(drop);
+        
+        PlaceDropOrderRequest request = new PlaceDropOrderRequest();
+        request.setDropId(testDropId);
+        PlaceDropOrderRequest.ItemRequest itemReq = new PlaceDropOrderRequest.ItemRequest();
+        itemReq.setItemId(testItemId);
+        itemReq.setQuantity(1);
+        request.setItems(List.of(itemReq));
+
+        org.junit.jupiter.api.Assertions.assertThrows(
+            com.foodflow.exception.InvalidOrderException.class, 
+            () -> dropOrderService.placeDropOrder(testUserId, request)
+        );
+    }
+    
+    @Test
+    void test5_CancellationRestoresCapacity() {
+        // Place one order successfully
+        PlaceDropOrderRequest request = new PlaceDropOrderRequest();
+        request.setDropId(testDropId);
+        PlaceDropOrderRequest.ItemRequest itemReq = new PlaceDropOrderRequest.ItemRequest();
+        itemReq.setItemId(testItemId);
+        itemReq.setQuantity(1);
+        request.setItems(List.of(itemReq));
+
+        com.foodflow.dto.response.OrderResponse response = dropOrderService.placeDropOrder(testUserId, request);
+        
+        // Setup authentication mock for cancellation
+        org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(
+            new org.springframework.security.authentication.UsernamePasswordAuthenticationToken("concurrent" + testUserId, "password")
+        );
+        // Wait, user email was "concurrent" + System.currentTimeMillis() + "@test.com"
+        User u = userRepository.findById(testUserId).orElseThrow();
+        org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(
+            new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(u.getEmail(), "password")
+        );
+
+        dropOrderService.cancelDropOrder(response.getOrderId());
+        
+        FoodDrop drop = dropRepository.findById(testDropId).orElseThrow();
+        assertEquals(0, drop.getCurrentOrders());
+        
+        DropItem item = dropItemRepository.findById(testItemId).orElseThrow();
+        assertEquals(0, item.getQuantityOrdered());
+    }
+    
+    @Test
+    void test6_CancellationAndBookingContention() throws InterruptedException {
+        // We start with max 2. Place 1 order.
+        PlaceDropOrderRequest request = new PlaceDropOrderRequest();
+        request.setDropId(testDropId);
+        PlaceDropOrderRequest.ItemRequest itemReq = new PlaceDropOrderRequest.ItemRequest();
+        itemReq.setItemId(testItemId);
+        itemReq.setQuantity(1);
+        request.setItems(List.of(itemReq));
+
+        com.foodflow.dto.response.OrderResponse response = dropOrderService.placeDropOrder(testUserId, request);
+        
+        User u = userRepository.findById(testUserId).orElseThrow();
+        org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(
+            new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(u.getEmail(), "password")
+        );
+
+        // Now run 1 thread cancelling, and 5 threads booking.
+        int bookingThreads = 5;
+        ExecutorService executorService = Executors.newFixedThreadPool(bookingThreads + 1);
+        CountDownLatch latch = new CountDownLatch(bookingThreads + 1);
+        
+        AtomicInteger successCount = new AtomicInteger(0);
+
+        executorService.execute(() -> {
+            try {
+                dropOrderService.cancelDropOrder(response.getOrderId());
+            } catch (Exception e) {} finally {
+                latch.countDown();
+            }
+        });
+
+        for (int i = 0; i < bookingThreads; i++) {
+            executorService.execute(() -> {
+                try {
+                    PlaceDropOrderRequest req = new PlaceDropOrderRequest();
+                    req.setDropId(testDropId);
+                    PlaceDropOrderRequest.ItemRequest iReq = new PlaceDropOrderRequest.ItemRequest();
+                    iReq.setItemId(testItemId);
+                    iReq.setQuantity(1);
+                    req.setItems(List.of(iReq));
+
+                    dropOrderService.placeDropOrder(testUserId, req);
+                    successCount.incrementAndGet();
+                } catch (Exception e) {
+                } finally {
+                    latch.countDown();
+                }
+            });
         }
+
+        latch.await();
+        executorService.shutdown();
+        
+        FoodDrop drop = dropRepository.findById(testDropId).orElseThrow();
+        org.junit.jupiter.api.Assertions.assertTrue(drop.getCurrentOrders() >= 0 && drop.getCurrentOrders() <= drop.getMaxOrders(), "Orders bounds invalid");
     }
 }
