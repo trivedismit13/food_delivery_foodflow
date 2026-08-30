@@ -216,6 +216,14 @@ public class DropOrderServiceImpl implements DropOrderService {
             throw new InvalidOrderException("Order does not belong to a drop");
         }
         
+        // Re-fetch the order after acquiring the Drop lock to ensure it hasn't been modified concurrently
+        order = orderRepository.findById(orderId)
+            .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+            
+        if (order.getStatus() != OrderStatus.PLACED) {
+            throw new InvalidOrderException("Order cannot be cancelled in its current state");
+        }
+        
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
         

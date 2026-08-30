@@ -78,7 +78,6 @@ public class ConcurrencyAdversarialTest {
         drop.setMaxOrders(2);
         drop.setCurrentOrders(0);
         drop.setStatus(FoodDrop.DropStatus.OPEN);
-        // drop.setIsDeliveryAvailable(true); // obsolete
         drop = dropRepository.save(drop);
         testDropId = drop.getDropId();
 
@@ -118,7 +117,6 @@ public class ConcurrencyAdversarialTest {
                 try {
                     PlaceDropOrderRequest request = new PlaceDropOrderRequest();
                     request.setDropId(testDropId);
-                    // request.setPaymentMethod("PAY_AT_PICKUP"); // obsolete
                     
                     PlaceDropOrderRequest.ItemRequest itemReq = new PlaceDropOrderRequest.ItemRequest();
                     itemReq.setItemId(testItemId);
@@ -295,5 +293,67 @@ public class ConcurrencyAdversarialTest {
             .count();
             
         assertEquals(activeOrders, drop.getCurrentOrders(), "currentOrders must exactly match the number of active, non-cancelled persisted orders");
+    }
+
+    @Test
+    void test7_ConcurrentCancellationOfSameOrder() throws InterruptedException {
+        // We start with max 2, place 1 order.
+        PlaceDropOrderRequest request = new PlaceDropOrderRequest();
+        request.setDropId(testDropId);
+        PlaceDropOrderRequest.ItemRequest itemReq = new PlaceDropOrderRequest.ItemRequest();
+        itemReq.setItemId(testItemId);
+        itemReq.setQuantity(1);
+        request.setItems(List.of(itemReq));
+
+        com.foodflow.dto.response.OrderResponse response = dropOrderService.placeDropOrder(testUserId, request);
+
+        int cancelThreads = 2;
+        ExecutorService executorService = Executors.newFixedThreadPool(cancelThreads);
+        CountDownLatch startLatch = new CountDownLatch(1);
+        CountDownLatch doneLatch = new CountDownLatch(cancelThreads);
+
+        AtomicInteger successfulCancellations = new AtomicInteger(0);
+        AtomicInteger expectedBusinessFailures = new AtomicInteger(0);
+        List<Exception> unexpectedFailures = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+        User u = userRepository.findById(testUserId).orElseThrow();
+
+        for (int i = 0; i < cancelThreads; i++) {
+            executorService.execute(() -> {
+                try {
+                    startLatch.await(); // Synchronize start
+                    
+                    org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(
+                        new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(u.getEmail(), "password")
+                    );
+                    
+                    dropOrderService.cancelDropOrder(response.getOrderId());
+                    successfulCancellations.incrementAndGet();
+                } catch (com.foodflow.exception.InvalidOrderException e) {
+                    expectedBusinessFailures.incrementAndGet();
+                } catch (Exception e) {
+                    unexpectedFailures.add(e);
+                } finally {
+                    doneLatch.countDown();
+                }
+            });
+        }
+
+        startLatch.countDown(); // Let them run concurrently
+        doneLatch.await();
+        executorService.shutdown();
+
+        assertEquals(1, successfulCancellations.get(), "Exactly one cancellation must succeed");
+        assertEquals(1, expectedBusinessFailures.get(), "Exactly one cancellation must fail as already cancelled");
+        org.junit.jupiter.api.Assertions.assertTrue(unexpectedFailures.isEmpty(), "Unexpected exceptions: " + unexpectedFailures);
+
+        Order cancelledOrder = orderRepository.findById(response.getOrderId()).orElseThrow();
+        assertEquals(OrderStatus.CANCELLED, cancelledOrder.getStatus());
+
+        FoodDrop drop = dropRepository.findById(testDropId).orElseThrow();
+        assertEquals(0, drop.getCurrentOrders());
+
+        DropItem dropItem = dropItemRepository.findById(testItemId).orElseThrow();
+        assertEquals(0, dropItem.getQuantityOrdered());
     }
 }
