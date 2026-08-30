@@ -156,6 +156,11 @@ export default function Navbar() {
               <Link to="/creators" className="text-sm font-medium text-stone-600 hover:text-orange-500 transition-colors">
                 All Creators
               </Link>
+              {isAuthenticated && isCustomer() && (
+                <Link to="/reels" className="text-sm font-medium text-stone-600 hover:text-orange-500 transition-colors">
+                  Reels
+                </Link>
+              )}
             </div>
           </div>
 
@@ -226,6 +231,7 @@ export default function Navbar() {
                     <>
                       <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">Home</Link>
                       <Link to="/drops" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">Discovery Feed</Link>
+                      <Link to="/reels" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">Reels</Link>
                       <Link to="/dashboard/customer" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">My Orders</Link>
                       <Link to="/notifications" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium flex items-center justify-between">
                         Notifications

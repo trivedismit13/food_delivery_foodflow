@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { apiClient as api } from '@/lib/api';
 import { Reel, ReelRequest } from '@/types/reel';
 import { PageResponse } from '@/types/api';
@@ -23,6 +23,22 @@ export const useDiscoveryReels = (page: number = 0) => {
     },
   });
 };
+
+export const useDiscoveryReelsInfinite = () => {
+  return useInfiniteQuery({
+    queryKey: ['reels', 'discovery', 'infinite'],
+    queryFn: async ({ pageParam = 0 }) => {
+      const response = await api.get<{ data: PageResponse<Reel> }>(`/reels?page=${pageParam}&size=10`);
+      return response.data.data;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.last) return undefined;
+      return lastPage.number + 1;
+    },
+  });
+};
+
 
 export const useCreateReel = (restaurantId: number) => {
   const queryClient = useQueryClient();

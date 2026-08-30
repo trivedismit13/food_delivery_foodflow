@@ -34,6 +34,7 @@ import OrderTrackingPage from './pages/OrderTrackingPage'
 import NotificationsPage from './pages/NotificationsPage'
 import NotFoundPage from './pages/NotFoundPage'
 import CartPage from './pages/CartPage'
+import CustomerReelsPage from './pages/reels/CustomerReelsPage'
 
 // Dashboards
 import CustomerDashboardPage from './pages/dashboard/CustomerDashboardPage'
@@ -110,6 +111,13 @@ function App() {
           <Route path="/dashboard/customer" element={
             <ProtectedRoute allowedRoles={['CUSTOMER']}>
               <CustomerDashboardPage />
+            </ProtectedRoute>
+          } />
+          
+          {/* Customer Reels */}
+          <Route path="/reels" element={
+            <ProtectedRoute allowedRoles={['CUSTOMER']}>
+              <CustomerReelsPage />
             </ProtectedRoute>
           } />
           
