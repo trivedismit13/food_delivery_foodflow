@@ -3,7 +3,7 @@ package com.foodflow.service;
 import com.foodflow.dto.request.ReelRequest;
 import com.foodflow.exception.InvalidRequestException;
 import com.foodflow.exception.ResourceNotFoundException;
-import com.foodflow.model.Reel;
+import com.foodflow.dto.response.ReelResponse;
 import com.foodflow.model.Restaurant;
 import com.foodflow.model.User;
 import com.foodflow.repository.ReelRepository;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,6 +46,9 @@ public class ReelServiceTest {
 
     @Autowired
     private ReelRepository reelRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     private User sellerA;
     private User sellerB;
@@ -115,12 +119,12 @@ public class ReelServiceTest {
         request.setTitle("My awesome reel");
         request.setMediaUrl("http://example.com/reel.mp4");
 
-        Reel created = reelService.uploadReel(restaurantA.getRestaurantId(), request);
+        ReelResponse created = reelService.uploadReel(restaurantA.getRestaurantId(), request);
 
         assertNotNull(created.getReelId());
         assertEquals("My awesome reel", created.getTitle());
         assertEquals("http://example.com/reel.mp4", created.getMediaUrl());
-        assertEquals(restaurantA.getRestaurantId(), created.getRestaurant().getRestaurantId());
+        assertEquals(restaurantA.getRestaurantId(), created.getRestaurantId());
     }
 
     @Test
@@ -148,7 +152,7 @@ public class ReelServiceTest {
             reelService.uploadReel(restaurantA.getRestaurantId(), request);
         });
 
-        assertEquals("You do not own this restaurant profile.", exception.getMessage());
+        assertEquals("Only sellers can upload reels.", exception.getMessage());
     }
 
     @Test
@@ -171,18 +175,22 @@ public class ReelServiceTest {
         ReelRequest req1 = new ReelRequest();
         req1.setTitle("First");
         req1.setMediaUrl("http://example.com/1.mp4");
-        reelService.uploadReel(restaurantA.getRestaurantId(), req1);
+        ReelResponse r1 = reelService.uploadReel(restaurantA.getRestaurantId(), req1);
 
         ReelRequest req2 = new ReelRequest();
         req2.setTitle("Second");
         req2.setMediaUrl("http://example.com/2.mp4");
-        reelService.uploadReel(restaurantA.getRestaurantId(), req2);
+        ReelResponse r2 = reelService.uploadReel(restaurantA.getRestaurantId(), req2);
 
-        Page<Reel> reels = reelService.getRestaurantReels(restaurantA.getRestaurantId(), PageRequest.of(0, 10));
+        // Manually update created_at to be deterministic and far in the future
+        jdbcTemplate.update("UPDATE reels SET created_at = '2037-01-01 10:00:00' WHERE reel_id = ?", r1.getReelId());
+        jdbcTemplate.update("UPDATE reels SET created_at = '2037-01-01 11:00:00' WHERE reel_id = ?", r2.getReelId());
+
+        Page<ReelResponse> reels = reelService.getRestaurantReels(restaurantA.getRestaurantId(), PageRequest.of(0, 10));
         
-        // Since we don't have simulated delays, they might have same timestamp. 
-        // But the query works.
         assertTrue(reels.getTotalElements() >= 2);
+        assertEquals("Second", reels.getContent().get(0).getTitle(), "Newer reel must appear first");
+        assertEquals("First", reels.getContent().get(1).getTitle(), "Older reel must appear second");
     }
     
     @Test
@@ -191,10 +199,20 @@ public class ReelServiceTest {
         ReelRequest req1 = new ReelRequest();
         req1.setTitle("First");
         req1.setMediaUrl("http://example.com/1.mp4");
-        reelService.uploadReel(restaurantA.getRestaurantId(), req1);
+        ReelResponse r1 = reelService.uploadReel(restaurantA.getRestaurantId(), req1);
         
-        Page<Reel> reels = reelService.getDiscoveryFeed(PageRequest.of(0, 10));
-        assertTrue(reels.getTotalElements() >= 1);
+        ReelRequest req2 = new ReelRequest();
+        req2.setTitle("Second");
+        req2.setMediaUrl("http://example.com/2.mp4");
+        ReelResponse r2 = reelService.uploadReel(restaurantA.getRestaurantId(), req2);
+
+        jdbcTemplate.update("UPDATE reels SET created_at = '2037-01-01 10:00:00' WHERE reel_id = ?", r1.getReelId());
+        jdbcTemplate.update("UPDATE reels SET created_at = '2037-01-01 11:00:00' WHERE reel_id = ?", r2.getReelId());
+
+        Page<ReelResponse> reels = reelService.getDiscoveryFeed(PageRequest.of(0, 10));
+        assertTrue(reels.getTotalElements() >= 2);
+        assertEquals("Second", reels.getContent().get(0).getTitle(), "Newer reel must appear first");
+        assertEquals("First", reels.getContent().get(1).getTitle(), "Older reel must appear second");
     }
     
     @Test
