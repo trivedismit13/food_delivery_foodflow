@@ -5,8 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ReelService {
-    Reel uploadReel(Reel reel);
+    Reel uploadReel(Long restaurantId, com.foodflow.dto.request.ReelRequest request);
     Page<Reel> getRestaurantReels(Long restaurantId, Pageable pageable);
     Page<Reel> getDiscoveryFeed(Pageable pageable);
-    void incrementViewCount(Long reelId);
 }

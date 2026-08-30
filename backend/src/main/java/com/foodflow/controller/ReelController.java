@@ -22,13 +22,7 @@ public class ReelController {
 
     @PostMapping("/restaurants/{id}/reels")
     public ResponseEntity<ApiResponse<Reel>> uploadReel(@PathVariable Long id, @Valid @RequestBody ReelRequest request) {
-        Reel reel = new Reel();
-        Restaurant restaurant = new Restaurant();
-        restaurant.setRestaurantId(id);
-        reel.setRestaurant(restaurant);
-        reel.setTitle(request.getTitle());
-        reel.setMediaUrl(request.getMediaUrl());
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(reelService.uploadReel(reel)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(reelService.uploadReel(id, request)));
     }
 
     @GetMapping("/restaurants/{id}/reels")
@@ -41,9 +35,5 @@ public class ReelController {
         return ResponseEntity.ok(ApiResponse.success(reelService.getDiscoveryFeed(pageable)));
     }
 
-    @PutMapping("/reels/{id}/view")
-    public ResponseEntity<ApiResponse<Void>> incrementViewCount(@PathVariable Long id) {
-        reelService.incrementViewCount(id);
-        return ResponseEntity.ok(ApiResponse.success(null));
-    }
+
 }

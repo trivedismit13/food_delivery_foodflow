@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReelRepository extends JpaRepository<Reel, Long> {
-    Page<Reel> findByRestaurantRestaurantId(Long restaurantId, Pageable pageable);
+    Page<Reel> findByRestaurantRestaurantIdOrderByCreatedAtDesc(Long restaurantId, Pageable pageable);
+    Page<Reel> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }

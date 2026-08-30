@@ -9,5 +9,6 @@ public class ReelRequest {
     private String title;
 
     @NotBlank(message = "Media URL is required")
+    @org.hibernate.validator.constraints.URL(message = "Media URL must be a valid URL")
     private String mediaUrl;
 }

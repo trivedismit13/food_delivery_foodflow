@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Star, Loader2, Bell, Check } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Star, Loader2, Bell, Check, Play } from 'lucide-react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
@@ -14,7 +14,9 @@ import {
   useFollowStatus 
 } from '@/queries/creators';
 import { useMenu } from '@/queries/menu';
+import { useRestaurantReels } from '@/queries/reels';
 import type { MenuItemResponse } from '@/types/menu';
+import type { Reel } from '@/types/reel';
 
 export default function CreatorProfilePage() {
   const { creatorId } = useParams();
@@ -28,10 +30,15 @@ export default function CreatorProfilePage() {
   const { data: creator, isLoading } = useCreatorById(id);
   const { data: menuItems = [], isLoading: isLoadingMenu } = useMenu(id);
   const { data: ratings, isLoading: isLoadingRatings } = useCreatorRatings(id);
+  const { data: reels, isLoading: isLoadingReels } = useRestaurantReels(id);
   const { data: isFollowing, isLoading: isLoadingFollowStatus } = useFollowStatus(user ? id : undefined);
   
   const followMutation = useFollowCreator();
   const unfollowMutation = useUnfollowCreator();
+
+  const isVideo = (url: string) => {
+    return url.match(/\.(mp4|webm|ogg)$/i) || url.includes('video');
+  };
 
   if (isLoading) {
     return (
@@ -268,9 +275,41 @@ export default function CreatorProfilePage() {
 
         {/* REELS TAB */}
         {activeTab === 'Reels' && (
-          <div className="bg-white rounded-2xl p-12 text-center border border-stone-100">
-            <h3 className="text-lg font-semibold text-stone-800 mb-2">No reels yet</h3>
-            <p className="text-stone-500">Check back later for behind-the-scenes content.</p>
+          <div>
+            {isLoadingReels ? (
+               <Loader2 className="animate-spin text-orange-500 mx-auto" />
+            ) : !reels?.content || reels.content.length === 0 ? (
+              <div className="bg-white rounded-2xl p-12 text-center border border-stone-100">
+                <h3 className="text-lg font-semibold text-stone-800 mb-2">No reels yet</h3>
+                <p className="text-stone-500">Check back later for behind-the-scenes content.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {reels.content.map((reel: Reel) => (
+                  <div key={reel.reelId} className="relative aspect-[9/16] bg-stone-100 rounded-2xl overflow-hidden group cursor-pointer border border-stone-200">
+                    {isVideo(reel.mediaUrl) ? (
+                      <video 
+                        src={reel.mediaUrl} 
+                        controls
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <img 
+                        src={reel.mediaUrl} 
+                        alt={reel.title}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-100 transition-opacity">
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <p className="text-white font-semibold text-sm line-clamp-2 shadow-sm">{reel.title}</p>
+                        <p className="text-stone-300 text-xs mt-1 shadow-sm">{new Date(reel.createdAt).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
