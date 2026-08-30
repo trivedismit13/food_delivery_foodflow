@@ -17,7 +17,7 @@ public interface DropItemRepository extends JpaRepository<DropItem, Long> {
     // Find specific item in a drop with pessimistic lock
     // Used during order placement to prevent oversell
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT di FROM DropItem di WHERE di.drop.dropId = :dropId AND di.dropItemId = :itemId")
+    @Query("SELECT di FROM DropItem di WHERE di.drop.dropId = :dropId AND di.menuItem.itemId = :itemId")
     Optional<DropItem> findByDropAndItemWithLock(
         @Param("dropId") Long dropId, 
         @Param("itemId") Long itemId);

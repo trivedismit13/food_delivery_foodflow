@@ -45,12 +45,16 @@ public class ConcurrencyAdversarialTest {
     @Autowired
     private MenuItemRepository menuItemRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     @MockBean
     private PaymentService paymentService;
 
     private Long testDropId;
-    private Long testUserId;
     private Long testItemId;
+    private Long testDropItemId;
+    private Long testUserId;
 
     @BeforeEach
     void setup() {
@@ -96,7 +100,8 @@ public class ConcurrencyAdversarialTest {
         dropItem.setDropPrice(BigDecimal.TEN);
         dropItem.setQuantityOrdered(0);
         dropItem = dropItemRepository.save(dropItem);
-        testItemId = dropItem.getDropItemId();
+        testItemId = menuItem.getItemId();
+        testDropItemId = dropItem.getDropItemId();
         
         when(paymentService.processPayment(any())).thenReturn(new Payment());
     }
@@ -211,7 +216,7 @@ public class ConcurrencyAdversarialTest {
         FoodDrop drop = dropRepository.findById(testDropId).orElseThrow();
         assertEquals(0, drop.getCurrentOrders());
         
-        DropItem item = dropItemRepository.findById(testItemId).orElseThrow();
+        DropItem item = dropItemRepository.findById(testDropItemId).orElseThrow();
         assertEquals(0, item.getQuantityOrdered());
     }
     
@@ -292,7 +297,7 @@ public class ConcurrencyAdversarialTest {
             .filter(o -> o.getDrop() != null && o.getDrop().getDropId().equals(testDropId) && o.getStatus() != OrderStatus.CANCELLED)
             .count();
             
-        assertEquals(activeOrders, drop.getCurrentOrders(), "currentOrders must exactly match the number of active, non-cancelled persisted orders");
+        assertEquals(activeOrders, (long) drop.getCurrentOrders(), "currentOrders must exactly match the number of active, non-cancelled persisted orders");
     }
 
     @Test
@@ -353,7 +358,7 @@ public class ConcurrencyAdversarialTest {
         FoodDrop drop = dropRepository.findById(testDropId).orElseThrow();
         assertEquals(0, drop.getCurrentOrders());
 
-        DropItem dropItem = dropItemRepository.findById(testItemId).orElseThrow();
+        DropItem dropItem = dropItemRepository.findById(testDropItemId).orElseThrow();
         assertEquals(0, dropItem.getQuantityOrdered());
     }
 }

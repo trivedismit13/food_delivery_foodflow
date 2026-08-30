@@ -213,13 +213,16 @@ public class DropOrderServiceImpl implements DropOrderService {
         if (initialDropRef != null) {
             lockedDrop = dropRepository.findByIdWithLock(initialDropRef.getDropId())
                 .orElseThrow(() -> new ResourceNotFoundException("Drop not found"));
+            // Refresh the locked Drop to ensure its version and state in the L1 cache 
+            // strictly match the database state after acquiring the lock.
+            entityManager.refresh(lockedDrop, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
         } else {
             throw new InvalidOrderException("Order does not belong to a drop");
         }
         
         // Re-fetch the order after acquiring the Drop lock to ensure it hasn't been modified concurrently
-        // Force a genuine database refresh to bypass the L1 cache
-        entityManager.refresh(order);
+        // Force a genuine database refresh with PESSIMISTIC_WRITE to bypass MySQL's REPEATABLE_READ snapshot
+        entityManager.refresh(order, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
             
         if (order.getStatus() != OrderStatus.PLACED) {
             throw new InvalidOrderException("Order cannot be cancelled in its current state");

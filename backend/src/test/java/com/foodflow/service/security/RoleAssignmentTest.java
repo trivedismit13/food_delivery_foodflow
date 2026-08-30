@@ -54,10 +54,8 @@ public class RoleAssignmentTest {
         request.setPhone("0987654321");
         request.setPassword("password123");
         request.setCreatorName("Test Kitchen");
-        request.setCreatorType("Home Kitchen");
         request.setCity("Test City");
-        request.setCuisine("Test Cuisine");
-        request.setPickupAddress("Test Address");
+        request.setWhatDoYouMake("Test Cuisine");
 
         AuthResponse response = authService.registerCreator(request);
 
