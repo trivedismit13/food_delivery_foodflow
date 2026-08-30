@@ -31,6 +31,7 @@ public class DropOrderServiceImpl implements DropOrderService {
     private final PaymentService paymentService;
     private final RestaurantRepository restaurantRepository;
     private final org.springframework.context.ApplicationEventPublisher eventPublisher;
+    private final jakarta.persistence.EntityManager entityManager;
 
     @Override
     @Transactional
@@ -217,8 +218,8 @@ public class DropOrderServiceImpl implements DropOrderService {
         }
         
         // Re-fetch the order after acquiring the Drop lock to ensure it hasn't been modified concurrently
-        order = orderRepository.findById(orderId)
-            .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        // Force a genuine database refresh to bypass the L1 cache
+        entityManager.refresh(order);
             
         if (order.getStatus() != OrderStatus.PLACED) {
             throw new InvalidOrderException("Order cannot be cancelled in its current state");
