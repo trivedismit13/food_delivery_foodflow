@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Star, Clock, MapPin, Loader2, Minus, Plus, CreditCard, Wallet, Banknote, AlertCircle, CheckCircle2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
-import { useDropRealtime } from '@/hooks/useDropRealtime';
 import { useDropById, usePlaceDropOrder } from '@/queries/drops';
 import type { PaymentMethod } from '@/types/order';
 
@@ -25,12 +24,6 @@ export default function DropDetailPage() {
   type CheckoutState = 'idle' | 'loading' | 'success' | 'error' | 'sold_out';
   const [checkoutState, setCheckoutState] = useState<CheckoutState>('idle');
   const [checkoutError, setCheckoutError] = useState<string>('');
-
-  useDropRealtime(dropId ? Number(dropId) : undefined, (update) => {
-    if (update.isSoldOut) {
-      toast.error('This drop just sold out!')
-    }
-  });
 
   if (isDropLoading || !drop) {
     return (
