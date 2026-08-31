@@ -51,22 +51,6 @@ public interface FoodDropRepository extends JpaRepository<FoodDrop, Long>, JpaSp
         """)
     org.springframework.data.domain.Page<FoodDrop> findDropsFromFollowedCreators(@Param("userId") Long userId, org.springframework.data.domain.Pageable pageable);
 
-    // Drops closing in the next N hours (for CLOSING_SOON notifications)
-    @Query(value = """
-        SELECT * FROM food_drops
-        WHERE status = 'OPEN'
-        AND order_cutoff_time BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL :hours HOUR)
-        """, nativeQuery = true)
-    List<FoodDrop> findDropsClosingSoon(@Param("hours") int hours);
-
-    // Drops that passed cutoff but are still OPEN (need status update)
-    @Query(value = """
-        SELECT * FROM food_drops
-        WHERE status = 'OPEN'
-        AND order_cutoff_time <= NOW()
-        """, nativeQuery = true)
-    List<FoodDrop> findDropsPastCutoff();
-
     @Query(value = """
         SELECT * FROM food_drops
         WHERE creator_id = :creatorId

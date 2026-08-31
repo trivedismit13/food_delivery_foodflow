@@ -12,6 +12,9 @@ import com.foodflow.repository.FoodDropRepository;
 import com.foodflow.repository.MenuItemRepository;
 import com.foodflow.repository.OrderRepository;
 import com.foodflow.repository.RestaurantRepository;
+import com.foodflow.service.security.CreatorAuthorizationService;
+import com.foodflow.exception.InvalidRequestException;
+import org.springframework.security.access.AccessDeniedException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -49,6 +52,9 @@ class DropServiceImplTest {
 
     @Mock
     private OrderRepository orderRepository;
+
+    @Mock
+    private CreatorAuthorizationService authorizationService;
 
     @InjectMocks
     private DropServiceImpl dropService;
@@ -100,6 +106,56 @@ class DropServiceImplTest {
         assertDoesNotThrow(() -> {
             FoodDropResponse response = dropService.createDrop(creatorUserId, request);
             assertNotNull(response);
+        });
+    }
+
+    @Test
+    void manualTransitionWorks() {
+        Long dropId = 1L;
+        FoodDrop drop = new FoodDrop();
+        drop.setDropId(dropId);
+        drop.setStatus(FoodDrop.DropStatus.ANNOUNCED);
+        drop.setPickupLocation("Gate");
+        drop.setPickupTime("12 PM");
+        drop.setMaxOrders(10);
+        drop.setCurrentOrders(0);
+        
+        Restaurant restaurant = new Restaurant();
+        restaurant.setRestaurantId(2L);
+        drop.setCreator(restaurant);
+        drop.setTitle("Title");
+        drop.setOrderCutoffTime(LocalDateTime.now().plusHours(1));
+
+        org.mockito.Mockito.doNothing().when(authorizationService).assertCreatorOwnsDrop(dropId);
+        when(dropRepository.findById(dropId)).thenReturn(Optional.of(drop));
+        when(dropRepository.save(any(FoodDrop.class))).thenAnswer(i -> i.getArgument(0));
+
+        FoodDropResponse response = dropService.updateDropStatus(dropId, FoodDrop.DropStatus.OPEN);
+        org.junit.jupiter.api.Assertions.assertEquals(FoodDrop.DropStatus.OPEN.name(), response.getStatus());
+    }
+
+    @Test
+    void invalidTransitionFails() {
+        Long dropId = 1L;
+        FoodDrop drop = new FoodDrop();
+        drop.setDropId(dropId);
+        drop.setStatus(FoodDrop.DropStatus.COMPLETED);
+
+        org.mockito.Mockito.doNothing().when(authorizationService).assertCreatorOwnsDrop(dropId);
+        when(dropRepository.findById(dropId)).thenReturn(Optional.of(drop));
+
+        org.junit.jupiter.api.Assertions.assertThrows(InvalidRequestException.class, () -> {
+            dropService.updateDropStatus(dropId, FoodDrop.DropStatus.OPEN);
+        });
+    }
+
+    @Test
+    void unauthorizedTransitionFails() {
+        Long dropId = 1L;
+        org.mockito.Mockito.doThrow(new AccessDeniedException("Not yours")).when(authorizationService).assertCreatorOwnsDrop(dropId);
+
+        org.junit.jupiter.api.Assertions.assertThrows(AccessDeniedException.class, () -> {
+            dropService.updateDropStatus(dropId, FoodDrop.DropStatus.OPEN);
         });
     }
 }
