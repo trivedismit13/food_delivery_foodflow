@@ -8,7 +8,8 @@ export type OrderStatus =
 
 export type OrderType = 'REGULAR' | 'DROP_PREORDER';
 
-export { type PaymentMethod, type PaymentStatus, type PaymentResponse } from './payment';
+import type { PaymentMethod, PaymentStatus, PaymentResponse } from './payment';
+export type { PaymentMethod, PaymentStatus, PaymentResponse };
 
 export interface OrderResponse {
   orderId: number;

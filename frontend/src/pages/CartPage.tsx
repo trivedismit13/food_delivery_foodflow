@@ -63,7 +63,7 @@ export default function CartPage() {
                   <li key={item.id} className="p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-stone-50/50 transition-colors">
                     <div className="flex-1">
                       <h3 className="font-semibold text-lg text-stone-800">{item.name}</h3>
-                      <p className="text-sm text-orange-500 font-medium">${item.price.toFixed(2)} each</p>
+                      <p className="text-sm text-orange-500 font-medium">₹{item.price.toFixed(2)} each</p>
                     </div>
                     
                     <div className="flex items-center gap-6">
@@ -84,7 +84,7 @@ export default function CartPage() {
                       </div>
                       
                       <div className="font-semibold text-lg text-stone-800 w-20 text-right">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        ₹{(item.price * item.quantity).toFixed(2)}
                       </div>
                       
                       <button 
@@ -108,7 +108,7 @@ export default function CartPage() {
               <div className="space-y-4 mb-6 text-stone-600">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-medium text-stone-800">${getTotal().toFixed(2)}</span>
+                  <span className="font-medium text-stone-800">₹{getTotal().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Taxes & Fees</span>
@@ -119,8 +119,16 @@ export default function CartPage() {
                 
                 <div className="flex justify-between text-lg font-bold text-stone-900">
                   <span>Total</span>
-                  <span>${getTotal().toFixed(2)}</span>
+                  <span>₹{getTotal().toFixed(2)}</span>
                 </div>
+              </div>
+
+              <div className="bg-stone-50 rounded-xl p-4 mb-6 border border-stone-200">
+                <h3 className="font-semibold text-stone-800 mb-1">Payment Method</h3>
+                <p className="text-brand-600 font-bold mb-2">Cash — Pay at Pickup</p>
+                <p className="text-xs text-stone-500">
+                  No online payment is required. Pay when you collect your food.
+                </p>
               </div>
               
               <button 
