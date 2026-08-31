@@ -12,6 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 import java.util.Optional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.AccessDeniedException;
+import com.foodflow.model.User;
+import com.foodflow.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -19,10 +24,25 @@ public class PaymentServiceImpl implements PaymentService {
     
     private final PaymentRepository paymentRepository;
     private final CreatorAuthorizationService authorizationService;
+    private final UserRepository userRepository;
 
     @Override
     public Optional<Payment> getPaymentByOrderId(Long orderId) {
-        return paymentRepository.findByOrderOrderId(orderId);
+        Payment payment = paymentRepository.findByOrderOrderId(orderId).orElse(null);
+        if (payment != null) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            boolean isAdmin = auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+            if (!isAdmin) {
+                User user = userRepository.findByEmail(auth.getName())
+                    .orElseThrow(() -> new AccessDeniedException("User not found"));
+                boolean isCustomer = payment.getOrder().getUser().getUserId().equals(user.getUserId());
+                boolean isSeller = payment.getOrder().getRestaurant().getOwner().getUserId().equals(user.getUserId());
+                if (!isCustomer && !isSeller) {
+                    throw new AccessDeniedException("Not authorized to view this payment");
+                }
+            }
+        }
+        return Optional.ofNullable(payment);
     }
 
     @Override
@@ -32,6 +52,12 @@ public class PaymentServiceImpl implements PaymentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
 
         authorizationService.assertCreatorOwnsOrderRestaurant(payment.getOrder().getOrderId());
+        
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isSeller = auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SELLER"));
+        if (!isSeller) {
+            throw new AccessDeniedException("Only a SELLER can collect payments");
+        }
 
         if (payment.getStatus() == PaymentStatus.COLLECTED) {
             return payment; // Idempotent

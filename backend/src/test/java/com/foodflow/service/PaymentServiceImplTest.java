@@ -19,6 +19,15 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import java.util.Collections;
+import com.foodflow.repository.UserRepository;
+
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceImplTest {
 
@@ -28,8 +37,27 @@ class PaymentServiceImplTest {
     @Mock
     private CreatorAuthorizationService authorizationService;
 
+    @Mock
+    private UserRepository userRepository;
+
     @InjectMocks
     private PaymentServiceImpl paymentService;
+
+    @BeforeEach
+    void setUp() {
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        lenient().when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        
+        org.springframework.security.core.GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_SELLER");
+        lenient().when(authentication.getAuthorities()).thenAnswer(invocation -> Collections.singleton(authority));
+    }
+
+    @AfterEach
+    void tearDown() {
+        SecurityContextHolder.clearContext();
+    }
 
     @Test
     void markPaymentCollected_Success() {

@@ -1,13 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient as api } from '@/lib/api';
-import type { PaymentStatus } from '@/types/api';
+import type { PaymentStatus, PaymentResponse } from '@/types/order';
 
-export function usePaymentStatus(orderId: number) {
+export function usePaymentByOrder(orderId: number) {
   return useQuery({
-    queryKey: ['payment', 'status', orderId],
+    queryKey: ['payment', orderId],
     queryFn: async () => {
-      const { data } = await api.get<{ status: PaymentStatus }>(`/payments/${orderId}`);
-      return data.status;
+      const { data } = await api.get<{ data: PaymentResponse }>(`/payments/${orderId}`);
+      return data.data;
     },
     enabled: !!orderId,
   });

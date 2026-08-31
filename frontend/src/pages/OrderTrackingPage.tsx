@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import { useParams } from 'react-router-dom'
 import { useOrderById } from '@/queries/orders'
+import { usePaymentByOrder } from '@/queries/usePayments'
 import type { OrderStatus } from '@/types/api'
 import { useState } from 'react'
 import { RatingModal } from '@/components/ui/RatingModal'
@@ -18,6 +19,7 @@ const steps: { id: OrderStatus, label: string, time?: string }[] = [
 export default function OrderTrackingPage() {
   const { id } = useParams<{ id: string }>()
   const { data: order, isLoading, error } = useOrderById(Number(id))
+  const { data: payment, isLoading: isPaymentLoading } = usePaymentByOrder(Number(id))
   
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false)
   const [hasRatedLocal, setHasRatedLocal] = useState(false)
@@ -224,6 +226,29 @@ export default function OrderTrackingPage() {
                 ))}
               </ul>
             </div>
+            
+            {/* Payment Summary */}
+            {payment && (
+              <div className="bg-white rounded-2xl p-5 shadow-warm-sm border border-stone-100">
+                <h3 className="font-bold text-stone-800 mb-4 text-sm uppercase tracking-wider text-stone-500">Payment</h3>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-stone-700">Method</span>
+                    <span className="text-stone-800 font-medium">Pay at Pickup</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-stone-700">Status</span>
+                    <span className={cn("font-medium", payment.status === 'COLLECTED' ? 'text-green-600' : payment.status === 'CANCELLED' ? 'text-red-600' : 'text-amber-600')}>
+                      {payment.status === 'COLLECTED' ? 'Paid at Pickup' : payment.status === 'CANCELLED' ? 'Cancelled' : 'Pending'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between pt-3 border-t border-stone-100">
+                    <span className="text-stone-700 font-bold">Total</span>
+                    <span className="text-stone-800 font-bold">₹{payment.amount}</span>
+                  </div>
+                </div>
+              </div>
+            )}
             
           </div>
         </div>

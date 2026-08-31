@@ -8,9 +8,7 @@ export type OrderStatus =
 
 export type OrderType = 'REGULAR' | 'DROP_PREORDER';
 
-export type PaymentMethod = 'CASH';
-
-export type PaymentStatus = 'PENDING' | 'COLLECTED' | 'CANCELLED';
+export { type PaymentMethod, type PaymentStatus, type PaymentResponse } from './payment';
 
 export interface OrderResponse {
   orderId: number;
@@ -37,13 +35,7 @@ export interface OrderItemResponse {
   lineTotal: number;
 }
 
-export interface PaymentResponse {
-  paymentId: number;
-  method: PaymentMethod;
-  amount: number;
-  status: PaymentStatus;
-  paymentDate: string;
-}
+
 
 export interface PlaceDropOrderRequest {
   dropId: number;
