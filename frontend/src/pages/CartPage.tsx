@@ -25,7 +25,7 @@ export default function CartPage() {
           itemId: item.id,
           quantity: item.quantity,
         })),
-        paymentMethod: 'CARD',
+      // removed paymentMethod since it's hardcoded on backend
       },
       {
         onSuccess: (data) => {

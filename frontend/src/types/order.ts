@@ -8,9 +8,9 @@ export type OrderStatus =
 
 export type OrderType = 'REGULAR' | 'DROP_PREORDER';
 
-export type PaymentMethod = 'CARD' | 'WALLET' | 'COD' | 'UPI';
+export type PaymentMethod = 'CASH';
 
-export type PaymentStatus = 'SUCCESS' | 'FAILED' | 'PENDING';
+export type PaymentStatus = 'PENDING' | 'COLLECTED' | 'CANCELLED';
 
 export interface OrderResponse {
   orderId: number;
@@ -51,8 +51,6 @@ export interface PlaceDropOrderRequest {
     itemId: number;
     quantity: number;
   }[];
-  paymentMethod: PaymentMethod;
   pickupTime?: string;
   specialInstructions?: string;
-
 }

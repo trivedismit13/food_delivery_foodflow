@@ -153,12 +153,12 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
                    "LIMIT 1", nativeQuery = true)
     List<Object[]> findHighestRatedDish();
 
-    // 14. GET /api/analytics/orders/cancelled-with-failed-payment
+    // 14. GET /api/analytics/orders/uncollected-cancelled
     @Query(value = "SELECT o.order_id, o.total_amount, p.method " +
                    "FROM orders o " +
                    "JOIN payments p ON o.order_id = p.order_id " +
-                   "WHERE o.status = 'CANCELLED' AND p.status = 'FAILED'", nativeQuery = true)
-    List<Object[]> findCancelledOrdersWithFailedPayment();
+                   "WHERE o.status = 'CANCELLED' AND p.status = 'PENDING'", nativeQuery = true)
+    List<Object[]> findUncollectedCancelledOrders();
 
     // 15. Creator performance: which drops sold out fastest
     @Query(value = "SELECT " +

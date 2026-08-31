@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface PaymentService {
     Optional<Payment> getPaymentByOrderId(Long orderId);
-    Payment updatePaymentStatus(Long paymentId, PaymentStatus status);
-    Payment processPayment(Payment payment);
+    Payment markPaymentCollected(Long paymentId);
+    Payment cancelPayment(Long paymentId);
+    Payment createPayment(Payment payment);
 }

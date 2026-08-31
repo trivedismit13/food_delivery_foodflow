@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient as api } from '@/lib/api';
 import type { PaymentStatus } from '@/types/api';
 
@@ -10,5 +10,20 @@ export function usePaymentStatus(orderId: number) {
       return data.status;
     },
     enabled: !!orderId,
+  });
+}
+
+export function useCollectPayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (orderId: number) => {
+      const { data } = await api.put<{ data: any }>(`/payments/order/${orderId}/collect`);
+      return data.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['payment'] });
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['drop-orders'] });
+    }
   });
 }

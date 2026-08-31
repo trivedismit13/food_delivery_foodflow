@@ -9,7 +9,7 @@ import { Shield, Star, Clock, MapPin, Loader2, Minus, Plus, CreditCard, Wallet, 
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
 import { useDropById, usePlaceDropOrder } from '@/queries/drops';
-import type { PaymentMethod } from '@/types/order';
+
 
 export default function DropDetailPage() {
   const { dropId } = useParams();
@@ -103,7 +103,7 @@ export default function DropDetailPage() {
           itemId: Number(itemId),
           quantity
         })),
-        paymentMethod: 'CASH',
+        // paymentMethod: 'CASH',
         pickupTime: drop.pickupTime,
         specialInstructions: specialInstructions || undefined
       } as any);

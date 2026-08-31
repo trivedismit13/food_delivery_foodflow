@@ -25,7 +25,7 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<OrderResponse>> placeOrder(@Valid @RequestBody PlaceOrderRequest request) {
-        OrderResponse order = orderService.placeOrder(request.getUserId(), request.getRestaurantId(), request.getItems(), request.getPaymentMethod());
+        OrderResponse order = orderService.placeOrder(request.getUserId(), request.getRestaurantId(), request.getItems(), com.foodflow.model.PaymentMethod.CASH);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(order));
     }
 

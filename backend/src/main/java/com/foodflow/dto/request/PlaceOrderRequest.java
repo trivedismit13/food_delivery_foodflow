@@ -1,6 +1,5 @@
 package com.foodflow.dto.request;
 
-import com.foodflow.model.PaymentMethod;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -21,7 +20,4 @@ public class PlaceOrderRequest {
     @NotEmpty(message = "Order must contain at least one item")
     @jakarta.validation.Valid
     private List<OrderItemRequest> items;
-
-    // Default to CASH if not provided
-    private PaymentMethod paymentMethod = PaymentMethod.CASH;
 }

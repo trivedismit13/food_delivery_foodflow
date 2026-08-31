@@ -82,8 +82,8 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    public List<Object[]> getCancelledOrdersWithFailedPayment() {
-        return analyticsRepository.findCancelledOrdersWithFailedPayment();
+    public List<Object[]> getUncollectedCancelledOrders() {
+        return analyticsRepository.findUncollectedCancelledOrders();
     }
 
     @Override

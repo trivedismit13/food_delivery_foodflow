@@ -1,5 +1,6 @@
 package com.foodflow.controller;
 
+import com.foodflow.dto.response.AnalyticsResponse;
 import com.foodflow.dto.response.ApiResponse;
 import com.foodflow.dto.response.CuisineRevenueResponse;
 import com.foodflow.dto.response.RestaurantCityRankResponse;
@@ -59,6 +60,18 @@ public class AnalyticsController {
         return ResponseEntity.ok(ApiResponse.success(analyticsService.getRestaurantsAboveAverageOrderValue()));
     }
 
+    @GetMapping("/orders/uncollected-cancelled")
+    public ResponseEntity<ApiResponse<List<AnalyticsResponse>>> getUncollectedCancelledOrders() {
+        return ResponseEntity.ok(ApiResponse.success(
+            analyticsService.getUncollectedCancelledOrders().stream().map(row ->
+                AnalyticsResponse.builder()
+                    .metricName("Order ID: " + row[0])
+                    .metricValue("Amount: $" + row[1] + ", Method: " + row[2])
+                    .build()
+            ).collect(Collectors.toList())
+        ));
+    }
+
     @GetMapping("/revenue/by-cuisine")
     public ResponseEntity<ApiResponse<List<CuisineRevenueResponse>>> getRevenueByCuisine() {
         List<CuisineRevenueResponse> responses = analyticsService.getRevenueByCuisine().stream()
@@ -108,8 +121,4 @@ public class AnalyticsController {
         return ResponseEntity.ok(ApiResponse.success(analyticsService.getHighestRatedDish()));
     }
 
-    @GetMapping("/orders/cancelled-with-failed-payment")
-    public ResponseEntity<ApiResponse<List<Object[]>>> getCancelledOrdersWithFailedPayment() {
-        return ResponseEntity.ok(ApiResponse.success(analyticsService.getCancelledOrdersWithFailedPayment()));
-    }
 }

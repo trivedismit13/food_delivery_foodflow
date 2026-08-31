@@ -103,7 +103,7 @@ public class ConcurrencyAdversarialTest {
         testItemId = menuItem.getItemId();
         testDropItemId = dropItem.getDropItemId();
         
-        when(paymentService.processPayment(any())).thenReturn(new Payment());
+        when(paymentService.createPayment(any())).thenAnswer(invocation -> invocation.getArgument(0));
     }
 
     @Test

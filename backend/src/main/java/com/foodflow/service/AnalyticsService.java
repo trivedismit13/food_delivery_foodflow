@@ -19,7 +19,7 @@ public interface AnalyticsService {
     List<Object[]> getMostLoyalCustomers(int limit);
     List<Object[]> getTopReelsUploaders();
     List<Object[]> getHighestRatedDish();
-    List<Object[]> getCancelledOrdersWithFailedPayment();
+    List<Object[]> getUncollectedCancelledOrders();
 
     com.foodflow.dto.response.CreatorDashboardResponse getCreatorDashboard(Long creatorId, String period);
     List<com.foodflow.dto.response.WeeklyTrendResponse> getCreatorWeeklyTrend(Long creatorId, int weeks);

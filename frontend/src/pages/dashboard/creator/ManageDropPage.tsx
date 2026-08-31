@@ -8,6 +8,7 @@ import { useAuthStore } from '@/store/authStore';
 
 import { useDropById, useUpdateDropStatus, useDropOrders, useCancelDrop } from '@/queries/drops';
 import { useUpdateOrderStatus } from '@/queries/orders';
+import { useCollectPayment } from '@/queries/usePayments';
 import { OrderStatus } from '@/types/api';
 type Tab = 'Details' | 'Orders';
 
@@ -21,6 +22,7 @@ export default function ManageDropPage() {
   const updateStatusMutation = useUpdateDropStatus();
   const cancelDropMutation = useCancelDrop();
   const updateOrderStatusMutation = useUpdateOrderStatus();
+  const collectPaymentMutation = useCollectPayment();
   const revenue = orders.reduce((sum, order) => sum + order.totalAmount, 0);
 
   const itemsToPrepareMap: Record<string, number> = {};
@@ -221,7 +223,23 @@ export default function ManageDropPage() {
                               <option value="CANCELLED">Cancelled</option>
                             </select>
                           </td>
-                          <td className="p-4 font-bold text-stone-900 text-right">₹{order.totalAmount}</td>
+                          <td className="p-4 font-bold text-stone-900 text-right">
+                            <div>₹{order.totalAmount}</div>
+                            {order.paymentStatus === 'PENDING' && (
+                              <button
+                                onClick={() => collectPaymentMutation.mutate(order.orderId)}
+                                disabled={collectPaymentMutation.isPending}
+                                className="mt-2 text-xs bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded"
+                              >
+                                Mark Collected
+                              </button>
+                            )}
+                            {order.paymentStatus === 'COLLECTED' && (
+                              <div className="mt-2 text-xs text-green-600 font-semibold flex items-center justify-end gap-1">
+                                <CheckCircle size={12} /> Collected
+                              </div>
+                            )}
+                          </td>
                         </tr>
                       ))}
                     </tbody>

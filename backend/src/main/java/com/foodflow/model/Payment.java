@@ -37,6 +37,6 @@ public class Payment {
     @Column(nullable = false)
     private PaymentStatus status;
 
-    @Column(name = "payment_date", insertable = false, updatable = false)
+    @Column(name = "payment_date", insertable = false)
     private LocalDateTime paymentDate;
 }

@@ -143,7 +143,7 @@ public class DropOrderServiceImpl implements DropOrderService {
             .amount(totalAmount)
             .status(PaymentStatus.PENDING)
             .build();
-        paymentService.processPayment(payment);
+        paymentService.createPayment(payment);
         
         restaurantRepository.incrementTotalOrders(drop.getCreator().getRestaurantId());
         
@@ -249,7 +249,7 @@ public class DropOrderServiceImpl implements DropOrderService {
         }
         
         paymentService.getPaymentByOrderId(orderId).ifPresent(payment -> {
-            paymentService.updatePaymentStatus(payment.getPaymentId(), PaymentStatus.CANCELLED);
+            paymentService.cancelPayment(payment.getPaymentId());
         });
         
         eventPublisher.publishEvent(new com.foodflow.event.DropOrderCancelledEvent(this, orderId));

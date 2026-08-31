@@ -94,10 +94,10 @@ public class OrderServiceImpl implements OrderService {
         Payment payment = Payment.builder()
                 .order(order)
                 .amount(totalAmount)
-                .method(paymentMethod != null ? paymentMethod : PaymentMethod.CASH)
+                .method(PaymentMethod.CASH)
                 .status(PaymentStatus.PENDING)
                 .build();
-        paymentService.processPayment(payment);
+        paymentService.createPayment(payment);
 
         return mapToResponse(order);
     }
