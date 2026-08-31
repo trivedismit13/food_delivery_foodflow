@@ -102,9 +102,10 @@ public class InsightService {
         // Rule 3: Best day insight
         List<Object[]> bestDay = analyticsRepository.findBestDayOfWeekForCreator(creatorId);
         if (!bestDay.isEmpty()) {
+            String bestDayName = extractDayName(bestDay.get(0));
             insights.add(ruleBasedInsight(
-                "Your drops perform best on " + extractDayName(bestDay.get(0)) + ".",
-                "Schedule your next drop announcement on a Thursday or Friday for maximum reach."
+                "Your drops perform best on " + bestDayName + ".",
+                "Consider scheduling future drops around " + bestDayName + "s."
             ));
         }
         
@@ -131,7 +132,7 @@ public class InsightService {
     }
 
     private Double calculateConfidence(Map<String, Object> context) {
-        return 0.95; // Stub
+        return null; // Stub: real confidence requires actual LLM probability calculation
     }
 
     private Double extractRepeatRate(Object repeatRateObj) {

@@ -102,7 +102,8 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         List<Object[]> weeklyTrend = analyticsRepository.findWeeklyRevenueTrend(creatorId, days / 7);
         java.math.BigDecimal totalRev = java.math.BigDecimal.ZERO;
         int totalOrders = 0;
-        int uniqueCustomers = analyticsRepository.findTotalUniqueCustomers(creatorId, days) != null ? analyticsRepository.findTotalUniqueCustomers(creatorId, days) : 0;
+        Integer uniqueCustomersResult = analyticsRepository.findTotalUniqueCustomers(creatorId, days);
+        int uniqueCustomers = uniqueCustomersResult != null ? uniqueCustomersResult : 0;
 
         for (Object[] row : weeklyTrend) {
             totalOrders += row[1] != null ? ((Number) row[1]).intValue() : 0;
@@ -114,8 +115,30 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         res.setTotalRevenue(totalRev);
         res.setTotalOrders(totalOrders);
         res.setAvgOrderValue(totalOrders > 0 ? totalRev.divide(new java.math.BigDecimal(totalOrders), 2, java.math.RoundingMode.HALF_UP) : java.math.BigDecimal.ZERO);
-        res.setRevenueChange(java.math.BigDecimal.ZERO); // Stub for previous period comparison
-        res.setOrdersChange(0);
+        
+        Object[] prevStatsRows = analyticsRepository.findPreviousPeriodStats(creatorId, days);
+        java.math.BigDecimal prevRev = java.math.BigDecimal.ZERO;
+        int prevOrders = 0;
+        if (prevStatsRows != null && prevStatsRows.length > 0 && prevStatsRows[0] instanceof Object[] prevRow) {
+            if (prevRow.length > 0 && prevRow[0] != null) prevRev = new java.math.BigDecimal(prevRow[0].toString());
+            if (prevRow.length > 1 && prevRow[1] != null) prevOrders = ((Number) prevRow[1]).intValue();
+        }
+        
+        java.math.BigDecimal revChange = java.math.BigDecimal.ZERO;
+        if (prevRev.compareTo(java.math.BigDecimal.ZERO) > 0) {
+            revChange = totalRev.subtract(prevRev).divide(prevRev, 4, java.math.RoundingMode.HALF_UP).multiply(new java.math.BigDecimal(100));
+        } else if (totalRev.compareTo(java.math.BigDecimal.ZERO) > 0) {
+            revChange = new java.math.BigDecimal(100);
+        }
+        res.setRevenueChange(revChange);
+        
+        int ordChange = 0;
+        if (prevOrders > 0) {
+            ordChange = (int) Math.round(((double)(totalOrders - prevOrders) / prevOrders) * 100);
+        } else if (totalOrders > 0) {
+            ordChange = 100;
+        }
+        res.setOrdersChange(ordChange);
         
         Object repeatRate = analyticsRepository.findRepeatCustomerRate(creatorId);
         if (repeatRate instanceof Object[] repeatRow && repeatRow.length > 2) {
@@ -123,9 +146,20 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         }
 
         res.setTotalUniqueCustomers(uniqueCustomers);
-        res.setTotalDrops(0);
-        res.setCompletedDrops(0);
-        res.setAvgDropFillRate(0.0);
+        
+        Object[] dropStatsRows = analyticsRepository.findCreatorDropStats(creatorId);
+        int totalDrops = 0;
+        int completedDrops = 0;
+        double avgFillRate = 0.0;
+        if (dropStatsRows != null && dropStatsRows.length > 0 && dropStatsRows[0] instanceof Object[] dropRow) {
+            if (dropRow.length > 0 && dropRow[0] != null) totalDrops = ((Number) dropRow[0]).intValue();
+            if (dropRow.length > 1 && dropRow[1] != null) completedDrops = ((Number) dropRow[1]).intValue();
+            if (dropRow.length > 2 && dropRow[2] != null) avgFillRate = ((Number) dropRow[2]).doubleValue();
+        }
+        
+        res.setTotalDrops(totalDrops);
+        res.setCompletedDrops(completedDrops);
+        res.setAvgDropFillRate(avgFillRate);
         return res;
     }
 
