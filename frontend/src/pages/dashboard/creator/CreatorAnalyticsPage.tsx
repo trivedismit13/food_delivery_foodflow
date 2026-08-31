@@ -89,9 +89,6 @@ export default function CreatorAnalyticsPage() {
           >
             <option value="LAST_7_DAYS">Last 7 Days</option>
             <option value="LAST_30_DAYS">Last 30 Days</option>
-            <option value="THIS_MONTH">This Month</option>
-            <option value="LAST_MONTH">Last Month</option>
-            <option value="ALL_TIME">All Time</option>
           </select>
         </div>
       </div>

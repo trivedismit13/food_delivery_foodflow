@@ -116,12 +116,12 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         res.setTotalOrders(totalOrders);
         res.setAvgOrderValue(totalOrders > 0 ? totalRev.divide(new java.math.BigDecimal(totalOrders), 2, java.math.RoundingMode.HALF_UP) : java.math.BigDecimal.ZERO);
         
-        Object[] prevStatsRows = analyticsRepository.findPreviousPeriodStats(creatorId, days);
+        Object[] prevStatsRow = analyticsRepository.findPreviousPeriodStats(creatorId, days);
         java.math.BigDecimal prevRev = java.math.BigDecimal.ZERO;
         int prevOrders = 0;
-        if (prevStatsRows != null && prevStatsRows.length > 0 && prevStatsRows[0] instanceof Object[] prevRow) {
-            if (prevRow.length > 0 && prevRow[0] != null) prevRev = new java.math.BigDecimal(prevRow[0].toString());
-            if (prevRow.length > 1 && prevRow[1] != null) prevOrders = ((Number) prevRow[1]).intValue();
+        if (prevStatsRow != null && prevStatsRow.length > 0) {
+            if (prevStatsRow.length > 0 && prevStatsRow[0] != null) prevRev = new java.math.BigDecimal(prevStatsRow[0].toString());
+            if (prevStatsRow.length > 1 && prevStatsRow[1] != null) prevOrders = ((Number) prevStatsRow[1]).intValue();
         }
         
         java.math.BigDecimal revChange = java.math.BigDecimal.ZERO;
@@ -147,11 +147,11 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
         res.setTotalUniqueCustomers(uniqueCustomers);
         
-        Object[] dropStatsRows = analyticsRepository.findCreatorDropStats(creatorId);
+        Object[] dropRow = analyticsRepository.findCreatorDropStats(creatorId);
         int totalDrops = 0;
         int completedDrops = 0;
         double avgFillRate = 0.0;
-        if (dropStatsRows != null && dropStatsRows.length > 0 && dropStatsRows[0] instanceof Object[] dropRow) {
+        if (dropRow != null && dropRow.length > 0) {
             if (dropRow.length > 0 && dropRow[0] != null) totalDrops = ((Number) dropRow[0]).intValue();
             if (dropRow.length > 1 && dropRow[1] != null) completedDrops = ((Number) dropRow[1]).intValue();
             if (dropRow.length > 2 && dropRow[2] != null) avgFillRate = ((Number) dropRow[2]).doubleValue();

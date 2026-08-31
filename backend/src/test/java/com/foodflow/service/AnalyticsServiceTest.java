@@ -93,4 +93,34 @@ public class AnalyticsServiceTest {
         assertTrue(response.getInsight().contains("placeholder"));
         assertNull(response.getConfidence());
     }
+
+    @Test
+    void testCreatorDashboardMetrics() {
+        Long creatorId = 1L;
+        int days = 7;
+
+        when(analyticsRepository.findTotalUniqueCustomers(creatorId, days)).thenReturn(50);
+        when(analyticsRepository.findWeeklyRevenueTrend(creatorId, days / 7)).thenReturn(Collections.emptyList());
+        when(analyticsRepository.findRepeatCustomerRate(creatorId)).thenReturn(new Object[]{10, 100, 10.0});
+
+        Object[] prevStats = new Object[]{new java.math.BigDecimal("100.00"), 5};
+        when(analyticsRepository.findPreviousPeriodStats(creatorId, days)).thenReturn(prevStats);
+
+        Object[] dropStats = new Object[]{10, 8, 85.5};
+        when(analyticsRepository.findCreatorDropStats(creatorId)).thenReturn(dropStats);
+
+        com.foodflow.dto.response.CreatorDashboardResponse response = analyticsService.getCreatorDashboard(creatorId, "LAST_7_DAYS");
+
+        assertEquals(50, response.getTotalUniqueCustomers());
+        assertEquals(10, response.getTotalDrops());
+        assertEquals(8, response.getCompletedDrops());
+        assertEquals(85.5, response.getAvgDropFillRate());
+
+        // Since weeklyTrend is empty, current revenue is 0 and current orders is 0.
+        // Prev rev is 100, so revenueChange should be ((0 - 100) / 100) * 100 = -100%
+        assertEquals(0, response.getRevenueChange().compareTo(new java.math.BigDecimal("-100.00")));
+        
+        // Prev orders is 5, current is 0. ordersChange should be ((0 - 5) / 5) * 100 = -100%
+        assertEquals(-100, response.getOrdersChange());
+    }
 }
