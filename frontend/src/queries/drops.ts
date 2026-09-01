@@ -105,6 +105,7 @@ export function usePlaceDropOrder() {
     onSuccess: (orderResponse) => {
       queryClient.invalidateQueries({ queryKey: ['drop', orderResponse.dropId] })
       queryClient.invalidateQueries({ queryKey: ['orders'] })
+      queryClient.invalidateQueries({ queryKey: ['drops'] })
       
       navigate(`/orders/${orderResponse.orderId}/track`)
     },

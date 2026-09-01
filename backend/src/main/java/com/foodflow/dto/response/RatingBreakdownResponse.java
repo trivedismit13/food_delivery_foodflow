@@ -21,7 +21,6 @@ public class RatingBreakdownResponse {
     @Builder
     public static class Breakdown {
         private BigDecimal foodQuality;
-        private BigDecimal deliveryExperience;
         private BigDecimal packaging;
     }
 }

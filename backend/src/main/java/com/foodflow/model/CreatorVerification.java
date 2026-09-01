@@ -34,12 +34,14 @@ public class CreatorVerification {
     @Column(name = "phone_otp_verified")
     private Boolean phoneOtpVerified = false;
 
+    @Column(name = "food_licence_number", length = 100)
     private String foodLicenceNumber;
+    @Column(name = "food_licence_url", length = 500)
     private String foodLicenceUrl;
-    @Column(name = "kitchen_photo_url_1")
+    @Column(name = "kitchen_photo_url_1", length = 500)
     private String kitchenPhotoUrl1;
     
-    @Column(name = "kitchen_photo_url_2")
+    @Column(name = "kitchen_photo_url_2", length = 500)
     private String kitchenPhotoUrl2;
 
     @Builder.Default

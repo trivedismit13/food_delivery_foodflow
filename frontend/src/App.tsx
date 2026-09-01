@@ -126,7 +126,7 @@ function App() {
           
           {/* Creator dashboard — nested routes */}
           <Route path="/dashboard/creator" element={
-            <ProtectedRoute allowedRoles={['SELLER']}>
+            <ProtectedRoute allowedRoles={['SELLER']} redirectTo="/auth/login/seller">
               <CreatorDashboardLayout />
             </ProtectedRoute>
           }>

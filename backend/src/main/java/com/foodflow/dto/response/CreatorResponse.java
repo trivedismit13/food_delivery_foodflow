@@ -22,7 +22,7 @@ public class CreatorResponse extends CreatorSummary {
 
     
     // Verifications and active drops
-    private Object verification; // Can map CreatorVerification to a smaller DTO later or just send it raw for now
+    private CreatorVerificationResponse verification;
     private List<FoodDropResponse> activeDrops;
 }
 

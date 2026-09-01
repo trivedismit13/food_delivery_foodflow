@@ -13,6 +13,7 @@ import com.foodflow.model.MenuItem;
 import com.foodflow.model.Rating;
 import com.foodflow.model.Restaurant;
 import com.foodflow.model.CreatorVerification;
+import com.foodflow.dto.response.CreatorVerificationResponse;
 import com.foodflow.repository.CreatorFollowRepository;
 import com.foodflow.repository.CreatorVerificationRepository;
 import com.foodflow.repository.FoodDropRepository;
@@ -208,7 +209,7 @@ public class CreatorController {
         List<String> insights = List.of(
             "Customer retention is up 12% this month.",
             "Vegetarian options are selling 3x faster than last week.",
-            "Consider offering delivery on weekends to capture more evening demand."
+            "Consider offering pre-orders on weekends to capture more evening demand."
         );
         return ResponseEntity.ok(ApiResponse.success(insights));
     }
@@ -328,9 +329,15 @@ public class CreatorController {
         cr.setOffersPickup(r.getPickupAddress() != null && !r.getPickupAddress().isEmpty());
         cr.setPickupAddress(r.getPickupAddress());
 
-        
         verificationRepository.findByCreatorRestaurantId(r.getRestaurantId()).ifPresent(v -> {
-            cr.setVerification(v); // Assuming frontend handles raw JSON or DTO
+            cr.setVerification(CreatorVerificationResponse.builder()
+                .verificationId(v.getVerificationId())
+                .currentLevel(v.getCurrentLevel())
+                .levelUpdatedAt(v.getLevelUpdatedAt())
+                .rejectionReason(v.getRejectionReason())
+                .createdAt(v.getCreatedAt())
+                .updatedAt(v.getUpdatedAt())
+                .build()); 
         });
         
         List<FoodDrop> activeDrops = foodDropRepository.findByCreatorRestaurantIdAndStatusIn(

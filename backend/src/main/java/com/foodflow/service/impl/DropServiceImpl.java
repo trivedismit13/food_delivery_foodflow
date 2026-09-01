@@ -60,6 +60,15 @@ public class DropServiceImpl implements DropService {
                 if (itemRequest.getName() == null || itemRequest.getPrice() == null) {
                     throw new InvalidRequestException("New items must have a name and price.");
                 }
+                if (itemRequest.getPrice().compareTo(java.math.BigDecimal.ZERO) < 0) {
+                    throw new InvalidRequestException("Price cannot be negative.");
+                }
+            }
+        }
+        
+        if (request.getOrderCutoffTime() != null && request.getDropDate() != null) {
+            if (request.getOrderCutoffTime().toLocalDate().isAfter(request.getDropDate())) {
+                throw new InvalidRequestException("Order cutoff time cannot be after the drop date.");
             }
         }
 
@@ -147,6 +156,12 @@ public class DropServiceImpl implements DropService {
         if (request.getDropPhotoUrl() != null) drop.setDropPhotoUrl(request.getDropPhotoUrl());
         if (request.getSpecialNotes() != null) drop.setSpecialNotes(request.getSpecialNotes());
 
+        LocalDate date = drop.getDropDate();
+        LocalDateTime cutoff = drop.getOrderCutoffTime();
+        if (cutoff != null && date != null && cutoff.toLocalDate().isAfter(date)) {
+            throw new InvalidRequestException("Order cutoff time cannot be after the drop date.");
+        }
+
         FoodDrop saved = dropRepository.save(drop);
         return mapToResponse(saved);
     }
@@ -210,7 +225,7 @@ public class DropServiceImpl implements DropService {
         if (newStatus == FoodDrop.DropStatus.COMPLETED) {
             java.util.List<com.foodflow.model.Order> orders = orderRepository.findByDropDropIdAndStatusNot(dropId, com.foodflow.model.OrderStatus.CANCELLED);
             for (com.foodflow.model.Order o : orders) {
-                o.setStatus(com.foodflow.model.OrderStatus.DELIVERED);
+                o.setStatus(com.foodflow.model.OrderStatus.COMPLETED);
                 orderRepository.save(o);
             }
         }

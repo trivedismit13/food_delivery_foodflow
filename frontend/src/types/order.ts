@@ -2,8 +2,7 @@ export type OrderStatus =
   | 'PLACED' 
   | 'PREPARING' 
   | 'READY'
-  | 'ON_THE_WAY' 
-  | 'DELIVERED' 
+  | 'COMPLETED'
   | 'CANCELLED';
 
 export type OrderType = 'REGULAR' | 'DROP_PREORDER';

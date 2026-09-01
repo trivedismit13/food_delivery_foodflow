@@ -21,8 +21,6 @@ public class SubmitRatingRequest {
     @DecimalMin("1.0") @DecimalMax("5.0")
     private BigDecimal foodQualityRating;
 
-    @DecimalMin("1.0") @DecimalMax("5.0")
-    private BigDecimal deliveryRating;
 
     @DecimalMin("1.0") @DecimalMax("5.0")
     private BigDecimal packagingRating;

@@ -36,7 +36,7 @@ export const formatPickupWindow = (
   startIso: string | null, 
   endIso: string | null
 ): string => {
-  if (!startIso || !endIso) return 'Delivery only'
+  if (!startIso || !endIso) return 'Not set'
   return `${formatTime(startIso)} – ${formatTime(endIso)}`
   // "12:00 PM – 2:00 PM"
 }

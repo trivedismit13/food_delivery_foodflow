@@ -49,12 +49,12 @@ public class Notification {
     private LocalDateTime createdAt;
 
     public enum NotificationType {
-        DROP_ANNOUNCED, DROP_OPEN,
+        DROP_ANNOUNCED, DROP_OPEN, DROP_CLOSING_SOON,
         ORDER_CONFIRMED, ORDER_READY, ORDER_CANCELLED,
         NEW_FOLLOWER, LOW_STOCK
     }
 
     public enum ReferenceType {
-        DROP, ORDER, USER, NONE
+        DROP, ORDER, USER
     }
 }

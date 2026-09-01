@@ -13,6 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import com.foodflow.security.UserDetailsImpl;
+import com.foodflow.service.security.CreatorAuthorizationService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class DropController {
 
     private final DropService dropService;
     private final DropOrderService dropOrderService;
+    private final CreatorAuthorizationService authorizationService;
 
     // --- Creator Endpoints ---
     
@@ -40,6 +44,7 @@ public class DropController {
     public ResponseEntity<ApiResponse<FoodDropResponse>> updateDrop(
             @PathVariable Long dropId,
             @Valid @RequestBody UpdateDropRequest request) {
+        authorizationService.assertCreatorOwnsDrop(dropId);
         return ResponseEntity.ok(ApiResponse.success(dropService.updateDrop(dropId, request)));
     }
 
@@ -48,6 +53,7 @@ public class DropController {
     public ResponseEntity<ApiResponse<FoodDropResponse>> updateDropStatus(
             @PathVariable Long dropId,
             @RequestParam FoodDrop.DropStatus status) {
+        authorizationService.assertCreatorOwnsDrop(dropId);
         return ResponseEntity.ok(ApiResponse.success(dropService.updateDropStatus(dropId, status)));
     }
 
@@ -56,6 +62,7 @@ public class DropController {
     public ResponseEntity<Void> addItemToDrop(
             @PathVariable Long dropId,
             @Valid @RequestBody AddDropItemRequest request) {
+        authorizationService.assertCreatorOwnsDrop(dropId);
         dropService.addItemToDrop(dropId, request);
         return ResponseEntity.ok().build();
     }
@@ -65,6 +72,7 @@ public class DropController {
     public ResponseEntity<Void> removeItemFromDrop(
             @PathVariable Long dropId,
             @PathVariable Long itemId) {
+        authorizationService.assertCreatorOwnsDrop(dropId);
         dropService.removeItemFromDrop(dropId, itemId);
         return ResponseEntity.ok().build();
     }
@@ -120,6 +128,12 @@ public class DropController {
     public ResponseEntity<ApiResponse<Void>> cancelDropOrder(
             @PathVariable Long dropId,
             @PathVariable Long orderId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SELLER"))) {
+            authorizationService.assertCreatorOwnsOrderRestaurant(orderId);
+        } else {
+            authorizationService.assertUserOwnsOrder(orderId);
+        }
         dropOrderService.cancelDropOrder(orderId);
         return ResponseEntity.ok(ApiResponse.success(null, "Order cancelled successfully", 200));
     }

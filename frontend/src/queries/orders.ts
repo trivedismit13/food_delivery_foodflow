@@ -30,7 +30,7 @@ export function useOrderById(orderId: number | undefined) {
     staleTime: 0,
     refetchInterval: (query) => {
       const status = query.state.data?.status;
-      if (status === 'PLACED' || status === 'PREPARING' || status === 'ON_THE_WAY' || status === 'READY') {
+      if (status === 'PLACED' || status === 'PREPARING' || status === 'READY') {
         return 15000;
       }
       return false;
@@ -65,8 +65,10 @@ export function usePlaceDropOrder() {
       const { data } = await apiClient.post<OrderResponse>(`/drops/${request.dropId}/orders`, request)
       return data
     },
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['orders'] })
+      queryClient.invalidateQueries({ queryKey: ['drop', variables.dropId] })
+      queryClient.invalidateQueries({ queryKey: ['drops'] })
     },
   })
 }

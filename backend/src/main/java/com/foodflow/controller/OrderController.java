@@ -24,7 +24,9 @@ public class OrderController {
     private final com.foodflow.service.security.CreatorAuthorizationService authorizationService;
 
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<OrderResponse>> placeOrder(@Valid @RequestBody PlaceOrderRequest request) {
+        authorizationService.assertUserMatches(request.getUserId());
         OrderResponse order = orderService.placeOrder(request.getUserId(), request.getRestaurantId(), request.getItems(), com.foodflow.model.PaymentMethod.CASH);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(order));
     }
@@ -63,6 +65,7 @@ public class OrderController {
     @GetMapping("/drops/{dropId}/orders")
     @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<java.util.List<OrderResponse>>> getDropOrders(@PathVariable Long dropId) {
+        authorizationService.assertCreatorOwnsDrop(dropId);
         return ResponseEntity.ok(ApiResponse.success(orderService.getDropOrders(dropId)));
     }
 }

@@ -218,8 +218,7 @@ export default function ManageDropPage() {
                               <option value="PLACED">Placed</option>
                               <option value="PREPARING">Preparing</option>
                               <option value="READY">Ready</option>
-                              <option value="ON_THE_WAY">On the Way</option>
-                              <option value="DELIVERED">Delivered</option>
+                              <option value="COMPLETED">Completed</option>
                               <option value="CANCELLED">Cancelled</option>
                             </select>
                           </td>

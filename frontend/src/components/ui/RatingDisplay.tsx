@@ -6,11 +6,11 @@ interface RatingDisplayProps {
   count?: number
   showPills?: boolean
   foodRating?: number
-  deliveryRating?: number
+
   size?: 'sm' | 'md' | 'lg'
 }
 
-export function RatingDisplay({ rating, count, showPills, foodRating, deliveryRating, size = 'sm' }: RatingDisplayProps) {
+export function RatingDisplay({ rating, count, showPills, foodRating, size = 'sm' }: RatingDisplayProps) {
   const sizeClasses = {
     sm: "w-3 h-3",
     md: "w-4 h-4",
@@ -40,18 +40,14 @@ export function RatingDisplay({ rating, count, showPills, foodRating, deliveryRa
         )}
       </div>
 
-      {showPills && (foodRating || deliveryRating) && (
+      {showPills && (foodRating) && (
         <div className="flex items-center gap-2 mt-1">
           {foodRating && (
             <span className={cn("px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap", getPillColor(foodRating))}>
               Food {foodRating.toFixed(1)}
             </span>
           )}
-          {deliveryRating && (
-            <span className={cn("px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap", getPillColor(deliveryRating))}>
-              Delivery {deliveryRating.toFixed(1)}
-            </span>
-          )}
+
         </div>
       )}
     </div>

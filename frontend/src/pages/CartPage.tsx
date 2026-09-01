@@ -33,8 +33,9 @@ export default function CartPage() {
           clearCart();
           navigate(`/orders/${data.orderId}/track`);
         },
-        onError: (err: any) => {
-          toast.error(err.response?.data?.message || 'Failed to place order');
+        onError: (err: unknown) => {
+          const error = err as { response?: { data?: { message?: string } } };
+          toast.error(error.response?.data?.message || 'Failed to place order');
         },
       }
     );

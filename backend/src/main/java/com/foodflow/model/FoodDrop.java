@@ -65,6 +65,7 @@ public class FoodDrop {
 
 
 
+    @Column(name = "drop_photo_url", columnDefinition = "LONGTEXT")
     private String dropPhotoUrl;
     
     @Column(columnDefinition = "TEXT")

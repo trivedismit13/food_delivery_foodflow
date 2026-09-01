@@ -33,7 +33,7 @@ public class Restaurant {
     @Column(nullable = false, length = 150)
     private String name;
 
-    @Column(length = 200)
+    @Column(nullable = false, length = 100)
     private String city;
 
     @Column(length = 20)
@@ -54,7 +54,7 @@ public class Restaurant {
     @Column(name = "bio", columnDefinition = "TEXT")
     private String bio;
 
-    @Column(name = "instagram_handle")
+    @Column(name = "instagram_handle", length = 100)
     private String instagramHandle;
 
     @Column(name = "pickup_address", columnDefinition = "TEXT")
@@ -72,7 +72,7 @@ public class Restaurant {
     @Builder.Default
     private Integer followerCount = 0;
 
-    @Column(name = "avg_rating")
+    @Column(name = "avg_rating", precision = 3, scale = 2)
     @Builder.Default
     private java.math.BigDecimal avgRating = java.math.BigDecimal.ZERO;
 

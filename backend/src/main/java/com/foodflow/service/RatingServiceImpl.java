@@ -40,7 +40,7 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public RatingResponse submitRating(Long userId, SubmitRatingRequest request) {
         if (!orderRepository.existsByUserUserIdAndRestaurantRestaurantIdAndStatus(
-                userId, request.getRestaurantId(), com.foodflow.model.OrderStatus.DELIVERED)) {
+                userId, request.getRestaurantId(), com.foodflow.model.OrderStatus.COMPLETED)) {
             throw new InvalidRequestException("You can only rate restaurants you've ordered from");
         }
 
@@ -58,7 +58,6 @@ public class RatingServiceImpl implements RatingService {
                 .restaurant(restaurant)
                 .ratingValue(request.getRatingValue())
                 .foodQualityRating(request.getFoodQualityRating())
-                .deliveryRating(request.getDeliveryRating())
                 .packagingRating(request.getPackagingRating())
                 .reviewText(request.getReviewText())
                 .createdAt(LocalDateTime.now())
@@ -119,7 +118,6 @@ public class RatingServiceImpl implements RatingService {
 
         BigDecimal avgOverall = averages.get("avgOverall") != null ? new BigDecimal(averages.get("avgOverall").toString()).setScale(1, RoundingMode.HALF_UP) : null;
         BigDecimal avgFood = averages.get("avgFood") != null ? new BigDecimal(averages.get("avgFood").toString()).setScale(1, RoundingMode.HALF_UP) : null;
-        BigDecimal avgDelivery = averages.get("avgDelivery") != null ? new BigDecimal(averages.get("avgDelivery").toString()).setScale(1, RoundingMode.HALF_UP) : null;
         BigDecimal avgPackaging = averages.get("avgPackaging") != null ? new BigDecimal(averages.get("avgPackaging").toString()).setScale(1, RoundingMode.HALF_UP) : null;
 
         // Simple trend mock
@@ -132,7 +130,6 @@ public class RatingServiceImpl implements RatingService {
                 .overallRating(avgOverall)
                 .breakdown(RatingBreakdownResponse.Breakdown.builder()
                         .foodQuality(avgFood)
-                        .deliveryExperience(avgDelivery)
                         .packaging(avgPackaging)
                         .build())
                 .totalRatings(totalRatings.intValue())

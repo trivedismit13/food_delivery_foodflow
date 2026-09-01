@@ -20,10 +20,10 @@ export function useCollectPayment() {
       const { data } = await api.put<{ data: PaymentResponse }>(`/payments/order/${orderId}/collect`);
       return data.data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['payment'] });
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['payment', variables] });
       queryClient.invalidateQueries({ queryKey: ['orders'] });
-      queryClient.invalidateQueries({ queryKey: ['drop-orders'] });
+      queryClient.invalidateQueries({ queryKey: ['dropOrders'] });
     }
   });
 }

@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import com.foodflow.service.security.CreatorAuthorizationService;
 
 @RestController
 @RequestMapping("/api/users")
@@ -20,6 +22,7 @@ public class UserController {
 
     private final UserService userService;
     private final RestaurantRepository restaurantRepository;
+    private final CreatorAuthorizationService authorizationService;
 
 
 
@@ -48,7 +51,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable Long id) {
+        authorizationService.assertUserMatches(id);
         return userService.getUserById(id)
                 .map(u -> {
                     UserResponse response = UserResponse.fromEntity(u);
@@ -72,7 +77,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<UserResponse>> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
+        authorizationService.assertUserMatches(id);
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());

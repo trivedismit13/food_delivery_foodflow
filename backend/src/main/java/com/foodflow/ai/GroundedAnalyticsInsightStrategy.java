@@ -9,7 +9,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class RAGInsightStrategy implements InsightStrategy {
+public class GroundedAnalyticsInsightStrategy implements InsightStrategy {
 
     private final AnalyticsService analyticsService;
     private final LLMClient llmClient;
@@ -29,7 +29,7 @@ public class RAGInsightStrategy implements InsightStrategy {
 
         // AUGMENTATION PHASE: Build the prompt
         String prompt = String.format(
-                "You are an expert food delivery analytics assistant. \n" +
+                "You are an expert food pickup analytics assistant. \n" +
                 "Here is the recent data for the restaurant:\n%s\n" +
                 "Question: %s\n" +
                 "Answer based ONLY on the data provided.", 
@@ -43,12 +43,11 @@ public class RAGInsightStrategy implements InsightStrategy {
                 .question(query)
                 .insight(generatedInsight)
                 .supportingData(topDishes) // Return raw data alongside the text insight
-                .confidence(0.5)
                 .build();
     }
 
     @Override
     public boolean supports(String queryType) {
-        return "RAG".equalsIgnoreCase(queryType) || "OPEN_ENDED".equalsIgnoreCase(queryType);
+        return "GROUNDED".equalsIgnoreCase(queryType) || "OPEN_ENDED".equalsIgnoreCase(queryType);
     }
 }

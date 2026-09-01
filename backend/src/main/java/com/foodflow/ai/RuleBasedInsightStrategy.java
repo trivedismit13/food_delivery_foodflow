@@ -22,22 +22,21 @@ public class RuleBasedInsightStrategy implements InsightStrategy {
         
         if (breakdown.getBreakdown() != null) {
             BigDecimal food = breakdown.getBreakdown().getFoodQuality();
-            BigDecimal delivery = breakdown.getBreakdown().getDeliveryExperience();
+            BigDecimal packaging = breakdown.getBreakdown().getPackaging();
             
-            if (food != null && delivery != null && food.compareTo(new BigDecimal("4.0")) > 0 && delivery.compareTo(new BigDecimal("3.0")) < 0) {
-                insightBuilder.append("Your food quality is excellent, but delivery experience is dragging your overall rating down. Consider reviewing your delivery partners or packaging to keep food warm. ");
+            if (food != null && packaging != null && food.compareTo(new BigDecimal("4.0")) > 0 && packaging.compareTo(new BigDecimal("3.0")) < 0) {
+                insightBuilder.append("[Automatic Insight] Your food quality is excellent, but packaging experience is dragging your overall rating down. Consider reviewing your packaging to keep food warm. ");
             }
         }
         
         if (insightBuilder.length() == 0) {
-            insightBuilder.append("Your ratings are currently stable. No critical operational anomalies detected in the rule-based engine.");
+            insightBuilder.append("[Automatic Insight] Your ratings are currently stable. No critical operational anomalies detected in the rule-based engine.");
         }
 
         return InsightResponse.builder()
                 .question(query)
                 .insight(insightBuilder.toString())
                 .supportingData(breakdown)
-                .confidence(0.9)
                 .build();
     }
 

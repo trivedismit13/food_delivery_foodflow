@@ -36,9 +36,8 @@ public class OllamaLLMClient implements LLMClient {
                 return response.get("response").toString();
             }
         } catch (Exception e) {
-            // Fallback for demo if Ollama is not actually running
-            return "Failed to connect to local Ollama instance. Please ensure it is running at " + baseUrl + ".";
+            return "AI insights are unavailable right now";
         }
-        return "No response from LLM.";
+        return "AI insights are unavailable right now";
     }
 }

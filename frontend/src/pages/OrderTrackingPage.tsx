@@ -10,10 +10,10 @@ import { useState } from 'react'
 import { RatingModal } from '@/components/ui/RatingModal'
 
 const steps: { id: OrderStatus, label: string, time?: string }[] = [
-  { id: 'PLACED', label: 'Order Received', time: '08:40 PM' },
-  { id: 'PREPARING', label: 'Food is being prepared', time: '08:45 PM' },
-  { id: 'READY', label: 'Ready for Collection / On the Way' },
-  { id: 'DELIVERED', label: 'Completed' },
+  { id: 'PLACED', label: 'Order Received' },
+  { id: 'PREPARING', label: 'Food is being prepared' },
+  { id: 'READY', label: 'Ready for Collection' },
+  { id: 'COMPLETED', label: 'Completed' },
 ]
 
 export default function OrderTrackingPage() {
@@ -34,42 +34,20 @@ export default function OrderTrackingPage() {
 
   const currentStatus = order.status
   let currentStepIndex = steps.findIndex(s => s.id === currentStatus)
-  // Fallback for ON_THE_WAY since we replaced it with READY in the steps array
-  if (currentStatus === 'ON_THE_WAY') {
-    currentStepIndex = 2; // maps to the 3rd step (index 2)
-  }
 
-  const isTerminal = currentStatus === 'DELIVERED' || currentStatus === 'CANCELLED'
+  const isTerminal = currentStatus === 'COMPLETED' || currentStatus === 'CANCELLED'
 
-  // Banner logic
   const renderBanner = () => {
-    if (currentStatus === 'DELIVERED') {
+    if (currentStatus === 'COMPLETED') {
       return (
         <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-8 flex items-center justify-between shadow-sm">
           <div>
-            <h3 className="text-emerald-800 font-bold text-lg">Order Delivered! 🎉</h3>
+            <h3 className="text-emerald-800 font-bold text-lg">Order Completed! 🎉</h3>
             <p className="text-emerald-700 text-sm">Enjoy your meal. Rate your experience below.</p>
           </div>
           {!hasRatedLocal && (
             <Button variant="primary" className="bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200" onClick={() => setIsRatingModalOpen(true)}>Rate Now</Button>
           )}
-        </div>
-      )
-    }
-    if (currentStatus === 'ON_THE_WAY') {
-      return (
-        <div className="bg-brand-50 border border-brand-200 rounded-2xl p-4 mb-8 flex items-center shadow-sm relative overflow-hidden">
-          <div className="absolute top-0 left-0 bottom-0 w-1 bg-brand-500 animate-pulse"></div>
-          <div>
-            <h3 className="text-brand-800 font-bold text-lg flex items-center gap-2">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-brand-500"></span>
-              </span>
-              Your order is on the way!
-            </h3>
-            <p className="text-brand-700 text-sm ml-5">Arriving in approx. 12 mins</p>
-          </div>
         </div>
       )
     }
@@ -133,7 +111,7 @@ export default function OrderTrackingPage() {
 
                   <div className="space-y-8 relative z-10">
                     {steps.map((step, index) => {
-                      const isCompleted = index < currentStepIndex || currentStatus === 'DELIVERED'
+                      const isCompleted = index < currentStepIndex || currentStatus === 'COMPLETED'
                       const isCurrent = index === currentStepIndex
 
                       return (
@@ -181,44 +159,34 @@ export default function OrderTrackingPage() {
           {/* Right: Details & Map Placeholder */}
           <div className={cn("flex flex-col gap-6", currentStatus === 'CANCELLED' ? "w-full" : "md:w-[45%]")}>
             
-            {/* Delivery Partner */}
-            {currentStepIndex >= 2 && currentStatus !== 'CANCELLED' && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="bg-white rounded-2xl p-5 shadow-warm-sm border border-stone-100 flex items-center justify-between"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-stone-200 to-stone-300 rounded-full flex items-center justify-center text-stone-500 font-bold overflow-hidden shadow-inner">
-                    R
-                  </div>
-                  <div>
-                    <p className="text-xs text-stone-500 font-medium uppercase tracking-wider mb-0.5">Delivery Partner</p>
-                    <p className="font-bold text-stone-800 text-sm">Ramesh Kumar</p>
-                    <p className="text-xs font-semibold flex items-center gap-1 mt-0.5"><span className="text-brand-500">⭐ 4.8</span> (450+ deliveries)</p>
-                  </div>
-                </div>
-                <button className="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center hover:bg-brand-100 transition-colors">
-                  <Phone className="w-4 h-4" />
-                </button>
-              </motion.div>
-            )}
-
-            {/* Map Placeholder */}
-            {currentStatus !== 'CANCELLED' && (
-              <div className="bg-white rounded-2xl overflow-hidden shadow-warm-sm border border-stone-100 h-[200px] relative">
-                <div className="absolute inset-0 bg-stone-100 flex flex-col items-center justify-center text-stone-400">
-                  <MapPin className="w-8 h-8 mb-2 opacity-50" />
-                  <span className="text-sm font-medium">Map View</span>
+            {/* Pickup Info */}
+            <div className="bg-white rounded-2xl p-5 shadow-warm-sm border border-stone-100 flex flex-col gap-4">
+              <h3 className="font-bold text-stone-800 text-sm uppercase tracking-wider text-stone-500">Pickup Details</h3>
+              <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-stone-400 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-stone-800">Restaurant Location</p>
+                  <p className="text-sm text-stone-500">Pickup at {order.restaurantName}</p>
                 </div>
               </div>
-            )}
+              {order.pickupTime && (
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full border-2 border-stone-400 flex items-center justify-center mt-0.5">
+                    <div className="w-1.5 h-1.5 rounded-full bg-stone-400"></div>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-stone-800">Scheduled Time</p>
+                    <p className="text-sm text-stone-500">{order.pickupTime}</p>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Order Details Summary */}
             <div className="bg-white rounded-2xl p-5 shadow-warm-sm border border-stone-100">
               <h3 className="font-bold text-stone-800 mb-4 text-sm uppercase tracking-wider text-stone-500">Order Summary</h3>
               <ul className="mt-4 space-y-3">
-                {order.items.map((item: any, idx: number) => (
+                {order.items.map((item: { quantity: number; itemName: string; priceEach: number }, idx: number) => (
                   <li key={idx} className="flex justify-between text-sm">
                     <span className="text-stone-700"><span className="font-medium text-stone-800">{item.quantity} ×</span> {item.itemName}</span>
                     <span className="text-stone-800 font-medium">₹{item.priceEach * item.quantity}</span>

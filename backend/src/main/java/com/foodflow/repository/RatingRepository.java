@@ -13,7 +13,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     @org.springframework.data.jpa.repository.Query("SELECT " +
             "AVG(r.ratingValue) as avgOverall, " +
             "AVG(r.foodQualityRating) as avgFood, " +
-            "AVG(r.deliveryRating) as avgDelivery, " +
+
             "AVG(r.packagingRating) as avgPackaging, " +
             "COUNT(r) as totalRatings " +
             "FROM Rating r WHERE r.restaurant.restaurantId = :restaurantId")

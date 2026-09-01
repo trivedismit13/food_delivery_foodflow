@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse<Void>> handleHttpMessageNotReadable(org.springframework.http.converter.HttpMessageNotReadableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error("Malformed request payload: " + ex.getMessage(), 400));
+                .body(ApiResponse.error("Malformed request payload", 400));
     }
 
     @ExceptionHandler(InvalidRequestException.class)
@@ -75,12 +75,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
     public ResponseEntity<ApiResponse<Void>> handleDataIntegrityViolation(org.springframework.dao.DataIntegrityViolationException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(ApiResponse.error("Data integrity violation: " + ex.getMostSpecificCause().getMessage(), 409));
+                .body(ApiResponse.error("Data integrity violation. A conflict occurred.", 409));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGeneralException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error("An unexpected error occurred: " + ex.getMessage(), 500));
+                .body(ApiResponse.error("An unexpected error occurred", 500));
     }
 }

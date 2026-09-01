@@ -38,8 +38,6 @@ public class Rating {
     @Column(name = "food_quality_rating", precision = 2, scale = 1)
     private BigDecimal foodQualityRating;
 
-    @Column(name = "delivery_rating", precision = 2, scale = 1)
-    private BigDecimal deliveryRating;
 
     @Column(name = "packaging_rating", precision = 2, scale = 1)
     private BigDecimal packagingRating;

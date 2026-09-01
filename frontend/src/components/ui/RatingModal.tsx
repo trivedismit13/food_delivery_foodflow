@@ -35,7 +35,7 @@ function StarPicker({ label, value, onChange }: { label: string, value: number, 
 export function RatingModal({ restaurantId, isOpen, onClose }: RatingModalProps) {
   const [ratingValue, setRatingValue] = useState(0)
   const [foodQuality, setFoodQuality] = useState(0)
-  const [delivery, setDelivery] = useState(0)
+
   const [packaging, setPackaging] = useState(0)
   const [reviewText, setReviewText] = useState('')
 
@@ -63,8 +63,9 @@ export function RatingModal({ restaurantId, isOpen, onClose }: RatingModalProps)
           toast.success('Thanks for your review!')
           onClose()
         },
-        onError: (err: any) => {
-          toast.error(err.response?.data?.message || 'Failed to submit rating')
+        onError: (err: unknown) => {
+          const error = err as { response?: { data?: { message?: string } } };
+          toast.error(error.response?.data?.message || 'Failed to submit rating')
         }
       }
     )
@@ -83,10 +84,8 @@ export function RatingModal({ restaurantId, isOpen, onClose }: RatingModalProps)
           
           <div className="grid grid-cols-2 gap-4">
             <StarPicker label="Food Quality" value={foodQuality} onChange={setFoodQuality} />
-            <StarPicker label="Delivery" value={delivery} onChange={setDelivery} />
+            <StarPicker label="Packaging" value={packaging} onChange={setPackaging} />
           </div>
-          
-          <StarPicker label="Packaging" value={packaging} onChange={setPackaging} />
           
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium">Review (Optional)</label>

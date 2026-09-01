@@ -8,22 +8,39 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.foodflow.service.security.CreatorAuthorizationService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 @RestController
 @RequestMapping("/api/payments")
 @RequiredArgsConstructor
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final CreatorAuthorizationService authorizationService;
 
     @GetMapping("/{orderId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<PaymentResponse>> checkPaymentStatus(@PathVariable Long orderId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isSeller = auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SELLER"));
+        if (isSeller) {
+            authorizationService.assertCreatorOwnsOrderRestaurant(orderId);
+        } else {
+            authorizationService.assertUserOwnsOrder(orderId);
+        }
+        
         return paymentService.getPaymentByOrderId(orderId)
                 .map(p -> ResponseEntity.ok(ApiResponse.success(mapToResponse(p))))
                 .orElse(ResponseEntity.status(org.springframework.http.HttpStatus.NOT_FOUND).body(ApiResponse.error("Payment not found", 404)));
     }
 
     @PutMapping("/order/{orderId}/collect")
+    @PreAuthorize("hasRole('SELLER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<PaymentResponse>> markPaymentCollected(@PathVariable Long orderId) {
+        authorizationService.assertCreatorOwnsOrderRestaurant(orderId);
         Payment payment = paymentService.getPaymentByOrderId(orderId)
             .orElseThrow(() -> new com.foodflow.exception.ResourceNotFoundException("Payment not found"));
         Payment collected = paymentService.markPaymentCollected(payment.getPaymentId());

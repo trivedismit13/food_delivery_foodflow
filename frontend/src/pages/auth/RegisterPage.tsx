@@ -60,8 +60,8 @@ export default function RegisterPage() {
           <div className="space-y-4">
             {[
               "🧑‍🍳 200+ verified creators",
-              "⭐ 4.8 average rating",
-              "🎯 2x better than average review than restaurant delivery"
+              "⭐ Highly rated creators",
+              "🎯 2x better average review than restaurants"
             ].map((text, i) => (
               <motion.div
                 key={i}
@@ -105,7 +105,7 @@ export default function RegisterPage() {
                 type="text"
                 {...register('name')}
                 className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all outline-none"
-                placeholder="John Doe"
+                placeholder="Enter your full name"
               />
               {errors.name && <p className="text-red-500 text-xs mt-1.5">{errors.name.message}</p>}
             </div>

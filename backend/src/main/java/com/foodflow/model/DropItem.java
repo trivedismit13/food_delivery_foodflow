@@ -39,6 +39,7 @@ public class DropItem {
     @Version
     private Long version;
 
+    @Column(name = "drop_price", precision = 10, scale = 2)
     private BigDecimal dropPrice;
 
     public boolean isSoldOut() {

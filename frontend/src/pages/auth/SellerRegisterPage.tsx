@@ -101,7 +101,7 @@ export default function SellerRegisterPage() {
               
               <div>
                 <label className="block text-sm font-medium text-stone-700 mb-1">Full Name</label>
-                <input type="text" name="name" required value={formData.name} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="John Doe" />
+                <input type="text" name="name" required value={formData.name} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="Enter your full name" />
               </div>
 
               <div>
