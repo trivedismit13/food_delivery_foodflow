@@ -230,6 +230,23 @@ public class DropServiceImpl implements DropService {
             }
         }
         
+        if (newStatus == FoodDrop.DropStatus.CANCELLED) {
+            java.util.List<com.foodflow.model.Order> orders = orderRepository.findByDropDropIdAndStatusNot(dropId, com.foodflow.model.OrderStatus.CANCELLED);
+            for (com.foodflow.model.Order o : orders) {
+                o.setStatus(com.foodflow.model.OrderStatus.CANCELLED);
+                orderRepository.save(o);
+                
+                notificationService.sendNotification(
+                    o.getUser().getUserId(),
+                    Notification.NotificationType.ORDER_CANCELLED,
+                    "Drop Cancelled",
+                    "Unfortunately, the drop '" + drop.getTitle() + "' has been cancelled.",
+                    Notification.ReferenceType.ORDER,
+                    o.getOrderId()
+                );
+            }
+        }
+        
         return mapToResponse(saved);
     }
 

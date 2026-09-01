@@ -114,7 +114,7 @@ public class DropController {
     // --- Order Placement ---
     
     @PostMapping("/{dropId}/orders")
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('SELLER')")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<OrderResponse>> placeDropOrder(
             @PathVariable Long dropId,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -128,12 +128,7 @@ public class DropController {
     public ResponseEntity<ApiResponse<Void>> cancelDropOrder(
             @PathVariable Long dropId,
             @PathVariable Long orderId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SELLER"))) {
-            authorizationService.assertCreatorOwnsOrderRestaurant(orderId);
-        } else {
-            authorizationService.assertUserOwnsOrder(orderId);
-        }
+        authorizationService.assertCanManageDropOrder(orderId, dropId);
         dropOrderService.cancelDropOrder(orderId);
         return ResponseEntity.ok(ApiResponse.success(null, "Order cancelled successfully", 200));
     }

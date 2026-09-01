@@ -6,7 +6,7 @@ FoodFlow is a **pickup-only** food marketplace connecting local culinary creator
 
 1. **Drops**: Creators schedule "Drops" - specific times and locations where food will be available for pickup. They set a menu, prices, and a maximum order limit.
 2. **Booking**: Customers browse Drops, add items to their cart, and book an order before the drop's cutoff time. 
-3. **Cash at Pickup**: All orders are cash-on-delivery (Cash at Pickup). Customers arrive at the designated location at the scheduled time and pay the creator directly in cash.
+3. **Cash at Pickup**: All orders are Pay at Pickup (Cash at Pickup). Customers arrive at the designated location at the scheduled time and pay the creator directly in cash.
 4. **Social Reels**: Creators can upload TikTok-style short videos (Reels) to showcase their dishes and engage with customers. Customers can discover new creators through the Reels feed.
 5. **Seller Analytics**: Creators have access to a dashboard tracking their revenue, popular items, fill rates, and customer retention metrics.
 

@@ -344,7 +344,7 @@ export default function CreatorAnalyticsPage() {
         <div className="mb-6">
           <h2 className="font-display text-xl font-bold text-stone-900 flex items-center gap-2">
             <Star className="text-orange-500 fill-orange-500 w-5 h-5" /> 
-            AI Insights
+            Automated Insights
           </h2>
           <p className="text-sm text-stone-500">Automatically generated insights based on your recent activity.</p>
         </div>
@@ -386,7 +386,7 @@ export default function CreatorAnalyticsPage() {
           <div className="flex-1 w-full">
             <h3 className="font-display text-2xl font-bold mb-2">Ask FoodFlow AI</h3>
             <p className="text-stone-400 text-sm mb-6 max-w-lg">
-              Our AI analyzes your drop history, customer reviews, and market trends to give you actionable insights.
+              Our system analyzes your drop history, customer reviews, and market trends to give you actionable insights.
             </p>
 
             <form onSubmit={handleAskInsight} className="flex gap-2 mb-6">

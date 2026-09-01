@@ -106,4 +106,45 @@ public class CreatorAuthorizationService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         assertCreatorOwnsRestaurant(order.getRestaurant().getRestaurantId());
     }
+
+    public void assertCanManageDropOrder(Long orderId, Long dropId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        if (order.getDrop() == null || !order.getDrop().getDropId().equals(dropId)) {
+            throw new AccessDeniedException("Order does not belong to the specified drop");
+        }
+        
+        org.springframework.security.core.Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
+        boolean isSeller = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_SELLER"));
+                
+        if (isSeller) {
+            assertCreatorOwnsRestaurant(order.getRestaurant().getRestaurantId());
+        } else {
+            User user = getAuthenticatedUser();
+            if (!order.getUser().getUserId().equals(user.getUserId())) {
+                throw new AccessDeniedException("You do not have permission to access this order");
+            }
+        }
+    }
+
+    public void assertCanAccessOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+                
+        org.springframework.security.core.Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
+        boolean isSeller = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_SELLER"));
+                
+        if (isSeller) {
+            assertCreatorOwnsRestaurant(order.getRestaurant().getRestaurantId());
+        } else {
+            User user = getAuthenticatedUser();
+            if (!order.getUser().getUserId().equals(user.getUserId())) {
+                throw new AccessDeniedException("You do not have permission to access this order");
+            }
+        }
+    }
 }

@@ -72,7 +72,7 @@ export default function CreatorMenuPage() {
         setIsSlideoverOpen(false);
         toast.success('Menu item saved successfully!');
       },
-      onError: (error: any) => {
+      onError: (error: unknown) => {
         const message = error instanceof Error
           ? error.message
           : 'Could not save the menu item.';

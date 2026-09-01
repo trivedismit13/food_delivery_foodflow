@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api")
@@ -19,9 +20,12 @@ import org.springframework.web.bind.annotation.*;
 public class ReelController {
 
     private final ReelService reelService;
+    private final com.foodflow.service.security.CreatorAuthorizationService authorizationService;
 
     @PostMapping("/restaurants/{id}/reels")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<ReelResponse>> uploadReel(@PathVariable Long id, @Valid @RequestBody ReelRequest request) {
+        authorizationService.assertCreatorOwnsRestaurant(id);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(reelService.uploadReel(id, request)));
     }
 

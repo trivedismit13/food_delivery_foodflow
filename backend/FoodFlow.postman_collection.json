@@ -19,11 +19,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/users/register/customer",
+							"raw": "http://localhost:8080/api/auth/register",
 							"protocol": "http",
 							"host": ["localhost"],
 							"port": "8080",
-							"path": ["api", "users", "register", "customer"]
+							"path": ["api", "auth", "register"]
 						},
 						"body": {
 							"mode": "raw",
@@ -42,11 +42,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/users/register/seller",
+							"raw": "http://localhost:8080/api/auth/register-creator",
 							"protocol": "http",
 							"host": ["localhost"],
 							"port": "8080",
-							"path": ["api", "users", "register", "seller"]
+							"path": ["api", "auth", "register-creator"]
 						},
 						"body": {
 							"mode": "raw",
@@ -65,11 +65,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/users/login",
+							"raw": "http://localhost:8080/api/auth/login",
 							"protocol": "http",
 							"host": ["localhost"],
 							"port": "8080",
-							"path": ["api", "users", "login"]
+							"path": ["api", "auth", "login"]
 						},
 						"body": {
 							"mode": "raw",
@@ -116,11 +116,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/drops/1/book",
+							"raw": "http://localhost:8080/api/orders",
 							"protocol": "http",
 							"host": ["localhost"],
 							"port": "8080",
-							"path": ["api", "drops", "1", "book"]
+							"path": ["api", "orders"]
 						},
 						"body": {
 							"mode": "raw",
@@ -220,11 +220,11 @@
 					"request": {
 						"method": "GET",
 						"url": {
-							"raw": "http://localhost:8080/api/notifications/user/1",
+							"raw": "http://localhost:8080/api/notifications",
 							"protocol": "http",
 							"host": ["localhost"],
 							"port": "8080",
-							"path": ["api", "notifications", "user", "1"]
+							"path": ["api", "notifications"]
 						}
 					}
 				}
@@ -238,11 +238,11 @@
 					"request": {
 						"method": "GET",
 						"url": {
-							"raw": "http://localhost:8080/api/analytics/seller/2",
+							"raw": "http://localhost:8080/api/creators/2/analytics/dashboard",
 							"protocol": "http",
 							"host": ["localhost"],
 							"port": "8080",
-							"path": ["api", "analytics", "seller", "2"]
+							"path": ["api", "creators", "2", "analytics", "dashboard"]
 						}
 					}
 				}

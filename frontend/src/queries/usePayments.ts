@@ -24,6 +24,7 @@ export function useCollectPayment() {
       queryClient.invalidateQueries({ queryKey: ['payment', variables] });
       queryClient.invalidateQueries({ queryKey: ['orders'] });
       queryClient.invalidateQueries({ queryKey: ['dropOrders'] });
+      queryClient.invalidateQueries({ queryKey: ['order', variables] });
     }
   });
 }

@@ -26,9 +26,9 @@ public class AnalyticsController {
     public ResponseEntity<ApiResponse<List<TopDishResponse>>> getTopDishes(@PathVariable Long id, @RequestParam(defaultValue = "5") int limit) {
         List<TopDishResponse> responses = analyticsService.getTopDishes(id, limit).stream()
                 .map(obj -> TopDishResponse.builder()
-                        .itemName((String) obj[0])
-                        .totalOrders(((Number) obj[1]).longValue())
-                        .revenue(new BigDecimal(obj[2].toString()))
+                        .itemName(obj.length > 0 && obj[0] != null ? (String) obj[0] : "Unknown")
+                        .totalOrders(obj.length > 1 && obj[1] != null ? ((Number) obj[1]).longValue() : 0L)
+                        .revenue(obj.length > 2 && obj[2] != null ? new BigDecimal(obj[2].toString()) : BigDecimal.ZERO)
                         .build())
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(responses));
@@ -76,8 +76,8 @@ public class AnalyticsController {
     public ResponseEntity<ApiResponse<List<CuisineRevenueResponse>>> getRevenueByCuisine() {
         List<CuisineRevenueResponse> responses = analyticsService.getRevenueByCuisine().stream()
                 .map(obj -> CuisineRevenueResponse.builder()
-                        .cuisine((String) obj[0])
-                        .totalRevenue(new BigDecimal(obj[1].toString()))
+                        .cuisine(obj.length > 0 && obj[0] != null ? (String) obj[0] : "Unknown")
+                        .totalRevenue(obj.length > 1 && obj[1] != null ? new BigDecimal(obj[1].toString()) : BigDecimal.ZERO)
                         .build())
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(responses));

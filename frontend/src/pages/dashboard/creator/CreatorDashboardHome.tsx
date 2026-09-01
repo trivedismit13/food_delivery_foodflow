@@ -246,7 +246,7 @@ export default function CreatorDashboardHome() {
               </motion.p>
             ) : (
               <p className="text-orange-800 leading-relaxed font-medium">
-                No insights available right now. Keep completing orders to generate AI insights!
+                No insights available right now. Keep completing orders to generate insights!
               </p>
             )}
             <div className="mt-4">

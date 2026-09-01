@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Check, Phone, MapPin } from 'lucide-react'
+import { Check, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import { useParams } from 'react-router-dom'
@@ -34,8 +34,6 @@ export default function OrderTrackingPage() {
 
   const currentStatus = order.status
   let currentStepIndex = steps.findIndex(s => s.id === currentStatus)
-
-  const isTerminal = currentStatus === 'COMPLETED' || currentStatus === 'CANCELLED'
 
   const renderBanner = () => {
     if (currentStatus === 'COMPLETED') {
@@ -156,7 +154,7 @@ export default function OrderTrackingPage() {
             </div>
           )}
 
-          {/* Right: Details & Map Placeholder */}
+          {/* Right: Details */}
           <div className={cn("flex flex-col gap-6", currentStatus === 'CANCELLED' ? "w-full" : "md:w-[45%]")}>
             
             {/* Pickup Info */}

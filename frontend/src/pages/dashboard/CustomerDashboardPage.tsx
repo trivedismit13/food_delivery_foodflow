@@ -208,7 +208,7 @@ export default function CustomerDashboardPage() {
                           )}
                           
                           <div className="flex gap-2 mt-4 w-full sm:w-auto">
-                            {order.status === 'DELIVERED' ? (
+                            {order.status === 'COMPLETED' ? (
                               <button className="flex-1 sm:flex-none px-5 py-2 rounded-xl border border-orange-500 text-orange-600 text-sm font-semibold hover:bg-orange-50 transition-colors">
                                 Rate Creator
                               </button>

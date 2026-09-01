@@ -168,6 +168,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         List<Object[]> trend = analyticsRepository.findWeeklyRevenueTrend(creatorId, weeks);
         List<com.foodflow.dto.response.WeeklyTrendResponse> result = new java.util.ArrayList<>();
         for (Object[] row : trend) {
+            if (row == null || row.length < 4) continue;
             com.foodflow.dto.response.WeeklyTrendResponse res = new com.foodflow.dto.response.WeeklyTrendResponse();
             res.setWeek(row[0] != null ? row[0].toString() : "N/A");
             res.setOrders(row[1] != null ? ((Number) row[1]).intValue() : 0);
@@ -183,6 +184,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         List<Object[]> items = analyticsRepository.findTopItemsForCreator(creatorId);
         List<com.foodflow.dto.response.TopItemResponse> result = new java.util.ArrayList<>();
         for (Object[] row : items) {
+            if (row == null || row.length < 3) continue;
             com.foodflow.dto.response.TopItemResponse res = new com.foodflow.dto.response.TopItemResponse();
             res.setItemName(row[0] != null ? row[0].toString() : "N/A");
             res.setTotalOrders(row[1] != null ? ((Number) row[1]).intValue() : 0);
@@ -213,6 +215,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         List<Object[]> drops = analyticsRepository.findFastestSellingDrops(creatorId);
         List<com.foodflow.dto.response.DropPerformanceResponse> result = new java.util.ArrayList<>();
         for (Object[] row : drops) {
+            if (row == null || row.length < 4) continue;
             com.foodflow.dto.response.DropPerformanceResponse res = new com.foodflow.dto.response.DropPerformanceResponse();
             res.setDropTitle(row[0] != null ? row[0].toString() : "N/A");
             res.setMaxOrders(row[1] != null ? ((Number) row[1]).intValue() : 0);
@@ -227,7 +230,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     public com.foodflow.dto.response.BestDayResponse getBestDayOfWeek(Long creatorId) {
         com.foodflow.dto.response.BestDayResponse res = new com.foodflow.dto.response.BestDayResponse();
         List<Object[]> bestDay = analyticsRepository.findBestDayOfWeekForCreator(creatorId);
-        if (!bestDay.isEmpty()) {
+        if (!bestDay.isEmpty() && bestDay.get(0) != null && bestDay.get(0).length >= 4) {
             Object[] row = bestDay.get(0);
             res.setDayOfWeek(row[0] != null ? row[0].toString() : "N/A");
             res.setAvgFillRate(row[1] != null ? ((Number) row[1]).doubleValue() : 0.0);

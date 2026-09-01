@@ -123,6 +123,19 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse updateOrderStatus(Long orderId, OrderStatus status) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        
+        OrderStatus currentStatus = order.getStatus();
+        
+        // Reject backward transitions
+        if (status.ordinal() < currentStatus.ordinal() && status != OrderStatus.CANCELLED) {
+            throw new InvalidOrderException("Invalid order transition from " + currentStatus + " to " + status);
+        }
+        
+        // Cannot transition out of CANCELLED or COMPLETED
+        if ((currentStatus == OrderStatus.CANCELLED || currentStatus == OrderStatus.COMPLETED) && status != currentStatus) {
+            throw new InvalidOrderException("Cannot change status of a " + currentStatus + " order");
+        }
+
         order.setStatus(status);
         order = orderRepository.save(order);
         return mapToResponse(order);

@@ -24,13 +24,7 @@ public class PaymentController {
     @GetMapping("/{orderId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<PaymentResponse>> checkPaymentStatus(@PathVariable Long orderId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        boolean isSeller = auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SELLER"));
-        if (isSeller) {
-            authorizationService.assertCreatorOwnsOrderRestaurant(orderId);
-        } else {
-            authorizationService.assertUserOwnsOrder(orderId);
-        }
+        authorizationService.assertCanAccessOrder(orderId);
         
         return paymentService.getPaymentByOrderId(orderId)
                 .map(p -> ResponseEntity.ok(ApiResponse.success(mapToResponse(p))))
@@ -38,7 +32,7 @@ public class PaymentController {
     }
 
     @PutMapping("/order/{orderId}/collect")
-    @PreAuthorize("hasRole('SELLER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ApiResponse<PaymentResponse>> markPaymentCollected(@PathVariable Long orderId) {
         authorizationService.assertCreatorOwnsOrderRestaurant(orderId);
         Payment payment = paymentService.getPaymentByOrderId(orderId)

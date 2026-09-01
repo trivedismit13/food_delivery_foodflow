@@ -84,8 +84,6 @@ public class UserController {
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
-        user.setPassword(request.getPassword());
-        user.setRole(request.getRole());
         return ResponseEntity.ok(ApiResponse.success(UserResponse.fromEntity(userService.updateUser(id, user))));
     }
 }

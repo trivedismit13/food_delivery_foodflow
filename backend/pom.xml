@@ -15,7 +15,7 @@
 	<description>Intelligent Food Delivery Analytics Platform</description>
 	<properties>
 		<java.version>21</java.version>
-		<lombok.version>1.18.34</lombok.version>
+		<lombok.version>1.18.32</lombok.version>
 	</properties>
 	<dependencies>
 		<!-- Spring Boot Web -->
@@ -122,7 +122,6 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.13.0</version>
 				<configuration>
-					<fork>true</fork>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
