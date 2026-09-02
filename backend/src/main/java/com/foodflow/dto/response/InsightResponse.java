@@ -13,6 +13,6 @@ public class InsightResponse {
     private String insight;
     private Object supportingData;
     private Set<String> supportingDataKeys;
-    private Double confidence;
+
     private LocalDateTime generatedAt;
 }

@@ -23,6 +23,7 @@ public class DropItemRequest {
     // For creating new items on the fly (from frontend CreateDropPage)
     private String name;
     private String description;
+    @jakarta.validation.constraints.PositiveOrZero(message = "Price must be positive or zero")
     private BigDecimal price;
     private Boolean isVegetarian;
     private Integer maxQuantityPerOrder;

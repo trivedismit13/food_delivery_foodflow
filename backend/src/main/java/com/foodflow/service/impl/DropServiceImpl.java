@@ -142,8 +142,13 @@ public class DropServiceImpl implements DropService {
         FoodDrop drop = dropRepository.findById(dropId)
             .orElseThrow(() -> new ResourceNotFoundException("Drop not found: " + dropId));
 
-        if (drop.getStatus() != FoodDrop.DropStatus.DRAFT && drop.getStatus() != FoodDrop.DropStatus.ANNOUNCED) {
-            throw new InvalidRequestException("Cannot edit a drop that is already " + drop.getStatus());
+        if (drop.getStatus() != FoodDrop.DropStatus.DRAFT) {
+            if (request.getMaxOrders() != null && !request.getMaxOrders().equals(drop.getMaxOrders())) {
+                throw new InvalidRequestException("Cannot change max orders for an active drop");
+            }
+            if (request.getOrderCutoffTime() != null && !request.getOrderCutoffTime().equals(drop.getOrderCutoffTime())) {
+                throw new InvalidRequestException("Cannot change order cutoff time for an active drop");
+            }
         }
 
         if (request.getTitle() != null) drop.setTitle(request.getTitle());

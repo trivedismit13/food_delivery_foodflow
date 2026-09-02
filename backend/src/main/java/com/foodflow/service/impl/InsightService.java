@@ -72,7 +72,7 @@ public class InsightService {
             .question(question)
             .insight(insight)
             .supportingDataKeys(context.keySet())
-            .confidence(calculateConfidence(context))
+
             .generatedAt(LocalDateTime.now())
             .build();
     }
@@ -131,9 +131,7 @@ public class InsightService {
         return data.toString();
     }
 
-    private Double calculateConfidence(Map<String, Object> context) {
-        return null; // Stub: real confidence requires actual LLM probability calculation
-    }
+
 
     private Double extractRepeatRate(Object repeatRateObj) {
         if (repeatRateObj instanceof Object[] row && row.length > 2) {
@@ -160,8 +158,8 @@ public class InsightService {
 
     private InsightResponse ruleBasedInsight(String insightText, String recommendation) {
         return InsightResponse.builder()
-                .insight(insightText + " " + recommendation)
-                .confidence(1.0)
+                .insight("[Rule-based Insight] " + insightText + " " + recommendation)
+
                 .generatedAt(LocalDateTime.now())
                 .build();
     }

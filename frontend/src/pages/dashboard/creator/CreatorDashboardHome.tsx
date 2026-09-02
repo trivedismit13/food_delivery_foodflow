@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { Link } from 'react-router-dom';
-import { Plus, Package, CheckCircle, BarChart3, ChevronDown, Clock, ArrowRight, Star, Loader2 } from 'lucide-react';
+import { Plus, Package, CheckCircle, BarChart3, ChevronDown, Clock, ArrowRight, Loader2 } from 'lucide-react';
 import { useCreatorDashboard, useAutoInsights } from '@/queries/creatorAnalytics';
 import { useCreatorDrops, useUpdateDropStatus, useCancelDrop } from '@/queries/drops';
 import { motion } from 'framer-motion';

@@ -1,5 +1,7 @@
 export type UserRole = 'CUSTOMER' | 'SELLER' | 'ADMIN';
 
+import { CreatorSummary } from './creator';
+
 export interface AuthResponse {
   userId: number;
   name: string;
@@ -8,7 +10,7 @@ export interface AuthResponse {
   token: string;
   expiresIn: number;
   tokenType: string;
-  creatorProfile?: any;
+  creatorProfile?: CreatorSummary;
 }
 
 export interface LoginRequest {

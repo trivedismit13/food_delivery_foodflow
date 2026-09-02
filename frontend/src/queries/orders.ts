@@ -68,6 +68,7 @@ export function usePlaceDropOrder() {
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['orders'] })
       queryClient.invalidateQueries({ queryKey: ['drop', variables.dropId] })
+      queryClient.invalidateQueries({ queryKey: ['dropOrders', variables.dropId] })
       queryClient.invalidateQueries({ queryKey: ['drops'] })
     },
   })

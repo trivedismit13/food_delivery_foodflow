@@ -31,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponse placeOrder(Long userId, Long restaurantId, List<OrderItemRequest> items, PaymentMethod paymentMethod) {
+    public OrderResponse placeOrder(Long userId, Long restaurantId, List<OrderItemRequest> items) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
@@ -124,21 +124,46 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         
-        OrderStatus currentStatus = order.getStatus();
-        
-        // Reject backward transitions
-        if (status.ordinal() < currentStatus.ordinal() && status != OrderStatus.CANCELLED) {
-            throw new InvalidOrderException("Invalid order transition from " + currentStatus + " to " + status);
-        }
-        
-        // Cannot transition out of CANCELLED or COMPLETED
-        if ((currentStatus == OrderStatus.CANCELLED || currentStatus == OrderStatus.COMPLETED) && status != currentStatus) {
-            throw new InvalidOrderException("Cannot change status of a " + currentStatus + " order");
-        }
+        validateOrderStatusTransition(order.getStatus(), status);
 
         order.setStatus(status);
         order = orderRepository.save(order);
+        
+        if (status == OrderStatus.CANCELLED) {
+            Payment payment = paymentService.getPaymentByOrderId(orderId).orElse(null);
+            if (payment != null) {
+                paymentService.cancelPayment(payment.getPaymentId());
+            }
+        }
+        
         return mapToResponse(order);
+    }
+
+    /*
+     * Changed visibility from private to package‑private to allow unit tests to invoke
+     * the transition validation directly. The method remains internal to the service
+     * package and is not part of the public API.
+     */
+    void validateOrderStatusTransition(OrderStatus currentStatus, OrderStatus requestedStatus) {
+        if (currentStatus == requestedStatus) {
+            return;
+        }
+
+        if (currentStatus == OrderStatus.PLACED) {
+            if (requestedStatus != OrderStatus.PREPARING && requestedStatus != OrderStatus.CANCELLED) {
+                throw new InvalidOrderException("Invalid order transition from " + currentStatus + " to " + requestedStatus);
+            }
+        } else if (currentStatus == OrderStatus.PREPARING) {
+            if (requestedStatus != OrderStatus.READY && requestedStatus != OrderStatus.CANCELLED) {
+                throw new InvalidOrderException("Invalid order transition from " + currentStatus + " to " + requestedStatus);
+            }
+        } else if (currentStatus == OrderStatus.READY) {
+            if (requestedStatus != OrderStatus.COMPLETED) {
+                throw new InvalidOrderException("Invalid order transition from " + currentStatus + " to " + requestedStatus);
+            }
+        } else {
+            throw new InvalidOrderException("Cannot change status of a " + currentStatus + " order");
+        }
     }
 
     @Override

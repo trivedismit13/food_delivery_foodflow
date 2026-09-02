@@ -65,7 +65,7 @@ export default function AdminVerificationPage() {
                 </td>
                 <td className="p-4 text-right">
                   <button 
-                    onClick={() => handleApprove(v.creator?.restaurantId!)}
+                    onClick={() => handleApprove(v.creator?.restaurantId ?? 0)}
                     disabled={processingId === v.creator?.restaurantId}
                     className="bg-green-500 hover:bg-green-600 disabled:bg-stone-300 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors inline-flex items-center gap-1"
                   >

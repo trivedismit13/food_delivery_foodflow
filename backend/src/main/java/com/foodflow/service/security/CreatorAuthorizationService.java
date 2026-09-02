@@ -116,6 +116,12 @@ public class CreatorAuthorizationService {
         
         org.springframework.security.core.Authentication auth =
                 SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        if (isAdmin) {
+            return;
+        }
+
         boolean isSeller = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_SELLER"));
                 
@@ -135,6 +141,12 @@ public class CreatorAuthorizationService {
                 
         org.springframework.security.core.Authentication auth =
                 SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        if (isAdmin) {
+            return;
+        }
+
         boolean isSeller = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_SELLER"));
                 

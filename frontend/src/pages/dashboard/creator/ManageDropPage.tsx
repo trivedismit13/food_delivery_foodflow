@@ -15,10 +15,10 @@ type Tab = 'Details' | 'Orders';
 export default function ManageDropPage() {
   const { dropId } = useParams();
   const [activeTab, setActiveTab] = useState<Tab>('Orders');
-  const { user, creatorProfile } = useAuthStore();
+  const { creatorProfile } = useAuthStore();
   
   const { data: drop, isLoading: isLoadingDrop, error: dropError } = useDropById(Number(dropId));
-  const { data: orders = [], isLoading: isLoadingOrders } = useDropOrders(Number(dropId));
+  const { data: orders = [] } = useDropOrders(Number(dropId));
   const updateStatusMutation = useUpdateDropStatus();
   const cancelDropMutation = useCancelDrop();
   const updateOrderStatusMutation = useUpdateOrderStatus();
@@ -77,7 +77,7 @@ export default function ManageDropPage() {
     }
   };
 
-  const isPreparing = drop.status === 'CUTOFF' || drop.status === 'READY';
+
   
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-6">
@@ -188,7 +188,7 @@ export default function ManageDropPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-stone-100">
-                      {orders.map((order, i) => (
+                      {orders.map((order) => (
                         <tr key={order.orderId} className="hover:bg-stone-50 transition-colors">
                           <td className="p-4 font-medium text-stone-900">FF-{order.orderId}</td>
                           <td className="p-4">

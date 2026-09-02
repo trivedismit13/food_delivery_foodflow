@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/lib/api'
-import type { MenuItemResponse } from '@/types/menu'
+
 
 export interface MenuItemRequest {
   name: string

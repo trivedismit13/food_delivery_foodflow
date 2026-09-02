@@ -29,7 +29,7 @@ export const useGetVerificationStatus = (creatorId: number) => {
 export const useSubmitLevel2Verification = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ creatorId, payload }: { creatorId: number, payload: any }) => {
+    mutationFn: async ({ creatorId, payload }: { creatorId: number, payload: Record<string, unknown> }) => {
       const res = await apiClient.put<{ data: CreatorVerification }>(`/creators/${creatorId}/verification/level-2`, payload);
       return res.data.data;
     },

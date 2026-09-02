@@ -39,7 +39,7 @@ export interface CreatorResponse {
 
   offersPickup: boolean;
   pickupAddress: string | null;
-  verification?: any;
+  verification?: Record<string, unknown>;
   activeDrops?: FoodDropResponse[];
 }
 

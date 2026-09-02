@@ -4,14 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
-import { apiClient } from '@/lib/api';
+
 import type { MenuItemResponse } from '@/types/api';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useMenu, useCreateMenuItem, useUpdateMenuItem, useDeleteMenuItem } from '@/queries/menu';
+import { useQueryClient } from '@tanstack/react-query';
+import { useMenu, useCreateMenuItem, useDeleteMenuItem } from '@/queries/menu';
 
 export default function CreatorMenuPage() {
   const { creatorProfile } = useAuthStore();
-  const queryClient = useQueryClient();
+
   const [isSlideoverOpen, setIsSlideoverOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');

@@ -359,11 +359,7 @@ export default function CreatorAnalyticsPage() {
               <div key={index} className="bg-orange-50 rounded-2xl p-5 border border-orange-100">
                 <h3 className="font-bold text-orange-900 mb-2">{insight.question}</h3>
                 <p className="text-sm text-orange-800 leading-relaxed">{insight.insight}</p>
-                {insight.confidence > 0 && (
-                  <div className="mt-3 text-xs font-semibold text-orange-600/70 uppercase tracking-wider">
-                    Confidence: {(insight.confidence * 100).toFixed(0)}%
-                  </div>
-                )}
+
               </div>
             ))}
           </div>

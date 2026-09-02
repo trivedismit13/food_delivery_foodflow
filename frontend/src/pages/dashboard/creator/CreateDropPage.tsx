@@ -10,7 +10,7 @@ import { useMenu } from '@/queries/menu';
 import { ValidationError } from '@/lib/api';
 
 export default function CreateDropPage() {
-  const navigate = useNavigate();
+
   const { user, creatorProfile } = useAuthStore();
   const [isSaving, setIsSaving] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -30,7 +30,7 @@ export default function CreateDropPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch Menu Catalog
-  const { data: menuItems = [], isLoading: isLoadingMenu } = useMenu(creatorProfile?.restaurantId);
+  const { data: menuItems = [] } = useMenu(creatorProfile?.restaurantId);
   const createDropMutation = useCreateDrop();
 
   const normalizedMenuItems = (menuItems as MenuItemResponse[]).map((item) => ({

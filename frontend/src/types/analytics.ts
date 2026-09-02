@@ -21,9 +21,9 @@ export interface CreatorDashboardResponse {
 export interface InsightResponse {
   question: string;
   insight: string;
-  supportingData: any;
+  supportingData: Record<string, unknown>;
   supportingDataKeys: string[];
-  confidence: number;
+
   generatedAt: string;
 }
 

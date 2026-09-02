@@ -27,7 +27,7 @@ public class OrderController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<OrderResponse>> placeOrder(@Valid @RequestBody PlaceOrderRequest request) {
         authorizationService.assertUserMatches(request.getUserId());
-        OrderResponse order = orderService.placeOrder(request.getUserId(), request.getRestaurantId(), request.getItems(), com.foodflow.model.PaymentMethod.CASH);
+        OrderResponse order = orderService.placeOrder(request.getUserId(), request.getRestaurantId(), request.getItems());
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(order));
     }
 

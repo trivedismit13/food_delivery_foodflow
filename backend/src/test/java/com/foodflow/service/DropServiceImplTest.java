@@ -110,6 +110,42 @@ class DropServiceImplTest {
     }
 
     @Test
+    void createDropRejectsItemsFromOtherRestaurant() {
+        Long creatorUserId = 7L;
+        Long creatorRestaurantId = 42L;
+
+        Restaurant creator = new Restaurant();
+        creator.setRestaurantId(creatorRestaurantId);
+        creator.setName("Test Kitchen");
+
+        Restaurant otherRestaurant = new Restaurant();
+        otherRestaurant.setRestaurantId(99L);
+
+        MenuItem existingMenuItem = new MenuItem();
+        existingMenuItem.setItemId(10L);
+        existingMenuItem.setRestaurant(otherRestaurant);
+
+        when(restaurantRepository.findByOwnerUserId(creatorUserId)).thenReturn(Optional.of(creator));
+        when(menuItemRepository.findById(10L)).thenReturn(Optional.of(existingMenuItem));
+
+        CreateDropRequest request = new CreateDropRequest();
+        request.setTitle("Weekend Special");
+        request.setDropDate(LocalDate.now().plusDays(1));
+        request.setOrderCutoffTime(LocalDateTime.now().plusHours(2));
+        request.setMaxOrders(10);
+        request.setPickupLocation("Near VIT Main Gate");
+        request.setPickupTime("12:00 PM - 2:00 PM");
+
+        DropItemRequest itemRequest = new DropItemRequest();
+        itemRequest.setItemId(10L);
+        request.setItems(List.of(itemRequest));
+
+        org.junit.jupiter.api.Assertions.assertThrows(InvalidRequestException.class, () -> {
+            dropService.createDrop(creatorUserId, request);
+        }, "Item does not belong to your menu");
+    }
+
+    @Test
     void manualTransitionWorks() {
         Long dropId = 1L;
         FoodDrop drop = new FoodDrop();

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Loader2, Bell, Check, Play } from 'lucide-react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Star, Loader2, Bell, Check } from 'lucide-react';
+import { useParams, Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
 import { VerificationBadge } from '@/components/creators/VerificationBadge';
@@ -31,7 +31,7 @@ export default function CreatorProfilePage() {
   const { data: menuItems = [], isLoading: isLoadingMenu } = useMenu(id);
   const { data: ratings, isLoading: isLoadingRatings } = useCreatorRatings(id);
   const { data: reels, isLoading: isLoadingReels } = useRestaurantReels(id);
-  const { data: isFollowing, isLoading: isLoadingFollowStatus } = useFollowStatus(user ? id : undefined);
+  const { data: isFollowing } = useFollowStatus(user ? id : undefined);
   
   const followMutation = useFollowCreator();
   const unfollowMutation = useUnfollowCreator();

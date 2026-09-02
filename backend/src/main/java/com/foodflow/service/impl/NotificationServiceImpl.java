@@ -117,7 +117,7 @@ public class NotificationServiceImpl implements NotificationService {
         Notification notification = notificationRepository.findById(notificationId)
             .orElseThrow(() -> new RuntimeException("Notification not found"));
         if (!notification.getUser().getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized");
+            throw new org.springframework.security.access.AccessDeniedException("Unauthorized");
         }
         notification.setIsRead(true);
         notificationRepository.save(notification);

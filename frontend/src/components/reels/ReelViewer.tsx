@@ -10,7 +10,7 @@ interface ReelViewerProps {
 
 export default function ReelViewer({ reel }: ReelViewerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+
   const navigate = useNavigate();
 
   const [ref, entry] = useIntersectionObserver<HTMLDivElement>({

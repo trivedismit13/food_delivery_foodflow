@@ -104,6 +104,7 @@ export function usePlaceDropOrder() {
     
     onSuccess: (orderResponse) => {
       queryClient.invalidateQueries({ queryKey: ['drop', orderResponse.dropId] })
+      queryClient.invalidateQueries({ queryKey: ['dropOrders', orderResponse.dropId] })
       queryClient.invalidateQueries({ queryKey: ['orders'] })
       queryClient.invalidateQueries({ queryKey: ['drops'] })
       
@@ -167,7 +168,7 @@ export function useUpdateDropStatus() {
       queryClient.invalidateQueries({ queryKey: ['dropOrders', variables.dropId] })
       toast.success(`Drop status updated to ${variables.status}`)
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       handleApiError(error)
     }
   })
@@ -189,7 +190,7 @@ export function useCancelDrop() {
       queryClient.invalidateQueries({ queryKey: ['drops'] })
       toast.success('Drop cancelled successfully')
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       handleApiError(error)
     }
   })

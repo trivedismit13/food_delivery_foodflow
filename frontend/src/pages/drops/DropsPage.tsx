@@ -17,7 +17,8 @@ export default function DropsPage() {
   const { isAuthenticated } = useAuthStore();
   const [activeStatus, setActiveStatus] = useState('All');
   const [activeType, setActiveType] = useState('All');
-  const [activeSort, setActiveSort] = useState('Closing Soonest');
+  const [activeSort] = useState('Closing Soonest');
+
   const [page, setPage] = useState(0);
   
   const [searchParams] = useSearchParams();
@@ -27,7 +28,7 @@ export default function DropsPage() {
     setPage(0);
   }, [query]);
 
-  const { data: feedData, isLoading: isFeedLoading, isPlaceholderData } = useActiveDropsFeed({ 
+  const { data: feedData, isPlaceholderData } = useActiveDropsFeed({ 
     type: activeType !== 'All' ? typeMapping[activeType] : undefined,
     sortBy: activeSort === 'Closing Soonest' ? 'closingSoonest' : 'newest',
     query,
