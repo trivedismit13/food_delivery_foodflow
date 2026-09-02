@@ -3,15 +3,7 @@ pipeline {
 
     tools {
         jdk 'Java 21'
-        nodejs 'NodeJS 18'
-    }
-
-    environment {
-        // We use Jenkins credentials to avoid hardcoding secrets in the pipeline.
-        // These credentials must be configured in Jenkins for the pipeline to succeed.
-        TEST_DB_USERNAME = credentials('test-db-username')
-        TEST_DB_PASSWORD = credentials('test-db-password')
-        TEST_JWT_SECRET  = credentials('test-jwt-secret')
+        nodejs 'NodeJS 22'
     }
 
     stages {
@@ -22,6 +14,13 @@ pipeline {
         }
 
         stage('Backend Test') {
+            environment {
+                // Non-secret environment variable required by test properties
+                TEST_DB_USERNAME = 'root'
+                // Secrets scoped only to the backend stage where they are needed
+                TEST_DB_PASSWORD = credentials('test-db-password')
+                TEST_JWT_SECRET  = credentials('test-jwt-secret')
+            }
             steps {
                 dir('backend') {
                     // Ensure the maven wrapper is executable on Linux agents
@@ -56,8 +55,9 @@ pipeline {
 
     post {
         always {
-            // Publish JUnit reports even if earlier stages failed
-            junit allowEmptyResults: true, testResults: 'backend/target/surefire-reports/*.xml, backend/target/failsafe-reports/*.xml'
+            // Publish JUnit reports strictly from surefire. 
+            // allowEmptyResults is removed so missing test results fail the build properly.
+            junit testResults: 'backend/target/surefire-reports/*.xml'
         }
         success {
             // Archive artifacts upon success
