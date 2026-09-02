@@ -101,7 +101,18 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         paymentService.createPayment(payment);
 
-        meterRegistry.counter("foodflow.orders.created").increment();
+        if (org.springframework.transaction.support.TransactionSynchronizationManager.isSynchronizationActive()) {
+            org.springframework.transaction.support.TransactionSynchronizationManager.registerSynchronization(
+                new org.springframework.transaction.support.TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        meterRegistry.counter("foodflow.orders.created").increment();
+                    }
+                }
+            );
+        } else {
+            meterRegistry.counter("foodflow.orders.created").increment();
+        }
 
         return mapToResponse(order);
     }
@@ -138,7 +149,18 @@ public class OrderServiceImpl implements OrderService {
             if (payment != null) {
                 paymentService.cancelPayment(payment.getPaymentId());
             }
-            meterRegistry.counter("foodflow.orders.cancelled").increment();
+            if (org.springframework.transaction.support.TransactionSynchronizationManager.isSynchronizationActive()) {
+                org.springframework.transaction.support.TransactionSynchronizationManager.registerSynchronization(
+                    new org.springframework.transaction.support.TransactionSynchronization() {
+                        @Override
+                        public void afterCommit() {
+                            meterRegistry.counter("foodflow.orders.cancelled").increment();
+                        }
+                    }
+                );
+            } else {
+                meterRegistry.counter("foodflow.orders.cancelled").increment();
+            }
         }
         
         return mapToResponse(order);

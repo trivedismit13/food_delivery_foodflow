@@ -51,7 +51,18 @@ public class ReelServiceImpl implements ReelService {
         reel.setTitle(request.getTitle());
         reel.setMediaUrl(request.getMediaUrl());
         reel = reelRepository.save(reel);
-        meterRegistry.counter("foodflow.reels.created").increment();
+        if (org.springframework.transaction.support.TransactionSynchronizationManager.isSynchronizationActive()) {
+            org.springframework.transaction.support.TransactionSynchronizationManager.registerSynchronization(
+                new org.springframework.transaction.support.TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        meterRegistry.counter("foodflow.reels.created").increment();
+                    }
+                }
+            );
+        } else {
+            meterRegistry.counter("foodflow.reels.created").increment();
+        }
         return mapToResponse(reel);
     }
 

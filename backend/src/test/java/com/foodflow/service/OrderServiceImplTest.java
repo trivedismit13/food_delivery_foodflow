@@ -206,4 +206,26 @@ public class OrderServiceImplTest {
 
         org.junit.jupiter.api.Assertions.assertEquals(0, meterRegistry.counter("foodflow.orders.created").count());
     }
+
+    @Test
+    void testMetrics_OrderCancelled_Rollback_MetricNotIncremented() {
+        Order order = createTestOrder(3L, OrderStatus.PLACED);
+        when(orderRepository.findById(3L)).thenReturn(Optional.of(order));
+        when(orderRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+        
+        com.foodflow.model.Payment payment = new com.foodflow.model.Payment();
+        payment.setPaymentId(3L);
+        when(paymentService.getPaymentByOrderId(3L)).thenReturn(Optional.of(payment));
+        
+        // Force existing failure path: payment cancellation fails
+        doThrow(new RuntimeException("Payment cancellation failed"))
+            .when(paymentService).cancelPayment(3L);
+        
+        assertThrows(RuntimeException.class, () -> {
+            orderService.updateOrderStatus(3L, OrderStatus.CANCELLED);
+        });
+        
+        // Metric remains unchanged because it rolls back (or fails before increment fallback)
+        org.junit.jupiter.api.Assertions.assertEquals(0, meterRegistry.counter("foodflow.orders.cancelled").count());
+    }
 }

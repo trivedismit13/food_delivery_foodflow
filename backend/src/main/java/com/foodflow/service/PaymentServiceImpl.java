@@ -72,7 +72,18 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setStatus(PaymentStatus.COLLECTED);
         payment.setPaymentDate(LocalDateTime.now());
         payment = paymentRepository.save(payment);
-        meterRegistry.counter("foodflow.payments.collected").increment();
+        if (org.springframework.transaction.support.TransactionSynchronizationManager.isSynchronizationActive()) {
+            org.springframework.transaction.support.TransactionSynchronizationManager.registerSynchronization(
+                new org.springframework.transaction.support.TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        meterRegistry.counter("foodflow.payments.collected").increment();
+                    }
+                }
+            );
+        } else {
+            meterRegistry.counter("foodflow.payments.collected").increment();
+        }
         return payment;
     }
 

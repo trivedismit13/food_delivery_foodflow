@@ -128,6 +128,9 @@ public class ReelServiceTest {
 
         ReelResponse created = reelService.uploadReel(restaurantA.getRestaurantId(), request);
 
+        org.springframework.test.context.transaction.TestTransaction.flagForCommit();
+        org.springframework.test.context.transaction.TestTransaction.end();
+
         assertNotNull(created.getReelId());
         assertEquals("My awesome reel", created.getTitle());
         assertEquals("http://example.com/reel.mp4", created.getMediaUrl());
@@ -135,6 +138,10 @@ public class ReelServiceTest {
         
         double finalCount = meterRegistry.counter("foodflow.reels.created").count();
         assertEquals(1.0, finalCount - initialCount);
+        
+        // Clean up
+        reelRepository.deleteById(created.getReelId());
+        org.springframework.test.context.transaction.TestTransaction.start();
     }
 
     @Test

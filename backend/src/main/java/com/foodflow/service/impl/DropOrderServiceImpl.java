@@ -174,7 +174,18 @@ public class DropOrderServiceImpl implements DropOrderService {
                 .build())
             .collect(java.util.stream.Collectors.toList());
             
-        meterRegistry.counter("foodflow.orders.created").increment();
+        if (org.springframework.transaction.support.TransactionSynchronizationManager.isSynchronizationActive()) {
+            org.springframework.transaction.support.TransactionSynchronizationManager.registerSynchronization(
+                new org.springframework.transaction.support.TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        meterRegistry.counter("foodflow.orders.created").increment();
+                    }
+                }
+            );
+        } else {
+            meterRegistry.counter("foodflow.orders.created").increment();
+        }
 
         return OrderResponse.builder()
             .orderId(savedOrder.getOrderId())
@@ -261,6 +272,17 @@ public class DropOrderServiceImpl implements DropOrderService {
         });
         
         eventPublisher.publishEvent(new com.foodflow.event.DropOrderCancelledEvent(this, orderId));
-        meterRegistry.counter("foodflow.orders.cancelled").increment();
+        if (org.springframework.transaction.support.TransactionSynchronizationManager.isSynchronizationActive()) {
+            org.springframework.transaction.support.TransactionSynchronizationManager.registerSynchronization(
+                new org.springframework.transaction.support.TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        meterRegistry.counter("foodflow.orders.cancelled").increment();
+                    }
+                }
+            );
+        } else {
+            meterRegistry.counter("foodflow.orders.cancelled").increment();
+        }
     }
 }
