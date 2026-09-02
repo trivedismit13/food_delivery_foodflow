@@ -155,8 +155,8 @@
 				<configuration>
 					<argLine>-Dnet.bytebuddy.experimental=true</argLine>
 					<systemPropertyVariables>
-						<DB_PASSWORD>13012005@Sm</DB_PASSWORD>
-						<JWT_SECRET>thisisverylongsecretformocktestingonlydoestmatter</JWT_SECRET>
+						<DB_PASSWORD>${env.TEST_DB_PASSWORD}</DB_PASSWORD>
+						<JWT_SECRET>${env.TEST_JWT_SECRET}</JWT_SECRET>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
