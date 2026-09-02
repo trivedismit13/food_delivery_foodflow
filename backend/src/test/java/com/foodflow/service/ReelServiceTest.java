@@ -31,7 +31,7 @@ import jakarta.validation.ConstraintViolation;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@ActiveProfiles("dev") // Use dev profile with H2 or same DB
+@ActiveProfiles("test")
 @Transactional
 public class ReelServiceTest {
 

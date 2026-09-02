@@ -46,7 +46,8 @@ public class WebSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> 
-                auth.requestMatchers("/api/auth/**").permitAll()
+                auth.requestMatchers("/actuator/health", "/actuator/prometheus").permitAll()
+                    .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/restaurants/*/reels").authenticated()
                     .requestMatchers("/api/restaurants/**").permitAll()
                     .requestMatchers("/api/menu/**").permitAll()
