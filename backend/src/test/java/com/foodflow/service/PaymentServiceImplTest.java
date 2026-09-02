@@ -10,8 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.access.AccessDeniedException;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -39,6 +42,9 @@ class PaymentServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Spy
+    private MeterRegistry meterRegistry = new SimpleMeterRegistry();
 
     @InjectMocks
     private PaymentServiceImpl paymentService;
@@ -78,6 +84,27 @@ class PaymentServiceImplTest {
         
         assertEquals(PaymentStatus.COLLECTED, result.getStatus());
         assertNotNull(result.getPaymentDate());
+        assertEquals(1, meterRegistry.counter("foodflow.payments.collected").count());
+    }
+    
+    @Test
+    void markPaymentCollected_Idempotent() {
+        Long paymentId = 1L;
+        Payment payment = new Payment();
+        payment.setPaymentId(paymentId);
+        payment.setStatus(PaymentStatus.COLLECTED);
+        
+        Order order = new Order();
+        order.setOrderId(100L);
+        payment.setOrder(order);
+
+        when(paymentRepository.findById(paymentId)).thenReturn(Optional.of(payment));
+        doNothing().when(authorizationService).assertCreatorOwnsOrderRestaurant(100L);
+
+        Payment result = paymentService.markPaymentCollected(paymentId);
+        
+        assertEquals(PaymentStatus.COLLECTED, result.getStatus());
+        assertEquals(0, meterRegistry.counter("foodflow.payments.collected").count());
     }
 
     @Test
@@ -97,6 +124,7 @@ class PaymentServiceImplTest {
         assertThrows(InvalidRequestException.class, () -> {
             paymentService.markPaymentCollected(paymentId);
         });
+        assertEquals(0, meterRegistry.counter("foodflow.payments.collected").count());
     }
 
     @Test
@@ -116,5 +144,6 @@ class PaymentServiceImplTest {
         assertThrows(AccessDeniedException.class, () -> {
             paymentService.markPaymentCollected(paymentId);
         });
+        assertEquals(0, meterRegistry.counter("foodflow.payments.collected").count());
     }
 }

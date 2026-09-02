@@ -8,6 +8,7 @@ import com.foodflow.exception.InvalidOrderException;
 import com.foodflow.exception.ResourceNotFoundException;
 import com.foodflow.model.*;
 import com.foodflow.repository.*;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
     private final PaymentService paymentService;
+    private final MeterRegistry meterRegistry;
 
     @Override
     @Transactional
@@ -99,6 +101,8 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         paymentService.createPayment(payment);
 
+        meterRegistry.counter("foodflow.orders.created").increment();
+
         return mapToResponse(order);
     }
 
@@ -134,6 +138,7 @@ public class OrderServiceImpl implements OrderService {
             if (payment != null) {
                 paymentService.cancelPayment(payment.getPaymentId());
             }
+            meterRegistry.counter("foodflow.orders.cancelled").increment();
         }
         
         return mapToResponse(order);

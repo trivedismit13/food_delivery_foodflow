@@ -9,6 +9,7 @@ import com.foodflow.service.NotificationService;
 import com.foodflow.service.PaymentService;
 import com.foodflow.dto.request.PlaceDropOrderRequest;
 import com.foodflow.dto.response.OrderResponse;
+import io.micrometer.core.instrument.MeterRegistry;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class DropOrderServiceImpl implements DropOrderService {
     private final RestaurantRepository restaurantRepository;
     private final org.springframework.context.ApplicationEventPublisher eventPublisher;
     private final jakarta.persistence.EntityManager entityManager;
+    private final MeterRegistry meterRegistry;
 
     @Override
     @Transactional
@@ -172,6 +174,8 @@ public class DropOrderServiceImpl implements DropOrderService {
                 .build())
             .collect(java.util.stream.Collectors.toList());
             
+        meterRegistry.counter("foodflow.orders.created").increment();
+
         return OrderResponse.builder()
             .orderId(savedOrder.getOrderId())
             .userId(savedOrder.getUser().getUserId())
@@ -257,5 +261,6 @@ public class DropOrderServiceImpl implements DropOrderService {
         });
         
         eventPublisher.publishEvent(new com.foodflow.event.DropOrderCancelledEvent(this, orderId));
+        meterRegistry.counter("foodflow.orders.cancelled").increment();
     }
 }

@@ -13,7 +13,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 
 import java.util.Optional;
 
@@ -39,6 +42,9 @@ public class OrderServiceImplTest {
     private PaymentService paymentService;
     @Mock
     private NotificationService notificationService;
+
+    @Spy
+    private MeterRegistry meterRegistry = new SimpleMeterRegistry();
 
     @InjectMocks
     private OrderServiceImpl orderService;
@@ -138,5 +144,66 @@ public class OrderServiceImplTest {
         
         verify(orderRepository, never()).save(any());
         verify(paymentService, never()).cancelPayment(anyLong());
+        
+        // Assert metric
+        org.junit.jupiter.api.Assertions.assertEquals(0, meterRegistry.counter("foodflow.orders.cancelled").count());
+    }
+
+    @Test
+    void testMetrics_OrderCancelled_Success() {
+        Order order = createTestOrder(2L, OrderStatus.PLACED);
+        when(orderRepository.findById(2L)).thenReturn(Optional.of(order));
+        when(orderRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+        
+        com.foodflow.model.Payment payment = new com.foodflow.model.Payment();
+        payment.setPaymentId(2L);
+        when(paymentService.getPaymentByOrderId(2L)).thenReturn(Optional.of(payment));
+        
+        orderService.updateOrderStatus(2L, OrderStatus.CANCELLED);
+        
+        org.junit.jupiter.api.Assertions.assertEquals(1, meterRegistry.counter("foodflow.orders.cancelled").count());
+    }
+
+    @Test
+    void testMetrics_OrderCreated_Success() {
+        Order order = createTestOrder(1L, OrderStatus.PLACED);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(order.getUser()));
+        when(restaurantRepository.findById(2L)).thenReturn(Optional.of(order.getRestaurant()));
+        order.getRestaurant().setIsOpen(true);
+        when(orderRepository.save(any())).thenAnswer(i -> {
+            Order o = i.getArgument(0);
+            o.setOrderId(1L);
+            return o;
+        });
+
+        com.foodflow.dto.request.OrderItemRequest req = new com.foodflow.dto.request.OrderItemRequest();
+        req.setItemId(10L);
+        req.setQuantity(1);
+
+        com.foodflow.model.MenuItem item = new com.foodflow.model.MenuItem();
+        item.setItemId(10L);
+        item.setRestaurant(order.getRestaurant());
+        item.setAvailableQty(5);
+        item.setPrice(java.math.BigDecimal.TEN);
+        item.setName("Item");
+        when(menuItemRepository.findById(10L)).thenReturn(Optional.of(item));
+
+        orderService.placeOrder(1L, 2L, java.util.Collections.singletonList(req));
+
+        org.junit.jupiter.api.Assertions.assertEquals(1, meterRegistry.counter("foodflow.orders.created").count());
+    }
+
+    @Test
+    void testMetrics_OrderCreated_Failure() {
+        Order order = createTestOrder(1L, OrderStatus.PLACED);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(order.getUser()));
+        when(restaurantRepository.findById(2L)).thenReturn(Optional.of(order.getRestaurant()));
+        order.getRestaurant().setIsOpen(false); // closed
+
+        assertThrows(InvalidOrderException.class, () -> {
+            orderService.placeOrder(1L, 2L, java.util.Collections.emptyList());
+        });
+
+        org.junit.jupiter.api.Assertions.assertEquals(0, meterRegistry.counter("foodflow.orders.created").count());
     }
 }

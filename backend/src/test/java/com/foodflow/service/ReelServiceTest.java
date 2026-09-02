@@ -20,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import io.micrometer.core.instrument.MeterRegistry;
 
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -40,6 +41,9 @@ public class ReelServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MeterRegistry meterRegistry;
 
     @Autowired
     private RestaurantRepository restaurantRepository;
@@ -115,6 +119,9 @@ public class ReelServiceTest {
     @Test
     void testUploadReel_OwnSeller_Success() {
         authenticateAs(sellerA);
+        
+        double initialCount = meterRegistry.counter("foodflow.reels.created").count();
+        
         ReelRequest request = new ReelRequest();
         request.setTitle("My awesome reel");
         request.setMediaUrl("http://example.com/reel.mp4");
@@ -125,11 +132,17 @@ public class ReelServiceTest {
         assertEquals("My awesome reel", created.getTitle());
         assertEquals("http://example.com/reel.mp4", created.getMediaUrl());
         assertEquals(restaurantA.getRestaurantId(), created.getRestaurantId());
+        
+        double finalCount = meterRegistry.counter("foodflow.reels.created").count();
+        assertEquals(1.0, finalCount - initialCount);
     }
 
     @Test
     void testUploadReel_CrossSeller_Rejected() {
         authenticateAs(sellerA);
+        
+        double initialCount = meterRegistry.counter("foodflow.reels.created").count();
+        
         ReelRequest request = new ReelRequest();
         request.setTitle("Hacking reel");
         request.setMediaUrl("http://example.com/hacker.mp4");
@@ -139,11 +152,17 @@ public class ReelServiceTest {
         });
         
         assertEquals("You do not own this restaurant profile.", exception.getMessage());
+        
+        double finalCount = meterRegistry.counter("foodflow.reels.created").count();
+        assertEquals(initialCount, finalCount);
     }
 
     @Test
     void testUploadReel_Customer_Rejected() {
         authenticateAs(customer);
+        
+        double initialCount = meterRegistry.counter("foodflow.reels.created").count();
+        
         ReelRequest request = new ReelRequest();
         request.setTitle("Customer upload");
         request.setMediaUrl("http://example.com/customer.mp4");
@@ -153,6 +172,9 @@ public class ReelServiceTest {
         });
 
         assertEquals("Only sellers can upload reels.", exception.getMessage());
+        
+        double finalCount = meterRegistry.counter("foodflow.reels.created").count();
+        assertEquals(initialCount, finalCount);
     }
 
     @Test

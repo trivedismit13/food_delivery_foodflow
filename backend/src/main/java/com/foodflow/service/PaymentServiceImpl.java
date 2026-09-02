@@ -6,6 +6,7 @@ import com.foodflow.model.PaymentStatus;
 import com.foodflow.repository.PaymentRepository;
 import com.foodflow.service.security.CreatorAuthorizationService;
 import com.foodflow.exception.InvalidRequestException;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final CreatorAuthorizationService authorizationService;
     private final UserRepository userRepository;
+    private final MeterRegistry meterRegistry;
 
     @Override
     public Optional<Payment> getPaymentByOrderId(Long orderId) {
@@ -69,7 +71,9 @@ public class PaymentServiceImpl implements PaymentService {
 
         payment.setStatus(PaymentStatus.COLLECTED);
         payment.setPaymentDate(LocalDateTime.now());
-        return paymentRepository.save(payment);
+        payment = paymentRepository.save(payment);
+        meterRegistry.counter("foodflow.payments.collected").increment();
+        return payment;
     }
 
     @Override

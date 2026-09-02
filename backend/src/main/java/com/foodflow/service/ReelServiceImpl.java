@@ -5,6 +5,7 @@ import com.foodflow.exception.InvalidRequestException;
 import com.foodflow.exception.ResourceNotFoundException;
 import com.foodflow.dto.response.ReelResponse;
 import com.foodflow.model.Reel;
+import io.micrometer.core.instrument.MeterRegistry;
 import com.foodflow.model.Restaurant;
 import com.foodflow.model.Role;
 import com.foodflow.model.User;
@@ -26,6 +27,7 @@ public class ReelServiceImpl implements ReelService {
     private final ReelRepository reelRepository;
     private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
+    private final MeterRegistry meterRegistry;
 
     @Override
     public ReelResponse uploadReel(Long restaurantId, ReelRequest request) {
@@ -49,6 +51,7 @@ public class ReelServiceImpl implements ReelService {
         reel.setTitle(request.getTitle());
         reel.setMediaUrl(request.getMediaUrl());
         reel = reelRepository.save(reel);
+        meterRegistry.counter("foodflow.reels.created").increment();
         return mapToResponse(reel);
     }
 

@@ -12,8 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jakarta.persistence.EntityManager;
 
 import java.math.BigDecimal;
@@ -47,6 +50,9 @@ public class DropOrderServiceImplTest {
     private ApplicationEventPublisher eventPublisher;
     @Mock
     private EntityManager entityManager;
+
+    @Spy
+    private MeterRegistry meterRegistry = new SimpleMeterRegistry();
 
     @InjectMocks
     private DropOrderServiceImpl dropOrderService;
@@ -116,6 +122,7 @@ public class DropOrderServiceImplTest {
         verify(orderRepository).save(any());
         verify(dropItemRepository).save(any());
         verify(paymentService).createPayment(any());
+        assertEquals(1, meterRegistry.counter("foodflow.orders.created").count());
     }
 
     @Test
@@ -136,6 +143,7 @@ public class DropOrderServiceImplTest {
         testRequest.getItems().get(0).setQuantity(0);
         when(dropRepository.findByIdWithLock(1L)).thenReturn(Optional.of(testDrop));
         assertThrows(InvalidOrderException.class, () -> dropOrderService.placeDropOrder(2L, testRequest));
+        assertEquals(0, meterRegistry.counter("foodflow.orders.created").count());
     }
 
     @Test
@@ -165,5 +173,6 @@ public class DropOrderServiceImplTest {
         testDrop.setCurrentOrders(10);
         when(dropRepository.findByIdWithLock(1L)).thenReturn(Optional.of(testDrop));
         assertThrows(InvalidOrderException.class, () -> dropOrderService.placeDropOrder(2L, testRequest));
+        assertEquals(0, meterRegistry.counter("foodflow.orders.created").count());
     }
 }
