@@ -8,13 +8,15 @@ node_modules/
 # Build output
 dist/
 
-# Environment files
+# Environment files (root and frontend)
+.env
 .env.*
 application-local.properties
 application-secret.properties
 
-# Keep environment template
+# Keep environment templates
 !.env.example
+!frontend/.env.example
 
 
 # ==========================================

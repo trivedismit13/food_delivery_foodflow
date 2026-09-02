@@ -52,7 +52,38 @@ Create a `.env.local` file in the `frontend` directory:
 VITE_API_URL=http://localhost:8080
 ```
 
-### Running Locally
+### Running via Docker (Recommended)
+
+1. **Configure Environment Variables**:
+   Create a `.env` file in the root directory (where `docker-compose.yml` is located) with the required secrets:
+   ```env
+   DB_NAME=food_flow
+   DB_USERNAME=foodflow_user
+   DB_PASSWORD=your_secure_db_password
+   MYSQL_ROOT_PASSWORD=your_secure_root_password
+   JWT_SECRET=your_base64_encoded_jwt_secret_key_min_256_bits
+   CORS_ALLOWED_ORIGINS=http://localhost:3000
+   VITE_API_BASE_URL=http://localhost:8080/api
+   ```
+
+2. **Start the Stack**:
+   Run the following command from the root of the repository:
+   ```bash
+   docker compose up -d
+   ```
+   *This will build the frontend and backend images, start the MySQL database, automatically run database migrations on boot, and start the frontend React application on port `3000` and the backend API on port `8080`.*
+
+3. **Access the Application**:
+   - Web App: `http://localhost:3000`
+   - API: `http://localhost:8080/api`
+
+4. **Stop the Stack**:
+   ```bash
+   docker compose down
+   ```
+   *To wipe the database volume entirely (clean slate), run `docker compose down -v`.*
+
+### Running Locally (Without Docker)
 
 1. **Database**: Create a MySQL database named `food_flow`.
 2. **Backend**:
