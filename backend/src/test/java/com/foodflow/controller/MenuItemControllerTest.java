@@ -25,9 +25,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MenuController.class)
+@WebMvcTest(MenuItemController.class)
 @AutoConfigureMockMvc(addFilters = false)
-class MenuControllerTest {
+class MenuItemControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,6 +43,9 @@ class MenuControllerTest {
 
     @MockBean
     private JwtUtils jwtUtils;
+
+    @MockBean
+    private com.foodflow.service.security.CreatorAuthorizationService authorizationService;
 
     @MockBean
     private com.foodflow.security.UserDetailsServiceImpl userDetailsService;
@@ -62,7 +65,7 @@ class MenuControllerTest {
         request.setCategory("Main Course");
         request.setAvailableQty(5);
 
-        mockMvc.perform(post("/api/restaurants/7/menu")
+        mockMvc.perform(post("/api/menu-items/7")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isCreated());

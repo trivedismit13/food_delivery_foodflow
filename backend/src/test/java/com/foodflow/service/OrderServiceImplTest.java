@@ -2,9 +2,11 @@ package com.foodflow.service;
 
 import com.foodflow.exception.InvalidOrderException;
 import com.foodflow.model.Order;
+import com.foodflow.model.Order;
 import com.foodflow.model.OrderStatus;
+import com.foodflow.model.User;
+import com.foodflow.model.Restaurant;
 import com.foodflow.repository.*;
-import com.foodflow.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -81,13 +83,26 @@ public class OrderServiceImplTest {
             () -> orderService.validateOrderStatusTransition(current, requested));
     }
 
+    private Order createTestOrder(Long id, OrderStatus status) {
+        Order order = new Order();
+        order.setOrderId(id);
+        order.setStatus(status);
+        User user = new User();
+        user.setUserId(1L);
+        order.setUser(user);
+        Restaurant rest = new Restaurant();
+        rest.setRestaurantId(2L);
+        rest.setName("Test Rest");
+        order.setRestaurant(rest);
+        return order;
+    }
+
     @Test
     void testUpdateOrderStatus_Valid() {
-        Order order = new Order();
-        order.setOrderId(1L);
-        order.setStatus(OrderStatus.PLACED);
+        Order order = createTestOrder(1L, OrderStatus.PLACED);
         
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+        when(orderRepository.save(any())).thenAnswer(i -> i.getArgument(0));
         
         orderService.updateOrderStatus(1L, OrderStatus.PREPARING);
         
@@ -96,11 +111,14 @@ public class OrderServiceImplTest {
 
     @Test
     void testUpdateOrderStatus_CancellationTrigger() {
-        Order order = new Order();
-        order.setOrderId(2L);
-        order.setStatus(OrderStatus.PLACED);
+        Order order = createTestOrder(2L, OrderStatus.PLACED);
         
         when(orderRepository.findById(2L)).thenReturn(Optional.of(order));
+        when(orderRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+        
+        com.foodflow.model.Payment payment = new com.foodflow.model.Payment();
+        payment.setPaymentId(2L);
+        when(paymentService.getPaymentByOrderId(2L)).thenReturn(Optional.of(payment));
         
         orderService.updateOrderStatus(2L, OrderStatus.CANCELLED);
         
@@ -110,9 +128,7 @@ public class OrderServiceImplTest {
 
     @Test
     void testUpdateOrderStatus_Invalid() {
-        Order order = new Order();
-        order.setOrderId(3L);
-        order.setStatus(OrderStatus.COMPLETED);
+        Order order = createTestOrder(3L, OrderStatus.COMPLETED);
         
         when(orderRepository.findById(3L)).thenReturn(Optional.of(order));
         

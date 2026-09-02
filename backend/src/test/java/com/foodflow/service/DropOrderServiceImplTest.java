@@ -74,7 +74,7 @@ public class DropOrderServiceImplTest {
         testDrop.setOrderCutoffTime(LocalDateTime.now().plusHours(1));
         testDrop.setMaxOrders(10);
         testDrop.setCurrentOrders(0);
-        testDrop.setCreator(creatorUser);
+        testDrop.setCreator(rest);
 
         MenuItem menuItem = new MenuItem();
         menuItem.setItemId(100L);
@@ -103,7 +103,7 @@ public class DropOrderServiceImplTest {
     void testValidDropBooking() {
         when(dropRepository.findByIdWithLock(1L)).thenReturn(Optional.of(testDrop));
         when(dropItemRepository.findByDropAndItemWithLock(1L, 100L)).thenReturn(Optional.of(testDropItem));
-        when(userRepository.findById(2L)).thenReturn(Optional.of(testUser));
+        when(userRepository.getReferenceById(2L)).thenReturn(testUser);
         when(orderRepository.save(any())).thenAnswer(i -> {
             Order o = i.getArgument(0);
             o.setOrderId(500L);
@@ -128,7 +128,6 @@ public class DropOrderServiceImplTest {
     void testEmptyItemList() {
         testRequest.setItems(new ArrayList<>());
         when(dropRepository.findByIdWithLock(1L)).thenReturn(Optional.of(testDrop));
-        when(userRepository.findById(2L)).thenReturn(Optional.of(testUser));
         assertThrows(InvalidOrderException.class, () -> dropOrderService.placeDropOrder(2L, testRequest));
     }
 

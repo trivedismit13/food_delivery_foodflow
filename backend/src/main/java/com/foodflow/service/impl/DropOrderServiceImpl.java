@@ -57,6 +57,10 @@ public class DropOrderServiceImpl implements DropOrderService {
             throw new InvalidOrderException("This drop is sold out");
         }
         
+        if (request.getItems() == null || request.getItems().isEmpty()) {
+            throw new InvalidOrderException("Order must contain at least one item");
+        }
+        
         List<OrderItem> orderItems = new ArrayList<>();
         BigDecimal totalAmount = BigDecimal.ZERO;
         

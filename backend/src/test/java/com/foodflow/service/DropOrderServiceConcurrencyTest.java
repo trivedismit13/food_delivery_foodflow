@@ -9,11 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.UUID;
 import java.util.concurrent.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,72 +43,89 @@ public class DropOrderServiceConcurrencyTest {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    private Long dropId;
-    private Long menuItemId;
-    private Long userAId;
-    private Long userBId;
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
+    private TransactionTemplate transactionTemplate;
 
     @BeforeEach
-    @Transactional
     void setUp() {
-        // Clean up repositories
-        dropItemRepository.deleteAll();
-        dropRepository.deleteAll();
-        menuItemRepository.deleteAll();
-        userRepository.deleteAll();
-        restaurantRepository.deleteAll();
+        transactionTemplate = new TransactionTemplate(transactionManager);
+    }
 
-        // Create a seller (restaurant owner)
-        User seller = User.builder().email("seller@example.com").name("Seller").role(UserRole.SELLER).build();
-        seller = userRepository.save(seller);
-        Restaurant restaurant = Restaurant.builder().owner(seller).name("TestRestaurant").isOpen(true).build();
-        restaurant = restaurantRepository.save(restaurant);
+    private Long createTestCustomer() {
+        return transactionTemplate.execute(status -> {
+            String uuid = UUID.randomUUID().toString();
+            User user = User.builder().email("concurrency-" + uuid + "@example.com").name("Test Customer").role(Role.CUSTOMER).build();
+            user.setPassword("password");
+            return userRepository.save(user).getUserId();
+        });
+    }
 
-        // Create a menu item with 1 quantity
-        MenuItem menuItem = MenuItem.builder()
+    private Long[] setupDropWithConfig(int maxOrders, int quantityAvailable) {
+        return transactionTemplate.execute(status -> {
+            String uuid = UUID.randomUUID().toString();
+            User seller = User.builder().email("seller-" + uuid + "@example.com").name("Seller").role(Role.SELLER).build();
+            seller.setPassword("password");
+            seller = userRepository.save(seller);
+            
+            Restaurant restaurant = Restaurant.builder()
+                .owner(seller)
+                .name("Res-" + uuid)
+                .city("Test City")
+                .cuisine("Italian")
+                .pickupAddress("123 Test St")
+                .pincode("123456")
+                .isOpen(true)
+                .build();
+            restaurant = restaurantRepository.save(restaurant);
+
+            MenuItem menuItem = MenuItem.builder()
                 .restaurant(restaurant)
-                .name("TestItem")
-                .price(BigDecimal.valueOf(10))
-                .availableQty(1)
+                .name("Item-" + uuid)
+                .price(BigDecimal.TEN)
+                .availableQty(100)
+                .category("Main Course")
+                .isVeg(true)
                 .build();
-        menuItem = menuItemRepository.save(menuItem);
-        menuItemId = menuItem.getItemId();
+            menuItem = menuItemRepository.save(menuItem);
 
-        // Create a drop with maxOrders=1
-        FoodDrop drop = FoodDrop.builder()
-                .creator(restaurant)
-                .title("TestDrop")
-                .status(FoodDrop.DropStatus.OPEN)
-                .orderCutoffTime(LocalDateTime.now().plusHours(1))
-                .maxOrders(1)
-                .currentOrders(0)
-                .pickupTime(LocalDateTime.now().plusHours(2))
-                .build();
-        drop = dropRepository.save(drop);
-        dropId = drop.getDropId();
+            FoodDrop drop = FoodDrop.builder()
+                    .creator(restaurant)
+                    .title("Drop-" + uuid)
+                    .status(FoodDrop.DropStatus.OPEN)
+                    .orderCutoffTime(LocalDateTime.now().plusHours(1))
+                    .maxOrders(maxOrders)
+                    .currentOrders(0)
+                    .pickupTime("12:00 PM")
+                    .dropDate(java.time.LocalDate.now())
+                    .build();
+            drop = dropRepository.save(drop);
 
-        // Add DropItem linked to the menu item, quantityAvailable=1
-        DropItem dropItem = DropItem.builder()
-                .drop(drop)
-                .menuItem(menuItem)
-                .quantityAvailable(1)
-                .quantityOrdered(0)
-                .build();
-        dropItemRepository.save(dropItem);
+            DropItem dropItem = DropItem.builder()
+                    .drop(drop)
+                    .menuItem(menuItem)
+                    .quantityAvailable(quantityAvailable)
+                    .quantityOrdered(0)
+                    .build();
+            dropItemRepository.save(dropItem);
 
-        // Create two customers
-        User userA = User.builder().email("a@example.com").name("A").role(UserRole.CUSTOMER).build();
-        userA = userRepository.save(userA);
-        userAId = userA.getUserId();
-        User userB = User.builder().email("b@example.com").name("B").role(UserRole.CUSTOMER).build();
-        userB = userRepository.save(userB);
-        userBId = userB.getUserId();
+            return new Long[]{drop.getDropId(), menuItem.getItemId()};
+        });
     }
 
     @Test
-    @WithMockUser(username = "a@example.com", roles = {"CUSTOMER"})
-    void concurrentBookingMaxOrdersInvariant() throws Exception {
-        // Both users attempt to place an order for the same drop concurrently
+    void capacityRaceTest() throws Exception {
+        Long[] setupIds = setupDropWithConfig(1, 10);
+        Long dropId = setupIds[0];
+        Long menuItemId = setupIds[1];
+
+        Long userAId = createTestCustomer();
+        Long userBId = createTestCustomer();
+
         PlaceDropOrderRequest request = new PlaceDropOrderRequest();
         request.setDropId(dropId);
         PlaceDropOrderRequest.ItemRequest itemReq = new PlaceDropOrderRequest.ItemRequest();
@@ -113,11 +133,19 @@ public class DropOrderServiceConcurrencyTest {
         itemReq.setQuantity(1);
         request.setItems(Collections.singletonList(itemReq));
 
+        CountDownLatch readyLatch = new CountDownLatch(2);
+        CountDownLatch startLatch = new CountDownLatch(1);
+
         Callable<Void> taskA = () -> {
+            readyLatch.countDown();
+            startLatch.await();
             dropOrderService.placeDropOrder(userAId, request);
             return null;
         };
+
         Callable<Void> taskB = () -> {
+            readyLatch.countDown();
+            startLatch.await();
             dropOrderService.placeDropOrder(userBId, request);
             return null;
         };
@@ -125,6 +153,10 @@ public class DropOrderServiceConcurrencyTest {
         ExecutorService executor = Executors.newFixedThreadPool(2);
         Future<Void> futureA = executor.submit(taskA);
         Future<Void> futureB = executor.submit(taskB);
+
+        readyLatch.await();
+        startLatch.countDown();
+
         executor.shutdown();
         executor.awaitTermination(10, TimeUnit.SECONDS);
 
@@ -135,22 +167,37 @@ public class DropOrderServiceConcurrencyTest {
                 f.get();
                 successCount++;
             } catch (ExecutionException ee) {
-                assertTrue(ee.getCause() instanceof InvalidOrderException);
-                failureCount++;
+                if (ee.getCause() instanceof InvalidOrderException) {
+                    failureCount++;
+                } else {
+                    fail("Unexpected exception: " + ee.getCause());
+                }
             }
         }
-        assertEquals(1, successCount, "Exactly one booking should succeed");
-        assertEquals(1, failureCount, "Exactly one booking should fail");
+
+        assertEquals(1, successCount, "Exactly one success");
+        assertEquals(1, failureCount, "Exactly one expected business failure");
+
+        // Verify Capacity in Database
+        transactionTemplate.execute(status -> {
+            FoodDrop drop = dropRepository.findById(dropId).orElseThrow();
+            assertEquals(1, drop.getCurrentOrders(), "currentOrders == 1");
+            assertTrue(drop.getCurrentOrders() <= drop.getMaxOrders(), "currentOrders <= maxOrders");
+            
+            long successfulOrdersCount = orderRepository.findByDropDropId(dropId).size();
+            assertEquals(1, successfulOrdersCount, "successful orders == 1");
+            return null;
+        });
     }
 
     @Test
-    @WithMockUser(username = "a@example.com", roles = {"CUSTOMER"})
-    void concurrentBookingQuantityInvariant() throws Exception {
-        // Same setup as above but the drop allows unlimited orders; we test quantityAvailable=1
-        // Update drop to allow many orders
-        FoodDrop drop = dropRepository.findById(dropId).orElseThrow();
-        drop.setMaxOrders(10);
-        dropRepository.save(drop);
+    void inventoryRaceTest() throws Exception {
+        Long[] setupIds = setupDropWithConfig(10, 1);
+        Long dropId = setupIds[0];
+        Long menuItemId = setupIds[1];
+
+        Long userAId = createTestCustomer();
+        Long userBId = createTestCustomer();
 
         PlaceDropOrderRequest request = new PlaceDropOrderRequest();
         request.setDropId(dropId);
@@ -159,11 +206,19 @@ public class DropOrderServiceConcurrencyTest {
         itemReq.setQuantity(1);
         request.setItems(Collections.singletonList(itemReq));
 
+        CountDownLatch readyLatch = new CountDownLatch(2);
+        CountDownLatch startLatch = new CountDownLatch(1);
+
         Callable<Void> taskA = () -> {
+            readyLatch.countDown();
+            startLatch.await();
             dropOrderService.placeDropOrder(userAId, request);
             return null;
         };
+
         Callable<Void> taskB = () -> {
+            readyLatch.countDown();
+            startLatch.await();
             dropOrderService.placeDropOrder(userBId, request);
             return null;
         };
@@ -171,6 +226,10 @@ public class DropOrderServiceConcurrencyTest {
         ExecutorService executor = Executors.newFixedThreadPool(2);
         Future<Void> futureA = executor.submit(taskA);
         Future<Void> futureB = executor.submit(taskB);
+
+        readyLatch.await();
+        startLatch.countDown();
+
         executor.shutdown();
         executor.awaitTermination(10, TimeUnit.SECONDS);
 
@@ -181,11 +240,21 @@ public class DropOrderServiceConcurrencyTest {
                 f.get();
                 successCount++;
             } catch (ExecutionException ee) {
-                assertTrue(ee.getCause() instanceof InvalidOrderException);
-                failureCount++;
+                if (ee.getCause() instanceof InvalidOrderException) {
+                    failureCount++;
+                }
             }
         }
-        assertEquals(1, successCount, "Only one order should consume the available quantity");
-        assertEquals(1, failureCount, "The other order should be rejected due to insufficient inventory");
+
+        assertEquals(1, successCount, "exactly 1 success");
+        assertEquals(1, failureCount, "exactly 1 expected inventory failure");
+
+        // Verify Inventory in Database
+        transactionTemplate.execute(status -> {
+            DropItem dropItem = dropItemRepository.findByDropDropId(dropId).stream().filter(di -> di.getMenuItem().getItemId().equals(menuItemId)).findFirst().orElseThrow();
+            assertTrue(dropItem.getQuantityOrdered() <= dropItem.getQuantityAvailable(), "quantityOrdered <= quantityAvailable");
+            assertEquals(1, dropItem.getQuantityOrdered(), "quantityOrdered == 1");
+            return null;
+        });
     }
 }

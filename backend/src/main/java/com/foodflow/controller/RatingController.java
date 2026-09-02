@@ -37,7 +37,7 @@ public class RatingController {
     public ResponseEntity<ApiResponse<Page<RatingResponse>>> getRestaurantRatings(@PathVariable Long id, Pageable pageable) {
         Page<RatingResponse> responses = ratingService.getRestaurantRatings(id, pageable).map(r -> RatingResponse.builder()
             .ratingId(r.getRatingId())
-            .orderId(r.getOrder() != null ? r.getOrder().getOrderId() : null)
+            .orderId(null)
             .score(r.getRatingValue().intValue())
             .reviewText(r.getReviewText())
             .createdAt(r.getCreatedAt())

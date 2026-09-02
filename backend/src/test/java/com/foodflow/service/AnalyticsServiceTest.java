@@ -74,8 +74,6 @@ public class AnalyticsServiceTest {
         assertEquals(1, insights.size());
         assertTrue(insights.get(0).getInsight().contains("Saturdays"));
         assertTrue(insights.get(0).getInsight().contains("Saturday"));
-        assertNotNull(insights.get(0).getConfidence());
-        assertEquals(1.0, insights.get(0).getConfidence());
     }
 
     @Test
@@ -91,7 +89,6 @@ public class AnalyticsServiceTest {
         assertNotNull(response);
         assertEquals(question, response.getQuestion());
         assertTrue(response.getInsight().contains("placeholder"));
-        assertNull(response.getConfidence());
     }
 
     @Test

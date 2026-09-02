@@ -15,7 +15,7 @@
 	<description>Intelligent Food Delivery Analytics Platform</description>
 	<properties>
 		<java.version>21</java.version>
-		<lombok.version>1.18.30</lombok.version>
+		<lombok.version>1.18.48</lombok.version>
 	</properties>
 	<dependencies>
 		<!-- Spring Boot Web -->
@@ -101,6 +101,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -128,7 +133,7 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-							<version>1.18.30</version>
+							<version>1.18.48</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
@@ -149,6 +154,10 @@
 				<version>3.2.5</version>
 				<configuration>
 					<argLine>-Dnet.bytebuddy.experimental=true</argLine>
+					<systemPropertyVariables>
+						<DB_PASSWORD>13012005@Sm</DB_PASSWORD>
+						<JWT_SECRET>thisisverylongsecretformocktestingonlydoestmatter</JWT_SECRET>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 		</plugins>

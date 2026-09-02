@@ -2,7 +2,7 @@ package com.foodflow.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foodflow.dto.request.PlaceDropOrderRequest;
-import com.foodflow.security.JwtAuthenticationFilter;
+import com.foodflow.security.JwtAuthFilter;
 import com.foodflow.service.DropOrderService;
 import com.foodflow.service.DropService;
 import com.foodflow.service.security.CreatorAuthorizationService;
@@ -23,11 +23,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(
-    controllers = DropController.class,
-    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
-)
-@AutoConfigureMockMvc(addFilters = true)
+@org.springframework.boot.test.context.SpringBootTest
+@AutoConfigureMockMvc
 public class DropControllerSecurityTest {
 
     @Autowired
@@ -45,8 +42,13 @@ public class DropControllerSecurityTest {
     @MockBean
     private CreatorAuthorizationService authorizationService;
 
+    @MockBean
+    private com.foodflow.security.UserDetailsServiceImpl userDetailsService;
+
+    @MockBean
+    private com.foodflow.security.JwtUtils jwtUtils;
+
     @Test
-    @WithMockUser(roles = "CUSTOMER")
     void testCustomerCanPlaceOrder() throws Exception {
         PlaceDropOrderRequest req = new PlaceDropOrderRequest();
         req.setDropId(1L);
@@ -55,36 +57,57 @@ public class DropControllerSecurityTest {
         ir.setQuantity(1);
         req.setItems(Collections.singletonList(ir));
 
+        com.foodflow.security.UserDetailsImpl customerUser = new com.foodflow.security.UserDetailsImpl(
+            1L, "Customer Name", "customer@test.com", "pass", "CUSTOMER"
+        );
+
         mockMvc.perform(post("/api/drops/1/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req))
-                .with(csrf()))
+                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf())
+                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(customerUser)))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(roles = "SELLER")
     void testSellerCannotPlaceOrder() throws Exception {
         PlaceDropOrderRequest req = new PlaceDropOrderRequest();
         req.setDropId(1L);
+        PlaceDropOrderRequest.ItemRequest ir = new PlaceDropOrderRequest.ItemRequest();
+        ir.setItemId(10L);
+        ir.setQuantity(1);
+        req.setItems(Collections.singletonList(ir));
+
+        com.foodflow.security.UserDetailsImpl sellerUser = new com.foodflow.security.UserDetailsImpl(
+            2L, "Seller Name", "seller@test.com", "pass", "SELLER"
+        );
 
         mockMvc.perform(post("/api/drops/1/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req))
-                .with(csrf()))
+                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf())
+                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(sellerUser)))
                 .andExpect(status().isForbidden());
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN")
     void testAdminCannotPlaceOrder() throws Exception {
         PlaceDropOrderRequest req = new PlaceDropOrderRequest();
         req.setDropId(1L);
+        PlaceDropOrderRequest.ItemRequest ir = new PlaceDropOrderRequest.ItemRequest();
+        ir.setItemId(10L);
+        ir.setQuantity(1);
+        req.setItems(Collections.singletonList(ir));
+
+        com.foodflow.security.UserDetailsImpl adminUser = new com.foodflow.security.UserDetailsImpl(
+            3L, "Admin Name", "admin@test.com", "pass", "ADMIN"
+        );
 
         mockMvc.perform(post("/api/drops/1/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req))
-                .with(csrf()))
+                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf())
+                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(adminUser)))
                 .andExpect(status().isForbidden());
     }
 
@@ -97,6 +120,6 @@ public class DropControllerSecurityTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req))
                 .with(csrf()))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 }

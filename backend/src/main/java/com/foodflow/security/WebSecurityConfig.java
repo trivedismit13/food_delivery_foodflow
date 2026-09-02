@@ -51,7 +51,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/api/restaurants/**").permitAll()
                     .requestMatchers("/api/menu/**").permitAll()
                     .requestMatchers("/api/reels/**").permitAll()
-                    .requestMatchers("/api/drops/**").permitAll()
+                    .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/drops/**").permitAll()
                     .requestMatchers("/api/creators/**").permitAll()
                     .anyRequest().authenticated()
             );

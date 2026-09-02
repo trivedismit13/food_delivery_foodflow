@@ -6,14 +6,14 @@ import { ProtectedRoute } from '../components/auth/ProtectedRoute';
 // Mock auth store
 vi.mock('../store/authStore', () => ({
   useAuthStore: vi.fn((selector) => {
-    const state = globalThis.__mockAuthState || { isAuthenticated: false, user: null, isLoading: false };
+    const state = (globalThis as any).__mockAuthState || { isAuthenticated: false, user: null, isLoading: false };
     return selector ? selector(state) : state;
   })
 }));
 
 describe('Role-Aware Routing', () => {
   it('redirects unauthorized users to login', () => {
-    globalThis.__mockAuthState = { isAuthenticated: false, user: null };
+    (globalThis as any).__mockAuthState = { isAuthenticated: false, user: null };
     render(
       <MemoryRouter initialEntries={['/dashboard']}>
         <ProtectedRoute allowedRoles={['SELLER']}>
@@ -25,7 +25,7 @@ describe('Role-Aware Routing', () => {
   });
 
   it('allows SELLER to access seller routes', () => {
-    globalThis.__mockAuthState = { 
+    (globalThis as any).__mockAuthState = { 
       isAuthenticated: true, 
       user: { role: 'SELLER' } 
     };
@@ -40,7 +40,7 @@ describe('Role-Aware Routing', () => {
   });
 
   it('rejects CUSTOMER from seller routes', () => {
-    globalThis.__mockAuthState = { 
+    (globalThis as any).__mockAuthState = { 
       isAuthenticated: true, 
       user: { role: 'CUSTOMER' } 
     };
