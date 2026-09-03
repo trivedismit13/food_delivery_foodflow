@@ -108,16 +108,21 @@ pipeline {
             steps {
                 sh '''
                     # Populate the named volume with prometheus config before starting
-                    docker volume create foodflow-ci_prometheus_config || true
+                    docker volume create foodflow-ci_prometheus_config
+                    docker rm -f dummy-prom-config >/dev/null 2>&1 || true
                     docker container create --name dummy-prom-config -v foodflow-ci_prometheus_config:/etc/prometheus alpine
-                    docker cp monitoring/prometheus/prometheus.yml dummy-prom-config:/etc/prometheus/prometheus.yml
-                    docker rm dummy-prom-config
+                    if ! docker cp monitoring/prometheus/prometheus.yml dummy-prom-config:/etc/prometheus/prometheus.yml; then
+                        docker rm -f dummy-prom-config
+                        exit 1
+                    fi
+                    docker rm -f dummy-prom-config
 
                     # Start the Compose stack
                     docker compose -p foodflow-ci up -d
                     
                     echo "Waiting for MySQL to become healthy..."
-                    for i in {1..30}; do
+                    i=1
+                    while [ "$i" -le 30 ]; do
                         if docker compose -p foodflow-ci ps mysql | grep -qi "healthy"; then
                             echo "MySQL is healthy."
                             break
@@ -128,17 +133,19 @@ pipeline {
                             docker compose -p foodflow-ci logs --tail=200 mysql
                             exit 1
                         fi
-                        if [ $i -eq 30 ]; then
+                        if [ "$i" -eq 30 ]; then
                             echo "Timeout waiting for MySQL."
                             docker compose -p foodflow-ci ps
                             docker compose -p foodflow-ci logs --tail=200 mysql
                             exit 1
                         fi
                         sleep 3
+                        i=$((i + 1))
                     done
 
                     echo "Waiting for Backend to respond..."
-                    for i in {1..30}; do
+                    i=1
+                    while [ "$i" -le 30 ]; do
                         if curl -s -f http://localhost:8082/actuator/health > /dev/null; then
                             echo "Backend is responding."
                             break
@@ -149,17 +156,19 @@ pipeline {
                             docker compose -p foodflow-ci logs --tail=200 backend
                             exit 1
                         fi
-                        if [ $i -eq 30 ]; then
+                        if [ "$i" -eq 30 ]; then
                             echo "Timeout waiting for Backend."
                             docker compose -p foodflow-ci ps
                             docker compose -p foodflow-ci logs --tail=200 backend
                             exit 1
                         fi
                         sleep 3
+                        i=$((i + 1))
                     done
 
                     echo "Waiting for Frontend to respond..."
-                    for i in {1..30}; do
+                    i=1
+                    while [ "$i" -le 30 ]; do
                         if curl -s -f http://localhost:3001 > /dev/null; then
                             echo "Frontend is responding."
                             break
@@ -170,17 +179,19 @@ pipeline {
                             docker compose -p foodflow-ci logs --tail=200 frontend
                             exit 1
                         fi
-                        if [ $i -eq 30 ]; then
+                        if [ "$i" -eq 30 ]; then
                             echo "Timeout waiting for Frontend."
                             docker compose -p foodflow-ci ps
                             docker compose -p foodflow-ci logs --tail=200 frontend
                             exit 1
                         fi
                         sleep 3
+                        i=$((i + 1))
                     done
 
                     echo "Waiting for Prometheus to respond..."
-                    for i in {1..30}; do
+                    i=1
+                    while [ "$i" -le 30 ]; do
                         if curl -s -f http://localhost:9091/-/healthy > /dev/null; then
                             echo "Prometheus is responding."
                             break
@@ -191,13 +202,14 @@ pipeline {
                             docker compose -p foodflow-ci logs --tail=100 prometheus
                             exit 1
                         fi
-                        if [ $i -eq 30 ]; then
+                        if [ "$i" -eq 30 ]; then
                             echo "Timeout waiting for Prometheus."
                             docker compose -p foodflow-ci ps
                             docker compose -p foodflow-ci logs --tail=100 prometheus
                             exit 1
                         fi
                         sleep 3
+                        i=$((i + 1))
                     done
                 '''
             }
