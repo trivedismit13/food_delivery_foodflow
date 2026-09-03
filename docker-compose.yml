@@ -62,9 +62,11 @@ services:
     ports:
       - "${PROMETHEUS_PORT:-9090}:9090"
     volumes:
-      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ${PROMETHEUS_CONFIG_SRC:-./monitoring/prometheus/prometheus.yml}:${PROMETHEUS_CONFIG_DEST:-/etc/prometheus/prometheus.yml}:ro
     restart: unless-stopped
 
 volumes:
   mysql_data:
+    driver: local
+  prometheus_config:
     driver: local

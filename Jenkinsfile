@@ -81,6 +81,8 @@ pipeline {
                 JWT_SECRET = credentials('test-jwt-secret')
                 CORS_ALLOWED_ORIGINS = 'http://localhost:3001'
                 VITE_API_BASE_URL = 'http://localhost:8082/api'
+                PROMETHEUS_CONFIG_SRC = 'prometheus_config'
+                PROMETHEUS_CONFIG_DEST = '/etc/prometheus'
             }
             steps {
                 sh 'docker compose -p foodflow-ci build'
@@ -100,9 +102,17 @@ pipeline {
                 JWT_SECRET = credentials('test-jwt-secret')
                 CORS_ALLOWED_ORIGINS = 'http://localhost:3001'
                 VITE_API_BASE_URL = 'http://localhost:8082/api'
+                PROMETHEUS_CONFIG_SRC = 'prometheus_config'
+                PROMETHEUS_CONFIG_DEST = '/etc/prometheus'
             }
             steps {
                 sh '''
+                    # Populate the named volume with prometheus config before starting
+                    docker volume create foodflow-ci_prometheus_config || true
+                    docker container create --name dummy-prom-config -v foodflow-ci_prometheus_config:/etc/prometheus alpine
+                    docker cp monitoring/prometheus/prometheus.yml dummy-prom-config:/etc/prometheus/prometheus.yml
+                    docker rm dummy-prom-config
+
                     # Start the Compose stack
                     docker compose -p foodflow-ci up -d
                     
@@ -164,6 +174,27 @@ pipeline {
                             echo "Timeout waiting for Frontend."
                             docker compose -p foodflow-ci ps
                             docker compose -p foodflow-ci logs --tail=200 frontend
+                            exit 1
+                        fi
+                        sleep 3
+                    done
+
+                    echo "Waiting for Prometheus to respond..."
+                    for i in {1..30}; do
+                        if curl -s -f http://localhost:9091/-/healthy > /dev/null; then
+                            echo "Prometheus is responding."
+                            break
+                        fi
+                        if docker compose -p foodflow-ci ps prometheus | grep -qi "exited"; then
+                            echo "Prometheus container crashed."
+                            docker compose -p foodflow-ci ps
+                            docker compose -p foodflow-ci logs --tail=100 prometheus
+                            exit 1
+                        fi
+                        if [ $i -eq 30 ]; then
+                            echo "Timeout waiting for Prometheus."
+                            docker compose -p foodflow-ci ps
+                            docker compose -p foodflow-ci logs --tail=100 prometheus
                             exit 1
                         fi
                         sleep 3
