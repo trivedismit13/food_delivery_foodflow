@@ -13,21 +13,6 @@ pipeline {
             }
         }
 
-        stage('CI Network Diagnostics') {
-            steps {
-                sh '''
-                    hostname
-                    ip addr || true
-                    ip route || true
-                    getent hosts foodflow-jenkins-mysql || true
-                    timeout 5 bash -c '</dev/tcp/foodflow-jenkins-mysql/3306' \\
-                        && echo "MYSQL_TCP_CONNECTED" \\
-                        || echo "MYSQL_TCP_FAILED"
-                    cat /etc/resolv.conf || true
-                '''
-            }
-        }
-
         stage('Backend Test') {
             environment {
                 SPRING_DATASOURCE_URL = 'jdbc:mysql://foodflow-jenkins-mysql:3306/food_flow?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata'
@@ -120,6 +105,13 @@ pipeline {
                     # Start the Compose stack
                     docker compose -p foodflow-ci up -d
                     
+                    check_http() {
+                        local service=$1
+                        local url=$2
+                        docker compose -p foodflow-ci exec -T "$service" wget -qO- "$url" >/dev/null 2>&1 || \
+                        docker compose -p foodflow-ci exec -T "$service" curl -s -f "$url" >/dev/null 2>&1
+                    }
+
                     echo "Waiting for MySQL to become healthy..."
                     i=1
                     while [ "$i" -le 30 ]; do
@@ -146,14 +138,7 @@ pipeline {
                     echo "Waiting for Backend to respond..."
                     i=1
                     while [ "$i" -le 30 ]; do
-                        echo "--- DIAGNOSTICS ---"
-                        docker compose -p foodflow-ci ps backend
-                        docker inspect foodflow-ci-backend-1 --format '{{json .State}}' || true
-                        curl -sS -o /tmp/backend-health.txt -w '\nHTTP_STATUS=%{http_code}\n' http://localhost:8082/actuator/health || echo "CURL_FAILED_WITH_EXIT_CODE=$?"
-                        cat /tmp/backend-health.txt || true
-                        echo "--- END DIAGNOSTICS ---"
-
-                        if curl -s -f http://localhost:8082/actuator/health > /dev/null; then
+                        if check_http backend http://localhost:8080/actuator/health; then
                             echo "Backend is responding."
                             break
                         fi
@@ -176,7 +161,7 @@ pipeline {
                     echo "Waiting for Frontend to respond..."
                     i=1
                     while [ "$i" -le 30 ]; do
-                        if curl -s -f http://localhost:3001 > /dev/null; then
+                        if check_http frontend http://localhost:80/; then
                             echo "Frontend is responding."
                             break
                         fi
@@ -199,7 +184,7 @@ pipeline {
                     echo "Waiting for Prometheus to respond..."
                     i=1
                     while [ "$i" -le 30 ]; do
-                        if curl -s -f http://localhost:9091/-/healthy > /dev/null; then
+                        if check_http prometheus http://localhost:9090/-/healthy; then
                             echo "Prometheus is responding."
                             break
                         fi
