@@ -53,8 +53,8 @@ pipeline {
                     sh 'npm ci'
                     // Lint checking
                     sh 'npm run lint'
-                    // Run frontend tests (vitest in run mode)
-                    sh 'npm run test -- --run'
+                    // Run frontend tests sequentially to avoid OOM in CI
+                    sh 'npm run test -- --run --no-file-parallelism'
                 }
             }
         }
