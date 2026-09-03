@@ -92,15 +92,14 @@ pipeline {
             }
             steps {
                 sh '''
-                    # Populate the named volume with prometheus config before starting
-                    docker volume create foodflow-ci_prometheus_config
-                    docker rm -f dummy-prom-config >/dev/null 2>&1 || true
-                    docker container create --name dummy-prom-config -v foodflow-ci_prometheus_config:/etc/prometheus alpine
-                    if ! docker cp monitoring/prometheus/prometheus.yml dummy-prom-config:/etc/prometheus/prometheus.yml; then
-                        docker rm -f dummy-prom-config
+                    # Create containers and volumes natively without starting them
+                    docker compose -p foodflow-ci create
+
+                    # Populate the Compose-managed volume directly via the prometheus container
+                    if ! docker cp monitoring/prometheus/prometheus.yml foodflow-ci-prometheus-1:/etc/prometheus/prometheus.yml; then
+                        echo "Failed to copy prometheus config"
                         exit 1
                     fi
-                    docker rm -f dummy-prom-config
 
                     # Start the Compose stack
                     docker compose -p foodflow-ci up -d
