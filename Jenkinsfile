@@ -96,7 +96,7 @@ pipeline {
                 MYSQL_PORT = '3308'
                 PROMETHEUS_PORT = '9091'
                 DB_NAME = 'food_flow_ci'
-                DB_USERNAME = 'root'
+                DB_USERNAME = 'foodflow_app'
                 DB_PASSWORD = credentials('test-db-password')
                 MYSQL_ROOT_PASSWORD = credentials('test-db-password')
                 JWT_SECRET = credentials('test-jwt-secret')
@@ -113,14 +113,8 @@ pipeline {
                     docker cp monitoring/prometheus/prometheus.yml dummy-prom-config:/etc/prometheus/prometheus.yml
                     docker rm dummy-prom-config
 
-                    # Start the Compose stack, but don't fail immediately to allow diagnostics
-                    if ! docker compose -p foodflow-ci up -d; then
-                        echo "DIAGNOSTIC: docker compose up -d failed!"
-                        docker compose -p foodflow-ci ps
-                        docker compose -p foodflow-ci logs --tail=200 mysql
-                        docker inspect foodflow-ci-mysql-1 --format '{{json .State.Health}}' || true
-                        exit 1
-                    fi
+                    # Start the Compose stack
+                    docker compose -p foodflow-ci up -d
                     
                     echo "Waiting for MySQL to become healthy..."
                     for i in {1..30}; do
