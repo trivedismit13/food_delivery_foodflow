@@ -15,6 +15,7 @@ pipeline {
 
         stage('Backend Test') {
             environment {
+                SPRING_DATASOURCE_URL = 'jdbc:mysql://foodflow-jenkins-mysql:3306/food_flow?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata'
                 // Non-secret environment variable required by test properties
                 TEST_DB_USERNAME = 'root'
                 // Secrets scoped only to the backend stage where they are needed
