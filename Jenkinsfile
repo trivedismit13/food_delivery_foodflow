@@ -69,33 +69,59 @@ pipeline {
         }
 
         stage('Docker Build') {
+            environment {
+                FRONTEND_PORT = '3001'
+                BACKEND_PORT = '8082'
+                MYSQL_PORT = '3308'
+                PROMETHEUS_PORT = '9091'
+                DB_NAME = 'food_flow_ci'
+                DB_USERNAME = 'root'
+                DB_PASSWORD = credentials('test-db-password')
+                MYSQL_ROOT_PASSWORD = credentials('test-db-password')
+                JWT_SECRET = credentials('test-jwt-secret')
+                CORS_ALLOWED_ORIGINS = 'http://localhost:3001'
+                VITE_API_BASE_URL = 'http://localhost:8082/api'
+            }
             steps {
-                sh 'docker compose build'
+                sh 'docker compose -p foodflow-ci build'
             }
         }
 
         stage('Docker Smoke Test') {
+            environment {
+                FRONTEND_PORT = '3001'
+                BACKEND_PORT = '8082'
+                MYSQL_PORT = '3308'
+                PROMETHEUS_PORT = '9091'
+                DB_NAME = 'food_flow_ci'
+                DB_USERNAME = 'root'
+                DB_PASSWORD = credentials('test-db-password')
+                MYSQL_ROOT_PASSWORD = credentials('test-db-password')
+                JWT_SECRET = credentials('test-jwt-secret')
+                CORS_ALLOWED_ORIGINS = 'http://localhost:3001'
+                VITE_API_BASE_URL = 'http://localhost:8082/api'
+            }
             steps {
                 sh '''
                     # Start the Compose stack
-                    docker compose up -d
+                    docker compose -p foodflow-ci up -d
                     
                     echo "Waiting for MySQL to become healthy..."
                     for i in {1..30}; do
-                        if docker compose ps mysql | grep -qi "healthy"; then
+                        if docker compose -p foodflow-ci ps mysql | grep -qi "healthy"; then
                             echo "MySQL is healthy."
                             break
                         fi
-                        if docker compose ps mysql | grep -qi "exited"; then
+                        if docker compose -p foodflow-ci ps mysql | grep -qi "exited"; then
                             echo "MySQL container crashed."
-                            docker compose ps
-                            docker compose logs --tail=200 mysql
+                            docker compose -p foodflow-ci ps
+                            docker compose -p foodflow-ci logs --tail=200 mysql
                             exit 1
                         fi
                         if [ $i -eq 30 ]; then
                             echo "Timeout waiting for MySQL."
-                            docker compose ps
-                            docker compose logs --tail=200 mysql
+                            docker compose -p foodflow-ci ps
+                            docker compose -p foodflow-ci logs --tail=200 mysql
                             exit 1
                         fi
                         sleep 3
@@ -103,20 +129,20 @@ pipeline {
 
                     echo "Waiting for Backend to respond..."
                     for i in {1..30}; do
-                        if curl -s -f http://localhost:8080/actuator/health > /dev/null; then
+                        if curl -s -f http://localhost:8082/actuator/health > /dev/null; then
                             echo "Backend is responding."
                             break
                         fi
-                        if docker compose ps backend | grep -qi "exited"; then
+                        if docker compose -p foodflow-ci ps backend | grep -qi "exited"; then
                             echo "Backend container crashed."
-                            docker compose ps
-                            docker compose logs --tail=200 backend
+                            docker compose -p foodflow-ci ps
+                            docker compose -p foodflow-ci logs --tail=200 backend
                             exit 1
                         fi
                         if [ $i -eq 30 ]; then
                             echo "Timeout waiting for Backend."
-                            docker compose ps
-                            docker compose logs --tail=200 backend
+                            docker compose -p foodflow-ci ps
+                            docker compose -p foodflow-ci logs --tail=200 backend
                             exit 1
                         fi
                         sleep 3
@@ -124,20 +150,20 @@ pipeline {
 
                     echo "Waiting for Frontend to respond..."
                     for i in {1..30}; do
-                        if curl -s -f http://localhost:3000 > /dev/null; then
+                        if curl -s -f http://localhost:3001 > /dev/null; then
                             echo "Frontend is responding."
                             break
                         fi
-                        if docker compose ps frontend | grep -qi "exited"; then
+                        if docker compose -p foodflow-ci ps frontend | grep -qi "exited"; then
                             echo "Frontend container crashed."
-                            docker compose ps
-                            docker compose logs --tail=200 frontend
+                            docker compose -p foodflow-ci ps
+                            docker compose -p foodflow-ci logs --tail=200 frontend
                             exit 1
                         fi
                         if [ $i -eq 30 ]; then
                             echo "Timeout waiting for Frontend."
-                            docker compose ps
-                            docker compose logs --tail=200 frontend
+                            docker compose -p foodflow-ci ps
+                            docker compose -p foodflow-ci logs --tail=200 frontend
                             exit 1
                         fi
                         sleep 3
@@ -154,7 +180,7 @@ pipeline {
             junit testResults: 'backend/target/surefire-reports/*.xml'
             // Ensure docker compose stack is shut down to prevent port collisions
             // and resource leaks, but keep the data volumes (do not use -v)
-            sh 'docker compose down'
+            sh 'docker compose -p foodflow-ci down'
         }
         success {
             // Archive artifacts upon success
