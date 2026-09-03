@@ -95,9 +95,9 @@ pipeline {
                     # Create containers and volumes natively without starting them
                     docker compose -p foodflow-ci create
 
-                    # Populate the Compose-managed volume directly via the prometheus container
-                    if ! docker cp monitoring/prometheus/prometheus.yml foodflow-ci-prometheus-1:/etc/prometheus/prometheus.yml; then
-                        echo "Failed to copy prometheus config"
+                    # Populate the Compose-managed volume using a temporary helper container with RW access
+                    if ! docker run --rm -i -v foodflow-ci_prometheus_config:/config alpine sh -c 'cat > /config/prometheus.yml' < monitoring/prometheus/prometheus.yml; then
+                        echo "Failed to populate prometheus config volume"
                         exit 1
                     fi
 
