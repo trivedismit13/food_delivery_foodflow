@@ -105,12 +105,7 @@ pipeline {
                     # Start the Compose stack
                     docker compose -p foodflow-ci up -d
                     
-                    check_http() {
-                        local service=$1
-                        local url=$2
-                        docker compose -p foodflow-ci exec -T "$service" wget -qO- "$url" >/dev/null 2>&1 || \
-                        docker compose -p foodflow-ci exec -T "$service" curl -s -f "$url" >/dev/null 2>&1
-                    }
+
 
                     echo "Waiting for MySQL to become healthy..."
                     i=1
@@ -138,7 +133,7 @@ pipeline {
                     echo "Waiting for Backend to respond..."
                     i=1
                     while [ "$i" -le 30 ]; do
-                        if check_http backend http://localhost:8080/actuator/health; then
+                        if docker run --rm --network foodflow-ci_default alpine wget -qO- http://backend:8080/actuator/health >/dev/null 2>&1; then
                             echo "Backend is responding."
                             break
                         fi
@@ -161,7 +156,7 @@ pipeline {
                     echo "Waiting for Frontend to respond..."
                     i=1
                     while [ "$i" -le 30 ]; do
-                        if check_http frontend http://localhost:80/; then
+                        if docker run --rm --network foodflow-ci_default alpine wget -qO- http://frontend:80/ >/dev/null 2>&1; then
                             echo "Frontend is responding."
                             break
                         fi
@@ -184,7 +179,7 @@ pipeline {
                     echo "Waiting for Prometheus to respond..."
                     i=1
                     while [ "$i" -le 30 ]; do
-                        if check_http prometheus http://localhost:9090/-/healthy; then
+                        if docker run --rm --network foodflow-ci_default alpine wget -qO- http://prometheus:9090/-/healthy >/dev/null 2>&1; then
                             echo "Prometheus is responding."
                             break
                         fi
