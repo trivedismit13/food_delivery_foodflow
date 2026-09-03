@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { ProtectedRoute } from '../components/auth/ProtectedRoute';
 
 // Mock auth store
@@ -16,9 +16,13 @@ describe('Role-Aware Routing', () => {
     (globalThis as any).__mockAuthState = { isAuthenticated: false, user: null };
     render(
       <MemoryRouter initialEntries={['/dashboard']}>
-        <ProtectedRoute allowedRoles={['SELLER']}>
-          <div>Dashboard Content</div>
-        </ProtectedRoute>
+        <Routes>
+          <Route path="/dashboard" element={
+            <ProtectedRoute allowedRoles={['SELLER']}>
+              <div>Dashboard Content</div>
+            </ProtectedRoute>
+          } />
+        </Routes>
       </MemoryRouter>
     );
     expect(screen.queryByText('Dashboard Content')).not.toBeInTheDocument();
@@ -31,9 +35,13 @@ describe('Role-Aware Routing', () => {
     };
     render(
       <MemoryRouter initialEntries={['/dashboard']}>
-        <ProtectedRoute allowedRoles={['SELLER']}>
-          <div>Seller Dashboard Content</div>
-        </ProtectedRoute>
+        <Routes>
+          <Route path="/dashboard" element={
+            <ProtectedRoute allowedRoles={['SELLER']}>
+              <div>Seller Dashboard Content</div>
+            </ProtectedRoute>
+          } />
+        </Routes>
       </MemoryRouter>
     );
     expect(screen.getByText('Seller Dashboard Content')).toBeInTheDocument();
@@ -46,9 +54,13 @@ describe('Role-Aware Routing', () => {
     };
     render(
       <MemoryRouter initialEntries={['/dashboard']}>
-        <ProtectedRoute allowedRoles={['SELLER']}>
-          <div>Seller Dashboard Content</div>
-        </ProtectedRoute>
+        <Routes>
+          <Route path="/dashboard" element={
+            <ProtectedRoute allowedRoles={['SELLER']}>
+              <div>Seller Dashboard Content</div>
+            </ProtectedRoute>
+          } />
+        </Routes>
       </MemoryRouter>
     );
     expect(screen.queryByText('Seller Dashboard Content')).not.toBeInTheDocument();
