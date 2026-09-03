@@ -67,6 +67,84 @@ pipeline {
                 }
             }
         }
+
+        stage('Docker Build') {
+            steps {
+                sh 'docker compose build'
+            }
+        }
+
+        stage('Docker Smoke Test') {
+            steps {
+                sh '''
+                    # Start the Compose stack
+                    docker compose up -d
+                    
+                    echo "Waiting for MySQL to become healthy..."
+                    for i in {1..30}; do
+                        if docker compose ps mysql | grep -qi "healthy"; then
+                            echo "MySQL is healthy."
+                            break
+                        fi
+                        if docker compose ps mysql | grep -qi "exited"; then
+                            echo "MySQL container crashed."
+                            docker compose ps
+                            docker compose logs --tail=200 mysql
+                            exit 1
+                        fi
+                        if [ $i -eq 30 ]; then
+                            echo "Timeout waiting for MySQL."
+                            docker compose ps
+                            docker compose logs --tail=200 mysql
+                            exit 1
+                        fi
+                        sleep 3
+                    done
+
+                    echo "Waiting for Backend to respond..."
+                    for i in {1..30}; do
+                        if curl -s -f http://localhost:8080/actuator/health > /dev/null; then
+                            echo "Backend is responding."
+                            break
+                        fi
+                        if docker compose ps backend | grep -qi "exited"; then
+                            echo "Backend container crashed."
+                            docker compose ps
+                            docker compose logs --tail=200 backend
+                            exit 1
+                        fi
+                        if [ $i -eq 30 ]; then
+                            echo "Timeout waiting for Backend."
+                            docker compose ps
+                            docker compose logs --tail=200 backend
+                            exit 1
+                        fi
+                        sleep 3
+                    done
+
+                    echo "Waiting for Frontend to respond..."
+                    for i in {1..30}; do
+                        if curl -s -f http://localhost:3000 > /dev/null; then
+                            echo "Frontend is responding."
+                            break
+                        fi
+                        if docker compose ps frontend | grep -qi "exited"; then
+                            echo "Frontend container crashed."
+                            docker compose ps
+                            docker compose logs --tail=200 frontend
+                            exit 1
+                        fi
+                        if [ $i -eq 30 ]; then
+                            echo "Timeout waiting for Frontend."
+                            docker compose ps
+                            docker compose logs --tail=200 frontend
+                            exit 1
+                        fi
+                        sleep 3
+                    done
+                '''
+            }
+        }
     }
 
     post {
@@ -74,6 +152,9 @@ pipeline {
             // Publish JUnit reports strictly from surefire. 
             // allowEmptyResults is removed so missing test results fail the build properly.
             junit testResults: 'backend/target/surefire-reports/*.xml'
+            // Ensure docker compose stack is shut down to prevent port collisions
+            // and resource leaks, but keep the data volumes (do not use -v)
+            sh 'docker compose down'
         }
         success {
             // Archive artifacts upon success
