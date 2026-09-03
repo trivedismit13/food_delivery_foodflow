@@ -13,6 +13,21 @@ pipeline {
             }
         }
 
+        stage('CI Network Diagnostics') {
+            steps {
+                sh '''
+                    hostname
+                    ip addr || true
+                    ip route || true
+                    getent hosts foodflow-jenkins-mysql || true
+                    timeout 5 bash -c '</dev/tcp/foodflow-jenkins-mysql/3306' \\
+                        && echo "MYSQL_TCP_CONNECTED" \\
+                        || echo "MYSQL_TCP_FAILED"
+                    cat /etc/resolv.conf || true
+                '''
+            }
+        }
+
         stage('Backend Test') {
             environment {
                 SPRING_DATASOURCE_URL = 'jdbc:mysql://foodflow-jenkins-mysql:3306/food_flow?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata'
