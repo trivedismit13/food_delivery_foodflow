@@ -146,6 +146,13 @@ pipeline {
                     echo "Waiting for Backend to respond..."
                     i=1
                     while [ "$i" -le 30 ]; do
+                        echo "--- DIAGNOSTICS ---"
+                        docker compose -p foodflow-ci ps backend
+                        docker inspect foodflow-ci-backend-1 --format '{{json .State}}' || true
+                        curl -sS -o /tmp/backend-health.txt -w '\nHTTP_STATUS=%{http_code}\n' http://localhost:8082/actuator/health || echo "CURL_FAILED_WITH_EXIT_CODE=$?"
+                        cat /tmp/backend-health.txt || true
+                        echo "--- END DIAGNOSTICS ---"
+
                         if curl -s -f http://localhost:8082/actuator/health > /dev/null; then
                             echo "Backend is responding."
                             break
