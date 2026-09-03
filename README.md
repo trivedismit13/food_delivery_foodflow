@@ -1,3 +1,5 @@
+
+
 # FoodFlow
 
 FoodFlow is a **pickup-only** food marketplace connecting local culinary creators (sellers) with customers.
@@ -111,3 +113,4 @@ VITE_API_URL=http://localhost:8080
 - Real-time cart management
 - Responsive, mobile-first UI
 - Advanced seller analytics dashboard
+............
