@@ -113,8 +113,14 @@ pipeline {
                     docker cp monitoring/prometheus/prometheus.yml dummy-prom-config:/etc/prometheus/prometheus.yml
                     docker rm dummy-prom-config
 
-                    # Start the Compose stack
-                    docker compose -p foodflow-ci up -d
+                    # Start the Compose stack, but don't fail immediately to allow diagnostics
+                    if ! docker compose -p foodflow-ci up -d; then
+                        echo "DIAGNOSTIC: docker compose up -d failed!"
+                        docker compose -p foodflow-ci ps
+                        docker compose -p foodflow-ci logs --tail=200 mysql
+                        docker inspect foodflow-ci-mysql-1 --format '{{json .State.Health}}' || true
+                        exit 1
+                    fi
                     
                     echo "Waiting for MySQL to become healthy..."
                     for i in {1..30}; do
