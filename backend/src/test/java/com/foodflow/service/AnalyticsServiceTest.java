@@ -101,7 +101,7 @@ public class AnalyticsServiceTest {
         when(analyticsRepository.findRepeatCustomerRate(creatorId)).thenReturn(new Object[]{10, 100, 10.0});
 
         Object[] prevStats = new Object[]{new java.math.BigDecimal("100.00"), 5};
-        when(analyticsRepository.findPreviousPeriodStats(creatorId, days)).thenReturn(prevStats);
+        when(analyticsRepository.findPreviousPeriodStats(creatorId, days, days * 2)).thenReturn(prevStats);
 
         Object[] dropStats = new Object[]{10, 8, 85.5};
         when(analyticsRepository.findCreatorDropStats(creatorId)).thenReturn(dropStats);
@@ -119,5 +119,7 @@ public class AnalyticsServiceTest {
         
         // Prev orders is 5, current is 0. ordersChange should be ((0 - 5) / 5) * 100 = -100%
         assertEquals(-100, response.getOrdersChange());
+
+        verify(analyticsRepository).findPreviousPeriodStats(creatorId, days, days * 2);
     }
 }
