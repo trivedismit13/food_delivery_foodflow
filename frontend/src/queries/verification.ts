@@ -63,3 +63,20 @@ export const useApproveVerification = () => {
     }
   });
 };
+
+export const useRejectVerification = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ creatorId, reason }: { creatorId: number, reason: string }) => {
+      const res = await apiClient.put<{ data: CreatorVerification }>(
+        `/verification/${creatorId}/reject`, 
+        reason,
+        { headers: { 'Content-Type': 'text/plain' } }
+      );
+      return res.data.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-verifications-pending'] });
+    }
+  });
+};
