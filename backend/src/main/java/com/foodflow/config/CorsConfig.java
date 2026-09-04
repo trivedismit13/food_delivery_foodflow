@@ -8,18 +8,25 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 @Configuration
 public class CorsConfig {
 
-    @Value("${CORS_ALLOWED_ORIGINS}")
+    @Value("${app.cors.allowed-origins:http://localhost:3000}")
     private String allowedOrigins;
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Read from properties — different for dev and prod
-        configuration.setAllowedOrigins(List.of(allowedOrigins.split(",")));
+        // Read from properties — trim whitespace and filter blank origins
+        List<String> origins = Arrays.stream(allowedOrigins.split(","))
+            .map(String::trim)
+            .filter(origin -> !origin.isEmpty())
+            .collect(Collectors.toList());
+        configuration.setAllowedOrigins(origins);
         
         // Allow standard HTTP methods
         configuration.setAllowedMethods(List.of(
