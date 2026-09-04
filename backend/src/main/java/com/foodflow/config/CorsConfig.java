@@ -43,7 +43,7 @@ public class CorsConfig {
         ));
         
         // Allow cookies (needed if you ever add session support)
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(false);
         
         // Cache preflight response for 1 hour
         // Browser won't send OPTIONS request every time
