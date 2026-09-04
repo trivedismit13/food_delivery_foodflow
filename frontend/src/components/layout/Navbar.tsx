@@ -150,12 +150,16 @@ export default function Navbar() {
             </Link>
 
             <div className="hidden lg:flex items-center gap-6 border-l border-stone-200 pl-6 ml-2">
-              <Link to="/drops" className="text-sm font-medium text-stone-600 hover:text-orange-500 transition-colors">
-                Discover Drops
-              </Link>
-              <Link to="/creators" className="text-sm font-medium text-stone-600 hover:text-orange-500 transition-colors">
-                All Creators
-              </Link>
+              {!isAdmin() && (
+                <>
+                  <Link to="/drops" className="text-sm font-medium text-stone-600 hover:text-orange-500 transition-colors">
+                    Discover Drops
+                  </Link>
+                  <Link to="/creators" className="text-sm font-medium text-stone-600 hover:text-orange-500 transition-colors">
+                    All Creators
+                  </Link>
+                </>
+              )}
               {isAuthenticated && isCustomer() && (
                 <Link to="/reels" className="text-sm font-medium text-stone-600 hover:text-orange-500 transition-colors">
                   Reels

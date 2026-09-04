@@ -7,7 +7,7 @@ import { useAuthStore } from '@/store/authStore'
 import type { AuthResponse, LoginRequest, RegisterRequest } from '@/types/api'
 import type { CreatorRegistrationRequest } from '@/types/creator'
 
-export function useLogin(expectedRole?: 'CUSTOMER' | 'SELLER') {
+export function useLogin(expectedRole?: 'CUSTOMER' | 'SELLER' | 'ADMIN') {
   const { setAuth } = useAuthStore()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -29,6 +29,15 @@ export function useLogin(expectedRole?: 'CUSTOMER' | 'SELLER') {
       
       if (expectedRole === 'SELLER' && authResponse.role === 'CUSTOMER') {
         toast.error("This is a Customer account. Please use the Customer Sign In page.", { duration: 5000 })
+        return
+      }
+
+      if (expectedRole === 'ADMIN' && authResponse.role !== 'ADMIN') {
+        toast.error("Invalid administrator credentials.", { duration: 5000 })
+        return
+      }
+      if (expectedRole !== 'ADMIN' && authResponse.role === 'ADMIN') {
+        toast.error("Administrators must use the admin portal.", { duration: 5000 })
         return
       }
 

@@ -65,4 +65,60 @@ describe('Role-Aware Routing', () => {
     );
     expect(screen.queryByText('Seller Dashboard Content')).not.toBeInTheDocument();
   });
+  it('allows ADMIN to access admin routes', () => {
+    (globalThis as any).__mockAuthState = { 
+      isAuthenticated: true, 
+      user: { role: 'ADMIN' } 
+    };
+    render(
+      <MemoryRouter initialEntries={['/admin']}>
+        <Routes>
+          <Route path="/admin" element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <div>Admin Console</div>
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </MemoryRouter>
+    );
+    expect(screen.getByText('Admin Console')).toBeInTheDocument();
+  });
+
+  it('rejects CUSTOMER from admin routes', () => {
+    (globalThis as any).__mockAuthState = { 
+      isAuthenticated: true, 
+      user: { role: 'CUSTOMER' } 
+    };
+    render(
+      <MemoryRouter initialEntries={['/admin']}>
+        <Routes>
+          <Route path="/admin" element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <div>Admin Console</div>
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </MemoryRouter>
+    );
+    expect(screen.queryByText('Admin Console')).not.toBeInTheDocument();
+  });
+
+  it('rejects SELLER from admin routes', () => {
+    (globalThis as any).__mockAuthState = { 
+      isAuthenticated: true, 
+      user: { role: 'SELLER' } 
+    };
+    render(
+      <MemoryRouter initialEntries={['/admin']}>
+        <Routes>
+          <Route path="/admin" element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <div>Admin Console</div>
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </MemoryRouter>
+    );
+    expect(screen.queryByText('Admin Console')).not.toBeInTheDocument();
+  });
 });

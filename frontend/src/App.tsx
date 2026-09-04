@@ -47,6 +47,7 @@ import CreatorProfileSettingsPage from './pages/dashboard/creator/CreatorProfile
 
 // Admin Pages
 import AdminVerificationPage from './pages/admin/AdminVerificationPage'
+import AdminLoginPage from './pages/admin/AdminLoginPage'
 
 function App() {
   useAuthInit()  // verify token on every page load
@@ -80,6 +81,9 @@ function App() {
           <Route path="/auth/login/seller" element={<GuestRoute><SellerLoginPage /></GuestRoute>} />
           <Route path="/auth/register" element={<GuestRoute><RegisterPage /></GuestRoute>} />
           <Route path="/auth/register/creator" element={<GuestRoute><SellerRegisterPage /></GuestRoute>} />
+          
+          {/* Admin auth route */}
+          <Route path="/admin/login" element={<GuestRoute><AdminLoginPage /></GuestRoute>} />
           
           {/* Order tracking */}
           <Route path="/orders/:orderId/track" element={
