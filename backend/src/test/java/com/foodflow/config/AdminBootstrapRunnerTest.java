@@ -60,6 +60,7 @@ public class AdminBootstrapRunnerTest {
         ReflectionTestUtils.setField(runner, "bootstrapEnabled", true);
         ReflectionTestUtils.setField(runner, "bootstrapEmail", "admin@test.local");
         ReflectionTestUtils.setField(runner, "bootstrapPassword", "secret123");
+        ReflectionTestUtils.setField(runner, "bootstrapName", "Custom Admin Name");
 
         when(userRepository.findByEmail("admin@test.local")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("secret123")).thenReturn("encodedSecret123");
@@ -74,7 +75,7 @@ public class AdminBootstrapRunnerTest {
         assertEquals("encodedSecret123", savedUser.getPassword());
         assertEquals(Role.ADMIN, savedUser.getRole());
         assertTrue(savedUser.getIsActive());
-        assertEquals("Admin", savedUser.getName());
+        assertEquals("Custom Admin Name", savedUser.getName());
     }
 
     @Test
@@ -107,6 +108,23 @@ public class AdminBootstrapRunnerTest {
         runner.run();
 
         // Should not update customer to admin
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void run_WhenEnabledAndSellerExists_AbortsSafe() {
+        ReflectionTestUtils.setField(runner, "bootstrapEnabled", true);
+        ReflectionTestUtils.setField(runner, "bootstrapEmail", "admin@test.local");
+        ReflectionTestUtils.setField(runner, "bootstrapPassword", "secret123");
+
+        User existingSeller = new User();
+        existingSeller.setRole(Role.SELLER);
+        
+        when(userRepository.findByEmail("admin@test.local")).thenReturn(Optional.of(existingSeller));
+
+        runner.run();
+
+        // Should not update seller to admin
         verify(userRepository, never()).save(any());
     }
 }

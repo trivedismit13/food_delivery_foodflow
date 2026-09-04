@@ -26,6 +26,9 @@ public class AdminBootstrapRunner implements CommandLineRunner {
     @Value("${admin.bootstrap.password:}")
     private String bootstrapPassword;
 
+    @Value("${admin.bootstrap.name:FoodFlow Administrator}")
+    private String bootstrapName;
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -59,7 +62,7 @@ public class AdminBootstrapRunner implements CommandLineRunner {
             User admin = new User();
             admin.setEmail(bootstrapEmail);
             admin.setPassword(passwordEncoder.encode(bootstrapPassword));
-            admin.setName("Admin");
+            admin.setName(bootstrapName);
             admin.setRole(Role.ADMIN);
             admin.setIsActive(true);
             

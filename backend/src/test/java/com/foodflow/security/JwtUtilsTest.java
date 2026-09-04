@@ -24,7 +24,7 @@ public class JwtUtilsTest {
     void testGenerateAndValidateJwtToken() {
         Authentication auth = mock(Authentication.class);
         UserDetailsImpl userDetails = new UserDetailsImpl(
-                1L, "admin@test.local", "password", "Admin", Role.ADMIN.name());
+                1L, "Admin", "admin@test.local", "password", Role.ADMIN.name());
         
         when(auth.getPrincipal()).thenReturn(userDetails);
 
@@ -39,7 +39,7 @@ public class JwtUtilsTest {
     void testValidateJwtToken_WithDifferentSecret_Fails() {
         Authentication auth = mock(Authentication.class);
         UserDetailsImpl userDetails = new UserDetailsImpl(
-                1L, "admin@test.local", "password", "Admin", Role.ADMIN.name());
+                1L, "Admin", "admin@test.local", "password", Role.ADMIN.name());
         when(auth.getPrincipal()).thenReturn(userDetails);
 
         String token = jwtUtils.generateJwtToken(auth);
@@ -47,6 +47,20 @@ public class JwtUtilsTest {
         // Change secret to simulate invalid signature
         ReflectionTestUtils.setField(jwtUtils, "jwtSecret", "AnotherVerySecureSecretKeyForTestingPurposeOnly32BytesMin!");
         
+        assertFalse(jwtUtils.validateJwtToken(token));
+    }
+
+    @Test
+    void testValidateJwtToken_WhenExpired_Fails() {
+        Authentication auth = mock(Authentication.class);
+        UserDetailsImpl userDetails = new UserDetailsImpl(
+                1L, "Admin", "admin@test.local", "password", Role.ADMIN.name());
+        when(auth.getPrincipal()).thenReturn(userDetails);
+
+        ReflectionTestUtils.setField(jwtUtils, "jwtExpirationMs", -1000); // Expired 1 second ago
+
+        String token = jwtUtils.generateJwtToken(auth);
+
         assertFalse(jwtUtils.validateJwtToken(token));
     }
 }
