@@ -116,7 +116,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         res.setTotalOrders(totalOrders);
         res.setAvgOrderValue(totalOrders > 0 ? totalRev.divide(new java.math.BigDecimal(totalOrders), 2, java.math.RoundingMode.HALF_UP) : java.math.BigDecimal.ZERO);
         
-        Object[] prevStatsRow = analyticsRepository.findPreviousPeriodStats(creatorId, days);
+        Object[] prevStatsRow = analyticsRepository.findPreviousPeriodStats(creatorId, days, days * 2);
         java.math.BigDecimal prevRev = java.math.BigDecimal.ZERO;
         int prevOrders = 0;
         if (prevStatsRow != null && prevStatsRow.length > 0) {

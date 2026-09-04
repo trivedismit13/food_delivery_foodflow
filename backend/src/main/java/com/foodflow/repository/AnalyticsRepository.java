@@ -228,9 +228,9 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
                    "FROM orders " +
                    "WHERE restaurant_id = :creatorId " +
                    "AND status != 'CANCELLED' " +
-                   "AND order_date >= DATE_SUB(CURDATE(), INTERVAL (:days * 2) DAY) " +
+                   "AND order_date >= DATE_SUB(CURDATE(), INTERVAL :prevDays DAY) " +
                    "AND order_date < DATE_SUB(CURDATE(), INTERVAL :days DAY)", nativeQuery = true)
-    Object[] findPreviousPeriodStats(@Param("creatorId") Long creatorId, @Param("days") int days);
+    Object[] findPreviousPeriodStats(@Param("creatorId") Long creatorId, @Param("days") int days, @Param("prevDays") int prevDays);
 
     // 18. Best day of week for a creator
     @Query(value = "SELECT " +
