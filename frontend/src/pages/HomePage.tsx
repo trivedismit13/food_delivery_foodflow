@@ -5,6 +5,7 @@ import { DropCard } from '@/components/drops/DropCard';
 import { CreatorCard } from '@/components/creators/CreatorCard';
 import { useActiveDropsFeed } from '@/queries/drops';
 import { useCreators } from '@/queries/creators';
+import { useDiscoveryReels } from '@/queries/reels';
 import { DropCardSkeleton } from '@/components/skeletons/DropCardSkeleton';
 import { CreatorCardSkeleton } from '@/components/skeletons/CreatorCardSkeleton';
 export default function HomePage() {
@@ -13,6 +14,9 @@ export default function HomePage() {
 
   const { data: creatorsPage, isLoading: isLoadingCreators } = useCreators({ size: 6 });
   const creators = creatorsPage?.content;
+
+  const { data: reelsPage, isLoading: isLoadingReels } = useDiscoveryReels(0);
+  const reels = reelsPage?.content;
 
   return (
     <div className="pb-20">
@@ -219,25 +223,51 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="flex overflow-x-auto gap-4 pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-            {[1,2,3,4,5,6].map(i => (
-              <Link to="/drops/1" key={i} className="group relative flex-shrink-0 w-40 h-60 rounded-2xl overflow-hidden shadow-sm hover:shadow-orange-500/20 transition-all hover:scale-[1.02]">
-                <div className="absolute inset-0 bg-gradient-to-br from-stone-700 to-stone-800"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
-                    <div className="w-4 h-4 ml-1 border-y-[8px] border-y-transparent border-l-[12px] border-l-white"></div>
-                  </div>
-                </div>
+          {isLoadingReels ? (
+            <div className="flex overflow-x-auto gap-4 pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="flex-shrink-0 w-40 h-60 rounded-2xl bg-stone-800 animate-pulse"></div>
+              ))}
+            </div>
+          ) : reels && reels.length > 0 ? (
+            <div className="flex overflow-x-auto gap-4 pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+              {reels.map(reel => {
+                const isVideo = reel.mediaUrl.match(/\.(mp4|webm|ogg)$/i) || reel.mediaUrl.includes('video');
+                return (
+                  <Link to="/reels" key={reel.reelId} className="group relative flex-shrink-0 w-40 h-60 rounded-2xl overflow-hidden shadow-sm hover:shadow-orange-500/20 transition-all hover:scale-[1.02]">
+                    <div className="absolute inset-0 bg-gradient-to-br from-stone-700 to-stone-800">
+                      {isVideo ? (
+                        <video src={reel.mediaUrl} className="w-full h-full object-cover" muted loop playsInline />
+                      ) : (
+                        <img src={reel.mediaUrl} alt={reel.title} className="w-full h-full object-cover" />
+                      )}
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                    
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
+                        <div className="w-4 h-4 ml-1 border-y-[8px] border-y-transparent border-l-[12px] border-l-white"></div>
+                      </div>
+                    </div>
 
-                <div className="absolute bottom-3 left-3 right-3">
-                  <p className="text-white font-semibold text-sm truncate">Sunday Roast Drop</p>
-                  <p className="text-white/60 text-xs truncate mt-0.5">Chef Rohan</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <p className="text-white font-semibold text-sm truncate">{reel.title}</p>
+                      <p className="text-white/60 text-xs truncate mt-0.5">{reel.restaurantName}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="bg-stone-800/50 rounded-2xl p-8 text-center border border-stone-800 shadow-sm mx-4 sm:mx-0">
+              <h3 className="font-display font-bold text-xl text-stone-200 mb-2">
+                No reels available right now
+              </h3>
+              <p className="text-stone-400 mb-6 text-sm max-w-md mx-auto">
+                Check back later to see what our creators are cooking up.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 

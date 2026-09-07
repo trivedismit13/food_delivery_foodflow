@@ -49,9 +49,9 @@ export default function LoginPage() {
           
           <div className="space-y-4 mt-12">
             {[
-              "🎂 Priya's Kitchen — 312 orders completed",
-              "🍛 Sunday Biryani Drop — Sold out in 90 mins",
-              "🌿 Healthy Tiffin — 94% repeat customers"
+              "🎂 Support local independent chefs",
+              "🍛 Pre-order authentic, fresh meals",
+              "🌿 Discover limited drops before they sell out"
             ].map((text, i) => (
               <motion.div
                 key={i}

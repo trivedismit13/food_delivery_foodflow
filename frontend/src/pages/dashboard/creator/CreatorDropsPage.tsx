@@ -13,7 +13,7 @@ export default function CreatorDropsPage() {
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const { creatorProfile } = useAuthStore();
 
-  const { data: drops = [], isLoading, isError } = useCreatorDrops(creatorProfile?.restaurantId);
+  const { data: drops = [] as any[], isLoading, isError } = useCreatorDrops(creatorProfile?.restaurantId);
 
   const normalizedDrops = useMemo(() =>
     drops.map((drop) => ({
@@ -23,7 +23,7 @@ export default function CreatorDropsPage() {
       date: formatDropDate(drop.dropDate),
       maxOrders: drop.maxOrders,
       currentOrders: drop.currentOrders,
-      revenue: drop.items ? drop.items.reduce((sum, item) => sum + (item.quantityOrdered * (item.dropPrice ?? item.price)), 0) : 0,
+      revenue: drop.items ? drop.items.reduce((sum: number, item: any) => sum + (item.quantityOrdered * (item.dropPrice ?? item.price)), 0) : 0,
       recentOrders: [] as Array<{ id: string; name: string; items: string }>,
     })),
     [drops]

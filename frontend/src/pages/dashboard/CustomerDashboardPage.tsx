@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/authStore';
 import { CreatorCard } from '@/components/creators/CreatorCard';
 import { DropCard, DropStatus } from '@/components/drops/DropCard';
 import { useUserOrders } from '@/queries/orders';
+import { useFollowedCreatorDrops } from '@/queries/drops';
 import { useNavigate } from 'react-router-dom';
 
 export default function CustomerDashboardPage() {
@@ -18,52 +19,11 @@ export default function CustomerDashboardPage() {
   const { data: ordersPage, isLoading: isOrdersLoading } = useUserOrders(0);
   const userOrders = ordersPage?.content || [];
   
-  // Mock Data
-  const now = new Date();
-  
-  const mockFollowedCreators = [
-    {
-      id: 1,
-      name: "Priya's Kitchen",
-      type: "Home Chef",
-      city: "Mumbai",
-      verificationLevel: 2 as const,
-      followerCount: 312,
-      totalOrders: 847,
-      rating: 4.8,
-      isFollowing: true,
-      hasActiveDrop: true
-    },
-    {
-      id: 2,
-      name: "The Sugar Studio",
-      type: "Home Baker",
-      city: "Mumbai",
-      verificationLevel: 1 as const,
-      followerCount: 124,
-      totalOrders: 156,
-      rating: 4.9,
-      isFollowing: true,
-      hasActiveDrop: false
-    }
-  ];
-
-  const mockActiveDropFromFollowed = {
-    dropId: 1,
-    title: "Sunday Special Mutton Biryani",
-    creatorId: 1,
-    creatorName: "Priya's Kitchen",
-    creatorVerificationLevel: 2 as const,
-    status: 'OPEN' as DropStatus,
-    maxOrders: 20,
-    currentOrders: 18,
-    orderCutoffTime: new Date(now.getTime() + 1000 * 60 * 90).toISOString(),
-    dropDate: new Date(now.getTime() + 1000 * 60 * 60 * 24).toISOString(),
-    pickupLocation: "Near VIT Main Gate",
-    pickupTime: "12:00 PM - 2:00 PM",
-    minPrice: 350,
-    description: "Slow cooked overnight with premium basmati rice."
-  };
+  const { data: followedDropsData, isLoading: isFollowedDropsLoading } = useFollowedCreatorDrops();
+  // Ensure we safely handle both array response and page response depending on the backend contract
+  const followedDrops = Array.isArray(followedDropsData) 
+    ? followedDropsData 
+    : (followedDropsData as any)?.content || [];
 
   const filteredOrders = userOrders.filter(o => 
     ordersTypeFilter === 'All' ? true : 
@@ -232,40 +192,28 @@ export default function CustomerDashboardPage() {
               </div>
             )}
 
-            {/* Following Tab */}
             {activeTab === 'Following' && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-display font-bold text-stone-900 mb-1">Creators You Follow</h2>
-                  <p className="text-stone-500 text-sm">You'll get notified when they announce new drops.</p>
+                  <h2 className="text-2xl font-display font-bold text-stone-900 mb-1">Active Drops From Creators You Follow</h2>
+                  <p className="text-stone-500 text-sm">Order before the cutoff time.</p>
                 </div>
 
-                {mockActiveDropFromFollowed && (
-                  <div className="bg-orange-50/50 rounded-2xl p-6 border border-orange-100">
-                    <h3 className="font-semibold text-orange-900 mb-4 flex items-center gap-2">
-                      <span className="text-orange-500">⚡</span> Active drops from your creators
-                    </h3>
-                    <div className="max-w-[320px]">
-                      <DropCard {...(mockActiveDropFromFollowed as any)} />
-                    </div>
+                {isFollowedDropsLoading ? (
+                  <div className="py-12 flex flex-col items-center justify-center bg-white rounded-2xl border border-stone-100">
+                    <Loader2 className="w-8 h-8 text-orange-500 animate-spin mb-4" />
+                    <p className="text-stone-500">Loading active drops...</p>
                   </div>
-                )}
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {mockFollowedCreators.map(creator => (
-                    <div key={creator.id} className="relative group">
-                      <CreatorCard {...creator} creatorType={creator.type} bioSnippet="" />
-                      <button className="absolute top-4 right-4 bg-white/90 backdrop-blur text-red-500 text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity border border-red-100 hover:bg-red-50 shadow-sm">
-                        Unfollow
-                      </button>
-                    </div>
-                  ))}
-                </div>
-                
-                {mockFollowedCreators.length === 0 && (
+                ) : followedDrops && followedDrops.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    {followedDrops.map((drop: any) => (
+                      <DropCard key={drop.dropId} {...drop} />
+                    ))}
+                  </div>
+                ) : (
                   <div className="text-center py-16 bg-white rounded-2xl border border-stone-100">
-                    <p className="text-stone-500 mb-4">You're not following any creators yet.</p>
-                    <Button>Browse Creators</Button>
+                    <p className="text-stone-500 mb-4">No active drops from creators you follow right now.</p>
+                    <Button onClick={() => navigate('/drops')}>Discover Drops</Button>
                   </div>
                 )}
               </div>

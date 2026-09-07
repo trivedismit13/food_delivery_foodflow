@@ -81,7 +81,7 @@ export function useFollowedCreatorDrops() {
   return useQuery({
     queryKey: ['drops', 'followed'],
     queryFn: async () => {
-      const response = await apiClient.get<FoodDropResponse[]>('/drops/following')
+      const response = await apiClient.get<PageResponse<FoodDropResponse>>('/drops/following')
       return response.data
     },
     enabled: isAuthenticated,
@@ -200,7 +200,7 @@ export function useDropOrders(dropId: number | undefined) {
   return useQuery({
     queryKey: ['dropOrders', dropId],
     queryFn: async () => {
-      const response = await apiClient.get<OrderResponse[]>(`/drops/${dropId}/orders`)
+      const response = await apiClient.get<OrderResponse[]>(`/orders/drops/${dropId}/orders`)
       return response.data
     },
     enabled: !!dropId,

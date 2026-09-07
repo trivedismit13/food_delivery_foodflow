@@ -34,7 +34,7 @@ export default function DropsPage() {
     query,
     page
   });
-  const { data: followedDropsData = [] } = useFollowedCreatorDrops();
+  const { data: followedDropsData } = useFollowedCreatorDrops();
 
   const now = new Date();
   
@@ -46,7 +46,7 @@ export default function DropsPage() {
     return diff > 0 && diff < 1000 * 60 * 60 * 4 && d.status === 'OPEN';
   });
 
-  const followedDrops = followedDropsData;
+  const followedDrops = Array.isArray(followedDropsData) ? followedDropsData : followedDropsData?.content || [];
 
   // Backend handles 'type' filtering natively via API now.
   // We handle 'status' locally if needed, but 'All' includes both OPEN and ANNOUNCED for now.

@@ -49,9 +49,9 @@ export default function SellerLoginPage() {
           
           <div className="space-y-4 mt-12">
             {[
-              "🎂 Priya's Kitchen — 312 orders completed",
-              "🍛 Sunday Biryani Drop — Sold out in 90 mins",
-              "🌿 Healthy Tiffin — 94% repeat customers"
+              "🎂 Built for independent chefs and bakers",
+              "🍛 Keep 100% control of your inventory",
+              "🌿 Reach food lovers directly without middleman fees"
             ].map((text, i) => (
               <motion.div
                 key={i}

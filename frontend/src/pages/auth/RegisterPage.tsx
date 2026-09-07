@@ -184,7 +184,7 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          {import.meta.env.VITE_GOOGLE_CLIENT_ID && import.meta.env.VITE_GOOGLE_CLIENT_ID !== 'dummy' && (
+          {import.meta.env.VITE_GOOGLE_CLIENT_ID && (
             <>
               <div className="flex items-center my-8">
                 <div className="flex-1 border-t border-stone-200" />

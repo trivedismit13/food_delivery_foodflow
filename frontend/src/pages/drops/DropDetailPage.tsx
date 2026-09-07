@@ -225,7 +225,11 @@ export default function DropDetailPage() {
               <h2 className="font-display text-2xl font-bold text-stone-900 mb-6">What's included</h2>
               
               <div className="space-y-4">
-                {drop.items?.map(item => {
+                {(!drop.items || drop.items.length === 0) ? (
+                  <div className="text-center py-8 text-stone-500 bg-stone-50 rounded-2xl border border-stone-100">
+                    No items available for this drop.
+                  </div>
+                ) : drop.items.map(item => {
                   const available = item.quantityAvailable;
                   const qty = selectedItems[item.itemId] || 0;
                   

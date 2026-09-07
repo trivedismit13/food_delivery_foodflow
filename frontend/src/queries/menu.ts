@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/lib/api'
-
+import type { MenuItemResponse } from '@/types/api'
 
 export interface MenuItemRequest {
   name: string
@@ -15,8 +15,8 @@ export function useMenu(restaurantId: number | undefined) {
   return useQuery({
     queryKey: ['creator-menu', restaurantId],
     queryFn: async () => {
-      const response = await apiClient.get<any>(`/menu-items/${restaurantId}`)
-      return response.data?.data || response.data || []
+      const response = await apiClient.get<MenuItemResponse[]>(`/menu-items/${restaurantId}`)
+      return response.data || []
     },
     enabled: !!restaurantId,
   })

@@ -58,8 +58,9 @@ function App() {
     return <div className="h-screen w-full flex items-center justify-center bg-stone-50">Loading...</div>
   }
 
-  return (
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || 'dummy'}>
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  const content = (
       <Routes>
         {/* Auth routes (redirect to / if already logged in) - NO NAVBAR */}
         <Route path="/auth/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
@@ -124,7 +125,7 @@ function App() {
           
           {/* Cart */}
           <Route path="/cart" element={
-            <ProtectedRoute allowedRoles={['CUSTOMER', 'SELLER', 'ADMIN']}>
+            <ProtectedRoute allowedRoles={['CUSTOMER']}>
               <CartPage />
             </ProtectedRoute>
           } />
@@ -151,8 +152,19 @@ function App() {
           
         </Route>
       </Routes>
+  );
+
+  return (
+    <>
+      {googleClientId ? (
+        <GoogleOAuthProvider clientId={googleClientId}>
+          {content}
+        </GoogleOAuthProvider>
+      ) : (
+        content
+      )}
       <Toaster />
-    </GoogleOAuthProvider>
+    </>
   )
 }
 
