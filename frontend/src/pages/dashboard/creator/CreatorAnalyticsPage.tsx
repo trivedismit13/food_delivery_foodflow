@@ -40,7 +40,7 @@ export default function CreatorAnalyticsPage() {
     { name: 'One-time', value: repeatCustomersAPI.totalCustomers - repeatCustomersAPI.repeatCustomers, color: '#e7e5e4' },
   ] : [];
 
-  const scatterData = topItemsData?.content.map(item => {
+  const scatterData = topItemsData?.content?.map(item => {
     const avgValue = item.totalOrders > 0 ? item.totalRevenue / item.totalOrders : 0;
     let category = 'STAR';
     if (item.totalOrders > 5 && avgValue > 150) category = 'STAR';
@@ -234,7 +234,7 @@ export default function CreatorAnalyticsPage() {
                     Loading drop performance...
                   </td>
                 </tr>
-              ) : dropPerformanceData?.content.map((drop, i) => {
+              ) : dropPerformanceData?.content?.map((drop, i) => {
                 const fillRate = drop.maxOrders > 0 ? (drop.currentOrders / drop.maxOrders) * 100 : 0;
                 return (
                   <tr key={i} className={cn("transition-colors", fillRate === 100 ? "bg-amber-50/30" : "hover:bg-stone-50")}>

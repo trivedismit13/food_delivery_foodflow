@@ -6,8 +6,8 @@ export function usePaymentByOrder(orderId: number) {
   return useQuery({
     queryKey: ['payment', orderId],
     queryFn: async () => {
-      const { data } = await api.get<{ data: PaymentResponse }>(`/payments/${orderId}`);
-      return data.data;
+      const { data } = await api.get<PaymentResponse>(`/payments/${orderId}`);
+      return data;
     },
     enabled: !!orderId,
   });
@@ -17,8 +17,8 @@ export function useCollectPayment() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (orderId: number) => {
-      const { data } = await api.put<{ data: PaymentResponse }>(`/payments/order/${orderId}/collect`);
-      return data.data;
+      const { data } = await api.put<PaymentResponse>(`/payments/order/${orderId}/collect`);
+      return data;
     },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['payment', variables] });

@@ -241,12 +241,12 @@ export default function CreatorProfilePage() {
           <div className="max-w-3xl mx-auto space-y-4">
             {isLoadingRatings ? (
                <Loader2 className="animate-spin text-orange-500 mx-auto" />
-            ) : ratings?.content.length === 0 ? (
+            ) : !ratings?.content || ratings.content.length === 0 ? (
                <div className="bg-white p-8 rounded-2xl border border-stone-100 text-center text-stone-500">
                  No reviews yet.
                </div>
             ) : (
-              ratings?.content.map(rating => (
+              ratings.content.map(rating => (
                 <div key={rating.ratingId} className="bg-white p-5 rounded-2xl border border-stone-100">
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex gap-3 items-center">

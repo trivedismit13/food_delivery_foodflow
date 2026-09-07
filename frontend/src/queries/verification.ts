@@ -19,8 +19,8 @@ export const useGetVerificationStatus = (creatorId: number) => {
   return useQuery({
     queryKey: ['verification', creatorId],
     queryFn: async () => {
-      const res = await apiClient.get<{ data: CreatorVerification }>(`/creators/${creatorId}/verification`);
-      return res.data.data;
+      const res = await apiClient.get<CreatorVerification>(`/creators/${creatorId}/verification`);
+      return res.data;
     },
     enabled: !!creatorId
   });
@@ -30,8 +30,8 @@ export const useSubmitLevel2Verification = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ creatorId, payload }: { creatorId: number, payload: Record<string, unknown> }) => {
-      const res = await apiClient.put<{ data: CreatorVerification }>(`/creators/${creatorId}/verification/level-2`, payload);
-      return res.data.data;
+      const res = await apiClient.put<CreatorVerification>(`/creators/${creatorId}/verification/level-2`, payload);
+      return res.data;
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['verification', variables.creatorId] });
@@ -45,8 +45,8 @@ export const useGetPendingVerifications = () => {
   return useQuery({
     queryKey: ['admin-verifications-pending'],
     queryFn: async () => {
-      const res = await apiClient.get<{ data: CreatorVerification[] }>('/verification/pending');
-      return res.data.data;
+      const res = await apiClient.get<CreatorVerification[]>('/verification/pending');
+      return res.data;
     }
   });
 };
@@ -55,8 +55,8 @@ export const useApproveVerification = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ creatorId, level }: { creatorId: number, level: number }) => {
-      const res = await apiClient.put<{ data: CreatorVerification }>(`/verification/${creatorId}/approve?level=${level}`);
-      return res.data.data;
+      const res = await apiClient.put<CreatorVerification>(`/verification/${creatorId}/approve?level=${level}`);
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-verifications-pending'] });
@@ -68,12 +68,12 @@ export const useRejectVerification = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ creatorId, reason }: { creatorId: number, reason: string }) => {
-      const res = await apiClient.put<{ data: CreatorVerification }>(
+      const res = await apiClient.put<CreatorVerification>(
         `/verification/${creatorId}/reject`, 
         reason,
         { headers: { 'Content-Type': 'text/plain' } }
       );
-      return res.data.data;
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-verifications-pending'] });

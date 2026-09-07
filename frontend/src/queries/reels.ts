@@ -7,8 +7,8 @@ export const useRestaurantReels = (restaurantId: number, page: number = 0) => {
   return useQuery({
     queryKey: ['reels', 'restaurant', restaurantId, page],
     queryFn: async () => {
-      const response = await api.get<{ data: PageResponse<Reel> }>(`/restaurants/${restaurantId}/reels?page=${page}&size=20`);
-      return response.data.data;
+      const response = await api.get<PageResponse<Reel>>(`/restaurants/${restaurantId}/reels?page=${page}&size=20`);
+      return response.data;
     },
     enabled: !!restaurantId,
   });
@@ -18,8 +18,8 @@ export const useDiscoveryReels = (page: number = 0) => {
   return useQuery({
     queryKey: ['reels', 'discovery', page],
     queryFn: async () => {
-      const response = await api.get<{ data: PageResponse<Reel> }>(`/reels?page=${page}&size=20`);
-      return response.data.data;
+      const response = await api.get<PageResponse<Reel>>(`/reels?page=${page}&size=20`);
+      return response.data;
     },
   });
 };
@@ -28,8 +28,8 @@ export const useDiscoveryReelsInfinite = () => {
   return useInfiniteQuery({
     queryKey: ['reels', 'discovery', 'infinite'],
     queryFn: async ({ pageParam = 0 }) => {
-      const response = await api.get<{ data: PageResponse<Reel> }>(`/reels?page=${pageParam}&size=10`);
-      return response.data.data;
+      const response = await api.get<PageResponse<Reel>>(`/reels?page=${pageParam}&size=10`);
+      return response.data;
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
@@ -45,8 +45,8 @@ export const useCreateReel = (restaurantId: number) => {
   
   return useMutation({
     mutationFn: async (request: ReelRequest) => {
-      const response = await api.post<{ data: Reel }>(`/restaurants/${restaurantId}/reels`, request);
-      return response.data.data;
+      const response = await api.post<Reel>(`/restaurants/${restaurantId}/reels`, request);
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reels', 'restaurant', restaurantId] });

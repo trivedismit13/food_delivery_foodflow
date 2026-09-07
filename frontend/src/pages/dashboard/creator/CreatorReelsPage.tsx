@@ -78,13 +78,13 @@ export default function CreatorReelsPage() {
           <div className="flex justify-center p-12">
             <Loader2 className="animate-spin text-orange-500" />
           </div>
-        ) : reels?.content.length === 0 ? (
+        ) : !reels?.content || reels.content.length === 0 ? (
           <div className="bg-stone-50 rounded-2xl p-12 text-center border border-stone-100">
             <p className="text-stone-500">You haven't published any reels yet.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {reels?.content.map((reel: Reel) => (
+            {reels.content.map((reel: Reel) => (
               <div key={reel.reelId} className="bg-white border border-stone-100 rounded-2xl overflow-hidden flex flex-col">
                 <div className="relative aspect-[9/16] bg-stone-100">
                   {isVideo(reel.mediaUrl) ? (

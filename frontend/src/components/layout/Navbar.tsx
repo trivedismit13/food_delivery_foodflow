@@ -150,7 +150,7 @@ export default function Navbar() {
             </Link>
 
             <div className="hidden lg:flex items-center gap-6 border-l border-stone-200 pl-6 ml-2">
-              {!isAdmin() && (
+              {(!isAuthenticated || isCustomer()) && (
                 <>
                   <Link to="/drops" className="text-sm font-medium text-stone-600 hover:text-orange-500 transition-colors">
                     Discover Drops
@@ -248,6 +248,10 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
+                  <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">Home</Link>
+                  <Link to="/drops" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">Discover Drops</Link>
+                  <Link to="/creators" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">All Creators</Link>
+                  <div className="h-px bg-stone-100 my-2"></div>
                   <Link to="/auth/login" onClick={() => setIsMobileMenuOpen(false)} className="text-stone-700 font-medium">Sign In</Link>
                   <Link to="/auth/register/creator" onClick={() => setIsMobileMenuOpen(false)} className="text-orange-500 font-medium">Join as Creator</Link>
                 </>

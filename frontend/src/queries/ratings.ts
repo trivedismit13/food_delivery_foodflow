@@ -7,8 +7,8 @@ export function useSubmitRating() {
 
   return useMutation({
     mutationFn: async (data: SubmitRatingRequest) => {
-      const res = await apiClient.post<{ data: RatingResponse }>('/ratings', data)
-      return res.data.data
+      const res = await apiClient.post<RatingResponse>('/ratings', data)
+      return res.data
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['creator', variables.restaurantId] })

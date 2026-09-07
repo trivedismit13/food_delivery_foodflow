@@ -184,21 +184,25 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          <div className="flex items-center my-8">
-            <div className="flex-1 border-t border-stone-200" />
-            <span className="px-4 text-xs text-stone-400 uppercase tracking-wider font-medium">or continue with</span>
-            <div className="flex-1 border-t border-stone-200" />
-          </div>
+          {import.meta.env.VITE_GOOGLE_CLIENT_ID && import.meta.env.VITE_GOOGLE_CLIENT_ID !== 'dummy' && (
+            <>
+              <div className="flex items-center my-8">
+                <div className="flex-1 border-t border-stone-200" />
+                <span className="px-4 text-xs text-stone-400 uppercase tracking-wider font-medium">or continue with</span>
+                <div className="flex-1 border-t border-stone-200" />
+              </div>
 
-          <div className="flex justify-center w-full [&>div]:w-full">
-            <GoogleLogin
-              onSuccess={() => {}}
-              onError={() => console.log('Login Failed')}
-              shape="rectangular"
-              size="large"
-              width="360"
-            />
-          </div>
+              <div className="flex justify-center w-full [&>div]:w-full">
+                <GoogleLogin
+                  onSuccess={() => {}}
+                  onError={() => console.log('Login Failed')}
+                  shape="rectangular"
+                  size="large"
+                  width="360"
+                />
+              </div>
+            </>
+          )}
 
           <p className="text-center text-sm text-stone-600 mt-8">
             Already have an account?{' '}

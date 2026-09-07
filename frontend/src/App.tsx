@@ -61,7 +61,40 @@ function App() {
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || 'dummy'}>
       <Routes>
-        {/* Root layout with Navbar */}
+        {/* Auth routes (redirect to / if already logged in) - NO NAVBAR */}
+        <Route path="/auth/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
+        <Route path="/auth/login/seller" element={<GuestRoute><SellerLoginPage /></GuestRoute>} />
+        <Route path="/auth/register" element={<GuestRoute><RegisterPage /></GuestRoute>} />
+        <Route path="/auth/register/creator" element={<GuestRoute><SellerRegisterPage /></GuestRoute>} />
+        
+        {/* Admin auth route - NO NAVBAR */}
+        <Route path="/admin/login" element={<GuestRoute><AdminLoginPage /></GuestRoute>} />
+
+        {/* Admin routes - NO NAVBAR */}
+        <Route path="/admin/verification/pending" element={
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <AdminVerificationPage />
+          </ProtectedRoute>
+        } />
+
+        {/* Creator dashboard — nested routes - NO NAVBAR */}
+        <Route path="/dashboard/creator" element={
+          <ProtectedRoute allowedRoles={['SELLER']} redirectTo="/auth/login/seller">
+            <CreatorDashboardLayout />
+          </ProtectedRoute>
+        }>
+          <Route index element={<CreatorDashboardHome />} />
+          <Route path="drops" element={<CreatorDropsPage />} />
+          <Route path="drops/new" element={<CreateDropPage />} />
+          <Route path="drops/:dropId" element={<ManageDropPage />} />
+          <Route path="menu" element={<CreatorMenuPage />} />
+          <Route path="analytics" element={<CreatorAnalyticsPage />} />
+          <Route path="reels" element={<CreatorReelsPage />} />
+          <Route path="profile" element={<CreatorProfileSettingsPage />} />
+          <Route path="verification" element={<CreatorVerificationPage />} />
+        </Route>
+
+        {/* Root layout with Navbar for Customer and Public routes */}
         <Route element={<RootLayout />}>
           
           {/* Public routes */}
@@ -71,19 +104,9 @@ function App() {
           <Route path="/creators" element={<CreatorsListPage />} />
           <Route path="/creators/:creatorId" element={<CreatorProfilePage />} />
 
-          
           {/* Legacy redirects */}
           <Route path="/restaurants" element={<Navigate to="/creators" replace />} />
           <Route path="/restaurants/:id" element={<RedirectToCreator />} />
-          
-          {/* Auth routes (redirect to / if already logged in) */}
-          <Route path="/auth/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
-          <Route path="/auth/login/seller" element={<GuestRoute><SellerLoginPage /></GuestRoute>} />
-          <Route path="/auth/register" element={<GuestRoute><RegisterPage /></GuestRoute>} />
-          <Route path="/auth/register/creator" element={<GuestRoute><SellerRegisterPage /></GuestRoute>} />
-          
-          {/* Admin auth route */}
-          <Route path="/admin/login" element={<GuestRoute><AdminLoginPage /></GuestRoute>} />
           
           {/* Order tracking */}
           <Route path="/orders/:orderId/track" element={
@@ -122,29 +145,6 @@ function App() {
           
           {/* Legacy profile redirect */}
           <Route path="/profile" element={<Navigate to="/dashboard/customer" replace />} />
-          
-          {/* Creator dashboard — nested routes */}
-          <Route path="/dashboard/creator" element={
-            <ProtectedRoute allowedRoles={['SELLER']} redirectTo="/auth/login/seller">
-              <CreatorDashboardLayout />
-            </ProtectedRoute>
-          }>
-            <Route index element={<CreatorDashboardHome />} />
-            <Route path="drops" element={<CreatorDropsPage />} />
-            <Route path="drops/new" element={<CreateDropPage />} />
-            <Route path="drops/:dropId" element={<ManageDropPage />} />
-            <Route path="menu" element={<CreatorMenuPage />} />
-            <Route path="analytics" element={<CreatorAnalyticsPage />} />
-            <Route path="reels" element={<CreatorReelsPage />} />
-            <Route path="profile" element={<CreatorProfileSettingsPage />} />
-            <Route path="verification" element={<CreatorVerificationPage />} />
-          </Route>
-          {/* Admin routes */}
-          <Route path="/admin/verification/pending" element={
-            <ProtectedRoute allowedRoles={['ADMIN']}>
-              <AdminVerificationPage />
-            </ProtectedRoute>
-          } />
           
           {/* 404 */}
           <Route path="*" element={<NotFoundPage />} />
