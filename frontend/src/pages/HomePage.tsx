@@ -69,8 +69,8 @@ export default function HomePage() {
               className="absolute z-10 right-4 top-24 w-64 bg-white p-3 rounded-2xl shadow-warm-lg"
             >
               <div className="h-32 bg-gradient-to-br from-orange-200 to-amber-200 rounded-xl mb-3"></div>
-              <h4 className="font-display font-bold text-stone-800">Sunday Biryani</h4>
-              <p className="text-xs text-stone-500">Priya's Kitchen</p>
+              <h4 className="font-display font-bold text-stone-800">Signature Dish</h4>
+              <p className="text-xs text-stone-500">Verified Local Creator</p>
             </motion.div>
             
             <motion.div 
@@ -80,8 +80,8 @@ export default function HomePage() {
               className="absolute z-0 right-32 bottom-32 w-56 bg-white p-3 rounded-2xl shadow-warm-lg"
             >
               <div className="h-28 bg-gradient-to-br from-amber-200 to-yellow-100 rounded-xl mb-3"></div>
-              <h4 className="font-display font-bold text-stone-800">Fresh Tartlets</h4>
-              <p className="text-xs text-stone-500">The Sugar Studio</p>
+              <h4 className="font-display font-bold text-stone-800">Freshly Baked</h4>
+              <p className="text-xs text-stone-500">Verified Artisan</p>
             </motion.div>
           </div>
         </div>
@@ -165,7 +165,7 @@ export default function HomePage() {
           <div className="flex justify-between items-end mb-8">
             <div>
               <h2 className="font-display text-3xl font-bold text-stone-900">
-                Independent creators near you
+                Discover independent creators
               </h2>
               <p className="text-stone-500 mt-1">Verified chefs, bakers, and food entrepreneurs</p>
             </div>

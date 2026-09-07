@@ -51,7 +51,7 @@ export default function CreatorAnalyticsPage() {
     return {
       name: item.itemName,
       frequency: item.totalOrders,
-      margin: avgValue,
+      avgOrderValue: avgValue,
       totalRevenue: item.totalRevenue,
       category
     };
@@ -222,14 +222,12 @@ export default function CreatorAnalyticsPage() {
                 <th className="p-4 font-semibold text-stone-500">Date</th>
                 <th className="p-4 font-semibold text-stone-500">Orders</th>
                 <th className="p-4 font-semibold text-stone-500">Fill Rate</th>
-                <th className="p-4 font-semibold text-stone-500">Revenue</th>
-                <th className="p-4 pr-6 font-semibold text-stone-500 text-right">Avg Rating</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100">
               {isDropsLoading ? (
                 <tr>
-                  <td colSpan={6} className="p-8 text-center text-stone-500">
+                  <td colSpan={4} className="p-8 text-center text-stone-500">
                     <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" />
                     Loading drop performance...
                   </td>
@@ -253,16 +251,12 @@ export default function CreatorAnalyticsPage() {
                         <span className="text-xs font-semibold text-stone-600">{fillRate.toFixed(1)}%</span>
                       </div>
                     </td>
-                    <td className="p-4 font-bold text-stone-900">-</td>
-                    <td className="p-4 pr-6 font-semibold text-stone-900 text-right flex items-center justify-end gap-1">
-                      -
-                    </td>
                   </tr>
                 );
               })}
               {(!isDropsLoading && (!dropPerformanceData || dropPerformanceData.content.length === 0)) && (
                 <tr>
-                  <td colSpan={6} className="p-4 text-center text-stone-500">No drop performance data available.</td>
+                  <td colSpan={4} className="p-4 text-center text-stone-500">No drop performance data available.</td>
                 </tr>
               )}
             </tbody>
@@ -274,7 +268,7 @@ export default function CreatorAnalyticsPage() {
       <div className="bg-white rounded-3xl p-6 md:p-8 border border-stone-100 shadow-sm">
         <div className="mb-8">
           <h2 className="font-display text-xl font-bold text-stone-900">Menu Intelligence</h2>
-          <p className="text-sm text-stone-500">Identify which dishes drive your business based on order frequency and profit margin.</p>
+          <p className="text-sm text-stone-500">Identify which dishes drive your business based on order frequency and average value.</p>
         </div>
         
         <div className="h-80 w-full relative mb-8">
@@ -291,7 +285,7 @@ export default function CreatorAnalyticsPage() {
               <ResponsiveContainer width="100%" height="100%">
                 <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
                   <XAxis type="number" dataKey="frequency" name="Order Frequency" stroke="#d6d3d1" tick={{ fill: '#78716c', fontSize: 12 }} />
-                  <YAxis type="number" dataKey="margin" name="Avg Value (₹)" stroke="#d6d3d1" tick={{ fill: '#78716c', fontSize: 12 }} />
+                  <YAxis type="number" dataKey="avgOrderValue" name="Avg Value (₹)" stroke="#d6d3d1" tick={{ fill: '#78716c', fontSize: 12 }} />
                   <ZAxis type="category" dataKey="name" name="Item" />
                   <Tooltip 
                     cursor={{ strokeDasharray: '3 3' }} 
@@ -322,19 +316,19 @@ export default function CreatorAnalyticsPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-green-50 p-3 rounded-xl border border-green-100 cursor-help">
             <h4 className="text-xs font-bold text-green-700 mb-1 uppercase tracking-wider">Star</h4>
-            <p className="text-xs text-green-600">High orders, high margin. (e.g. Mutton Biryani)</p>
+            <p className="text-xs text-green-600">High orders, high value. (e.g. Mutton Biryani)</p>
           </div>
           <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 cursor-help">
             <h4 className="text-xs font-bold text-blue-700 mb-1 uppercase tracking-wider">Hidden Gem</h4>
-            <p className="text-xs text-blue-600">Low orders, high margin. Promote these!</p>
+            <p className="text-xs text-blue-600">Low orders, high value. Promote these!</p>
           </div>
           <div className="bg-amber-50 p-3 rounded-xl border border-amber-100 cursor-help">
             <h4 className="text-xs font-bold text-amber-700 mb-1 uppercase tracking-wider">Workhorse</h4>
-            <p className="text-xs text-amber-600">High orders, low margin. (e.g. Desserts)</p>
+            <p className="text-xs text-amber-600">High orders, low value. (e.g. Desserts)</p>
           </div>
           <div className="bg-red-50 p-3 rounded-xl border border-red-100 cursor-help">
             <h4 className="text-xs font-bold text-red-700 mb-1 uppercase tracking-wider">Review</h4>
-            <p className="text-xs text-red-600">Low orders, low margin. Consider removing.</p>
+            <p className="text-xs text-red-600">Low orders, low value. Consider removing.</p>
           </div>
         </div>
       </div>

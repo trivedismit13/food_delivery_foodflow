@@ -19,7 +19,7 @@ export default function CreatorDashboardHome() {
   const { data: insights, isLoading: isInsightsLoading } = useAutoInsights();
 
   const { data: drops, isLoading: isDropsLoading } = useCreatorDrops(creatorProfile?.restaurantId);
-  const activeDrop = drops?.find(d => ['DRAFT', 'ANNOUNCED', 'OPEN', 'CUTOFF', 'READY'].includes(d.status));
+  const activeDrop = drops?.find(d => ['ANNOUNCED', 'OPEN', 'CUTOFF', 'READY'].includes(d.status));
   const { mutate: updateDropStatus, isPending: isUpdatingStatus } = useUpdateDropStatus();
   const { mutate: cancelDrop, isPending: isCancelling } = useCancelDrop();
 

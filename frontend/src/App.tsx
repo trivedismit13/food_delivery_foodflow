@@ -4,7 +4,7 @@ import CreatorDashboardLayout from './layouts/CreatorDashboardLayout'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 import { GuestRoute } from './components/auth/GuestRoute'
 import RedirectToCreator from './components/RedirectToCreator'
-import { GoogleOAuthProvider } from '@react-oauth/google'
+
 import { Toaster } from 'sonner'
 import { useAuthInit } from './hooks/useAuthInit'
 import { useAuthStore } from './store/authStore'
@@ -58,7 +58,7 @@ function App() {
     return <div className="h-screen w-full flex items-center justify-center bg-stone-50">Loading...</div>
   }
 
-  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 
   const content = (
       <Routes>
@@ -156,13 +156,7 @@ function App() {
 
   return (
     <>
-      {googleClientId ? (
-        <GoogleOAuthProvider clientId={googleClientId}>
-          {content}
-        </GoogleOAuthProvider>
-      ) : (
-        content
-      )}
+      {content}
       <Toaster />
     </>
   )

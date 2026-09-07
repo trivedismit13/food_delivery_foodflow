@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useRegister } from '@/queries/auth';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, UtensilsCrossed } from 'lucide-react';
-import { GoogleLogin } from '@react-oauth/google';
+
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -184,25 +184,7 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          {import.meta.env.VITE_GOOGLE_CLIENT_ID && (
-            <>
-              <div className="flex items-center my-8">
-                <div className="flex-1 border-t border-stone-200" />
-                <span className="px-4 text-xs text-stone-400 uppercase tracking-wider font-medium">or continue with</span>
-                <div className="flex-1 border-t border-stone-200" />
-              </div>
 
-              <div className="flex justify-center w-full [&>div]:w-full">
-                <GoogleLogin
-                  onSuccess={() => {}}
-                  onError={() => console.log('Login Failed')}
-                  shape="rectangular"
-                  size="large"
-                  width="360"
-                />
-              </div>
-            </>
-          )}
 
           <p className="text-center text-sm text-stone-600 mt-8">
             Already have an account?{' '}
