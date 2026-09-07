@@ -1,0 +1,3 @@
+-- V4 placeholder migration (was never created; V3 jumped to V5)
+-- This empty file ensures Flyway can validate migration history on fresh installs
+-- without gaps in the version sequence.
