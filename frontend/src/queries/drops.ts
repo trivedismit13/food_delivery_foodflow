@@ -67,8 +67,8 @@ export function useCreatorDrops(creatorId: number | undefined) {
   return useQuery({
     queryKey: ['drops', 'creator', creatorId],
     queryFn: async () => {
-      const response = await apiClient.get<FoodDropResponse[]>(`/drops/creator/${creatorId}`)
-      return response.data
+      const response = await apiClient.get<PageResponse<FoodDropResponse>>(`/drops/creator/${creatorId}`)
+      return response.data.content
     },
     enabled: !!creatorId,
     staleTime: 0,
