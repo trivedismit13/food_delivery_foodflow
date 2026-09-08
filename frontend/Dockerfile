@@ -17,11 +17,9 @@ COPY . .
 # In Docker Compose local setup this is http://localhost:8080/api
 ARG VITE_API_BASE_URL=http://localhost:8080/api
 ARG VITE_APP_ENV=production
-ARG VITE_GOOGLE_CLIENT_ID=
 
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 ENV VITE_APP_ENV=${VITE_APP_ENV}
-ENV VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
 
 RUN npm run build
 

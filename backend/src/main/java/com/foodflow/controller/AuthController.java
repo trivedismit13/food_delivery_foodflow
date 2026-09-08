@@ -1,7 +1,6 @@
 package com.foodflow.controller;
 
 import com.foodflow.dto.request.CreatorRegistrationRequest;
-import com.foodflow.dto.request.GoogleAuthRequest;
 import com.foodflow.dto.request.LoginRequest;
 import com.foodflow.dto.request.UserRequest;
 import com.foodflow.dto.response.ApiResponse;

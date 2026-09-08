@@ -82,8 +82,11 @@ public class InsightService {
         List<InsightResponse> insights = new ArrayList<>();
         
         // Rule 1: Repeat customer rate below 30%
+        // Only generate this insight when we have enough data (non-null rate).
+        // A null rate means insufficient history — do NOT treat it as zero.
         Object repeatRate = analyticsRepository.findRepeatCustomerRate(creatorId);
-        if (extractRepeatRate(repeatRate) < 30.0) {
+        Double repeatRateValue = extractRepeatRate(repeatRate);
+        if (repeatRateValue != null && repeatRateValue < 30.0) {
             insights.add(ruleBasedInsight(
                 "Your repeat customer rate is below average.",
                 "Consider announcing a 'returning customer discount' in your next drop description."
@@ -99,14 +102,16 @@ public class InsightService {
             ));
         }
         
-        // Rule 3: Best day insight
+        // Rule 3: Best day insight — only if there is actually data
         List<Object[]> bestDay = analyticsRepository.findBestDayOfWeekForCreator(creatorId);
         if (!bestDay.isEmpty()) {
             String bestDayName = extractDayName(bestDay.get(0));
-            insights.add(ruleBasedInsight(
-                "Your drops perform best on " + bestDayName + ".",
-                "Consider scheduling future drops around " + bestDayName + "s."
-            ));
+            if (bestDayName != null && !bestDayName.isBlank() && !bestDayName.equals("Unknown")) {
+                insights.add(ruleBasedInsight(
+                    "Your drops perform best on " + bestDayName + ".",
+                    "Consider scheduling future drops around " + bestDayName + "s."
+                ));
+            }
         }
         
         return insights;
@@ -133,13 +138,19 @@ public class InsightService {
 
 
 
+    /**
+     * Returns null when there is no repeat customer data at all (insufficient history),
+     * so callers can distinguish between "the rate is actually 0" and "no data yet".
+     */
     private Double extractRepeatRate(Object repeatRateObj) {
+        if (repeatRateObj == null) return null;
         if (repeatRateObj instanceof Object[] row && row.length > 2) {
             if (row[2] instanceof Number) {
                 return ((Number) row[2]).doubleValue();
             }
         }
-        return 0.0;
+        // The query returned a row but the rate column is not populated — treat as no data
+        return null;
     }
 
     private Integer extractHoursToSellout(Object[] dropData) {

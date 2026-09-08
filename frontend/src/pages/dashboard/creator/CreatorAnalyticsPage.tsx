@@ -118,7 +118,7 @@ export default function CreatorAnalyticsPage() {
         <div className="bg-white p-5 rounded-2xl border border-stone-100 shadow-sm">
           <p className="text-sm font-semibold text-stone-500 mb-1 flex items-center justify-between">Avg Fill Rate <Star size={16} className="text-amber-500 fill-amber-500"/></p>
           <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-2xl font-bold text-stone-900">
-            {isDashboardLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : `${dashboard?.avgDropFillRate?.toFixed(1) || 0}%`}
+            {isDashboardLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : `${dashboard?.avgDropFillRate != null ? dashboard.avgDropFillRate.toFixed(1) : '—'}%`}
           </motion.p>
         </div>
       </div>
@@ -150,7 +150,7 @@ export default function CreatorAnalyticsPage() {
               {isBestDayLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin inline-block mr-2" />
               ) : bestDayDataAPI ? (
-                <>Your drops perform best on <span className="font-bold">{bestDayDataAPI.dayOfWeek}s</span> with <span className="font-bold">{bestDayDataAPI.avgFillRate.toFixed(1)}% average fill rate</span>. Consider scheduling your next drop for a {bestDayDataAPI.dayOfWeek}.</>
+                <>Your drops perform best on <span className="font-bold">{bestDayDataAPI.dayOfWeek}s</span> with <span className="font-bold">{bestDayDataAPI.avgFillRate != null ? bestDayDataAPI.avgFillRate.toFixed(1) : '—'}% average fill rate</span>. Consider scheduling your next drop for a {bestDayDataAPI.dayOfWeek}.</>
               ) : (
                 <>Not enough data to determine your best performing day yet.</>
               )}
@@ -165,7 +165,7 @@ export default function CreatorAnalyticsPage() {
           <div className="flex gap-4 mb-8">
             <div>
               <p className="text-3xl font-bold text-orange-600">
-                {isRepeatLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : `${repeatCustomersAPI?.repeatRatePercent.toFixed(0) || 0}%`}
+                {isRepeatLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : `${repeatCustomersAPI?.repeatRatePercent != null ? repeatCustomersAPI.repeatRatePercent.toFixed(0) : '—'}%`}
               </p>
               <p className="text-xs font-semibold text-stone-500 uppercase">Repeat rate</p>
             </div>
