@@ -165,9 +165,9 @@ export default function RegisterPage() {
               />
               <label htmlFor="terms" className="text-sm text-stone-600">
                 I agree to the{' '}
-                <a href="#" className="text-orange-500 hover:underline">Terms of Service</a>{' '}
+                <span className="text-orange-500 font-medium">Terms of Service</span>{' '}
                 and{' '}
-                <a href="#" className="text-orange-500 hover:underline">Privacy Policy</a>
+                <span className="text-orange-500 font-medium">Privacy Policy</span>
               </label>
             </div>
             {errors.terms && <p className="text-red-500 text-xs">{errors.terms.message}</p>}
