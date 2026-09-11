@@ -1,1776 +1,3995 @@
 -- V35__seed_realistic_dev_data.sql
--- Realistic interconnected development dataset for FoodFlow
--- TARGET: dev branch ONLY â€” DO NOT apply to production
--- All passwords = 'FoodFlow@2024'  (BCrypt $2b$10$)
--- Applied: 2026-09-11
---
--- ID ranges used:
---   Users (creators):   1001-1015
---   Users (customers):  2001-2050
---   Restaurants:        1001-1015
---   Menu Items:         3001-3172
---   Food Drops:         4001-4049
---   Drop Items:         4501-4625
---   Orders:             5001-5229
---   Order Items:        6001-6580
---   Payments:           7001-7229
---   Ratings:            8001-8068
---   Notifications:      9001-9040
---   Reels:              10001-10022
-
--- ============================================================
--- SECTION 1: CREATOR (SELLER) USERS  [1001-1015]
--- ============================================================
-INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES
-(1001, 'Priya Sharma',      'priya.sharma@creator.com',     '9900001001', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1002, 'Aarti Devi',        'aarti.devi@creator.com',       '9900001002', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1003, 'Rahul Verma',       'rahul.verma@creator.com',      '9900001003', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1004, 'Mohammed Hussain',  'mohammed.hussain@creator.com', '9900001004', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1005, 'Sanjay Patil',      'sanjay.patil@creator.com',     '9900001005', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1006, 'Ritu Kapoor',       'ritu.kapoor@creator.com',      '9900001006', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1007, 'Karthik Iyer',      'karthik.iyer@creator.com',     '9900001007', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1008, 'Amit Das',          'amit.das@creator.com',         '9900001008', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1009, 'Neha Singh',        'neha.singh.creator@foodflow.com','9900001009','$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1010, 'Vikram Mehta',      'vikram.mehta@creator.com',     '9900001010', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1011, 'Bhavna Patel',      'bhavna.patel@creator.com',     '9900001011', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1012, 'Tenzin Gyatso',     'tenzin.gyatso@creator.com',    '9900001012', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1013, 'Sophia Fernandez',  'sophia.fernandez@creator.com', '9900001013', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1014, 'Mathew Thomas',     'mathew.thomas@creator.com',    '9900001014', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE),
-(1015, 'Divya Reddy',       'divya.reddy@creator.com',      '9900001015', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
-
--- ============================================================
--- SECTION 2: CUSTOMER USERS  [2001-2050]
--- ============================================================
-INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES
-(2001, 'Aarav Sharma',         'aarav.sharma@example.com',      '9800002001', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2002, 'Priya Iyer',           'priya.iyer@example.com',        '9800002002', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2003, 'Rahul Gupta',          'rahul.gupta@example.com',       '9800002003', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2004, 'Sneha Nair',           'sneha.nair@example.com',        '9800002004', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2005, 'Vikash Pandey',        'vikash.pandey@example.com',     '9800002005', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2006, 'Divya Menon',          'divya.menon@example.com',       '9800002006', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2007, 'Kiran Patel',          'kiran.patel@example.com',       '9800002007', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2008, 'Aakash Verma',         'aakash.verma@example.com',      '9800002008', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2009, 'Riya Shah',            'riya.shah@example.com',         '9800002009', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2010, 'Suresh Kumar',         'suresh.kumar@example.com',      '9800002010', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2011, 'Pooja Mehta',          'pooja.mehta@example.com',       '9800002011', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2012, 'Ankit Joshi',          'ankit.joshi@example.com',       '9800002012', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2013, 'Meena Pillai',         'meena.pillai@example.com',      '9800002013', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2014, 'Rohit Agarwal',        'rohit.agarwal@example.com',     '9800002014', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2015, 'Swathi Krishnan',      'swathi.krishnan@example.com',   '9800002015', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2016, 'Abhishek Das',         'abhishek.das@example.com',      '9800002016', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2017, 'Kavya Reddy',          'kavya.reddy@example.com',       '9800002017', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2018, 'Siddharth Rao',        'siddharth.rao@example.com',     '9800002018', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2019, 'Manisha Bose',         'manisha.bose@example.com',      '9800002019', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2020, 'Nikhil Tiwari',        'nikhil.tiwari@example.com',     '9800002020', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2021, 'Tanvi Shah',           'tanvi.shah@example.com',        '9800002021', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2022, 'Deepak Nambiar',       'deepak.nambiar@example.com',    '9800002022', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2023, 'Ishita Chatterjee',    'ishita.chatterjee@example.com', '9800002023', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2024, 'Vishal Kumar',         'vishal.kumar@example.com',      '9800002024', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2025, 'Shreya Varma',         'shreya.varma@example.com',      '9800002025', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2026, 'Gaurav Malhotra',      'gaurav.malhotra@example.com',   '9800002026', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2027, 'Lakshmi Subramaniam',  'lakshmi.subramaniam@example.com','9800002027','$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2028, 'Rajiv Kapoor',         'rajiv.kapoor@example.com',      '9800002028', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2029, 'Ankita Singh',         'ankita.singh@example.com',      '9800002029', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2030, 'Mayur Desai',          'mayur.desai@example.com',       '9800002030', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2031, 'Chandni Mishra',       'chandni.mishra@example.com',    '9800002031', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2032, 'Aryan Patel',          'aryan.patel@example.com',       '9800002032', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2033, 'Preeti Nair',          'preeti.nair@example.com',       '9800002033', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2034, 'Saurabh Yadav',        'saurabh.yadav@example.com',     '9800002034', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2035, 'Bindu Krishnan',       'bindu.krishnan@example.com',    '9800002035', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2036, 'Tushar Shah',          'tushar.shah@example.com',       '9800002036', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2037, 'Archana Pillai',       'archana.pillai@example.com',    '9800002037', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2038, 'Vivek Menon',          'vivek.menon@example.com',       '9800002038', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2039, 'Shalini Gupta',        'shalini.gupta@example.com',     '9800002039', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2040, 'Pratik Das',           'pratik.das@example.com',        '9800002040', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2041, 'Megha Reddy',          'megha.reddy@example.com',       '9800002041', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2042, 'Shivam Jha',           'shivam.jha@example.com',        '9800002042', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2043, 'Hema Kiran',           'hema.kiran@example.com',        '9800002043', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2044, 'Abhinav Roy',          'abhinav.roy@example.com',       '9800002044', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2045, 'Padma Sundaram',       'padma.sundaram@example.com',    '9800002045', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2046, 'Kaushal Mehta',        'kaushal.mehta@example.com',     '9800002046', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2047, 'Ranjana Iyer',         'ranjana.iyer@example.com',      '9800002047', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2048, 'Pavan Kumar',          'pavan.kumar@example.com',       '9800002048', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2049, 'Vaishali Shah',        'vaishali.shah@example.com',     '9800002049', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE),
-(2050, 'Girish Nambiar',       'girish.nambiar@example.com',    '9800002050', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
-
--- ============================================================
--- SECTION 3: RESTAURANTS (creator profiles)  [1001-1015]
--- ============================================================
-INSERT INTO restaurants (restaurant_id, owner_id, name, city, pincode, cuisine, is_open,
-    creator_type, bio, instagram_handle, verification_level, is_accepting_orders,
-    pickup_address, avg_rating, follower_count, total_orders_completed, accepts_delivery)
-VALUES
-(1001, 1001, 'The Sourdough Story',    'Bangalore',  '560001', 'Bakery',        TRUE, 'HOME_BAKER',          'Artisan sourdough and European pastries baked fresh daily. Every loaf is a story.', 'sourdoughstory_blr',    3, TRUE, '12th Cross, Indiranagar, Bangalore',    0.00, 0, 0, FALSE),
-(1002, 1002, 'Maa Ki Rasoi',           'Delhi',      '110001', 'North Indian',  TRUE, 'TIFFIN_SERVICE',      'Authentic homestyle North Indian thalis. Pure vegetarian. Tastes like home.',          'maakirasoidelhi',       2, TRUE, 'Lajpat Nagar Market, New Delhi',        0.00, 0, 0, FALSE),
-(1003, 1003, 'Midnight Munchies',      'Mumbai',     '400001', 'Fast Food',     TRUE, 'CLOUD_KITCHEN',       'Your late-night cravings sorted. Burgers, fries and shakes made to order.',             'midnightmunchies_mum',  0, TRUE, 'Bandra West, Mumbai',                   0.00, 0, 0, FALSE),
-(1004, 1004, 'Sunday Biryani Club',    'Hyderabad',  '500001', 'Hyderabadi',    TRUE, 'WEEKEND_CHEF',        'Authentic Dum Biryani slow-cooked over wood-fire. Weekend only. Worth the wait.',       'sundaybiryaniclub',     3, TRUE, 'Jubilee Hills, Hyderabad',              0.00, 0, 0, FALSE),
-(1005, 1005, 'Bombay Vada Pav',        'Pune',       '411001', 'Street Food',   TRUE, 'CAMPUS_SELLER',       'The best Vada Pav outside Mumbai â€” with our secret dry garlic chutney.',               'bombayvadapav_pune',    1, TRUE, 'FC Road, Deccan Gymkhana, Pune',        0.00, 0, 0, FALSE),
-(1006, 1006, 'Keto Kitchen',           'Bangalore',  '560034', 'Healthy',       TRUE, 'HEALTHY_MEALS',       'Guilt-free, low-carb, high-fat keto meals and desserts. Macros on every dish.',         'ketokitchen_blr',       2, TRUE, 'HSR Layout Sector 2, Bangalore',        0.00, 0, 0, FALSE),
-(1007, 1007, 'Chennai Spice',          'Chennai',    '600001', 'South Indian',  TRUE, 'HOME_BAKER',          'Filter coffee and crispy dosas just like your grandmother made them.',                  'chennaispice_chn',      1, TRUE, 'T. Nagar, Chennai',                     0.00, 0, 0, FALSE),
-(1008, 1008, 'Bengali Sweets Corner',  'Kolkata',    '700001', 'Desserts',      TRUE, 'SPECIALTY_DESSERTS',  'Authentic Rosogolla and Sandesh made fresh. Third-generation sweet makers.',             'bengalisweetscorner',   3, TRUE, 'College Street, Kolkata',               0.00, 0, 0, FALSE),
-(1009, 1009, 'Fit Bites',              'Delhi',      '110016', 'Salads',        TRUE, 'HEALTHY_MEALS',       'Protein-packed salads and power bowls for fitness enthusiasts. Nutritionist designed.',  'fitbites_delhi',        2, TRUE, 'Hauz Khas Village, New Delhi',          0.00, 0, 0, FALSE),
-(1010, 1010, 'The Pasta Bar',          'Mumbai',     '400050', 'Italian',       TRUE, 'CLOUD_KITCHEN',       'Handmade pasta with rich, slow-cooked sauces. Italy, delivered to your doorstep.',       'thepastabar_mum',       2, TRUE, 'Bandra West, Mumbai',                   0.00, 0, 0, FALSE),
-(1011, 1011, 'Gujarati Thali House',   'Ahmedabad',  '380001', 'Gujarati',      TRUE, 'TIFFIN_SERVICE',      'Traditional Kathiyawadi and Gujarati thalis. Unlimited rotis, endless love.',            'gujaratithalihouse',    1, TRUE, 'CG Road, Ahmedabad',                    0.00, 0, 0, FALSE),
-(1012, 1012, 'Momos & More',           'Delhi',      '110092', 'Tibetan',       TRUE, 'WEEKEND_CHEF',        'Steamed and fried momos with spicy red chutney. Tibetan soul food in Delhi.',            'momosandmoredelhi',     1, TRUE, 'Laxmi Nagar, New Delhi',                0.00, 0, 0, FALSE),
-(1013, 1013, 'Bake My Day',            'Panaji',     '403001', 'Bakery',        TRUE, 'HOME_BAKER',          'Custom celebration cakes and Portuguese Goan sweets. Est. in a tiny Panaji kitchen.',   'bakemydaygoa',          2, TRUE, 'Fontainhas, Panaji, Goa',               0.00, 0, 0, FALSE),
-(1014, 1014, 'Kerala Kitchen',         'Bangalore',  '560008', 'Kerala',        TRUE, 'CLOUD_KITCHEN',       'Appam, stew and authentic Kerala seafood. A slice of Kerala in Bangalore.',              'keralakitchenblr',      3, TRUE, 'Koramangala 5th Block, Bangalore',      0.00, 0, 0, FALSE),
-(1015, 1015, 'Millet Magic',           'Hyderabad',  '500072', 'Healthy',       TRUE, 'HEALTHY_MEALS',       'Gluten-free, ancient grain based nutritious meals. Millets the way they should be.',     'milletmagic_hyd',       1, TRUE, 'Madhapur, Hyderabad',                   0.00, 0, 0, FALSE);
-
--- ============================================================
--- SECTION 4: CREATOR VERIFICATIONS  [creator_id = restaurant_id]
--- ============================================================
-INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified,
-    food_licence_number, food_licence_url, kitchen_photo_url_1, kitchen_photo_url_2)
-VALUES
-(1001, 3, TRUE,  'FSSAI-KA-2024-1001', 'https://docs.foodflow.dev/lic/1001.pdf', 'https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg', 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg'),
-(1002, 2, TRUE,  'FSSAI-DL-2024-1002', 'https://docs.foodflow.dev/lic/1002.pdf', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL),
-(1003, 0, FALSE, NULL, NULL, NULL, NULL),
-(1004, 3, TRUE,  'FSSAI-TS-2024-1004', 'https://docs.foodflow.dev/lic/1004.pdf', 'https://images.pexels.com/photos/1624487/pexels-photo-1624487.jpeg', 'https://images.pexels.com/photos/12737656/pexels-photo-12737656.jpeg'),
-(1005, 1, TRUE,  NULL, NULL, NULL, NULL),
-(1006, 2, TRUE,  'FSSAI-KA-2024-1006', 'https://docs.foodflow.dev/lic/1006.pdf', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL),
-(1007, 1, TRUE,  NULL, NULL, NULL, NULL),
-(1008, 3, TRUE,  'FSSAI-WB-2024-1008', 'https://docs.foodflow.dev/lic/1008.pdf', 'https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg',  'https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg'),
-(1009, 2, TRUE,  'FSSAI-DL-2024-1009', 'https://docs.foodflow.dev/lic/1009.pdf', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL),
-(1010, 2, TRUE,  'FSSAI-MH-2024-1010', 'https://docs.foodflow.dev/lic/1010.pdf', 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg', NULL),
-(1011, 1, TRUE,  NULL, NULL, NULL, NULL),
-(1012, 1, TRUE,  NULL, NULL, NULL, NULL),
-(1013, 2, TRUE,  'FSSAI-GA-2024-1013', 'https://docs.foodflow.dev/lic/1013.pdf', 'https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg', NULL),
-(1014, 3, TRUE,  'FSSAI-KA-2024-1014', 'https://docs.foodflow.dev/lic/1014.pdf', 'https://images.pexels.com/photos/3629537/pexels-photo-3629537.jpeg', 'https://images.pexels.com/photos/12737656/pexels-photo-12737656.jpeg'),
-(1015, 1, TRUE,  NULL, NULL, NULL, NULL);
-
--- ============================================================
--- SECTION 5: MENU ITEMS  [3001-3172]
--- ============================================================
--- Creator 1001 â€” The Sourdough Story (Bakery) [3001-3012]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3001, 1001, 'Artisan Sourdough Loaf',   'Country-style sourdough with 72-hr fermentation. Crisp crust, open crumb.',      280.00, TRUE,  'Bread',    20, FALSE),
-(3002, 1001, 'Classic Croissant',         'Buttery, flaky all-butter croissant. Baked fresh every morning.',                  80.00, TRUE,  'Pastry',   30, FALSE),
-(3003, 1001, 'Blueberry Muffin',          'Jumbo muffin packed with fresh blueberries and a sugary crust.',                   60.00, TRUE,  'Muffin',   40, FALSE),
-(3004, 1001, 'Chocolate Brownie',         'Fudgy dark chocolate brownie with sea salt flakes. One piece.',                    55.00, TRUE,  'Dessert',  50, FALSE),
-(3005, 1001, 'Cinnamon Roll',             'Soft swirled roll drenched in cream cheese frosting.',                             90.00, TRUE,  'Pastry',   25, FALSE),
-(3006, 1001, 'Banana Bread',              'Moist banana bread with walnuts and a hint of vanilla.',                          180.00, TRUE,  'Bread',    15, FALSE),
-(3007, 1001, 'Red Velvet Cake (Slice)',   'Layered red velvet with cream cheese frosting. One generous slice.',              150.00, TRUE,  'Cake',     20, FALSE),
-(3008, 1001, 'Almond Biscotti',           'Twice-baked Italian biscotti with whole almonds. Pack of 6.',                    180.00, TRUE,  'Cookie',   30, FALSE),
-(3009, 1001, 'Rosemary Focaccia',         'Thick Ligurian focaccia with fresh rosemary and sea salt.',                       220.00, TRUE,  'Bread',    15, FALSE),
-(3010, 1001, 'Chocolate Chip Cookies',    'Bakery-style thick cookies with Belgian chocolate chips. Pack of 4.',             200.00, TRUE,  'Cookie',   35, FALSE),
-(3011, 1001, 'NY Cheesecake Slice',       'Dense New York style cheesecake on graham cracker crust.',                        250.00, TRUE,  'Cake',     15, FALSE),
-(3012, 1001, 'Pain au Chocolat',          'Flaky croissant dough encasing Belgian dark chocolate.',                           75.00, TRUE,  'Pastry',   30, FALSE);
-
--- Creator 1002 â€” Maa Ki Rasoi (North Indian Tiffin) [3013-3024]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3013, 1002, 'Dal Makhani Tiffin',        'Slow-cooked black lentils in buttery tomato gravy. With 2 phulkas.',              140.00, TRUE,  'Tiffin',   30, FALSE),
-(3014, 1002, 'Roti Combo',                '4 fresh phulkas with sabzi and dal. Homestyle.',                                  100.00, TRUE,  'Tiffin',   40, FALSE),
-(3015, 1002, 'Rajma Chawal',              'Creamy red kidney beans curry over steamed basmati rice.',                         130.00, TRUE,  'Main',     30, FALSE),
-(3016, 1002, 'Paneer Butter Masala',      'Cottage cheese in rich tomato-cashew gravy. With 2 butter rotis.',               180.00, TRUE,  'Main',     25, FALSE),
-(3017, 1002, 'Aloo Sabzi Tiffin',         'Dry aloo with jeera, methi leaves, and warm rotis.',                              110.00, TRUE,  'Tiffin',   35, FALSE),
-(3018, 1002, 'Khichdi',                   'Comfort moong dal khichdi with ghee tadka and papad.',                            100.00, TRUE,  'Main',     30, FALSE),
-(3019, 1002, 'Kadhai Paneer',             'Paneer and capsicum in robust kadhai masala. Semi-dry.',                           170.00, TRUE,  'Main',     25, FALSE),
-(3020, 1002, 'Chole Bhature',             'Spiced chickpeas with 2 fluffy deep-fried bhaturas.',                             140.00, TRUE,  'Main',     20, FALSE),
-(3021, 1002, 'Methi Thepla',              'Soft fenugreek flatbreads. Pack of 6 with aam ka achaar.',                         80.00, TRUE,  'Bread',    30, FALSE),
-(3022, 1002, 'Chapati x4',                '4 fresh wheat rotis rolled thin and roasted on tawa.',                             50.00, TRUE,  'Bread',    50, FALSE),
-(3023, 1002, 'Jeera Rice',                'Fragrant basmati rice tempered with cumin and ghee.',                              70.00, TRUE,  'Rice',     40, FALSE),
-(3024, 1002, 'Raita',                     'Fresh yogurt with cucumber, pomegranate and mint chaat masala.',                   50.00, TRUE,  'Side',     50, FALSE);
-
--- Creator 1003 â€” Midnight Munchies (Fast Food) [3025-3034]  â€” ZERO DATA CREATOR
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3025, 1003, 'Classic Burger',            'Double patty smash burger with cheddar and special sauce.',                        150.00, FALSE, 'Burger',   30, FALSE),
-(3026, 1003, 'Loaded Fries',              'Thick-cut fries with nacho cheese, jalapeÃ±os and sriracha.',                        80.00, TRUE,  'Sides',    40, FALSE),
-(3027, 1003, 'Chicken Wrap',              'Grilled chicken strip wrap with garlic mayo and fresh slaw.',                      180.00, FALSE, 'Wrap',     25, FALSE),
-(3028, 1003, 'Thick Milkshake',           'Oreo / Mango / Chocolate. 400ml thick and creamy shake.',                         120.00, TRUE,  'Beverage', 20, FALSE),
-(3029, 1003, 'Nachos Platter',            'Tortilla chips with salsa, sour cream and jalapeÃ±os.',                             100.00, TRUE,  'Sides',    30, FALSE),
-(3030, 1003, 'Onion Rings',               'Beer-battered crispy onion rings. Half dozen.',                                    70.00, TRUE,  'Sides',    30, FALSE),
-(3031, 1003, 'BBQ Chicken Burger',        'Smoky BBQ sauce, crispy fried chicken, pickles and slaw.',                         200.00, FALSE, 'Burger',   20, FALSE),
-(3032, 1003, 'Veg Club Sandwich',         'Triple-decker with cheese, cucumber, tomato and mustard.',                         100.00, TRUE,  'Sandwich', 25, FALSE),
-(3033, 1003, 'Pizza Slice',               'NY-style cheese pizza slice, wood-fired flavour.',                                 120.00, TRUE,  'Pizza',    20, FALSE),
-(3034, 1003, 'Waffle Fries',              'Crispy waffle-cut fries with dipping sauce of choice.',                             90.00, TRUE,  'Sides',    30, FALSE);
-
--- Creator 1004 â€” Sunday Biryani Club (Hyderabadi) [3035-3046]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3035, 1004, 'Mutton Dum Biryani',        'Slow-cooked Hyderabadi mutton biryani. Aged basmati, whole spices.',              350.00, FALSE, 'Biryani',  20, FALSE),
-(3036, 1004, 'Chicken Dum Biryani',       'Tender chicken dum biryani with caramelised onions and saffron.',                 280.00, FALSE, 'Biryani',  25, FALSE),
-(3037, 1004, 'Veg Dum Biryani',           'Seasonal vegetables, nuts and fried onions. Pakki dum style.',                    220.00, TRUE,  'Biryani',  20, FALSE),
-(3038, 1004, 'Chicken Tikka',             'Tandoor-style chargrilled chicken tikka. Half portion 4 pcs.',                    250.00, FALSE, 'Starter',  20, FALSE),
-(3039, 1004, 'Seekh Kebab',               'Minced mutton seekh kebab with mint chutney. 4 pcs.',                             200.00, FALSE, 'Starter',  20, FALSE),
-(3040, 1004, 'Lamb Rogan Josh',           'Kashmiri slow-braised lamb in a cardamom-laden gravy.',                            300.00, FALSE, 'Main',     15, FALSE),
-(3041, 1004, 'Haleem',                    'Slow-cooked meat and lentil porridge. Weekend special.',                           200.00, FALSE, 'Main',     20, FALSE),
-(3042, 1004, 'Mirchi Ka Salan',           'Chilli and peanut gravy â€” the classic biryani accompaniment.',                    100.00, TRUE,  'Side',     30, FALSE),
-(3043, 1004, 'Burani Raita',              'Garlic-spiked yogurt with roasted cumin. Large portion.',                          60.00, TRUE,  'Side',     50, FALSE),
-(3044, 1004, 'Boti Kebab',                'Marinated mutton chunks skewered and charred over coal.',                          220.00, FALSE, 'Starter',  15, FALSE),
-(3045, 1004, 'Double Ka Meetha',          'Hyderabadi bread pudding with khoya, saffron, dry fruits.',                       120.00, TRUE,  'Dessert',  25, FALSE),
-(3046, 1004, 'Chicken Korma',             'Mughlai chicken in a white onion and cashew gravy.',                               240.00, FALSE, 'Main',     20, FALSE);
-
--- Creator 1005 â€” Bombay Vada Pav (Street Food) [3047-3056]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3047, 1005, 'Classic Vada Pav',          'The OG Mumbai street food. Potato vada in soft pav with 3 chutneys.',              60.00, TRUE,  'Street',   60, FALSE),
-(3048, 1005, 'Pav Bhaji',                 'Buttery mashed vegetable bhaji with toasted pav. 2 pav.',                         120.00, TRUE,  'Street',   30, FALSE),
-(3049, 1005, 'Misal Pav',                 'Spicy sprouted moth bean curry topped with farsan. 2 pav.',                        100.00, TRUE,  'Street',   25, FALSE),
-(3050, 1005, 'Bhel Puri',                 'Puffed rice with tamarind chutney, onion, and coriander.',                         70.00, TRUE,  'Chaat',    40, FALSE),
-(3051, 1005, 'Sev Puri',                  'Crispy puris topped with potato, chutneys and sev.',                               80.00, TRUE,  'Chaat',    35, FALSE),
-(3052, 1005, 'Ragda Pattice',             'Spiced white pea curry over potato patties with chutneys.',                        100.00, TRUE,  'Chaat',    25, FALSE),
-(3053, 1005, 'Dabeli',                    'Spiced potato filling in a bun with pomegranate and sev.',                          70.00, TRUE,  'Street',   35, FALSE),
-(3054, 1005, 'Dahi Puri',                 'Crispy puris filled with potato, yogurt, and sweet chutney.',                       80.00, TRUE,  'Chaat',    30, FALSE),
-(3055, 1005, 'Samosa (2 pcs)',            'Crispy triangular pastry filled with spiced aloo-matar.',                           50.00, TRUE,  'Snack',    50, FALSE),
-(3056, 1005, 'Cutting Chai',              'Mumbai-style strong brewed masala chai. 120ml glass.',                              30.00, TRUE,  'Beverage', 80, FALSE);
-
--- Creator 1006 â€” Keto Kitchen (Healthy Meals) [3057-3068]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3057, 1006, 'Keto Salad Bowl',           'Greens, avocado, grilled chicken, nuts with lemon-olive dressing.',               250.00, FALSE, 'Salad',    15, FALSE),
-(3058, 1006, 'Bulletproof Coffee',        'MCT oil blended black coffee for sustained energy. 250ml.',                        150.00, TRUE,  'Beverage', 20, FALSE),
-(3059, 1006, 'Keto Pancakes',             'Almond flour pancakes with erythritol syrup and berries. 3 pcs.',                 200.00, TRUE,  'Breakfast',15, FALSE),
-(3060, 1006, 'Avocado Egg Bowl',          'Halved avocado with 2 sunny-side eggs, feta and micro greens.',                   280.00, TRUE,  'Breakfast',12, FALSE),
-(3061, 1006, 'Cauliflower Fried Rice',    'Cauliflower rice stir-fried with egg, soy and sesame.',                           200.00, TRUE,  'Main',     20, FALSE),
-(3062, 1006, 'Keto Brownie',              'Dense dark chocolate brownie sweetened with monk fruit. 2 pcs.',                  120.00, TRUE,  'Dessert',  25, FALSE),
-(3063, 1006, 'Zucchini Pasta',            'Spiralised zucchini with pesto and cherry tomatoes.',                              220.00, TRUE,  'Main',     15, FALSE),
-(3064, 1006, 'Grilled Chicken Bowl',      '200g grilled chicken breast, roasted veggies, tahini drizzle.',                   300.00, FALSE, 'Main',     15, FALSE),
-(3065, 1006, 'Cheese Omelette',           '3-egg fluffy omelette loaded with cheddar and herbs.',                            180.00, TRUE,  'Breakfast',20, FALSE),
-(3066, 1006, 'Keto Fat Bombs',            'Coconut oil and peanut butter fat bombs. Pack of 4.',                             150.00, TRUE,  'Snack',    25, FALSE),
-(3067, 1006, 'Almond Flour Bread',        'Grain-free sandwich bread sliced and ready. 4 slices.',                           200.00, TRUE,  'Bread',    15, FALSE),
-(3068, 1006, 'Keto Pizza',                '8-inch cauliflower base pizza with mozzarella and veggies.',                       350.00, TRUE,  'Main',     10, FALSE);
-
--- Creator 1007 â€” Chennai Spice (South Indian) [3069-3080]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3069, 1007, 'Ghee Roast Masala Dosa',   'Extra crispy dosa on tawa ghee with potato masala, sambar, chutneys.',            120.00, TRUE,  'Tiffin',   30, FALSE),
-(3070, 1007, 'Idli Sambar (3 pcs)',       'Soft steamed idlis with piping hot sambar and 2 chutneys.',                       100.00, TRUE,  'Tiffin',   40, FALSE),
-(3071, 1007, 'Medu Vada (2 pcs)',         'Crispy lentil donuts. Served with sambar and coconut chutney.',                    80.00, TRUE,  'Tiffin',   35, FALSE),
-(3072, 1007, 'Filter Coffee (Davara)',    'Traditional South Indian filter decoction with full-fat milk. 150ml.',             40.00, TRUE,  'Beverage', 60, FALSE),
-(3073, 1007, 'Rava Upma',                 'Semolina tempered with mustard, curry leaves and green chilli.',                   80.00, TRUE,  'Breakfast',30, FALSE),
-(3074, 1007, 'Rava Dosa',                 'Thin, crispy semolina crepe with onion and green chilli.',                        110.00, TRUE,  'Tiffin',   25, FALSE),
-(3075, 1007, 'Ven Pongal',                'Comfort rice-lentil khichdi with generous ghee and pepper.',                      100.00, TRUE,  'Breakfast',25, FALSE),
-(3076, 1007, 'Curd Rice',                 'Cool, creamy curd rice tempered with mustard and pomegranate.',                    90.00, TRUE,  'Main',     30, FALSE),
-(3077, 1007, 'Pepper Rasam',              'Thin, tangy peppery tomato rasam. Best drunk from a glass.',                       60.00, TRUE,  'Soup',     40, FALSE),
-(3078, 1007, 'Coconut Chutney (extra)',   'Fresh-ground coconut chutney with roasted chana dal. 100ml.',                      40.00, TRUE,  'Side',     50, FALSE),
-(3079, 1007, 'Tomato Rice',               'Tangy cooked tomato rice with curry leaves and peanuts.',                          90.00, TRUE,  'Rice',     25, FALSE),
-(3080, 1007, 'Kallappam',                 'Soft, lacy fermented rice pancake. Pair with coconut stew.',                      110.00, TRUE,  'Tiffin',   20, FALSE);
-
--- Creator 1008 â€” Bengali Sweets Corner (Specialty Desserts) [3081-3092]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3081, 1008, 'Rosogolla (6 pcs)',         'Spongy chenna balls in light sugar syrup. The original Kolkata style.',           140.00, TRUE,  'Sweets',   30, FALSE),
-(3082, 1008, 'Sandesh (6 pcs)',           'Fresh chenna shaped and flavoured sweets. Classic Bengali misti.',                 180.00, TRUE,  'Sweets',   25, FALSE),
-(3083, 1008, 'Mishti Doi',                'Set sweetened yogurt with jaggery. Served in earthen matka.',                     100.00, TRUE,  'Dairy',    30, FALSE),
-(3084, 1008, 'Kaju Barfi (250g)',         'Premium cashew fudge squares with silver leaf. Festive quality.',                  350.00, TRUE,  'Sweets',   20, FALSE),
-(3085, 1008, 'Rasgulla (6 pcs)',          'Soft chenna balls soaked in rose-scented sugar syrup.',                           130.00, TRUE,  'Sweets',   30, FALSE),
-(3086, 1008, 'Pantua (6 pcs)',            'Deep-fried Bengali gulab jamun in thickened syrup.',                              150.00, TRUE,  'Sweets',   25, FALSE),
-(3087, 1008, 'Chum Chum (4 pcs)',         'Oblong chenna sweets dipped in coconut or pistachio coating.',                    200.00, TRUE,  'Sweets',   20, FALSE),
-(3088, 1008, 'Ladikeni (4 pcs)',          'Large dark Bengali gulab jamun. Rich and syrupy.',                                 160.00, TRUE,  'Sweets',   20, FALSE),
-(3089, 1008, 'Chomchom (4 pcs)',          'Cottage cheese sweet soaked in flavoured syrup. Pastel coloured.',                180.00, TRUE,  'Sweets',   20, FALSE),
-(3090, 1008, 'Kalojam (6 pcs)',           'Darkened fried chenna balls in thick sugar syrup.',                                140.00, TRUE,  'Sweets',   25, FALSE),
-(3091, 1008, 'Malai Chop (4 pcs)',        'Chenna patties cooked in reduced cream. Light and delicate.',                     220.00, TRUE,  'Sweets',   15, FALSE),
-(3092, 1008, 'Nolen Gurer Sondesh (6)', 'Winter special. Chenna with date palm jaggery. Seasonal.',                         180.00, TRUE,  'Sweets',   15, FALSE);
-
--- Creator 1009 â€” Fit Bites (Healthy Meals) [3093-3104]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3093, 1009, 'Green Detox Salad',         'Kale, spinach, cucumber, apple with lemon-ginger dressing.',                      250.00, TRUE,  'Salad',    15, FALSE),
-(3094, 1009, 'Quinoa Bowl',               'Red quinoa with roasted veggies and tahini dressing.',                             280.00, TRUE,  'Bowl',     15, FALSE),
-(3095, 1009, 'High Protein Bowl',         'Grilled chicken, edamame, chickpeas, eggs. 38g protein per bowl.',                 300.00, FALSE, 'Bowl',     12, FALSE),
-(3096, 1009, 'Chia Pudding',              'Overnight chia in almond milk with mango and berries.',                            180.00, TRUE,  'Dessert',  20, FALSE),
-(3097, 1009, 'Buddha Bowl',               'Grain base, roasted veggies, hummus, pickled onion, tahini.',                     320.00, TRUE,  'Bowl',     12, FALSE),
-(3098, 1009, 'Spirulina Smoothie',        'Banana, spinach, spirulina and coconut water. 400ml.',                             200.00, TRUE,  'Beverage', 20, FALSE),
-(3099, 1009, 'Overnight Oats',            'Rolled oats soaked in oat milk with seeds, dates and berries.',                    150.00, TRUE,  'Breakfast',25, FALSE),
-(3100, 1009, 'Red Lentil Soup',           'Turmeric spiced masoor dal soup. 300ml.',                                          120.00, TRUE,  'Soup',     20, FALSE),
-(3101, 1009, 'Multigrain Veggie Wrap',    'Multigrain wrap with hummus, grilled veggies and feta.',                           200.00, TRUE,  'Wrap',     15, FALSE),
-(3102, 1009, 'Seasonal Fruit Bowl',       'Mixed diced seasonal fruits. No sugar added. 300g.',                               150.00, TRUE,  'Snack',    20, FALSE),
-(3103, 1009, 'Power Salad',               'Broccoli, chickpea, avocado, seeds with apple cider vinaigrette.',                 270.00, TRUE,  'Salad',    12, FALSE),
-(3104, 1009, 'Acai Bowl',                 'Frozen acai base with granola, coconut, berries and honey.',                       300.00, TRUE,  'Bowl',     10, FALSE);
-
--- Creator 1010 â€” The Pasta Bar (Italian) [3105-3116]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3105, 1010, 'Spaghetti Carbonara',       'Egg-based Roman carbonara with guanciale and Pecorino. No cream.',               350.00, FALSE, 'Pasta',    15, FALSE),
-(3106, 1010, 'Penne Arrabiata',           'Spicy San Marzano tomato sauce over penne. Finished with fresh basil.',           280.00, TRUE,  'Pasta',    20, FALSE),
-(3107, 1010, 'Fettuccine Alfredo',        'Silky fettuccine in a Parmesan cream sauce. Classic comfort.',                    320.00, TRUE,  'Pasta',    15, FALSE),
-(3108, 1010, 'Vegetable Lasagna',         'Layered bÃ©chamel and roasted vegetable lasagna. Serves 1.',                       380.00, TRUE,  'Pasta',    10, FALSE),
-(3109, 1010, 'Bruschetta al Pomodoro',    'Grilled sourdough with marinated heritage tomatoes and basil.',                   150.00, TRUE,  'Starter',  20, FALSE),
-(3110, 1010, 'Classic Tiramisu',          'Espresso-soaked ladyfinger layers with mascarpone. Individual pot.',              200.00, TRUE,  'Dessert',  15, FALSE),
-(3111, 1010, 'Cheesy Garlic Bread',       'Rustic baguette with garlic butter, Parmesan and herbs. 2 pcs.',                  100.00, TRUE,  'Sides',    25, FALSE),
-(3112, 1010, 'Mushroom Risotto',          'Arborio rice with porcini mushrooms, white wine, Parmesan.',                      340.00, TRUE,  'Risotto',  10, FALSE),
-(3113, 1010, 'Pasta Al Pomodoro',         'Simple perfect: San Marzano tomatoes, olive oil, basil.',                         280.00, TRUE,  'Pasta',    20, FALSE),
-(3114, 1010, 'Potato Gnocchi',            'Pillowy potato gnocchi with sage brown butter and Parmigiano.',                   300.00, TRUE,  'Pasta',    12, FALSE),
-(3115, 1010, 'Spinach Ricotta Ravioli',   'Handmade ravioli stuffed with spinach and ricotta.',                              320.00, TRUE,  'Pasta',    10, FALSE),
-(3116, 1010, 'Cannoli',                   'Fried pastry shell with sweetened ricotta and pistachios. 2 pcs.',                150.00, TRUE,  'Dessert',  15, FALSE);
-
--- Creator 1011 â€” Gujarati Thali House (Gujarati) [3117-3128]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3117, 1011, 'Full Gujarati Thali',       '2 rotis, rice, dal, 2 sabjis, farsan, kadhi, raita, mithai.',                    200.00, TRUE,  'Thali',    20, FALSE),
-(3118, 1011, 'Dhokla (8 pcs)',            'Steamed fermented chickpea batter. Light, spongy, tangy.',                         90.00, TRUE,  'Snack',    30, FALSE),
-(3119, 1011, 'Fafda with Jalebi',         'Gram flour fried snack with fresh hot jalebi. Weekend breakfast.',                 80.00, TRUE,  'Breakfast',25, FALSE),
-(3120, 1011, 'Khaman Dhokla (8 pcs)',     'Soft, yellow besan dhokla with mustard and green chilli tadka.',                   70.00, TRUE,  'Snack',    35, FALSE),
-(3121, 1011, 'Undhiyu',                   'Winter mixed vegetable preparation with fenugreek dumplings.',                     180.00, TRUE,  'Main',     15, FALSE),
-(3122, 1011, 'Thepla (6 pcs)',            'Spiced fenugreek flatbreads. Perfect travel food.',                                 90.00, TRUE,  'Bread',    30, FALSE),
-(3123, 1011, 'Khandvi (12 pcs)',          'Thin rolled gram flour bites with coconut and sesame.',                            100.00, TRUE,  'Snack',    25, FALSE),
-(3124, 1011, 'Dal Baati Churma',          'Baked wheat balls with dal and sweet churma. Rajasthani classic.',                250.00, TRUE,  'Main',     15, FALSE),
-(3125, 1011, 'Puri Shak',                 'Fried wheat pooris with potato-tomato shak. 3 pooris.',                           120.00, TRUE,  'Main',     20, FALSE),
-(3126, 1011, 'Moong Dal Halwa',           'Slow-cooked split mung lentil sweet with ghee and dry fruits.',                    90.00, TRUE,  'Dessert',  20, FALSE),
-(3127, 1011, 'Ghevar',                    'Lattice fried sweet disc with rabdi and saffron. Festive.',                        200.00, TRUE,  'Dessert',  10, FALSE),
-(3128, 1011, 'Jalebi (6 pcs)',            'Freshly fried crisp jalebi soaked in sugar syrup.',                               100.00, TRUE,  'Dessert',  25, FALSE);
-
--- Creator 1012 â€” Momos & More (Tibetan) [3129-3138]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3129, 1012, 'Steamed Veg Momos (10)',   'Cabbage and paneer filled steamed dumplings with red chutney.',                   120.00, TRUE,  'Dimsum',   30, FALSE),
-(3130, 1012, 'Fried Chicken Momos (10)','Minced chicken momos deep fried until golden. Extra spicy dip.',                   150.00, FALSE, 'Dimsum',   25, FALSE),
-(3131, 1012, 'Thukpa',                   'Tibetan noodle soup with vegetables and Himalayan spices.',                        180.00, TRUE,  'Soup',     20, FALSE),
-(3132, 1012, 'Thenthuk',                 'Handmade pulled noodle soup. Hearty and warming.',                                 160.00, FALSE, 'Soup',     15, FALSE),
-(3133, 1012, 'Pan Fried Momos (10)',     'Steamed then pan-fried. Crispy bottom, juicy inside.',                             140.00, TRUE,  'Dimsum',   25, FALSE),
-(3134, 1012, 'Wonton Soup',              '8 wontons in clear bone broth with bok choy.',                                     150.00, FALSE, 'Soup',     15, FALSE),
-(3135, 1012, 'Buffalo Momos (10)',       'Minced buffalo meat momos. Authentic flavour.',                                     130.00, FALSE, 'Dimsum',   20, FALSE),
-(3136, 1012, 'Chocolate Momos (10)',     'Sweet dessert momos filled with nutella and banana. Fried.',                       160.00, TRUE,  'Dessert',  15, FALSE),
-(3137, 1012, 'Jhol Momos (10)',          'Steamed momos dipped in a spiced soupy broth. Popular street style.',              140.00, TRUE,  'Dimsum',   25, FALSE),
-(3138, 1012, 'C-Momos (10)',             'Crispy momos in a chilli sauce. Street food icon.',                                 130.00, TRUE,  'Dimsum',   20, FALSE);
-
--- Creator 1013 â€” Bake My Day (Goan Bakery) [3139-3150]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3139, 1013, 'Bebinca (slice)',           'Classic Goan 7-layer cake with coconut milk and ghee. Heirloom recipe.',          200.00, TRUE,  'Cake',     15, FALSE),
-(3140, 1013, 'Dodol (slice)',             'Sticky rice cake with coconut and jaggery. Intensely sweet.',                     150.00, TRUE,  'Sweets',   15, FALSE),
-(3141, 1013, 'Serradura',                 'Sawdust pudding with crushed Maria biscuits and cream. Chilled.',                 180.00, TRUE,  'Dessert',  20, FALSE),
-(3142, 1013, 'Goan PÃ£o (2 pcs)',          'Crusty Goan bread rolls baked in a wood-fired oven.',                              60.00, TRUE,  'Bread',    30, FALSE),
-(3143, 1013, 'Cocada (6 pcs)',            'Coconut sweet balls with jaggery. Traditional Goan confection.',                  120.00, TRUE,  'Sweets',   25, FALSE),
-(3144, 1013, 'Bol de Coco',               'Whole coconut cake. Traditional Portuguese-Goan recipe.',                         250.00, TRUE,  'Cake',     10, FALSE),
-(3145, 1013, 'Banana Cake (slice)',       'Moist banana cake with cinnamon cream cheese frosting.',                           180.00, TRUE,  'Cake',     15, FALSE),
-(3146, 1013, 'Semolina Cake (slice)',     'Goan baath cake made with coconut and semolina.',                                  200.00, TRUE,  'Cake',     12, FALSE),
-(3147, 1013, 'Choc Fudge Brownies (6)', 'Dense, fudgy brownies with sea salt caramel drizzle.',                              220.00, TRUE,  'Dessert',  20, FALSE),
-(3148, 1013, 'Cashew Cookies (8 pcs)',   'Buttery cookies packed with whole Goan cashews.',                                  200.00, TRUE,  'Cookie',   25, FALSE),
-(3149, 1013, 'Goan Christmas Cake (s.)', 'Dark fruit cake soaked in port wine. Year-round available.',                       280.00, TRUE,  'Cake',     10, FALSE),
-(3150, 1013, 'Portuguese Egg Tarts (4)','Creamy custard tarts with a flaky shell. Served warm.',                             160.00, TRUE,  'Pastry',   20, FALSE);
-
--- Creator 1014 â€” Kerala Kitchen (Kerala) [3151-3162]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3151, 1014, 'Appam with Veg Stew',      'Lacy appam with coconut milk vegetable stew. 2 appam.',                           200.00, TRUE,  'Tiffin',   20, FALSE),
-(3152, 1014, 'Kerala Fish Curry',         'Kodampuli-based fish curry. Best with rice. Serves 1.',                           280.00, FALSE, 'Main',     15, FALSE),
-(3153, 1014, 'Prawn Curry',               'Coconut milk prawn curry with raw mango. Semi-thick.',                            320.00, FALSE, 'Main',     12, FALSE),
-(3154, 1014, 'Puttu with Kadala Curry',  'Steamed rice cylinder with black chickpea curry.',                                 150.00, FALSE, 'Breakfast',20, FALSE),
-(3155, 1014, 'Kerala Parotta Chicken',   'Layered Malabar parotta with spiced chicken fry. 2 parotta.',                     220.00, FALSE, 'Main',     20, FALSE),
-(3156, 1014, 'Kerala Beef Fry',           'Dry-spiced slow-cooked beef with coconut slices.',                                280.00, FALSE, 'Main',     15, FALSE),
-(3157, 1014, 'Mini Kerala Sadya',         '7-item sadya on banana leaf: rice, sambar, 3 sabjis, payasam, papadum.',          250.00, TRUE,  'Thali',    12, FALSE),
-(3158, 1014, 'Kozhikodan Biryani',        'Malabar dum biryani with ghee-fried onions and dates.',                           300.00, FALSE, 'Biryani',  15, FALSE),
-(3159, 1014, 'Karimeen Pollichathu',      'Pearl spot fish baked in banana leaf with spice paste.',                          350.00, FALSE, 'Main',     10, FALSE),
-(3160, 1014, 'Erissery',                  'Pumpkin and red cowpea cooked with coconut and cumin.',                           130.00, TRUE,  'Side',     25, FALSE),
-(3161, 1014, 'Avial',                     'Mixed vegetable with yogurt and coconut. 11 vegetables.',                         120.00, TRUE,  'Side',     25, FALSE),
-(3162, 1014, 'Palada Payasam',            'Rice flakes cooked in milk with cardamom. Traditional dessert.',                  150.00, TRUE,  'Dessert',  20, FALSE);
-
--- Creator 1015 â€” Millet Magic (Healthy Meals) [3163-3172]
-INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES
-(3163, 1015, 'Ragi Dosa',                 'Finger millet crispy dosa with coconut chutney and sambar.',                      110.00, TRUE,  'Tiffin',   25, FALSE),
-(3164, 1015, 'Jowar Roti (4 pcs)',        'Hand-rolled sorghum flatbreads with ghee. Gluten-free.',                           80.00, TRUE,  'Bread',    30, FALSE),
-(3165, 1015, 'Bajra Khichdi',             'Pearl millet cooked with vegetables and tempered spices.',                         120.00, TRUE,  'Main',     20, FALSE),
-(3166, 1015, 'Foxtail Millet Upma',       'Nutritious foxtail millet semolina with curry leaves.',                           100.00, TRUE,  'Breakfast',25, FALSE),
-(3167, 1015, 'Kodo Millet Rice Bowl',     'Kodo millet with sambar and 2 sides. Wholesome meal.',                            130.00, TRUE,  'Bowl',     20, FALSE),
-(3168, 1015, 'Ragi Ladoo (6 pcs)',        'Roasted finger millet ladoo with jaggery and ghee.',                              150.00, TRUE,  'Dessert',  25, FALSE),
-(3169, 1015, 'Barnyard Millet Bowl',      'Samak rice bowl with lentils and roasted nuts.',                                  200.00, TRUE,  'Bowl',     15, FALSE),
-(3170, 1015, 'Little Millet Pongal',      'Hearty little millet pongal with pepper and ghee.',                               110.00, TRUE,  'Breakfast',20, FALSE),
-(3171, 1015, 'Kodo Millet Idli (6 pcs)','Soft steamed idlis with sambar and chutneys. Gluten-free.',                         120.00, TRUE,  'Tiffin',   25, FALSE),
-(3172, 1015, 'Proso Millet Kheer',        'Creamy proso millet kheer with cardamom and dry fruits.',                         150.00, TRUE,  'Dessert',  20, FALSE);
-
--- ============================================================
--- SECTION 6: FOOD DROPS  [4001-4049]
--- Statuses: COMPLETED / CUTOFF / READY / OPEN / ANNOUNCED / DRAFT
--- ============================================================
-INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time,
-    pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url, special_notes)
-VALUES
--- Creator 1001 — The Sourdough Story
-(4001, 1001, 'Weekend Sourdough Batch #1',     'Fresh 72-hour sourdough and cinnamon rolls. Limited slots.',
-    '2026-08-11', '2026-08-10 20:00:00', '12th Cross, Indiranagar, Bangalore', '10 AM – 12 PM', 15, 6,  'COMPLETED', 'https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg', 'Pre-order required.'),
-(4002, 1001, 'Pastry Morning Drop',             'Croissants and pain au chocolat baked overnight.',
-    '2026-08-18', '2026-08-17 20:00:00', '12th Cross, Indiranagar, Bangalore', '9 AM – 11 AM',  20, 6,  'COMPLETED', 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg', NULL),
-(4003, 1001, 'Muffin & Banana Bread Day',       'Blueberry muffins, banana bread and biscotti.',
-    '2026-08-25', '2026-08-24 20:00:00', '12th Cross, Indiranagar, Bangalore', '10 AM – 12 PM', 15, 5,  'COMPLETED', 'https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg', NULL),
-(4004, 1001, 'Cake Saturday — Red Velvet',      'Whole cakes and slices ready for pickup.',
-    '2026-09-10', '2026-09-09 20:00:00', '12th Cross, Indiranagar, Bangalore', '11 AM – 1 PM',  15, 8,  'READY',     'https://images.pexels.com/photos/1291712/pexels-photo-1291712.jpeg', 'Pickup confirmation will be sent.'),
-(4005, 1001, 'Focaccia & Sourdough Pre-order',  'Rosemary focaccia and sourdough loaves.',
-    '2026-09-12', '2026-09-11 20:00:00', '12th Cross, Indiranagar, Bangalore', '10 AM – 12 PM', 20, 5,  'OPEN',      'https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg', NULL),
-(4006, 1001, 'Cheesecake & Cookie Box',         'NY cheesecake slices and chocolate chip cookies.',
-    '2026-09-17', '2026-09-16 20:00:00', '12th Cross, Indiranagar, Bangalore', '11 AM – 1 PM',  25, 0,  'ANNOUNCED', 'https://images.pexels.com/photos/1291712/pexels-photo-1291712.jpeg', NULL),
--- Creator 1002 — Maa Ki Rasoi
-(4007, 1002, 'Monday Tiffin — Dal Makhani',     'Dal makhani and fresh rotis. Pre-book to avoid missing out.',
-    '2026-08-18', '2026-08-17 19:00:00', 'Lajpat Nagar Market, New Delhi',     '12 PM – 2 PM',  20, 6,  'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL),
-(4008, 1002, 'Comfort Khichdi Drop',            'Moong dal khichdi and rajma chawal. Desi comfort.',
-    '2026-08-25', '2026-08-24 19:00:00', 'Lajpat Nagar Market, New Delhi',     '12 PM – 2 PM',  15, 5,  'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL),
-(4009, 1002, 'Paneer & Chole Tiffin',           'Paneer butter masala and chole bhature. Weekend special.',
-    '2026-09-14', '2026-09-13 19:00:00', 'Lajpat Nagar Market, New Delhi',     '12 PM – 2 PM',  25, 3,  'OPEN',      'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', 'Add raita for Rs 50 extra.'),
-(4010, 1002, 'Rajasthani Thepla Special',       'Fresh methi thepla with aloo sabzi. Crispy and soft.',
-    '2026-09-21', '2026-09-20 19:00:00', 'Lajpat Nagar Market, New Delhi',     '11 AM – 1 PM',  20, 0,  'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL),
--- Creator 1003 — Midnight Munchies (DRAFT, no public orders)
-(4011, 1003, 'Late Night Burger Box',           'Classic and BBQ burgers. Coming soon.',
-    '2026-09-20', '2026-09-19 22:00:00', 'Bandra West, Mumbai',                '10 PM – 12 AM', 20, 0,  'DRAFT',     NULL, NULL),
--- Creator 1004 — Sunday Biryani Club
-(4012, 1004, 'Eid Special Biryani Drop',        'Mutton dum biryani with haleem and raita.',
-    '2026-07-06', '2026-07-05 18:00:00', 'Jubilee Hills, Hyderabad',           '1 PM – 3 PM',   20, 8,  'COMPLETED', 'https://images.pexels.com/photos/1624487/pexels-photo-1624487.jpeg', 'Limited portions. One person one pot.'),
-(4013, 1004, 'Sunday Classic — Chicken & Tikka', 'Chicken biryani, chicken tikka and seekh kebab platter.',
-    '2026-07-20', '2026-07-19 18:00:00', 'Jubilee Hills, Hyderabad',           '1 PM – 3 PM',   25, 10, 'COMPLETED', 'https://images.pexels.com/photos/1624487/pexels-photo-1624487.jpeg', NULL),
-(4014, 1004, 'Veg Biryani Sunday',              'Dum veg biryani with mirchi ka salan. Purely vegetarian.',
-    '2026-08-03', '2026-08-02 18:00:00', 'Jubilee Hills, Hyderabad',           '1 PM – 3 PM',   20, 6,  'COMPLETED', 'https://images.pexels.com/photos/1624487/pexels-photo-1624487.jpeg', NULL),
-(4015, 1004, 'This Sunday — Biryani Pre-order', 'Mutton + Chicken biryanis and raita.',
-    '2026-09-14', '2026-09-13 18:00:00', 'Jubilee Hills, Hyderabad',           '1 PM – 3 PM',   25, 6,  'OPEN',      'https://images.pexels.com/photos/1624487/pexels-photo-1624487.jpeg', 'Order by Saturday 6 PM.'),
-(4016, 1004, 'Haleem & Kebab Weekend',          'Haleem, boti kebab and double ka meetha.',
-    '2026-09-21', '2026-09-20 18:00:00', 'Jubilee Hills, Hyderabad',           '1 PM – 3 PM',   30, 0,  'ANNOUNCED', 'https://images.pexels.com/photos/1624487/pexels-photo-1624487.jpeg', NULL),
--- Creator 1005 — Bombay Vada Pav
-(4017, 1005, 'Vada Pav & Pav Bhaji Batch',      'Classic Vada Pav and buttery pav bhaji.',
-    '2026-08-28', '2026-08-27 18:00:00', 'FC Road, Deccan Gymkhana, Pune',     '5 PM – 8 PM',   15, 4,  'COMPLETED', 'https://images.pexels.com/photos/3629537/pexels-photo-3629537.jpeg', NULL),
-(4018, 1005, 'Evening Chaat Drop',              'Vada pav, misal pav and bhel puri. Evening street food.',
-    '2026-09-12', '2026-09-12 15:00:00', 'FC Road, Deccan Gymkhana, Pune',     '5 PM – 8 PM',   20, 3,  'OPEN',      'https://images.pexels.com/photos/3629537/pexels-photo-3629537.jpeg', NULL),
--- Creator 1006 — Keto Kitchen
-(4019, 1006, 'Keto Monday Meal Prep',           'Keto salad bowl and bulletproof coffee.',
-    '2026-08-25', '2026-08-24 20:00:00', 'HSR Layout Sector 2, Bangalore',     '8 AM – 10 AM',  12, 5,  'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', 'Macros sheet included.'),
-(4020, 1006, 'Keto Breakfast Batch',            'Keto pancakes and avocado egg bowl.',
-    '2026-09-01', '2026-08-31 20:00:00', 'HSR Layout Sector 2, Bangalore',     '8 AM – 10 AM',  15, 4,  'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL),
-(4021, 1006, 'Keto Lunch Box — This Week',      'Cauliflower rice and grilled chicken bowl.',
-    '2026-09-12', '2026-09-11 20:00:00', 'HSR Layout Sector 2, Bangalore',     '12 PM – 2 PM',  20, 2,  'OPEN',      'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL),
-(4022, 1006, 'Keto Baked Goodies Drop',         'Almond flour bread and keto fat bombs.',
-    '2026-09-18', '2026-09-17 20:00:00', 'HSR Layout Sector 2, Bangalore',     '10 AM – 12 PM', 15, 0,  'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL),
--- Creator 1007 — Chennai Spice
-(4023, 1007, 'Tiffin Morning — Dosa & Idli',    'Masala dosa and soft idlis with sambar.',
-    '2026-08-24', '2026-08-23 20:00:00', 'T. Nagar, Chennai',                  '8 AM – 10 AM',  20, 6,  'COMPLETED', 'https://images.pexels.com/photos/3629537/pexels-photo-3629537.jpeg', NULL),
-(4024, 1007, 'Vada & Upma Morning',             'Crispy medu vada and hot upma.',
-    '2026-09-01', '2026-08-31 20:00:00', 'T. Nagar, Chennai',                  '8 AM – 10 AM',  15, 5,  'COMPLETED', 'https://images.pexels.com/photos/3629537/pexels-photo-3629537.jpeg', NULL),
-(4025, 1007, 'Filter Coffee & Tiffin Box',      'Filter coffee, pongal and rava dosa.',
-    '2026-09-13', '2026-09-12 20:00:00', 'T. Nagar, Chennai',                  '8 AM – 10 AM',  20, 2,  'OPEN',      'https://images.pexels.com/photos/3629537/pexels-photo-3629537.jpeg', NULL),
--- Creator 1008 — Bengali Sweets Corner
-(4026, 1008, 'Misti Special — Rosogolla & More', 'Rosogolla, sandesh and mishti doi.',
-    '2026-08-10', '2026-08-09 18:00:00', 'College Street, Kolkata',            '11 AM – 1 PM',  20, 8,  'COMPLETED', 'https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg', 'Earthen matka packaging.'),
-(4027, 1008, 'Festival Sweets Box',             'Kaju barfi, rasgulla and chum chum.',
-    '2026-08-24', '2026-08-23 18:00:00', 'College Street, Kolkata',            '11 AM – 1 PM',  25, 10, 'COMPLETED', 'https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg', NULL),
-(4028, 1008, 'Autumn Misti Drop',              'Pantua, ladikeni and chomchom.',
-    '2026-09-01', '2026-08-31 18:00:00', 'College Street, Kolkata',            '11 AM – 1 PM',  20, 7,  'COMPLETED', 'https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg', NULL),
-(4029, 1008, 'Malai Chop & Sondesh — Ready',   'Malai chop and nolen gurer sondesh. Ready for pickup.',
-    '2026-09-10', '2026-09-09 18:00:00', 'College Street, Kolkata',            '11 AM – 1 PM',  20, 8,  'READY',     'https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg', 'Pickup: same day only.'),
-(4030, 1008, 'Puja Special Sweets — Coming',   'Rosogolla and sandesh for Durga Puja season.',
-    '2026-09-21', '2026-09-20 18:00:00', 'College Street, Kolkata',            '11 AM – 1 PM',  25, 0,  'ANNOUNCED', 'https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg', NULL),
--- Creator 1009 — Fit Bites
-(4031, 1009, 'Detox Monday Bowls',              'Green detox salad and quinoa bowl.',
-    '2026-09-01', '2026-08-31 20:00:00', 'Hauz Khas Village, New Delhi',       '12 PM – 2 PM',  15, 5,  'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL),
-(4032, 1009, 'Power Bowl Drop — This Week',     'Protein bowl, buddha bowl and power salad.',
-    '2026-09-13', '2026-09-12 20:00:00', 'Hauz Khas Village, New Delhi',       '12 PM – 2 PM',  20, 2,  'OPEN',      'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL),
--- Creator 1010 — The Pasta Bar
-(4033, 1010, 'Pasta Wednesday — Carbonara',     'Spaghetti carbonara and bruschetta.',
-    '2026-08-27', '2026-08-26 20:00:00', 'Bandra West, Mumbai',                '7 PM – 9 PM',   15, 5,  'COMPLETED', 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg', NULL),
-(4034, 1010, 'Penne Night & Garlic Bread',      'Penne arrabiata and cheesy garlic bread.',
-    '2026-09-03', '2026-09-02 20:00:00', 'Bandra West, Mumbai',                '7 PM – 9 PM',   12, 4,  'COMPLETED', 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg', NULL),
-(4035, 1010, 'Friday Italian Night',            'Fettuccine alfredo and tiramisu.',
-    '2026-09-12', '2026-09-11 20:00:00', 'Bandra West, Mumbai',                '7 PM – 9 PM',   20, 2,  'OPEN',      'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg', NULL),
--- Creator 1011 — Gujarati Thali House
-(4036, 1011, 'Sunday Full Thali',               'Complete Gujarati thali with dhokla.',
-    '2026-09-01', '2026-08-31 18:00:00', 'CG Road, Ahmedabad',                 '12 PM – 2 PM',  15, 4,  'COMPLETED', 'https://images.pexels.com/photos/3629537/pexels-photo-3629537.jpeg', NULL),
-(4037, 1011, 'Navratri Special — Fafda & Undhiyu', 'Fafda with jalebi and winter undhiyu.',
-    '2026-09-21', '2026-09-20 18:00:00', 'CG Road, Ahmedabad',                 '10 AM – 12 PM', 20, 0,  'ANNOUNCED', 'https://images.pexels.com/photos/3629537/pexels-photo-3629537.jpeg', NULL),
--- Creator 1012 — Momos & More
-(4038, 1012, 'Weekend Momo Batch',              'Steamed veg momos and thukpa.',
-    '2026-09-07', '2026-09-06 18:00:00', 'Laxmi Nagar, New Delhi',             '6 PM – 9 PM',   15, 3,  'COMPLETED', 'https://images.pexels.com/photos/3629537/pexels-photo-3629537.jpeg', NULL),
-(4039, 1012, 'Fried & Jhol Momo Drop',          'Fried chicken momos and jhol momos.',
-    '2026-09-14', '2026-09-13 18:00:00', 'Laxmi Nagar, New Delhi',             '6 PM – 9 PM',   20, 2,  'OPEN',      'https://images.pexels.com/photos/3629537/pexels-photo-3629537.jpeg', NULL),
--- Creator 1013 — Bake My Day (Goa)
-(4040, 1013, 'Goan Heritage Sweets Box',        'Bebinca and dodol. Traditional Goan recipes.',
-    '2026-08-31', '2026-08-30 18:00:00', 'Fontainhas, Panaji, Goa',            '10 AM – 1 PM',  15, 4,  'COMPLETED', 'https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg', NULL),
-(4041, 1013, 'Pão & Banana Cake Morning',       'Fresh Goan pão bread and banana cake.',
-    '2026-09-06', '2026-09-05 18:00:00', 'Fontainhas, Panaji, Goa',            '9 AM – 11 AM',  10, 3,  'COMPLETED', 'https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg', NULL),
-(4042, 1013, 'Pastry Weekend — Serradura & Egg Tart', 'Serradura pudding, egg tarts and cashew cookies.',
-    '2026-09-14', '2026-09-13 18:00:00', 'Fontainhas, Panaji, Goa',            '10 AM – 1 PM',  15, 2,  'OPEN',      'https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg', NULL),
--- Creator 1014 — Kerala Kitchen
-(4043, 1014, 'Onam Special — Fish Curry & Appam', 'Appam with veg stew and Kerala fish curry.',
-    '2026-08-17', '2026-08-16 18:00:00', 'Koramangala 5th Block, Bangalore',   '11 AM – 1 PM',  20, 8,  'COMPLETED', 'https://images.pexels.com/photos/12737656/pexels-photo-12737656.jpeg', 'Onam special packaging.'),
-(4044, 1014, 'Kerala Breakfast Box',            'Puttu with kadala and Kerala beef fry.',
-    '2026-08-31', '2026-08-30 18:00:00', 'Koramangala 5th Block, Bangalore',   '8 AM – 10 AM',  20, 6,  'COMPLETED', 'https://images.pexels.com/photos/12737656/pexels-photo-12737656.jpeg', NULL),
-(4045, 1014, 'Sadya Mini & Kozhikodan Biryani',  'Mini sadya and Malabar biryani.',
-    '2026-09-07', '2026-09-06 18:00:00', 'Koramangala 5th Block, Bangalore',   '12 PM – 2 PM',  15, 5,  'COMPLETED', 'https://images.pexels.com/photos/12737656/pexels-photo-12737656.jpeg', NULL),
-(4046, 1014, 'Prawn Curry & Karimeen — Ready',  'Prawn curry and karimeen pollichathu. Ready for pickup.',
-    '2026-09-10', '2026-09-09 18:00:00', 'Koramangala 5th Block, Bangalore',   '12 PM – 2 PM',  15, 6,  'READY',     'https://images.pexels.com/photos/12737656/pexels-photo-12737656.jpeg', 'Very limited. Pickup today only.'),
-(4047, 1014, 'Appam & Parotta Weekend',         'Appam with stew, parotta with chicken and avial.',
-    '2026-09-14', '2026-09-13 18:00:00', 'Koramangala 5th Block, Bangalore',   '12 PM – 2 PM',  20, 3,  'OPEN',      'https://images.pexels.com/photos/12737656/pexels-photo-12737656.jpeg', NULL),
--- Creator 1015 — Millet Magic
-(4048, 1015, 'Millet Tiffin — Ragi & Jowar',   'Ragi dosa and jowar roti. Gluten-free goodness.',
-    '2026-09-07', '2026-09-06 18:00:00', 'Madhapur, Hyderabad',                '9 AM – 11 AM',  12, 3,  'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL),
-(4049, 1015, 'Ancient Grains Box — Coming Soon', 'Bajra khichdi and ragi ladoo.',
-    '2026-09-21', '2026-09-20 18:00:00', 'Madhapur, Hyderabad',                '9 AM – 11 AM',  15, 0,  'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', NULL);
-
--- ============================================================
--- SECTION 7: DROP ITEMS  [4501-4625]
--- (drop_id, item_id, quantity_available, quantity_ordered)
--- ============================================================
-INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES
--- Drop 4001 (Sourdough + Cinnamon Roll)
-(4501, 4001, 3001, 20, 6),(4502, 4001, 3005, 20, 6),
--- Drop 4002 (Croissant + Pain au Chocolat)
-(4503, 4002, 3002, 30, 6),(4504, 4002, 3012, 30, 6),
--- Drop 4003 (Muffin + Banana Bread + Biscotti)
-(4505, 4003, 3003, 20, 5),(4506, 4003, 3006, 15, 5),(4507, 4003, 3008, 20, 5),
--- Drop 4004 (Red Velvet Cake + Brownie) — READY
-(4508, 4004, 3007, 20, 8),(4509, 4004, 3004, 30, 8),
--- Drop 4005 (Focaccia + Sourdough) — OPEN
-(4510, 4005, 3009, 20, 5),(4511, 4005, 3001, 20, 5),
--- Drop 4006 (Cheesecake + Cookies) — ANNOUNCED
-(4512, 4006, 3011, 25, 0),(4513, 4006, 3010, 30, 0),
--- Drop 4007 (Dal Makhani + Roti Combo)
-(4514, 4007, 3013, 25, 6),(4515, 4007, 3014, 25, 6),
--- Drop 4008 (Rajma Chawal + Khichdi)
-(4516, 4008, 3015, 20, 5),(4517, 4008, 3018, 20, 5),
--- Drop 4009 (Paneer + Chole + Chapati) — OPEN
-(4518, 4009, 3016, 30, 3),(4519, 4009, 3020, 25, 3),(4520, 4009, 3022, 40, 3),
--- Drop 4010 (Thepla + Aloo) — ANNOUNCED
-(4521, 4010, 3021, 25, 0),(4522, 4010, 3017, 20, 0),
--- Drop 4011 (Burger + Fries) — DRAFT
-(4523, 4011, 3025, 20, 0),(4524, 4011, 3026, 20, 0),
--- Drop 4012 (Mutton Biryani + Haleem + Raita)
-(4525, 4012, 3035, 20, 8),(4526, 4012, 3041, 20, 8),(4527, 4012, 3043, 40, 8),
--- Drop 4013 (Chicken Biryani + Tikka + Seekh)
-(4528, 4013, 3036, 30, 10),(4529, 4013, 3038, 20, 10),(4530, 4013, 3039, 20, 10),
--- Drop 4014 (Veg Biryani + Mirchi Ka Salan)
-(4531, 4014, 3037, 20, 6),(4532, 4014, 3042, 20, 6),
--- Drop 4015 (Mutton + Chicken + Raita) — OPEN
-(4533, 4015, 3035, 25, 6),(4534, 4015, 3036, 25, 6),(4535, 4015, 3043, 50, 6),
--- Drop 4016 (Haleem + Boti + Meetha) — ANNOUNCED
-(4536, 4016, 3041, 30, 0),(4537, 4016, 3044, 25, 0),(4538, 4016, 3045, 30, 0),
--- Drop 4017 (Vada Pav + Pav Bhaji)
-(4539, 4017, 3047, 30, 4),(4540, 4017, 3048, 20, 4),
--- Drop 4018 (Vada Pav + Misal + Bhel) — OPEN
-(4541, 4018, 3047, 30, 3),(4542, 4018, 3049, 25, 3),(4543, 4018, 3050, 30, 3),
--- Drop 4019 (Keto Salad + Bulletproof Coffee)
-(4544, 4019, 3057, 15, 5),(4545, 4019, 3058, 20, 5),
--- Drop 4020 (Keto Pancakes + Avocado Egg)
-(4546, 4020, 3059, 15, 4),(4547, 4020, 3060, 12, 4),
--- Drop 4021 (Cauliflower Rice + Grilled Chicken) — OPEN
-(4548, 4021, 3061, 20, 2),(4549, 4021, 3064, 15, 2),
--- Drop 4022 (Almond Flour Bread + Fat Bombs) — ANNOUNCED
-(4550, 4022, 3067, 15, 0),(4551, 4022, 3066, 20, 0),
--- Drop 4023 (Masala Dosa + Idli Sambar)
-(4552, 4023, 3069, 25, 6),(4553, 4023, 3070, 25, 6),
--- Drop 4024 (Medu Vada + Upma)
-(4554, 4024, 3071, 20, 5),(4555, 4024, 3073, 20, 5),
--- Drop 4025 (Filter Coffee + Pongal + Rava Dosa) — OPEN
-(4556, 4025, 3072, 40, 2),(4557, 4025, 3075, 20, 2),(4558, 4025, 3074, 20, 2),
--- Drop 4026 (Rosogolla + Sandesh + Mishti Doi)
-(4559, 4026, 3081, 25, 8),(4560, 4026, 3082, 25, 8),(4561, 4026, 3083, 25, 8),
--- Drop 4027 (Kaju Barfi + Rasgulla + Chum Chum)
-(4562, 4027, 3084, 20, 10),(4563, 4027, 3085, 25, 10),(4564, 4027, 3087, 20, 10),
--- Drop 4028 (Pantua + Ladikeni + Chomchom)
-(4565, 4028, 3086, 20, 7),(4566, 4028, 3088, 20, 7),(4567, 4028, 3089, 20, 7),
--- Drop 4029 (Malai Chop + Sondesh) — READY
-(4568, 4029, 3091, 20, 8),(4569, 4029, 3092, 20, 8),
--- Drop 4030 (Rosogolla + Sandesh) — ANNOUNCED
-(4570, 4030, 3081, 25, 0),(4571, 4030, 3082, 25, 0),
--- Drop 4031 (Detox Salad + Quinoa)
-(4572, 4031, 3093, 15, 5),(4573, 4031, 3094, 15, 5),
--- Drop 4032 (Protein Bowl + Buddha Bowl + Power Salad) — OPEN
-(4574, 4032, 3095, 15, 2),(4575, 4032, 3097, 15, 2),(4576, 4032, 3103, 12, 2),
--- Drop 4033 (Carbonara + Bruschetta)
-(4577, 4033, 3105, 15, 5),(4578, 4033, 3109, 15, 5),
--- Drop 4034 (Penne Arrabiata + Garlic Bread)
-(4579, 4034, 3106, 15, 4),(4580, 4034, 3111, 20, 4),
--- Drop 4035 (Fettuccine + Tiramisu) — OPEN
-(4581, 4035, 3107, 15, 2),(4582, 4035, 3110, 15, 2),
--- Drop 4036 (Thali + Dhokla)
-(4583, 4036, 3117, 15, 4),(4584, 4036, 3118, 30, 4),
--- Drop 4037 (Fafda + Undhiyu) — ANNOUNCED
-(4585, 4037, 3119, 20, 0),(4586, 4037, 3121, 15, 0),
--- Drop 4038 (Steamed Veg Momos + Thukpa)
-(4587, 4038, 3129, 20, 3),(4588, 4038, 3131, 15, 3),
--- Drop 4039 (Fried Chicken Momos + Jhol Momos) — OPEN
-(4589, 4039, 3130, 20, 2),(4590, 4039, 3137, 20, 2),
--- Drop 4040 (Bebinca + Dodol)
-(4591, 4040, 3139, 15, 4),(4592, 4040, 3140, 15, 4),
--- Drop 4041 (Pão + Banana Cake)
-(4593, 4041, 3142, 20, 3),(4594, 4041, 3145, 12, 3),
--- Drop 4042 (Serradura + Egg Tart + Cashew Cookies) — OPEN
-(4595, 4042, 3141, 15, 2),(4596, 4042, 3150, 20, 2),(4597, 4042, 3148, 20, 2),
--- Drop 4043 (Appam + Fish Curry)
-(4598, 4043, 3151, 20, 8),(4599, 4043, 3152, 15, 8),
--- Drop 4044 (Puttu Kadala + Beef Fry)
-(4600, 4044, 3154, 20, 6),(4601, 4044, 3156, 15, 6),
--- Drop 4045 (Sadya + Biryani)
-(4602, 4045, 3157, 12, 5),(4603, 4045, 3158, 12, 5),
--- Drop 4046 (Prawn Curry + Karimeen) — READY
-(4604, 4046, 3153, 12, 6),(4605, 4046, 3159, 10, 6),
--- Drop 4047 (Appam + Parotta Chicken + Avial) — OPEN
-(4606, 4047, 3151, 20, 3),(4607, 4047, 3155, 20, 3),(4608, 4047, 3161, 20, 3),
--- Drop 4048 (Ragi Dosa + Jowar Roti)
-(4609, 4048, 3163, 15, 3),(4610, 4048, 3164, 15, 3),
--- Drop 4049 (Bajra Khichdi + Ragi Ladoo) — ANNOUNCED
-(4611, 4049, 3165, 20, 0),(4612, 4049, 3168, 20, 0);
-
--- ============================================================
--- SECTION 8: CREATOR FOLLOWS
--- ============================================================
--- Creator 1001 followers (customers 2001-2025)
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2001,1001),(2002,1001),(2003,1001),(2004,1001),(2005,1001),
-(2006,1001),(2007,1001),(2008,1001),(2009,1001),(2010,1001),
-(2011,1001),(2012,1001),(2013,1001),(2014,1001),(2015,1001),
-(2016,1001),(2017,1001),(2018,1001),(2019,1001),(2020,1001),
-(2021,1001),(2022,1001),(2023,1001),(2024,1001),(2025,1001);
-
--- Creator 1002 followers (customers 2015-2026)
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2015,1002),(2016,1002),(2017,1002),(2018,1002),(2019,1002),(2020,1002),
-(2021,1002),(2022,1002),(2023,1002),(2024,1002),(2025,1002),(2026,1002);
-
--- Creator 1004 followers (customers 2038-2050 + 2001-2005)
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2001,1004),(2002,1004),(2003,1004),(2004,1004),(2005,1004),
-(2038,1004),(2039,1004),(2040,1004),(2041,1004),(2042,1004),
-(2043,1004),(2044,1004),(2045,1004),(2046,1004),(2047,1004),
-(2048,1004),(2049,1004),(2050,1004);
-
--- Creator 1005 followers
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2001,1005),(2025,1005),(2038,1005),(2046,1005),(2030,1005);
-
--- Creator 1006 followers
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2001,1006),(2002,1006),(2006,1006),(2011,1006),(2014,1006),
-(2015,1006),(2016,1006),(2017,1006),(2018,1006),(2019,1006);
-
--- Creator 1007 followers
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2001,1007),(2003,1007),(2007,1007),(2019,1007),(2020,1007),
-(2021,1007),(2022,1007),(2025,1007);
-
--- Creator 1008 followers
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2001,1008),(2003,1008),(2005,1008),(2007,1008),(2009,1008),
-(2011,1008),(2013,1008),(2015,1008),(2017,1008),(2019,1008),
-(2021,1008),(2023,1008),(2027,1008),(2029,1008),(2031,1008);
-
--- Creator 1009 followers
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2002,1009),(2004,1009),(2006,1009),(2008,1009),(2010,1009),
-(2012,1009),(2016,1009),(2020,1009);
-
--- Creator 1010 followers
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2010,1010),(2012,1010),(2014,1010),(2016,1010),(2018,1010),
-(2020,1010),(2022,1010),(2024,1010);
-
--- Creator 1011 followers
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2025,1011),(2030,1011),(2035,1011),(2040,1011),(2045,1011);
-
--- Creator 1012 followers
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2040,1012),(2041,1012),(2042,1012),(2043,1012);
-
--- Creator 1013 followers
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2015,1013),(2025,1013),(2035,1013),(2045,1013),(2013,1013);
-
--- Creator 1014 followers
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2002,1014),(2004,1014),(2006,1014),(2008,1014),(2010,1014),
-(2012,1014),(2014,1014),(2016,1014),(2018,1014),(2020,1014),
-(2022,1014),(2024,1014);
-
--- Creator 1015 followers
-INSERT INTO creator_follows (follower_id, creator_id) VALUES
-(2030,1015),(2040,1015),(2045,1015),(2050,1015);
-
--- ============================================================
--- SECTION 9: ORDERS  [5001-5229]
--- Statuses: PLACED / PREPARING / READY / COMPLETED / CANCELLED
--- PaymentMethod: CASH / UPI / CARD
--- ============================================================
-INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_status, total_amount, payment_method, pickup_time, special_instructions, order_date) VALUES
--- === DROP 4001 (Sourdough Batch #1 — COMPLETED) ===
-(5001, 2001, 1001, 4001, 'COMPLETED', 700.00, 'UPI',  '10:00 AM', NULL,                      '2026-08-11 10:15:00'),
-(5002, 2002, 1001, 4001, 'COMPLETED', 280.00, 'CASH', '10:30 AM', NULL,                      '2026-08-10 20:30:00'),
-(5003, 2003, 1001, 4001, 'COMPLETED', 540.00, 'UPI',  '11:00 AM', 'Extra packaging please.', '2026-08-10 21:00:00'),
-(5004, 2004, 1001, 4001, 'COMPLETED', 360.00, 'UPI',  '10:15 AM', NULL,                      '2026-08-10 21:30:00'),
-(5005, 2005, 1001, 4001, 'COMPLETED', 280.00, 'CARD', '11:30 AM', NULL,                      '2026-08-10 22:00:00'),
-(5006, 2006, 1001, 4001, 'CANCELLED', 560.00, 'UPI',  '10:00 AM', NULL,                      '2026-08-10 22:30:00'),
--- === DROP 4002 (Pastry Morning — COMPLETED) ===
-(5007, 2007, 1001, 4002, 'COMPLETED', 480.00, 'UPI',  '9:30 AM',  NULL,                      '2026-08-18 09:45:00'),
-(5008, 2008, 1001, 4002, 'COMPLETED', 315.00, 'CASH', '10:00 AM', NULL,                      '2026-08-17 21:00:00'),
-(5009, 2009, 1001, 4002, 'COMPLETED', 480.00, 'UPI',  '10:30 AM', 'Gift wrap needed.',        '2026-08-17 21:30:00'),
-(5010, 2010, 1001, 4002, 'COMPLETED', 150.00, 'CASH', '9:00 AM',  NULL,                      '2026-08-17 22:00:00'),
-(5011, 2011, 1001, 4002, 'COMPLETED', 315.00, 'UPI',  '9:30 AM',  NULL,                      '2026-08-17 22:30:00'),
-(5012, 2012, 1001, 4002, 'COMPLETED', 150.00, 'CARD', '10:00 AM', NULL,                      '2026-08-17 23:00:00'),
--- === DROP 4003 (Muffin & Banana Bread — COMPLETED) ===
-(5013, 2013, 1001, 4003, 'COMPLETED', 480.00, 'UPI',  '10:00 AM', NULL,                      '2026-08-25 10:15:00'),
-(5014, 2014, 1001, 4003, 'COMPLETED', 360.00, 'CASH', '11:00 AM', NULL,                      '2026-08-24 21:00:00'),
-(5015, 2015, 1001, 4003, 'COMPLETED', 240.00, 'UPI',  '10:30 AM', NULL,                      '2026-08-24 21:30:00'),
-(5016, 2016, 1001, 4003, 'CANCELLED', 180.00, 'UPI',  '10:00 AM', NULL,                      '2026-08-24 22:00:00'),
-(5017, 2017, 1001, 4003, 'COMPLETED', 360.00, 'CARD', '11:30 AM', NULL,                      '2026-08-24 22:30:00'),
--- === DROP 4004 (Cake Saturday — READY) ===
-(5018, 2001, 1001, 4004, 'READY',     600.00, 'UPI',  '11:00 AM', NULL,                      '2026-09-09 21:00:00'),
-(5019, 2002, 1001, 4004, 'READY',     700.00, 'CASH', '11:30 AM', NULL,                      '2026-09-09 21:30:00'),
-(5020, 2003, 1001, 4004, 'PREPARING', 400.00, 'UPI',  '12:00 PM', NULL,                      '2026-09-09 22:00:00'),
-(5021, 2004, 1001, 4004, 'PREPARING', 550.00, 'CARD', '11:00 AM', 'Birthday cake please.',   '2026-09-09 22:30:00'),
-(5022, 2005, 1001, 4004, 'PLACED',    300.00, 'UPI',  '12:30 PM', NULL,                      '2026-09-09 23:00:00'),
-(5023, 2006, 1001, 4004, 'PLACED',    800.00, 'CARD', '12:00 PM', NULL,                      '2026-09-09 23:30:00'),
-(5024, 2007, 1001, 4004, 'PLACED',    400.00, 'UPI',  '11:30 AM', NULL,                      '2026-09-10 00:00:00'),
-(5025, 2008, 1001, 4004, 'PLACED',    300.00, 'CASH', '12:00 PM', NULL,                      '2026-09-10 00:30:00'),
--- === DROP 4005 (Focaccia & Sourdough — OPEN) ===
-(5026, 2009, 1001, 4005, 'PLACED',    500.00, 'UPI',  '10:00 AM', NULL,                      '2026-09-11 21:30:00'),
-(5027, 2010, 1001, 4005, 'PLACED',    440.00, 'CASH', '11:00 AM', NULL,                      '2026-09-11 22:00:00'),
-(5028, 2011, 1001, 4005, 'PLACED',    220.00, 'UPI',  '10:30 AM', NULL,                      '2026-09-11 22:30:00'),
-(5029, 2012, 1001, 4005, 'PLACED',    500.00, 'CARD', '10:00 AM', NULL,                      '2026-09-11 23:00:00'),
-(5030, 2013, 1001, 4005, 'PLACED',    280.00, 'UPI',  '11:30 AM', NULL,                      '2026-09-11 23:30:00'),
--- === DROP 4007 (Maa Ki Rasoi — Dal Makhani COMPLETED) ===
-(5031, 2015, 1002, 4007, 'COMPLETED', 280.00, 'UPI',  '12:00 PM', NULL,                      '2026-08-18 12:30:00'),
-(5032, 2016, 1002, 4007, 'COMPLETED', 200.00, 'CASH', '12:30 PM', NULL,                      '2026-08-17 19:30:00'),
-(5033, 2017, 1002, 4007, 'COMPLETED', 240.00, 'UPI',  '1:00 PM',  NULL,                      '2026-08-17 20:00:00'),
-(5034, 2018, 1002, 4007, 'COMPLETED', 150.00, 'CASH', '12:00 PM', NULL,                      '2026-08-17 20:30:00'),
-(5035, 2019, 1002, 4007, 'COMPLETED', 280.00, 'UPI',  '12:30 PM', NULL,                      '2026-08-17 21:00:00'),
-(5036, 2020, 1002, 4007, 'COMPLETED', 240.00, 'CARD', '1:00 PM',  NULL,                      '2026-08-17 21:30:00'),
--- === DROP 4008 (Khichdi Drop COMPLETED) ===
-(5037, 2021, 1002, 4008, 'COMPLETED', 260.00, 'UPI',  '12:00 PM', NULL,                      '2026-08-25 12:30:00'),
-(5038, 2022, 1002, 4008, 'COMPLETED', 200.00, 'CASH', '12:30 PM', NULL,                      '2026-08-24 19:30:00'),
-(5039, 2023, 1002, 4008, 'COMPLETED', 130.00, 'UPI',  '1:00 PM',  NULL,                      '2026-08-24 20:00:00'),
-(5040, 2024, 1002, 4008, 'COMPLETED', 260.00, 'UPI',  '12:00 PM', NULL,                      '2026-08-24 20:30:00'),
-(5041, 2025, 1002, 4008, 'COMPLETED', 200.00, 'CASH', '12:30 PM', NULL,                      '2026-08-24 21:00:00'),
--- === DROP 4009 (Paneer & Chole — OPEN) ===
-(5042, 2015, 1002, 4009, 'PLACED',    280.00, 'UPI',  '12:00 PM', NULL,                      '2026-09-13 19:30:00'),
-(5043, 2018, 1002, 4009, 'PLACED',    420.00, 'CASH', '12:30 PM', NULL,                      '2026-09-13 20:00:00'),
-(5044, 2020, 1002, 4009, 'PLACED',    230.00, 'UPI',  '1:00 PM',  NULL,                      '2026-09-13 20:30:00'),
--- === DROP 4012 (Sunday Biryani — Eid COMPLETED) ===
-(5045, 2038, 1004, 4012, 'COMPLETED', 700.00, 'UPI',  '1:00 PM',  NULL,                      '2026-07-06 13:30:00'),
-(5046, 2039, 1004, 4012, 'COMPLETED', 610.00, 'CASH', '1:30 PM',  NULL,                      '2026-07-05 18:30:00'),
-(5047, 2040, 1004, 4012, 'COMPLETED', 410.00, 'UPI',  '2:00 PM',  NULL,                      '2026-07-05 19:00:00'),
-(5048, 2041, 1004, 4012, 'COMPLETED', 350.00, 'CARD', '1:00 PM',  NULL,                      '2026-07-05 19:30:00'),
-(5049, 2042, 1004, 4012, 'COMPLETED', 700.00, 'UPI',  '1:30 PM',  'Mutton only.',             '2026-07-05 20:00:00'),
-(5050, 2043, 1004, 4012, 'COMPLETED', 410.00, 'CASH', '2:00 PM',  NULL,                      '2026-07-05 20:30:00'),
-(5051, 2044, 1004, 4012, 'COMPLETED', 610.00, 'UPI',  '1:00 PM',  NULL,                      '2026-07-05 21:00:00'),
-(5052, 2045, 1004, 4012, 'CANCELLED', 350.00, 'UPI',  '1:30 PM',  NULL,                      '2026-07-05 21:30:00'),
--- === DROP 4013 (Chicken Biryani Sunday — COMPLETED) ===
-(5053, 2001, 1004, 4013, 'COMPLETED', 710.00, 'UPI',  '1:00 PM',  NULL,                      '2026-07-20 13:30:00'),
-(5054, 2002, 1004, 4013, 'COMPLETED', 530.00, 'CASH', '1:30 PM',  NULL,                      '2026-07-19 18:30:00'),
-(5055, 2003, 1004, 4013, 'COMPLETED', 280.00, 'UPI',  '2:00 PM',  NULL,                      '2026-07-19 19:00:00'),
-(5056, 2004, 1004, 4013, 'COMPLETED', 450.00, 'CARD', '1:00 PM',  NULL,                      '2026-07-19 19:30:00'),
-(5057, 2005, 1004, 4013, 'COMPLETED', 710.00, 'UPI',  '1:30 PM',  NULL,                      '2026-07-19 20:00:00'),
-(5058, 2046, 1004, 4013, 'COMPLETED', 530.00, 'CASH', '2:00 PM',  NULL,                      '2026-07-19 20:30:00'),
-(5059, 2047, 1004, 4013, 'COMPLETED', 280.00, 'UPI',  '1:00 PM',  NULL,                      '2026-07-19 21:00:00'),
-(5060, 2048, 1004, 4013, 'COMPLETED', 450.00, 'CARD', '1:30 PM',  NULL,                      '2026-07-19 21:30:00'),
-(5061, 2049, 1004, 4013, 'COMPLETED', 280.00, 'UPI',  '2:00 PM',  NULL,                      '2026-07-19 22:00:00'),
-(5062, 2050, 1004, 4013, 'COMPLETED', 530.00, 'CASH', '1:00 PM',  NULL,                      '2026-07-19 22:30:00'),
--- === DROP 4014 (Veg Biryani Sunday — COMPLETED) ===
-(5063, 2038, 1004, 4014, 'COMPLETED', 320.00, 'UPI',  '1:00 PM',  NULL,                      '2026-08-03 13:30:00'),
-(5064, 2039, 1004, 4014, 'COMPLETED', 320.00, 'UPI',  '1:30 PM',  NULL,                      '2026-08-02 18:30:00'),
-(5065, 2040, 1004, 4014, 'COMPLETED', 220.00, 'CASH', '2:00 PM',  NULL,                      '2026-08-02 19:00:00'),
-(5066, 2041, 1004, 4014, 'COMPLETED', 220.00, 'CASH', '1:00 PM',  NULL,                      '2026-08-02 19:30:00'),
-(5067, 2042, 1004, 4014, 'COMPLETED', 320.00, 'UPI',  '1:30 PM',  NULL,                      '2026-08-02 20:00:00'),
-(5068, 2043, 1004, 4014, 'CANCELLED', 220.00, 'UPI',  '2:00 PM',  NULL,                      '2026-08-02 20:30:00'),
--- === DROP 4015 (This Sunday — Biryani — OPEN) ===
-(5069, 2001, 1004, 4015, 'PLACED',    630.00, 'UPI',  '1:00 PM',  NULL,                      '2026-09-13 18:30:00'),
-(5070, 2002, 1004, 4015, 'PLACED',    350.00, 'CASH', '1:30 PM',  NULL,                      '2026-09-13 19:00:00'),
-(5071, 2003, 1004, 4015, 'PLACED',    630.00, 'UPI',  '2:00 PM',  NULL,                      '2026-09-13 19:30:00'),
-(5072, 2004, 1004, 4015, 'PLACED',    410.00, 'CARD', '1:00 PM',  NULL,                      '2026-09-13 20:00:00'),
-(5073, 2047, 1004, 4015, 'PLACED',    280.00, 'UPI',  '1:30 PM',  NULL,                      '2026-09-13 20:30:00'),
-(5074, 2048, 1004, 4015, 'PLACED',    350.00, 'CASH', '2:00 PM',  NULL,                      '2026-09-13 21:00:00'),
--- === DROP 4017 (Vada Pav & Pav Bhaji — COMPLETED) ===
-(5075, 2001, 1005, 4017, 'COMPLETED', 180.00, 'CASH', '5:30 PM',  NULL,                      '2026-08-28 17:45:00'),
-(5076, 2025, 1005, 4017, 'COMPLETED', 120.00, 'UPI',  '6:00 PM',  NULL,                      '2026-08-27 18:30:00'),
-(5077, 2038, 1005, 4017, 'COMPLETED', 60.00,  'CASH', '7:00 PM',  NULL,                      '2026-08-27 19:00:00'),
-(5078, 2046, 1005, 4017, 'COMPLETED', 180.00, 'UPI',  '6:30 PM',  NULL,                      '2026-08-27 19:30:00'),
--- === DROP 4018 (Evening Chaat Drop — OPEN) ===
-(5079, 2001, 1005, 4018, 'PLACED',    230.00, 'CASH', '5:30 PM',  NULL,                      '2026-09-12 15:30:00'),
-(5080, 2030, 1005, 4018, 'PLACED',    190.00, 'UPI',  '6:00 PM',  NULL,                      '2026-09-12 16:00:00'),
-(5081, 2038, 1005, 4018, 'PLACED',    150.00, 'CASH', '6:30 PM',  NULL,                      '2026-09-12 16:30:00'),
--- === DROP 4019 (Keto Monday — COMPLETED) ===
-(5082, 2001, 1006, 4019, 'COMPLETED', 400.00, 'UPI',  '8:30 AM',  NULL,                      '2026-08-25 08:45:00'),
-(5083, 2002, 1006, 4019, 'COMPLETED', 400.00, 'UPI',  '9:00 AM',  NULL,                      '2026-08-24 20:30:00'),
-(5084, 2006, 1006, 4019, 'COMPLETED', 250.00, 'CASH', '8:30 AM',  'No nuts please.',         '2026-08-24 21:00:00'),
-(5085, 2011, 1006, 4019, 'COMPLETED', 400.00, 'CARD', '9:00 AM',  NULL,                      '2026-08-24 21:30:00'),
-(5086, 2014, 1006, 4019, 'COMPLETED', 400.00, 'UPI',  '9:30 AM',  NULL,                      '2026-08-24 22:00:00'),
--- === DROP 4020 (Keto Breakfast Batch — COMPLETED) ===
-(5087, 2015, 1006, 4020, 'COMPLETED', 400.00, 'UPI',  '8:30 AM',  NULL,                      '2026-09-01 08:45:00'),
-(5088, 2016, 1006, 4020, 'COMPLETED', 480.00, 'CASH', '9:00 AM',  NULL,                      '2026-08-31 20:30:00'),
-(5089, 2017, 1006, 4020, 'COMPLETED', 200.00, 'UPI',  '8:30 AM',  NULL,                      '2026-08-31 21:00:00'),
-(5090, 2018, 1006, 4020, 'COMPLETED', 400.00, 'CARD', '9:30 AM',  NULL,                      '2026-08-31 21:30:00'),
--- === DROP 4021 (Keto Lunch Box — OPEN) ===
-(5091, 2001, 1006, 4021, 'PLACED',    450.00, 'UPI',  '12:00 PM', NULL,                      '2026-09-11 20:30:00'),
-(5092, 2002, 1006, 4021, 'PLACED',    450.00, 'CASH', '12:30 PM', NULL,                      '2026-09-11 21:00:00'),
--- === DROP 4023 (Dosa & Idli Morning — COMPLETED) ===
-(5093, 2001, 1007, 4023, 'COMPLETED', 220.00, 'CASH', '8:30 AM',  NULL,                      '2026-08-24 08:45:00'),
-(5094, 2003, 1007, 4023, 'COMPLETED', 200.00, 'UPI',  '9:00 AM',  NULL,                      '2026-08-23 20:30:00'),
-(5095, 2007, 1007, 4023, 'COMPLETED', 120.00, 'CASH', '8:30 AM',  NULL,                      '2026-08-23 21:00:00'),
-(5096, 2019, 1007, 4023, 'COMPLETED', 200.00, 'UPI',  '9:00 AM',  NULL,                      '2026-08-23 21:30:00'),
-(5097, 2020, 1007, 4023, 'COMPLETED', 220.00, 'CARD', '9:30 AM',  NULL,                      '2026-08-23 22:00:00'),
-(5098, 2021, 1007, 4023, 'COMPLETED', 120.00, 'CASH', '8:30 AM',  NULL,                      '2026-08-23 22:30:00'),
--- === DROP 4024 (Vada & Upma — COMPLETED) ===
-(5099, 2003, 1007, 4024, 'COMPLETED', 180.00, 'UPI',  '8:30 AM',  NULL,                      '2026-09-01 08:45:00'),
-(5100, 2007, 1007, 4024, 'COMPLETED', 100.00, 'CASH', '9:00 AM',  NULL,                      '2026-08-31 20:30:00'),
-(5101, 2019, 1007, 4024, 'COMPLETED', 160.00, 'UPI',  '8:30 AM',  NULL,                      '2026-08-31 21:00:00'),
-(5102, 2022, 1007, 4024, 'COMPLETED', 180.00, 'CARD', '9:30 AM',  NULL,                      '2026-08-31 21:30:00'),
-(5103, 2025, 1007, 4024, 'COMPLETED', 100.00, 'CASH', '9:00 AM',  NULL,                      '2026-08-31 22:00:00'),
--- === DROP 4025 (Filter Coffee & Tiffin — OPEN) ===
-(5104, 2001, 1007, 4025, 'PLACED',    250.00, 'CASH', '8:30 AM',  NULL,                      '2026-09-12 20:30:00'),
-(5105, 2021, 1007, 4025, 'PLACED',    250.00, 'UPI',  '9:00 AM',  NULL,                      '2026-09-12 21:00:00'),
--- === DROP 4026 (Bengali Sweets — Misti Special COMPLETED) ===
-(5106, 2001, 1008, 4026, 'COMPLETED', 420.00, 'UPI',  '11:30 AM', NULL,                      '2026-08-10 11:45:00'),
-(5107, 2003, 1008, 4026, 'COMPLETED', 240.00, 'CASH', '12:00 PM', NULL,                      '2026-08-09 18:30:00'),
-(5108, 2005, 1008, 4026, 'COMPLETED', 100.00, 'UPI',  '11:30 AM', NULL,                      '2026-08-09 19:00:00'),
-(5109, 2007, 1008, 4026, 'COMPLETED', 380.00, 'CASH', '12:00 PM', NULL,                      '2026-08-09 19:30:00'),
-(5110, 2009, 1008, 4026, 'COMPLETED', 240.00, 'CARD', '12:30 PM', NULL,                      '2026-08-09 20:00:00'),
-(5111, 2011, 1008, 4026, 'COMPLETED', 380.00, 'UPI',  '11:30 AM', NULL,                      '2026-08-09 20:30:00'),
-(5112, 2013, 1008, 4026, 'COMPLETED', 420.00, 'CASH', '12:00 PM', NULL,                      '2026-08-09 21:00:00'),
-(5113, 2015, 1008, 4026, 'COMPLETED', 100.00, 'UPI',  '12:30 PM', NULL,                      '2026-08-09 21:30:00'),
--- === DROP 4027 (Festival Sweets — COMPLETED) ===
-(5114, 2001, 1008, 4027, 'COMPLETED', 680.00, 'UPI',  '11:30 AM', NULL,                      '2026-08-24 11:45:00'),
-(5115, 2003, 1008, 4027, 'COMPLETED', 480.00, 'CASH', '12:00 PM', NULL,                      '2026-08-23 18:30:00'),
-(5116, 2005, 1008, 4027, 'COMPLETED', 550.00, 'UPI',  '11:30 AM', NULL,                      '2026-08-23 19:00:00'),
-(5117, 2007, 1008, 4027, 'COMPLETED', 350.00, 'CASH', '12:00 PM', NULL,                      '2026-08-23 19:30:00'),
-(5118, 2009, 1008, 4027, 'COMPLETED', 680.00, 'CARD', '12:30 PM', 'Gift box please.',         '2026-08-23 20:00:00'),
-(5119, 2013, 1008, 4027, 'COMPLETED', 480.00, 'UPI',  '11:30 AM', NULL,                      '2026-08-23 20:30:00'),
-(5120, 2017, 1008, 4027, 'COMPLETED', 480.00, 'CASH', '12:00 PM', NULL,                      '2026-08-23 21:00:00'),
-(5121, 2019, 1008, 4027, 'COMPLETED', 350.00, 'UPI',  '12:30 PM', NULL,                      '2026-08-23 21:30:00'),
-(5122, 2021, 1008, 4027, 'COMPLETED', 550.00, 'CASH', '11:30 AM', NULL,                      '2026-08-23 22:00:00'),
-(5123, 2023, 1008, 4027, 'COMPLETED', 350.00, 'UPI',  '12:00 PM', NULL,                      '2026-08-23 22:30:00'),
--- === DROP 4028 (Autumn Misti — COMPLETED) ===
-(5124, 2001, 1008, 4028, 'COMPLETED', 490.00, 'UPI',  '11:30 AM', NULL,                      '2026-09-01 11:45:00'),
-(5125, 2003, 1008, 4028, 'COMPLETED', 340.00, 'CASH', '12:00 PM', NULL,                      '2026-08-31 18:30:00'),
-(5126, 2005, 1008, 4028, 'COMPLETED', 490.00, 'UPI',  '11:30 AM', NULL,                      '2026-08-31 19:00:00'),
-(5127, 2007, 1008, 4028, 'COMPLETED', 340.00, 'CASH', '12:00 PM', NULL,                      '2026-08-31 19:30:00'),
-(5128, 2009, 1008, 4028, 'COMPLETED', 490.00, 'CARD', '12:30 PM', NULL,                      '2026-08-31 20:00:00'),
-(5129, 2011, 1008, 4028, 'COMPLETED', 340.00, 'UPI',  '11:30 AM', NULL,                      '2026-08-31 20:30:00'),
-(5130, 2013, 1008, 4028, 'CANCELLED', 490.00, 'UPI',  '12:00 PM', NULL,                      '2026-08-31 21:00:00'),
--- === DROP 4029 (Malai Chop & Sondesh — READY) ===
-(5131, 2001, 1008, 4029, 'READY',     400.00, 'UPI',  '11:30 AM', NULL,                      '2026-09-09 18:30:00'),
-(5132, 2003, 1008, 4029, 'READY',     360.00, 'CASH', '12:00 PM', NULL,                      '2026-09-09 19:00:00'),
-(5133, 2005, 1008, 4029, 'PREPARING', 400.00, 'UPI',  '11:30 AM', NULL,                      '2026-09-09 19:30:00'),
-(5134, 2007, 1008, 4029, 'PREPARING', 360.00, 'CASH', '12:00 PM', NULL,                      '2026-09-09 20:00:00'),
-(5135, 2009, 1008, 4029, 'PLACED',    400.00, 'CARD', '12:30 PM', NULL,                      '2026-09-09 20:30:00'),
-(5136, 2011, 1008, 4029, 'PLACED',    400.00, 'UPI',  '11:30 AM', NULL,                      '2026-09-09 21:00:00'),
-(5137, 2013, 1008, 4029, 'PLACED',    360.00, 'CASH', '12:00 PM', NULL,                      '2026-09-09 21:30:00'),
-(5138, 2015, 1008, 4029, 'PLACED',    400.00, 'UPI',  '12:30 PM', NULL,                      '2026-09-09 22:00:00'),
--- === DROP 4031 (Detox Monday — COMPLETED) ===
-(5139, 2002, 1009, 4031, 'COMPLETED', 530.00, 'UPI',  '12:00 PM', NULL,                      '2026-09-01 12:15:00'),
-(5140, 2004, 1009, 4031, 'COMPLETED', 530.00, 'UPI',  '12:30 PM', NULL,                      '2026-08-31 20:30:00'),
-(5141, 2006, 1009, 4031, 'COMPLETED', 250.00, 'CASH', '1:00 PM',  NULL,                      '2026-08-31 21:00:00'),
-(5142, 2008, 1009, 4031, 'COMPLETED', 280.00, 'UPI',  '12:00 PM', NULL,                      '2026-08-31 21:30:00'),
-(5143, 2010, 1009, 4031, 'COMPLETED', 530.00, 'CARD', '12:30 PM', NULL,                      '2026-08-31 22:00:00'),
--- === DROP 4032 (Power Bowls — OPEN) ===
-(5144, 2002, 1009, 4032, 'PLACED',    570.00, 'UPI',  '12:00 PM', NULL,                      '2026-09-12 20:30:00'),
-(5145, 2012, 1009, 4032, 'PLACED',    320.00, 'CASH', '12:30 PM', NULL,                      '2026-09-12 21:00:00'),
--- === DROP 4033 (Pasta Carbonara — COMPLETED) ===
-(5146, 2010, 1010, 4033, 'COMPLETED', 500.00, 'UPI',  '7:30 PM',  NULL,                      '2026-08-27 19:45:00'),
-(5147, 2012, 1010, 4033, 'COMPLETED', 500.00, 'UPI',  '8:00 PM',  NULL,                      '2026-08-26 20:30:00'),
-(5148, 2014, 1010, 4033, 'COMPLETED', 350.00, 'CASH', '7:30 PM',  NULL,                      '2026-08-26 21:00:00'),
-(5149, 2016, 1010, 4033, 'COMPLETED', 350.00, 'CARD', '8:00 PM',  NULL,                      '2026-08-26 21:30:00'),
-(5150, 2018, 1010, 4033, 'COMPLETED', 500.00, 'UPI',  '8:30 PM',  NULL,                      '2026-08-26 22:00:00'),
--- === DROP 4034 (Penne Night — COMPLETED) ===
-(5151, 2010, 1010, 4034, 'COMPLETED', 380.00, 'UPI',  '7:30 PM',  NULL,                      '2026-09-03 19:45:00'),
-(5152, 2012, 1010, 4034, 'COMPLETED', 280.00, 'CASH', '8:00 PM',  NULL,                      '2026-09-02 20:30:00'),
-(5153, 2014, 1010, 4034, 'COMPLETED', 380.00, 'UPI',  '7:30 PM',  NULL,                      '2026-09-02 21:00:00'),
-(5154, 2016, 1010, 4034, 'COMPLETED', 280.00, 'CARD', '8:30 PM',  NULL,                      '2026-09-02 21:30:00'),
--- === DROP 4035 (Friday Italian Night — OPEN) ===
-(5155, 2010, 1010, 4035, 'PLACED',    520.00, 'UPI',  '7:00 PM',  NULL,                      '2026-09-11 20:30:00'),
-(5156, 2018, 1010, 4035, 'PLACED',    520.00, 'CASH', '7:30 PM',  NULL,                      '2026-09-11 21:00:00'),
--- === DROP 4036 (Gujarati Thali — COMPLETED) ===
-(5157, 2025, 1011, 4036, 'COMPLETED', 290.00, 'CASH', '12:00 PM', NULL,                      '2026-09-01 12:15:00'),
-(5158, 2030, 1011, 4036, 'COMPLETED', 200.00, 'UPI',  '12:30 PM', NULL,                      '2026-08-31 18:30:00'),
-(5159, 2035, 1011, 4036, 'COMPLETED', 200.00, 'CASH', '1:00 PM',  NULL,                      '2026-08-31 19:00:00'),
-(5160, 2040, 1011, 4036, 'COMPLETED', 290.00, 'UPI',  '12:00 PM', NULL,                      '2026-08-31 19:30:00'),
--- === DROP 4038 (Weekend Momo Batch — COMPLETED) ===
-(5161, 2040, 1012, 4038, 'COMPLETED', 300.00, 'UPI',  '6:30 PM',  NULL,                      '2026-09-07 18:45:00'),
-(5162, 2041, 1012, 4038, 'COMPLETED', 300.00, 'CASH', '7:00 PM',  NULL,                      '2026-09-06 18:30:00'),
-(5163, 2042, 1012, 4038, 'COMPLETED', 180.00, 'UPI',  '6:30 PM',  NULL,                      '2026-09-06 19:00:00'),
--- === DROP 4039 (Fried Momo Drop — OPEN) ===
-(5164, 2040, 1012, 4039, 'PLACED',    290.00, 'UPI',  '6:30 PM',  NULL,                      '2026-09-13 18:30:00'),
-(5165, 2043, 1012, 4039, 'PLACED',    270.00, 'CASH', '7:00 PM',  NULL,                      '2026-09-13 19:00:00'),
--- === DROP 4040 (Goan Heritage Sweets — COMPLETED) ===
-(5166, 2015, 1013, 4040, 'COMPLETED', 350.00, 'UPI',  '10:30 AM', NULL,                      '2026-08-31 10:45:00'),
-(5167, 2025, 1013, 4040, 'COMPLETED', 300.00, 'CASH', '11:00 AM', NULL,                      '2026-08-30 18:30:00'),
-(5168, 2035, 1013, 4040, 'COMPLETED', 200.00, 'UPI',  '10:30 AM', NULL,                      '2026-08-30 19:00:00'),
-(5169, 2045, 1013, 4040, 'COMPLETED', 350.00, 'CARD', '11:00 AM', NULL,                      '2026-08-30 19:30:00'),
--- === DROP 4041 (Pão & Banana Cake — COMPLETED) ===
-(5170, 2013, 1013, 4041, 'COMPLETED', 240.00, 'CASH', '9:30 AM',  NULL,                      '2026-09-06 09:45:00'),
-(5171, 2025, 1013, 4041, 'COMPLETED', 180.00, 'UPI',  '10:00 AM', NULL,                      '2026-09-05 18:30:00'),
-(5172, 2035, 1013, 4041, 'COMPLETED', 240.00, 'CASH', '10:30 AM', NULL,                      '2026-09-05 19:00:00'),
--- === DROP 4042 (Pastry Weekend — OPEN) ===
-(5173, 2015, 1013, 4042, 'PLACED',    560.00, 'UPI',  '10:00 AM', NULL,                      '2026-09-13 18:30:00'),
-(5174, 2035, 1013, 4042, 'PLACED',    340.00, 'CASH', '10:30 AM', NULL,                      '2026-09-13 19:00:00'),
--- === DROP 4043 (Onam Special — COMPLETED) ===
-(5175, 2002, 1014, 4043, 'COMPLETED', 480.00, 'UPI',  '11:30 AM', NULL,                      '2026-08-17 11:45:00'),
-(5176, 2004, 1014, 4043, 'COMPLETED', 280.00, 'CASH', '12:00 PM', NULL,                      '2026-08-16 18:30:00'),
-(5177, 2006, 1014, 4043, 'COMPLETED', 480.00, 'UPI',  '11:30 AM', NULL,                      '2026-08-16 19:00:00'),
-(5178, 2008, 1014, 4043, 'COMPLETED', 350.00, 'CARD', '12:00 PM', NULL,                      '2026-08-16 19:30:00'),
-(5179, 2010, 1014, 4043, 'COMPLETED', 200.00, 'CASH', '12:30 PM', NULL,                      '2026-08-16 20:00:00'),
-(5180, 2012, 1014, 4043, 'COMPLETED', 480.00, 'UPI',  '11:30 AM', NULL,                      '2026-08-16 20:30:00'),
-(5181, 2014, 1014, 4043, 'COMPLETED', 350.00, 'CASH', '12:00 PM', NULL,                      '2026-08-16 21:00:00'),
-(5182, 2016, 1014, 4043, 'COMPLETED', 480.00, 'UPI',  '12:30 PM', NULL,                      '2026-08-16 21:30:00'),
--- === DROP 4044 (Kerala Breakfast Box — COMPLETED) ===
-(5183, 2002, 1014, 4044, 'COMPLETED', 430.00, 'UPI',  '8:30 AM',  NULL,                      '2026-08-31 08:45:00'),
-(5184, 2004, 1014, 4044, 'COMPLETED', 150.00, 'CASH', '9:00 AM',  NULL,                      '2026-08-30 18:30:00'),
-(5185, 2006, 1014, 4044, 'COMPLETED', 280.00, 'UPI',  '8:30 AM',  NULL,                      '2026-08-30 19:00:00'),
-(5186, 2008, 1014, 4044, 'COMPLETED', 430.00, 'CARD', '9:00 AM',  NULL,                      '2026-08-30 19:30:00'),
-(5187, 2010, 1014, 4044, 'COMPLETED', 150.00, 'CASH', '9:30 AM',  NULL,                      '2026-08-30 20:00:00'),
-(5188, 2012, 1014, 4044, 'COMPLETED', 430.00, 'UPI',  '8:30 AM',  NULL,                      '2026-08-30 20:30:00'),
--- === DROP 4045 (Sadya & Kozhikodan Biryani — COMPLETED) ===
-(5189, 2002, 1014, 4045, 'COMPLETED', 550.00, 'UPI',  '12:00 PM', NULL,                      '2026-09-07 12:15:00'),
-(5190, 2004, 1014, 4045, 'COMPLETED', 250.00, 'CASH', '12:30 PM', NULL,                      '2026-09-06 18:30:00'),
-(5191, 2006, 1014, 4045, 'COMPLETED', 300.00, 'UPI',  '1:00 PM',  NULL,                      '2026-09-06 19:00:00'),
-(5192, 2008, 1014, 4045, 'COMPLETED', 550.00, 'CARD', '12:00 PM', NULL,                      '2026-09-06 19:30:00'),
-(5193, 2014, 1014, 4045, 'COMPLETED', 300.00, 'CASH', '12:30 PM', NULL,                      '2026-09-06 20:00:00'),
--- === DROP 4046 (Prawn Curry & Karimeen — READY) ===
-(5194, 2002, 1014, 4046, 'READY',     670.00, 'UPI',  '12:00 PM', NULL,                      '2026-09-09 18:30:00'),
-(5195, 2004, 1014, 4046, 'READY',     320.00, 'CASH', '12:30 PM', NULL,                      '2026-09-09 19:00:00'),
-(5196, 2006, 1014, 4046, 'PREPARING', 670.00, 'UPI',  '1:00 PM',  NULL,                      '2026-09-09 19:30:00'),
-(5197, 2008, 1014, 4046, 'PREPARING', 350.00, 'CARD', '12:00 PM', NULL,                      '2026-09-09 20:00:00'),
-(5198, 2010, 1014, 4046, 'PLACED',    320.00, 'CASH', '12:30 PM', NULL,                      '2026-09-09 20:30:00'),
-(5199, 2012, 1014, 4046, 'PLACED',    670.00, 'UPI',  '1:00 PM',  NULL,                      '2026-09-09 21:00:00'),
--- === DROP 4047 (Appam & Parotta Weekend — OPEN) ===
-(5200, 2002, 1014, 4047, 'PLACED',    420.00, 'UPI',  '12:00 PM', NULL,                      '2026-09-13 18:30:00'),
-(5201, 2016, 1014, 4047, 'PLACED',    220.00, 'CASH', '12:30 PM', NULL,                      '2026-09-13 19:00:00'),
-(5202, 2024, 1014, 4047, 'PLACED',    640.00, 'UPI',  '1:00 PM',  NULL,                      '2026-09-13 19:30:00'),
--- === DROP 4048 (Millet Tiffin — COMPLETED) ===
-(5203, 2030, 1015, 4048, 'COMPLETED', 190.00, 'CASH', '9:30 AM',  NULL,                      '2026-09-07 09:45:00'),
-(5204, 2040, 1015, 4048, 'COMPLETED', 110.00, 'UPI',  '10:00 AM', NULL,                      '2026-09-06 18:30:00'),
-(5205, 2045, 1015, 4048, 'COMPLETED', 190.00, 'CASH', '9:30 AM',  NULL,                      '2026-09-06 19:00:00');
-
--- ============================================================
--- SECTION 10: ORDER ITEMS  [6001–6380]
--- (order_id, item_id, quantity, unit_price)
--- ============================================================
-INSERT INTO order_items (order_item_id, order_id, item_id, quantity, unit_price) VALUES
--- Drop 4001 orders
-(6001,5001,3001,2,280.00),(6002,5001,3005,1,140.00),
-(6003,5002,3001,1,280.00),
-(6004,5003,3001,1,280.00),(6005,5003,3005,2,140.00),
-(6006,5004,3001,1,280.00),(6007,5004,3005,1,140.00),
-(6008,5005,3001,1,280.00),
--- Drop 4002 orders
-(6009,5007,3002,2,160.00),(6010,5007,3012,2,80.00),
-(6011,5008,3002,1,160.00),(6012,5008,3012,1,80.00),(6013,5008,3001,1,75.00),
-(6014,5009,3002,3,160.00),
-(6015,5010,3002,1,150.00),
-(6016,5011,3012,2,80.00),(6017,5011,3002,1,160.00),
-(6018,5012,3002,1,150.00),
--- Drop 4003 orders
-(6019,5013,3003,2,120.00),(6020,5013,3006,2,120.00),
-(6021,5014,3006,3,120.00),
-(6022,5015,3003,2,120.00),
-(6023,5017,3008,3,120.00),
--- Drop 4004 orders (READY)
-(6024,5018,3007,1,600.00),
-(6025,5019,3004,1,150.00),(6026,5019,3007,1,600.00),
-(6027,5020,3004,2,150.00),(6028,5020,3007,1,100.00),
-(6029,5021,3007,1,400.00),(6030,5021,3004,1,150.00),
-(6031,5022,3004,2,150.00),
-(6032,5023,3007,1,600.00),(6033,5023,3004,1,200.00),
-(6034,5024,3004,2,200.00),
-(6035,5025,3007,1,300.00),
--- Drop 4005 orders (OPEN/PLACED)
-(6036,5026,3009,1,280.00),(6037,5026,3001,1,220.00),
-(6038,5027,3009,2,220.00),
-(6039,5028,3001,1,220.00),
-(6040,5029,3009,1,280.00),(6041,5029,3001,1,220.00),
-(6042,5030,3001,1,280.00),
--- Drop 4007 orders (Dal Makhani)
-(6043,5031,3013,1,180.00),(6044,5031,3014,1,100.00),
-(6045,5032,3013,1,200.00),
-(6046,5033,3014,2,100.00),(6047,5033,3013,1,40.00),
-(6048,5034,3014,1,150.00),
-(6049,5035,3013,1,180.00),(6050,5035,3014,1,100.00),
-(6051,5036,3014,2,100.00),(6052,5036,3013,1,40.00),
--- Drop 4008 orders
-(6053,5037,3015,1,130.00),(6054,5037,3018,1,130.00),
-(6055,5038,3015,1,200.00),
-(6056,5039,3018,1,130.00),
-(6057,5040,3015,1,130.00),(6058,5040,3018,1,130.00),
-(6059,5041,3015,1,200.00),
--- Drop 4009 orders (OPEN)
-(6060,5042,3016,1,280.00),
-(6061,5043,3020,1,220.00),(6062,5043,3022,1,200.00),
-(6063,5044,3016,1,180.00),(6064,5044,3022,1,50.00),
--- Drop 4012 orders (Eid Biryani)
-(6065,5045,3035,1,450.00),(6066,5045,3041,1,250.00),
-(6067,5046,3036,1,350.00),(6068,5046,3043,2,130.00),
-(6069,5047,3037,1,280.00),(6070,5047,3043,1,130.00),
-(6071,5048,3035,1,350.00),
-(6072,5049,3035,1,450.00),(6073,5049,3041,1,250.00),
-(6074,5050,3037,1,280.00),(6075,5050,3043,1,130.00),
-(6076,5051,3036,1,350.00),(6077,5051,3041,1,260.00),
--- Drop 4013 orders (Chicken Biryani Sunday)
-(6078,5053,3036,1,350.00),(6079,5053,3038,1,280.00),(6080,5053,3039,1,80.00),
-(6081,5054,3036,1,350.00),(6082,5054,3039,2,90.00),
-(6083,5055,3036,1,280.00),
-(6084,5056,3038,1,280.00),(6085,5056,3039,2,85.00),
-(6086,5057,3036,1,350.00),(6087,5057,3038,1,280.00),(6088,5057,3039,1,80.00),
-(6089,5058,3036,1,350.00),(6090,5058,3039,2,90.00),
-(6091,5059,3036,1,280.00),
-(6092,5060,3038,1,280.00),(6093,5060,3039,2,85.00),
-(6094,5061,3036,1,280.00),
-(6095,5062,3036,1,350.00),(6096,5062,3039,2,90.00),
--- Drop 4014 orders (Veg Biryani)
-(6097,5063,3037,1,320.00),
-(6098,5064,3037,1,320.00),
-(6099,5065,3042,1,220.00),
-(6100,5066,3042,1,220.00),
-(6101,5067,3037,1,320.00),
--- Drop 4015 orders (OPEN)
-(6102,5069,3035,1,450.00),(6103,5069,3043,1,180.00),
-(6104,5070,3043,2,175.00),
-(6105,5071,3035,1,450.00),(6106,5071,3043,1,180.00),
-(6107,5072,3036,1,350.00),(6108,5072,3043,1,60.00),
-(6109,5073,3036,1,280.00),
-(6110,5074,3043,2,175.00),
--- Drop 4017 orders (Vada Pav)
-(6111,5075,3047,2,60.00),(6112,5075,3048,1,60.00),
-(6113,5076,3047,2,60.00),
-(6114,5077,3047,1,60.00),
-(6115,5078,3047,2,60.00),(6116,5078,3048,1,60.00),
--- Drop 4018 orders (OPEN)
-(6117,5079,3047,2,60.00),(6118,5079,3049,1,110.00),
-(6119,5080,3048,1,120.00),(6120,5080,3050,1,70.00),
-(6121,5081,3047,1,60.00),(6122,5081,3050,2,45.00),
--- Drop 4019 orders (Keto Monday)
-(6123,5082,3057,1,250.00),(6124,5082,3058,1,150.00),
-(6125,5083,3057,1,250.00),(6126,5083,3058,1,150.00),
-(6127,5084,3057,1,250.00),
-(6128,5085,3057,1,250.00),(6129,5085,3058,1,150.00),
-(6130,5086,3057,1,250.00),(6131,5086,3058,1,150.00),
--- Drop 4020 orders (Keto Breakfast)
-(6132,5087,3059,2,200.00),
-(6133,5088,3060,2,240.00),
-(6134,5089,3059,1,200.00),
-(6135,5090,3059,2,200.00),
--- Drop 4021 orders (OPEN)
-(6136,5091,3061,1,280.00),(6137,5091,3064,1,170.00),
-(6138,5092,3061,1,280.00),(6139,5092,3064,1,170.00),
--- Drop 4023 orders (Dosa & Idli)
-(6140,5093,3069,1,120.00),(6141,5093,3070,1,100.00),
-(6142,5094,3069,1,100.00),(6143,5094,3070,1,100.00),
-(6144,5095,3070,1,120.00),
-(6145,5096,3069,1,100.00),(6146,5096,3070,1,100.00),
-(6147,5097,3069,1,120.00),(6148,5097,3070,1,100.00),
-(6149,5098,3070,1,120.00),
--- Drop 4024 orders (Vada & Upma)
-(6150,5099,3071,2,80.00),(6151,5099,3073,1,20.00),
-(6152,5100,3073,2,50.00),
-(6153,5101,3071,1,80.00),(6154,5101,3073,1,80.00),
-(6155,5102,3071,2,80.00),(6156,5102,3073,1,20.00),
-(6157,5103,3073,2,50.00),
--- Drop 4025 orders (OPEN)
-(6158,5104,3075,1,150.00),(6159,5104,3072,1,100.00),
-(6160,5105,3074,1,160.00),(6161,5105,3072,1,90.00),
--- Drop 4026 orders (Bengali Sweets)
-(6162,5106,3081,2,120.00),(6163,5106,3082,1,180.00),
-(6164,5107,3083,2,120.00),
-(6165,5108,3081,1,100.00),
-(6166,5109,3082,1,180.00),(6167,5109,3083,1,200.00),
-(6168,5110,3081,2,120.00),
-(6169,5111,3083,1,200.00),(6170,5111,3082,1,180.00),
-(6171,5112,3082,2,180.00),(6172,5112,3081,1,60.00),
-(6173,5113,3081,1,100.00),
--- Drop 4027 orders (Festival Sweets)
-(6174,5114,3084,2,200.00),(6175,5114,3085,2,140.00),
-(6176,5115,3084,1,200.00),(6177,5115,3085,2,140.00),
-(6178,5116,3084,1,200.00),(6179,5116,3087,3,120.00),
-(6180,5117,3085,2,175.00),
-(6181,5118,3084,2,200.00),(6182,5118,3085,2,140.00),
-(6183,5119,3084,1,200.00),(6184,5119,3085,2,140.00),
-(6185,5120,3085,2,140.00),(6186,5120,3087,2,100.00),
-(6187,5121,3085,2,175.00),
-(6188,5122,3084,1,200.00),(6189,5122,3087,3,120.00),
-(6190,5123,3085,2,175.00),
--- Drop 4028 orders (Autumn Misti)
-(6191,5124,3086,2,170.00),(6192,5124,3088,1,150.00),
-(6193,5125,3088,2,170.00),
-(6194,5126,3086,2,170.00),(6195,5126,3088,1,150.00),
-(6196,5127,3088,2,170.00),
-(6197,5128,3086,2,170.00),(6198,5128,3088,1,150.00),
-(6199,5129,3088,2,170.00),
--- Drop 4029 orders (READY)
-(6200,5131,3091,2,200.00),
-(6201,5132,3092,3,120.00),
-(6202,5133,3091,2,200.00),
-(6203,5134,3092,3,120.00),
-(6204,5135,3091,2,200.00),
-(6205,5136,3091,2,200.00),
-(6206,5137,3092,3,120.00),
-(6207,5138,3091,2,200.00),
--- Drop 4031 orders (Detox Monday)
-(6208,5139,3093,1,250.00),(6209,5139,3094,1,280.00),
-(6210,5140,3093,1,250.00),(6211,5140,3094,1,280.00),
-(6212,5141,3093,1,250.00),
-(6213,5142,3094,1,280.00),
-(6214,5143,3093,1,250.00),(6215,5143,3094,1,280.00),
--- Drop 4032 orders (OPEN)
-(6216,5144,3095,1,320.00),(6217,5144,3097,1,250.00),
-(6218,5145,3097,1,320.00),
--- Drop 4033 orders (Carbonara)
-(6219,5146,3105,1,350.00),(6220,5146,3109,2,75.00),
-(6221,5147,3105,1,350.00),(6222,5147,3109,2,75.00),
-(6223,5148,3109,2,75.00),(6224,5148,3105,1,200.00),
-(6225,5149,3109,2,75.00),(6226,5149,3105,1,200.00),
-(6227,5150,3105,1,350.00),(6228,5150,3109,2,75.00),
--- Drop 4034 orders
-(6229,5151,3106,1,250.00),(6230,5151,3111,2,65.00),
-(6231,5152,3111,2,65.00),(6232,5152,3106,1,150.00),
-(6233,5153,3106,1,250.00),(6234,5153,3111,2,65.00),
-(6235,5154,3111,2,65.00),(6236,5154,3106,1,150.00),
--- Drop 4035 orders (OPEN)
-(6237,5155,3107,1,350.00),(6238,5155,3110,2,85.00),
-(6239,5156,3107,1,350.00),(6240,5156,3110,2,85.00),
--- Drop 4036 orders (Thali)
-(6241,5157,3117,1,290.00),
-(6242,5158,3118,2,100.00),
-(6243,5159,3118,2,100.00),
-(6244,5160,3117,1,290.00),
--- Drop 4038 orders (Momos)
-(6245,5161,3129,2,120.00),(6246,5161,3131,1,60.00),
-(6247,5162,3129,2,120.00),(6248,5162,3131,1,60.00),
-(6249,5163,3131,1,60.00),(6250,5163,3129,1,120.00),
--- Drop 4039 orders (OPEN)
-(6251,5164,3130,2,130.00),(6252,5164,3137,1,30.00),
-(6253,5165,3137,2,120.00),(6254,5165,3130,1,30.00),
--- Drop 4040 orders (Goan Sweets)
-(6255,5166,3139,1,250.00),(6256,5166,3140,1,100.00),
-(6257,5167,3139,1,250.00),(6258,5167,3140,1,50.00),
-(6259,5168,3140,1,200.00),
-(6260,5169,3139,1,250.00),(6261,5169,3140,1,100.00),
--- Drop 4041 orders
-(6262,5170,3142,2,80.00),(6263,5170,3145,1,80.00),
-(6264,5171,3142,1,80.00),(6265,5171,3145,1,100.00),
-(6266,5172,3142,2,80.00),(6267,5172,3145,1,80.00),
--- Drop 4042 orders (OPEN)
-(6268,5173,3141,2,180.00),(6269,5173,3148,2,100.00),
-(6270,5174,3141,1,180.00),(6271,5174,3150,2,80.00),
--- Drop 4043 orders (Onam)
-(6272,5175,3151,2,180.00),(6273,5175,3152,1,120.00),
-(6274,5176,3152,1,280.00),
-(6275,5177,3151,2,180.00),(6276,5177,3152,1,120.00),
-(6277,5178,3151,1,180.00),(6278,5178,3152,1,170.00),
-(6279,5179,3151,1,200.00),
-(6280,5180,3151,2,180.00),(6281,5180,3152,1,120.00),
-(6282,5181,3151,1,180.00),(6283,5181,3152,1,170.00),
-(6284,5182,3151,2,180.00),(6285,5182,3152,1,120.00),
--- Drop 4044 orders (Kerala Breakfast)
-(6286,5183,3154,2,200.00),(6287,5183,3156,1,30.00),
-(6288,5184,3154,1,150.00),
-(6289,5185,3156,1,120.00),(6290,5185,3154,1,160.00),
-(6291,5186,3154,2,200.00),(6292,5186,3156,1,30.00),
-(6293,5187,3154,1,150.00),
-(6294,5188,3154,2,200.00),(6295,5188,3156,1,30.00),
--- Drop 4045 orders
-(6296,5189,3157,1,250.00),(6297,5189,3158,1,300.00),
-(6298,5190,3157,1,250.00),
-(6299,5191,3158,1,300.00),
-(6300,5192,3157,1,250.00),(6301,5192,3158,1,300.00),
-(6302,5193,3158,1,300.00),
--- Drop 4046 orders (READY)
-(6303,5194,3153,1,350.00),(6304,5194,3159,1,320.00),
-(6305,5195,3153,1,320.00),
-(6306,5196,3153,1,350.00),(6307,5196,3159,1,320.00),
-(6308,5197,3159,1,350.00),
-(6309,5198,3153,1,320.00),
-(6310,5199,3153,1,350.00),(6311,5199,3159,1,320.00),
--- Drop 4047 orders (OPEN)
-(6312,5200,3151,2,180.00),(6313,5200,3155,1,60.00),
-(6314,5201,3161,1,220.00),
-(6315,5202,3151,2,180.00),(6316,5202,3155,1,280.00),
--- Drop 4048 orders (Millet)
-(6317,5203,3163,1,120.00),(6318,5203,3164,1,70.00),
-(6319,5204,3164,1,110.00),
-(6320,5205,3163,1,120.00),(6321,5205,3164,1,70.00);
-
--- ============================================================
--- SECTION 11: PAYMENTS
--- (order_id, status, method, amount, transaction_id, collected_at)
--- ============================================================
-INSERT INTO payments (payment_id, order_id, status, method, amount, transaction_id, collected_at) VALUES
--- === COMPLETED orders — all collected ===
--- Drop 4001
-(7001,5001,'COLLECTED','UPI',   700.00, 'TXN-4001-5001', '2026-08-11 10:20:00'),
-(7002,5002,'COLLECTED','CASH',  280.00, 'TXN-4001-5002', '2026-08-11 10:35:00'),
-(7003,5003,'COLLECTED','UPI',   540.00, 'TXN-4001-5003', '2026-08-11 11:05:00'),
-(7004,5004,'COLLECTED','UPI',   360.00, 'TXN-4001-5004', '2026-08-11 10:20:00'),
-(7005,5005,'COLLECTED','CARD',  280.00, 'TXN-4001-5005', '2026-08-11 11:35:00'),
-(7006,5006,'REFUNDED', 'UPI',   560.00, 'TXN-4001-5006', NULL),
--- Drop 4002
-(7007,5007,'COLLECTED','UPI',   480.00, 'TXN-4002-5007', '2026-08-18 09:50:00'),
-(7008,5008,'COLLECTED','CASH',  315.00, 'TXN-4002-5008', '2026-08-18 10:05:00'),
-(7009,5009,'COLLECTED','UPI',   480.00, 'TXN-4002-5009', '2026-08-18 10:35:00'),
-(7010,5010,'COLLECTED','CASH',  150.00, 'TXN-4002-5010', '2026-08-18 09:05:00'),
-(7011,5011,'COLLECTED','UPI',   315.00, 'TXN-4002-5011', '2026-08-18 09:35:00'),
-(7012,5012,'COLLECTED','CARD',  150.00, 'TXN-4002-5012', '2026-08-18 10:05:00'),
--- Drop 4003
-(7013,5013,'COLLECTED','UPI',   480.00, 'TXN-4003-5013', '2026-08-25 10:20:00'),
-(7014,5014,'COLLECTED','CASH',  360.00, 'TXN-4003-5014', '2026-08-25 11:05:00'),
-(7015,5015,'COLLECTED','UPI',   240.00, 'TXN-4003-5015', '2026-08-25 10:35:00'),
-(7016,5016,'REFUNDED', 'UPI',   180.00, 'TXN-4003-5016', NULL),
-(7017,5017,'COLLECTED','CARD',  360.00, 'TXN-4003-5017', '2026-08-25 11:35:00'),
--- Drop 4004 READY — pending/not collected yet
-(7018,5018,'PENDING',  'UPI',   600.00, NULL, NULL),
-(7019,5019,'PENDING',  'CASH',  700.00, NULL, NULL),
-(7020,5020,'PENDING',  'UPI',   400.00, NULL, NULL),
-(7021,5021,'PENDING',  'CARD',  550.00, NULL, NULL),
-(7022,5022,'PENDING',  'UPI',   300.00, NULL, NULL),
-(7023,5023,'PENDING',  'CARD',  800.00, NULL, NULL),
-(7024,5024,'PENDING',  'UPI',   400.00, NULL, NULL),
-(7025,5025,'PENDING',  'CASH',  300.00, NULL, NULL),
--- Drop 4005 OPEN — pending
-(7026,5026,'PENDING',  'UPI',   500.00, NULL, NULL),
-(7027,5027,'PENDING',  'CASH',  440.00, NULL, NULL),
-(7028,5028,'PENDING',  'UPI',   220.00, NULL, NULL),
-(7029,5029,'PENDING',  'CARD',  500.00, NULL, NULL),
-(7030,5030,'PENDING',  'UPI',   280.00, NULL, NULL),
--- Drop 4007
-(7031,5031,'COLLECTED','UPI',   280.00, 'TXN-4007-5031', '2026-08-18 12:35:00'),
-(7032,5032,'COLLECTED','CASH',  200.00, 'TXN-4007-5032', '2026-08-18 12:35:00'),
-(7033,5033,'COLLECTED','UPI',   240.00, 'TXN-4007-5033', '2026-08-18 13:05:00'),
-(7034,5034,'COLLECTED','CASH',  150.00, 'TXN-4007-5034', '2026-08-18 12:05:00'),
-(7035,5035,'COLLECTED','UPI',   280.00, 'TXN-4007-5035', '2026-08-18 12:35:00'),
-(7036,5036,'COLLECTED','CARD',  240.00, 'TXN-4007-5036', '2026-08-18 13:05:00'),
--- Drop 4008
-(7037,5037,'COLLECTED','UPI',   260.00, 'TXN-4008-5037', '2026-08-25 12:35:00'),
-(7038,5038,'COLLECTED','CASH',  200.00, 'TXN-4008-5038', '2026-08-25 12:35:00'),
-(7039,5039,'COLLECTED','UPI',   130.00, 'TXN-4008-5039', '2026-08-25 13:05:00'),
-(7040,5040,'COLLECTED','UPI',   260.00, 'TXN-4008-5040', '2026-08-25 12:05:00'),
-(7041,5041,'COLLECTED','CASH',  200.00, 'TXN-4008-5041', '2026-08-25 12:35:00'),
--- Drop 4009 OPEN
-(7042,5042,'PENDING',  'UPI',   280.00, NULL, NULL),
-(7043,5043,'PENDING',  'CASH',  420.00, NULL, NULL),
-(7044,5044,'PENDING',  'UPI',   230.00, NULL, NULL),
--- Drop 4012 Eid Biryani
-(7045,5045,'COLLECTED','UPI',   700.00, 'TXN-4012-5045', '2026-07-06 13:35:00'),
-(7046,5046,'COLLECTED','CASH',  610.00, 'TXN-4012-5046', '2026-07-06 13:35:00'),
-(7047,5047,'COLLECTED','UPI',   410.00, 'TXN-4012-5047', '2026-07-06 14:05:00'),
-(7048,5048,'COLLECTED','CARD',  350.00, 'TXN-4012-5048', '2026-07-06 13:05:00'),
-(7049,5049,'COLLECTED','UPI',   700.00, 'TXN-4012-5049', '2026-07-06 13:35:00'),
-(7050,5050,'COLLECTED','CASH',  410.00, 'TXN-4012-5050', '2026-07-06 14:05:00'),
-(7051,5051,'COLLECTED','UPI',   610.00, 'TXN-4012-5051', '2026-07-06 13:05:00'),
-(7052,5052,'REFUNDED', 'UPI',   350.00, 'TXN-4012-5052', NULL),
--- Drop 4013 Chicken Biryani
-(7053,5053,'COLLECTED','UPI',   710.00, 'TXN-4013-5053', '2026-07-20 13:35:00'),
-(7054,5054,'COLLECTED','CASH',  530.00, 'TXN-4013-5054', '2026-07-20 13:35:00'),
-(7055,5055,'COLLECTED','UPI',   280.00, 'TXN-4013-5055', '2026-07-20 14:05:00'),
-(7056,5056,'COLLECTED','CARD',  450.00, 'TXN-4013-5056', '2026-07-20 13:05:00'),
-(7057,5057,'COLLECTED','UPI',   710.00, 'TXN-4013-5057', '2026-07-20 13:35:00'),
-(7058,5058,'COLLECTED','CASH',  530.00, 'TXN-4013-5058', '2026-07-20 14:05:00'),
-(7059,5059,'COLLECTED','UPI',   280.00, 'TXN-4013-5059', '2026-07-20 13:05:00'),
-(7060,5060,'COLLECTED','CARD',  450.00, 'TXN-4013-5060', '2026-07-20 13:35:00'),
-(7061,5061,'COLLECTED','UPI',   280.00, 'TXN-4013-5061', '2026-07-20 14:05:00'),
-(7062,5062,'COLLECTED','CASH',  530.00, 'TXN-4013-5062', '2026-07-20 13:05:00'),
--- Drop 4014 Veg Biryani
-(7063,5063,'COLLECTED','UPI',   320.00, 'TXN-4014-5063', '2026-08-03 13:35:00'),
-(7064,5064,'COLLECTED','UPI',   320.00, 'TXN-4014-5064', '2026-08-03 13:35:00'),
-(7065,5065,'COLLECTED','CASH',  220.00, 'TXN-4014-5065', '2026-08-03 14:05:00'),
-(7066,5066,'COLLECTED','CASH',  220.00, 'TXN-4014-5066', '2026-08-03 13:05:00'),
-(7067,5067,'COLLECTED','UPI',   320.00, 'TXN-4014-5067', '2026-08-03 13:35:00'),
-(7068,5068,'REFUNDED', 'UPI',   220.00, 'TXN-4014-5068', NULL),
--- Drop 4015 OPEN
-(7069,5069,'PENDING',  'UPI',   630.00, NULL, NULL),
-(7070,5070,'PENDING',  'CASH',  350.00, NULL, NULL),
-(7071,5071,'PENDING',  'UPI',   630.00, NULL, NULL),
-(7072,5072,'PENDING',  'CARD',  410.00, NULL, NULL),
-(7073,5073,'PENDING',  'UPI',   280.00, NULL, NULL),
-(7074,5074,'PENDING',  'CASH',  350.00, NULL, NULL),
--- Drop 4017 Vada Pav
-(7075,5075,'COLLECTED','CASH',  180.00, 'TXN-4017-5075', '2026-08-28 17:50:00'),
-(7076,5076,'COLLECTED','UPI',   120.00, 'TXN-4017-5076', '2026-08-28 18:05:00'),
-(7077,5077,'COLLECTED','CASH',  60.00,  'TXN-4017-5077', '2026-08-28 19:05:00'),
-(7078,5078,'COLLECTED','UPI',   180.00, 'TXN-4017-5078', '2026-08-28 18:35:00'),
--- Drop 4018 OPEN
-(7079,5079,'PENDING',  'CASH',  230.00, NULL, NULL),
-(7080,5080,'PENDING',  'UPI',   190.00, NULL, NULL),
-(7081,5081,'PENDING',  'CASH',  150.00, NULL, NULL),
--- Drop 4019 Keto Monday
-(7082,5082,'COLLECTED','UPI',   400.00, 'TXN-4019-5082', '2026-08-25 08:50:00'),
-(7083,5083,'COLLECTED','UPI',   400.00, 'TXN-4019-5083', '2026-08-25 09:05:00'),
-(7084,5084,'COLLECTED','CASH',  250.00, 'TXN-4019-5084', '2026-08-25 08:35:00'),
-(7085,5085,'COLLECTED','CARD',  400.00, 'TXN-4019-5085', '2026-08-25 09:05:00'),
-(7086,5086,'COLLECTED','UPI',   400.00, 'TXN-4019-5086', '2026-08-25 09:35:00'),
--- Drop 4020 Keto Breakfast
-(7087,5087,'COLLECTED','UPI',   400.00, 'TXN-4020-5087', '2026-09-01 08:50:00'),
-(7088,5088,'COLLECTED','CASH',  480.00, 'TXN-4020-5088', '2026-09-01 09:05:00'),
-(7089,5089,'COLLECTED','UPI',   200.00, 'TXN-4020-5089', '2026-09-01 08:35:00'),
-(7090,5090,'COLLECTED','CARD',  400.00, 'TXN-4020-5090', '2026-09-01 09:35:00'),
--- Drop 4021 OPEN
-(7091,5091,'PENDING',  'UPI',   450.00, NULL, NULL),
-(7092,5092,'PENDING',  'CASH',  450.00, NULL, NULL),
--- Drop 4023 Dosa & Idli
-(7093,5093,'COLLECTED','CASH',  220.00, 'TXN-4023-5093', '2026-08-24 08:50:00'),
-(7094,5094,'COLLECTED','UPI',   200.00, 'TXN-4023-5094', '2026-08-24 09:05:00'),
-(7095,5095,'COLLECTED','CASH',  120.00, 'TXN-4023-5095', '2026-08-24 08:35:00'),
-(7096,5096,'COLLECTED','UPI',   200.00, 'TXN-4023-5096', '2026-08-24 09:05:00'),
-(7097,5097,'COLLECTED','CARD',  220.00, 'TXN-4023-5097', '2026-08-24 09:35:00'),
-(7098,5098,'COLLECTED','CASH',  120.00, 'TXN-4023-5098', '2026-08-24 08:35:00'),
--- Drop 4024 Vada & Upma
-(7099,5099,'COLLECTED','UPI',   180.00, 'TXN-4024-5099', '2026-09-01 08:50:00'),
-(7100,5100,'COLLECTED','CASH',  100.00, 'TXN-4024-5100', '2026-09-01 09:05:00'),
-(7101,5101,'COLLECTED','UPI',   160.00, 'TXN-4024-5101', '2026-09-01 08:35:00'),
-(7102,5102,'COLLECTED','CARD',  180.00, 'TXN-4024-5102', '2026-09-01 09:35:00'),
-(7103,5103,'COLLECTED','CASH',  100.00, 'TXN-4024-5103', '2026-09-01 09:05:00'),
--- Drop 4025 OPEN
-(7104,5104,'PENDING',  'CASH',  250.00, NULL, NULL),
-(7105,5105,'PENDING',  'UPI',   250.00, NULL, NULL),
--- Drop 4026 Bengali Sweets
-(7106,5106,'COLLECTED','UPI',   420.00, 'TXN-4026-5106', '2026-08-10 11:50:00'),
-(7107,5107,'COLLECTED','CASH',  240.00, 'TXN-4026-5107', '2026-08-10 12:05:00'),
-(7108,5108,'COLLECTED','UPI',   100.00, 'TXN-4026-5108', '2026-08-10 11:35:00'),
-(7109,5109,'COLLECTED','CASH',  380.00, 'TXN-4026-5109', '2026-08-10 12:05:00'),
-(7110,5110,'COLLECTED','CARD',  240.00, 'TXN-4026-5110', '2026-08-10 12:35:00'),
-(7111,5111,'COLLECTED','UPI',   380.00, 'TXN-4026-5111', '2026-08-10 11:35:00'),
-(7112,5112,'COLLECTED','CASH',  420.00, 'TXN-4026-5112', '2026-08-10 12:05:00'),
-(7113,5113,'COLLECTED','UPI',   100.00, 'TXN-4026-5113', '2026-08-10 12:35:00'),
--- Drop 4027 Festival Sweets
-(7114,5114,'COLLECTED','UPI',   680.00, 'TXN-4027-5114', '2026-08-24 11:50:00'),
-(7115,5115,'COLLECTED','CASH',  480.00, 'TXN-4027-5115', '2026-08-24 12:05:00'),
-(7116,5116,'COLLECTED','UPI',   550.00, 'TXN-4027-5116', '2026-08-24 11:35:00'),
-(7117,5117,'COLLECTED','CASH',  350.00, 'TXN-4027-5117', '2026-08-24 12:05:00'),
-(7118,5118,'COLLECTED','CARD',  680.00, 'TXN-4027-5118', '2026-08-24 12:35:00'),
-(7119,5119,'COLLECTED','UPI',   480.00, 'TXN-4027-5119', '2026-08-24 11:35:00'),
-(7120,5120,'COLLECTED','CASH',  480.00, 'TXN-4027-5120', '2026-08-24 12:05:00'),
-(7121,5121,'COLLECTED','UPI',   350.00, 'TXN-4027-5121', '2026-08-24 12:35:00'),
-(7122,5122,'COLLECTED','CASH',  550.00, 'TXN-4027-5122', '2026-08-24 11:35:00'),
-(7123,5123,'COLLECTED','UPI',   350.00, 'TXN-4027-5123', '2026-08-24 12:05:00'),
--- Drop 4028 Autumn Misti
-(7124,5124,'COLLECTED','UPI',   490.00, 'TXN-4028-5124', '2026-09-01 11:50:00'),
-(7125,5125,'COLLECTED','CASH',  340.00, 'TXN-4028-5125', '2026-09-01 12:05:00'),
-(7126,5126,'COLLECTED','UPI',   490.00, 'TXN-4028-5126', '2026-09-01 11:35:00'),
-(7127,5127,'COLLECTED','CASH',  340.00, 'TXN-4028-5127', '2026-09-01 12:05:00'),
-(7128,5128,'COLLECTED','CARD',  490.00, 'TXN-4028-5128', '2026-09-01 12:35:00'),
-(7129,5129,'COLLECTED','UPI',   340.00, 'TXN-4028-5129', '2026-09-01 11:35:00'),
-(7130,5130,'REFUNDED', 'UPI',   490.00, 'TXN-4028-5130', NULL),
--- Drop 4029 READY
-(7131,5131,'PENDING',  'UPI',   400.00, NULL, NULL),
-(7132,5132,'PENDING',  'CASH',  360.00, NULL, NULL),
-(7133,5133,'PENDING',  'UPI',   400.00, NULL, NULL),
-(7134,5134,'PENDING',  'CASH',  360.00, NULL, NULL),
-(7135,5135,'PENDING',  'CARD',  400.00, NULL, NULL),
-(7136,5136,'PENDING',  'UPI',   400.00, NULL, NULL),
-(7137,5137,'PENDING',  'CASH',  360.00, NULL, NULL),
-(7138,5138,'PENDING',  'UPI',   400.00, NULL, NULL),
--- Drop 4031 Detox Monday
-(7139,5139,'COLLECTED','UPI',   530.00, 'TXN-4031-5139', '2026-09-01 12:20:00'),
-(7140,5140,'COLLECTED','UPI',   530.00, 'TXN-4031-5140', '2026-09-01 12:35:00'),
-(7141,5141,'COLLECTED','CASH',  250.00, 'TXN-4031-5141', '2026-09-01 13:05:00'),
-(7142,5142,'COLLECTED','UPI',   280.00, 'TXN-4031-5142', '2026-09-01 12:05:00'),
-(7143,5143,'COLLECTED','CARD',  530.00, 'TXN-4031-5143', '2026-09-01 12:35:00'),
--- Drop 4032 OPEN
-(7144,5144,'PENDING',  'UPI',   570.00, NULL, NULL),
-(7145,5145,'PENDING',  'CASH',  320.00, NULL, NULL),
--- Drop 4033 Carbonara
-(7146,5146,'COLLECTED','UPI',   500.00, 'TXN-4033-5146', '2026-08-27 19:50:00'),
-(7147,5147,'COLLECTED','UPI',   500.00, 'TXN-4033-5147', '2026-08-27 20:05:00'),
-(7148,5148,'COLLECTED','CASH',  350.00, 'TXN-4033-5148', '2026-08-27 19:35:00'),
-(7149,5149,'COLLECTED','CARD',  350.00, 'TXN-4033-5149', '2026-08-27 20:05:00'),
-(7150,5150,'COLLECTED','UPI',   500.00, 'TXN-4033-5150', '2026-08-27 20:35:00'),
--- Drop 4034
-(7151,5151,'COLLECTED','UPI',   380.00, 'TXN-4034-5151', '2026-09-03 19:50:00'),
-(7152,5152,'COLLECTED','CASH',  280.00, 'TXN-4034-5152', '2026-09-03 20:05:00'),
-(7153,5153,'COLLECTED','UPI',   380.00, 'TXN-4034-5153', '2026-09-03 19:35:00'),
-(7154,5154,'COLLECTED','CARD',  280.00, 'TXN-4034-5154', '2026-09-03 20:35:00'),
--- Drop 4035 OPEN
-(7155,5155,'PENDING',  'UPI',   520.00, NULL, NULL),
-(7156,5156,'PENDING',  'CASH',  520.00, NULL, NULL),
--- Drop 4036 Thali
-(7157,5157,'COLLECTED','CASH',  290.00, 'TXN-4036-5157', '2026-09-01 12:20:00'),
-(7158,5158,'COLLECTED','UPI',   200.00, 'TXN-4036-5158', '2026-09-01 12:35:00'),
-(7159,5159,'COLLECTED','CASH',  200.00, 'TXN-4036-5159', '2026-09-01 13:05:00'),
-(7160,5160,'COLLECTED','UPI',   290.00, 'TXN-4036-5160', '2026-09-01 12:05:00'),
--- Drop 4038 Momos
-(7161,5161,'COLLECTED','UPI',   300.00, 'TXN-4038-5161', '2026-09-07 18:50:00'),
-(7162,5162,'COLLECTED','CASH',  300.00, 'TXN-4038-5162', '2026-09-07 19:05:00'),
-(7163,5163,'COLLECTED','UPI',   180.00, 'TXN-4038-5163', '2026-09-07 18:35:00'),
--- Drop 4039 OPEN
-(7164,5164,'PENDING',  'UPI',   290.00, NULL, NULL),
-(7165,5165,'PENDING',  'CASH',  270.00, NULL, NULL),
--- Drop 4040 Goan Sweets
-(7166,5166,'COLLECTED','UPI',   350.00, 'TXN-4040-5166', '2026-08-31 10:50:00'),
-(7167,5167,'COLLECTED','CASH',  300.00, 'TXN-4040-5167', '2026-08-31 11:05:00'),
-(7168,5168,'COLLECTED','UPI',   200.00, 'TXN-4040-5168', '2026-08-31 10:35:00'),
-(7169,5169,'COLLECTED','CARD',  350.00, 'TXN-4040-5169', '2026-08-31 11:05:00'),
--- Drop 4041
-(7170,5170,'COLLECTED','CASH',  240.00, 'TXN-4041-5170', '2026-09-06 09:50:00'),
-(7171,5171,'COLLECTED','UPI',   180.00, 'TXN-4041-5171', '2026-09-06 10:05:00'),
-(7172,5172,'COLLECTED','CASH',  240.00, 'TXN-4041-5172', '2026-09-06 10:35:00'),
--- Drop 4042 OPEN
-(7173,5173,'PENDING',  'UPI',   560.00, NULL, NULL),
-(7174,5174,'PENDING',  'CASH',  340.00, NULL, NULL),
--- Drop 4043 Onam
-(7175,5175,'COLLECTED','UPI',   480.00, 'TXN-4043-5175', '2026-08-17 11:50:00'),
-(7176,5176,'COLLECTED','CASH',  280.00, 'TXN-4043-5176', '2026-08-17 12:05:00'),
-(7177,5177,'COLLECTED','UPI',   480.00, 'TXN-4043-5177', '2026-08-17 11:35:00'),
-(7178,5178,'COLLECTED','CARD',  350.00, 'TXN-4043-5178', '2026-08-17 12:05:00'),
-(7179,5179,'COLLECTED','CASH',  200.00, 'TXN-4043-5179', '2026-08-17 12:35:00'),
-(7180,5180,'COLLECTED','UPI',   480.00, 'TXN-4043-5180', '2026-08-17 11:35:00'),
-(7181,5181,'COLLECTED','CASH',  350.00, 'TXN-4043-5181', '2026-08-17 12:05:00'),
-(7182,5182,'COLLECTED','UPI',   480.00, 'TXN-4043-5182', '2026-08-17 12:35:00'),
--- Drop 4044 Kerala Breakfast
-(7183,5183,'COLLECTED','UPI',   430.00, 'TXN-4044-5183', '2026-08-31 08:50:00'),
-(7184,5184,'COLLECTED','CASH',  150.00, 'TXN-4044-5184', '2026-08-31 09:05:00'),
-(7185,5185,'COLLECTED','UPI',   280.00, 'TXN-4044-5185', '2026-08-31 08:35:00'),
-(7186,5186,'COLLECTED','CARD',  430.00, 'TXN-4044-5186', '2026-08-31 09:05:00'),
-(7187,5187,'COLLECTED','CASH',  150.00, 'TXN-4044-5187', '2026-08-31 09:35:00'),
-(7188,5188,'COLLECTED','UPI',   430.00, 'TXN-4044-5188', '2026-08-31 08:35:00'),
--- Drop 4045
-(7189,5189,'COLLECTED','UPI',   550.00, 'TXN-4045-5189', '2026-09-07 12:20:00'),
-(7190,5190,'COLLECTED','CASH',  250.00, 'TXN-4045-5190', '2026-09-07 12:35:00'),
-(7191,5191,'COLLECTED','UPI',   300.00, 'TXN-4045-5191', '2026-09-07 13:05:00'),
-(7192,5192,'COLLECTED','CARD',  550.00, 'TXN-4045-5192', '2026-09-07 12:05:00'),
-(7193,5193,'COLLECTED','CASH',  300.00, 'TXN-4045-5193', '2026-09-07 12:35:00'),
--- Drop 4046 READY
-(7194,5194,'PENDING',  'UPI',   670.00, NULL, NULL),
-(7195,5195,'PENDING',  'CASH',  320.00, NULL, NULL),
-(7196,5196,'PENDING',  'UPI',   670.00, NULL, NULL),
-(7197,5197,'PENDING',  'CARD',  350.00, NULL, NULL),
-(7198,5198,'PENDING',  'CASH',  320.00, NULL, NULL),
-(7199,5199,'PENDING',  'UPI',   670.00, NULL, NULL),
--- Drop 4047 OPEN
-(7200,5200,'PENDING',  'UPI',   420.00, NULL, NULL),
-(7201,5201,'PENDING',  'CASH',  220.00, NULL, NULL),
-(7202,5202,'PENDING',  'UPI',   640.00, NULL, NULL),
--- Drop 4048 Millet
-(7203,5203,'COLLECTED','CASH',  190.00, 'TXN-4048-5203', '2026-09-07 09:50:00'),
-(7204,5204,'COLLECTED','UPI',   110.00, 'TXN-4048-5204', '2026-09-07 10:05:00'),
-(7205,5205,'COLLECTED','CASH',  190.00, 'TXN-4048-5205', '2026-09-07 09:35:00');
-
--- ============================================================
--- SECTION 12: RATINGS
--- One rating per (user_id, restaurant_id) — UNIQUE constraint.
--- Only customers who completed at least one order rate a creator.
--- rating_value: 1.0–5.0
--- ============================================================
-INSERT INTO ratings (rating_id, user_id, restaurant_id, rating_value, food_quality_rating, packaging_rating, review_text, created_at) VALUES
--- === Restaurant 1001 — The Artisan Oven (Priya Sharma) ===
-(8001, 2001, 1001, 4.8, 5.0, 4.5, 'Priya bakes like a professional patisserie. Her sourdough is the best I have had outside of Europe!', '2026-08-11 12:00:00'),
-(8002, 2002, 1001, 4.7, 4.8, 4.5, 'The pastries are incredibly fresh. I could taste the effort in every bite.', '2026-08-18 11:00:00'),
-(8003, 2003, 1001, 5.0, 5.0, 5.0, 'Absolutely stunning bakes. The croissants melted in my mouth. 10/10.', '2026-08-11 11:30:00'),
-(8004, 2004, 1001, 4.5, 4.5, 4.0, 'Good quality, a bit pricey but worth it for a special occasion.', '2026-08-18 12:00:00'),
-(8005, 2005, 1001, 4.9, 5.0, 5.0, 'The banana bread is phenomenal. Will keep ordering every drop!', '2026-08-25 11:00:00'),
-(8006, 2007, 1001, 4.6, 4.7, 4.3, 'Great packaging — everything arrived in perfect shape. Loved the pastries.', '2026-08-18 10:30:00'),
-(8007, 2008, 1001, 4.8, 5.0, 4.5, 'Consistent quality every drop. One of my favourite home bakers on the platform.', '2026-08-25 12:00:00'),
-(8008, 2013, 1001, 4.7, 4.8, 4.6, 'The muffins were so moist — none of that dry store-bought texture.', '2026-08-25 11:30:00'),
-(8009, 2014, 1001, 4.5, 4.5, 4.0, 'Good variety in each drop. Appreciate the effort to keep things interesting.', '2026-08-25 12:30:00'),
-(8010, 2017, 1001, 4.6, 4.7, 4.4, 'Beautiful presentation and amazing flavours. Totally worth the price.', '2026-08-25 13:00:00'),
-
--- === Restaurant 1002 — Maa Ki Rasoi (Kavitha Nair) ===
-(8011, 2015, 1002, 4.9, 5.0, 4.8, 'Dal Makhani tastes exactly like my grandmother used to make. Tears of joy, honestly.', '2026-08-18 14:00:00'),
-(8012, 2016, 1002, 4.7, 4.8, 4.5, 'Authentic home-style cooking. The khichdi was so comforting.', '2026-08-18 13:30:00'),
-(8013, 2017, 1002, 4.8, 4.9, 4.6, 'Best home food I have had in this city. Always fresh, always warm.', '2026-08-18 14:30:00'),
-(8014, 2018, 1002, 4.6, 4.7, 4.3, 'Good portions, real home-style taste. Dal was perfectly spiced.', '2026-08-18 12:30:00'),
-(8015, 2019, 1002, 5.0, 5.0, 5.0, 'I order from Kavitha every single drop. She never disappoints. Absolutely love her cooking.', '2026-08-18 13:00:00'),
-(8016, 2020, 1002, 4.8, 5.0, 4.5, 'The paneer in the chole was so well-cooked. Restaurant-quality at home-style prices.', '2026-08-25 14:00:00'),
-(8017, 2021, 1002, 4.7, 4.8, 4.4, 'Honest, pure home cooking. No compromises on quality.', '2026-08-25 13:00:00'),
-(8018, 2022, 1002, 4.5, 4.6, 4.2, 'Really enjoyed the khichdi. Simple but perfect comfort food.', '2026-08-25 13:30:00'),
-(8019, 2023, 1002, 4.6, 4.7, 4.3, 'Reliable quality every time. The food always smells and tastes fresh.', '2026-08-25 14:30:00'),
-
--- === Restaurant 1004 — Hyderabadi Dum House (Zubeida Begum) ===
-(8020, 2001, 1004, 4.9, 5.0, 4.7, 'The dum biryani was absolutely spectacular. Saffron aroma, perfectly cooked rice, tender meat. Nothing beats it.', '2026-07-20 15:00:00'),
-(8021, 2002, 1004, 5.0, 5.0, 5.0, 'Best biryani in Hyderabad, hands down. Restaurant-quality from a home kitchen. Zubeida is a legend.', '2026-07-06 15:00:00'),
-(8022, 2003, 1004, 4.7, 4.8, 4.5, 'Authentic Hyderabadi flavours. The raita perfectly balanced the spice.', '2026-07-20 15:30:00'),
-(8023, 2004, 1004, 4.8, 5.0, 4.6, 'The mirchi ka salan was incredible. I ate three bowls with my biryani.', '2026-07-06 14:30:00'),
-(8024, 2005, 1004, 4.6, 4.7, 4.4, 'Beautiful packaging, biryani arrived hot. Great seller.', '2026-07-20 16:00:00'),
-(8025, 2038, 1004, 5.0, 5.0, 5.0, 'Been waiting to find biryani like this since I moved to Hyderabad. Worth every rupee!', '2026-07-06 14:00:00'),
-(8026, 2039, 1004, 4.8, 5.0, 4.5, 'Mutton dum biryani was fall-off-the-bone tender. Amazing slow-cooked flavour.', '2026-07-06 14:00:00'),
-(8027, 2040, 1004, 4.7, 4.8, 4.5, 'Veg biryani was just as good as the mutton. Whole spices done perfectly.', '2026-08-03 14:00:00'),
-(8028, 2041, 1004, 4.9, 5.0, 4.8, 'Consistently excellent every Sunday. This is my go-to weekly treat.', '2026-07-06 14:30:00'),
-(8029, 2042, 1004, 4.5, 4.6, 4.2, 'Good biryani, could use a touch more salt for my taste but very good overall.', '2026-07-06 15:00:00'),
-(8030, 2043, 1004, 4.8, 5.0, 4.5, 'The dum sealing was visible when I opened the pack — that''s real dum biryani technique!', '2026-07-06 15:30:00'),
-(8031, 2046, 1004, 4.7, 4.8, 4.4, 'Saturday drop is my weekly ritual. Top quality every time.', '2026-07-20 14:00:00'),
-(8032, 2047, 1004, 4.9, 5.0, 4.7, 'Zubeida is incredibly talented. Her biryani is cooked with so much love and skill.', '2026-07-20 14:30:00'),
-
--- === Restaurant 1005 — Mumbai Street Eats (Ramesh Patil) ===
-(8033, 2001, 1005, 4.7, 4.8, 4.3, 'Vada pav tasted exactly like the ones outside CST! Ramesh has nailed the authentic flavour.', '2026-08-28 19:00:00'),
-(8034, 2025, 1005, 4.6, 4.7, 4.2, 'Pav bhaji was buttery and delicious. The bread was perfectly toasted.', '2026-08-28 19:30:00'),
-(8035, 2038, 1005, 4.5, 4.6, 4.0, 'Classic Mumbai street food. Sev puri was crunchy and fresh. Will order again.', '2026-08-28 18:30:00'),
-
--- === Restaurant 1006 — Keto Kitchen by Ananya (Ananya Krishnan) ===
-(8036, 2001, 1006, 4.8, 5.0, 4.6, 'Finally healthy food that actually tastes good! The cauliflower rice is brilliant.', '2026-08-25 10:00:00'),
-(8037, 2002, 1006, 4.9, 5.0, 4.8, 'I have been following a keto diet for 6 months and Ananya''s food is by far the best I have found.', '2026-09-01 10:00:00'),
-(8038, 2006, 1006, 4.7, 4.8, 4.5, 'The breakfast bowl kept me full until evening. Genuinely nutritious.', '2026-08-25 09:00:00'),
-(8039, 2011, 1006, 4.6, 4.7, 4.4, 'Great for meal prep. Ordered 4 boxes and they lasted the whole week.', '2026-08-25 10:30:00'),
-(8040, 2014, 1006, 4.8, 5.0, 4.6, 'The paneer tikka bowl was absolutely packed with flavour. 100% clean eating.', '2026-08-25 11:00:00'),
-(8041, 2015, 1006, 4.5, 4.6, 4.2, 'Consistent macros. I love that she includes nutrition info with each drop.', '2026-09-01 09:30:00'),
-(8042, 2016, 1006, 4.7, 4.8, 4.4, 'The zucchini lasagna was incredibly creative. Keto comfort food — who knew!', '2026-09-01 10:30:00'),
-
--- === Restaurant 1007 — Udupi Home Kitchen (Suresh Kamath) ===
-(8043, 2001, 1007, 4.8, 5.0, 4.5, 'The masala dosa was crisp, the potato filling perfectly spiced. Suresh is a gem.', '2026-08-24 10:30:00'),
-(8044, 2003, 1007, 4.7, 4.8, 4.4, 'Idli was soft and fresh, sambar was flavourful. Better than most restaurants!', '2026-08-24 10:00:00'),
-(8045, 2007, 1007, 5.0, 5.0, 5.0, 'Udupi food is hard to find outside Karnataka. Suresh''s kitchen is a treasure.', '2026-08-24 09:30:00'),
-(8046, 2019, 1007, 4.6, 4.7, 4.3, 'The filter coffee was exceptional — thick decoction, perfectly sweetened.', '2026-09-01 09:30:00'),
-(8047, 2020, 1007, 4.9, 5.0, 4.7, 'Medu vada was perfectly crispy outside, fluffy inside. Exactly right.', '2026-08-24 11:00:00'),
-(8048, 2021, 1007, 4.7, 4.8, 4.5, 'Upma was made with love — not the dry, bland kind you get in cafeterias.', '2026-09-01 09:00:00'),
-(8049, 2022, 1007, 4.5, 4.6, 4.2, 'Nice home-style South Indian breakfast. Chutneys were amazing.', '2026-09-01 10:30:00'),
-
--- === Restaurant 1008 — Nobo's Sweet Corner (Noboru Chatterjee) ===
-(8050, 2001, 1008, 4.9, 5.0, 4.8, 'The sandesh is divine. Best Bengali sweets outside Kolkata, I guarantee it.', '2026-08-10 13:00:00'),
-(8051, 2003, 1008, 4.8, 5.0, 4.6, 'Rasgulla was perfectly spongy and soaked in just the right amount of syrup.', '2026-08-10 13:30:00'),
-(8052, 2005, 1008, 5.0, 5.0, 5.0, 'Every single sweet was perfection. The misti doi was like a hug in a bowl.', '2026-08-10 12:30:00'),
-(8053, 2007, 1008, 4.7, 4.8, 4.5, 'The mishti collection for Durga Puja was spectacular. Gifted a box to family — everyone loved it.', '2026-08-24 13:00:00'),
-(8054, 2009, 1008, 4.8, 5.0, 4.6, 'Noboru is clearly very passionate about preserving authentic Bengali sweet-making traditions.', '2026-08-24 13:30:00'),
-(8055, 2011, 1008, 4.6, 4.7, 4.4, 'Good variety of sweets. The malai chop was especially creamy and light.', '2026-09-01 13:00:00'),
-(8056, 2013, 1008, 4.9, 5.0, 4.7, 'Festival box was beautifully packed and everything tasted authentic.', '2026-08-24 12:30:00'),
-(8057, 2015, 1008, 4.7, 4.8, 4.5, 'Can''t believe this quality comes from a home kitchen. Exceptional.', '2026-08-10 12:00:00'),
-(8058, 2017, 1008, 4.5, 4.6, 4.2, 'Sweets were very fresh and not too sweet — perfectly balanced.', '2026-08-24 14:00:00'),
-(8059, 2019, 1008, 4.8, 5.0, 4.6, 'The autumn collection was inspired. Each sweet told a seasonal story.', '2026-09-01 14:00:00'),
-(8060, 2021, 1008, 4.6, 4.7, 4.3, 'Sondesh in the latest drop was incredibly delicate and flavourful.', '2026-09-01 13:30:00'),
-
--- === Restaurant 1009 — Green Bowl by Meera (Meera Iyer) ===
-(8061, 2002, 1009, 4.7, 4.8, 4.5, 'The Protein Bowl is incredible — nutritious, filling, and genuinely delicious.', '2026-09-01 14:00:00'),
-(8062, 2004, 1009, 4.6, 4.7, 4.3, 'Great detox options. The salads actually taste good — not just healthy rabbit food.', '2026-09-01 13:30:00'),
-(8063, 2006, 1009, 4.8, 5.0, 4.6, 'Meera understands nutrition without sacrificing flavour. Rare find on this platform.', '2026-09-01 14:30:00'),
-(8064, 2008, 1009, 4.5, 4.6, 4.2, 'The smoothie bowls were beautiful and fresh. Very Instagrammable too!', '2026-09-01 13:00:00'),
-(8065, 2010, 1009, 4.9, 5.0, 4.8, 'Have tried all her drops so far. Every single one has been excellent.', '2026-09-01 15:00:00'),
-
--- === Restaurant 1010 — Pasta e Basta (Valentina Romano) ===
-(8066, 2010, 1010, 4.9, 5.0, 4.7, 'The carbonara was authentic Roman-style — real guanciale, no cream. Valentina knows her Italian.', '2026-08-27 21:00:00'),
-(8067, 2012, 1010, 4.8, 5.0, 4.6, 'Best pasta I have had outside of a proper Italian restaurant. Fresh, handmade, incredible.', '2026-08-27 21:30:00'),
-(8068, 2014, 1010, 4.7, 4.8, 4.5, 'Pappardelle was cooked perfectly al dente. Ragù was deeply flavoured.', '2026-08-27 20:30:00'),
-(8069, 2016, 1010, 4.6, 4.7, 4.4, 'The arancini were crispy, cheesy perfection. Great sides alongside the pasta.', '2026-09-03 21:00:00'),
-(8070, 2018, 1010, 4.8, 5.0, 4.6, 'Tiramisu was the real deal. Coffee-soaked, creamy layers. A perfect end to an Italian meal.', '2026-08-27 22:00:00'),
-
--- === Restaurant 1011 — Jai Ho Kitchen (Jayesh Patel) ===
-(8071, 2025, 1011, 4.7, 4.8, 4.4, 'The Gujarati Thali was fantastic — dal, sabzi, roti, everything freshly prepared.', '2026-09-01 14:00:00'),
-(8072, 2030, 1011, 4.8, 5.0, 4.5, 'Undhiyu was perfectly spiced with methi muthiya that crumbled just right.', '2026-09-01 13:30:00'),
-(8073, 2035, 1011, 4.5, 4.6, 4.2, 'Gujarati food done right. Dhokla was fluffy and perfectly sour.', '2026-09-01 14:30:00'),
-(8074, 2040, 1011, 4.6, 4.7, 4.3, 'Wholesome and tasty. Kadhi was light and flavourful — comfort food at its best.', '2026-09-01 15:00:00'),
-
--- === Restaurant 1012 — Himalayan Dumplings (Tenzin Wangchuk) ===
-(8075, 2040, 1012, 4.9, 5.0, 4.7, 'These momos are life-changing! Thin wrappers, juicy filling, amazing chutney.', '2026-09-07 21:00:00'),
-(8076, 2041, 1012, 4.8, 5.0, 4.6, 'The jhol momo broth was warming and deeply flavoured. Absolutely perfect for a rainy day.', '2026-09-07 21:30:00'),
-(8077, 2042, 1012, 4.7, 4.8, 4.5, 'Best momos outside the Northeast. Tenzin is clearly a master of his craft.', '2026-09-07 20:30:00'),
-
--- === Restaurant 1013 — Casa de Goa (Francisca Fernandes) ===
-(8078, 2015, 1013, 4.8, 5.0, 4.6, 'The bebinca was heavenly — layers of coconut and egg perfectly caramelised.', '2026-08-31 12:00:00'),
-(8079, 2025, 1013, 4.7, 4.8, 4.5, 'Pão de Lo cake was beautifully moist with that distinctive Goan flavour.', '2026-08-31 11:30:00'),
-(8080, 2035, 1013, 4.6, 4.7, 4.3, 'Dodol was perfectly chewy and rich with jaggery. Hard to find outside Goa.', '2026-08-31 12:30:00'),
-(8081, 2045, 1013, 4.9, 5.0, 4.8, 'Francisca''s sweets are a slice of Goan heritage. Every piece was special.', '2026-08-31 13:00:00'),
-(8082, 2013, 1013, 4.5, 4.6, 4.2, 'The banana cake was moist and fragrant. Would love to see more Goan recipes.', '2026-09-06 11:00:00'),
-
--- === Restaurant 1014 — Kerala Kitchen (Lekha Menon) ===
-(8083, 2002, 1014, 4.9, 5.0, 4.8, 'The Onam sadya was a true feast — over 15 dishes, every one cooked to perfection.', '2026-08-17 13:00:00'),
-(8084, 2004, 1014, 4.8, 5.0, 4.6, 'Prawn curry in coconut milk was absolutely divine. Restaurant-quality for sure.', '2026-09-07 14:00:00'),
-(8085, 2006, 1014, 4.7, 4.8, 4.5, 'Kozhikodan biryani is a totally different style from Hyderabadi — equally amazing.', '2026-09-07 13:30:00'),
-(8086, 2008, 1014, 5.0, 5.0, 5.0, 'Lekha is an exceptional cook. The karimeen pollichathu was perfection — smoky, tangy, incredible.', '2026-09-07 13:00:00'),
-(8087, 2010, 1014, 4.8, 5.0, 4.6, 'Kerala breakfast box was the best morning meal I''ve had. Appam with stew is a masterpiece.', '2026-08-31 10:00:00'),
-(8088, 2012, 1014, 4.6, 4.7, 4.4, 'Puttu and kadala curry were perfectly paired. Will definitely order again.', '2026-08-31 10:30:00'),
-(8089, 2014, 1014, 4.7, 4.8, 4.5, 'The sadya banana leaf presentation was a lovely touch — very authentic.', '2026-09-07 14:30:00'),
-(8090, 2016, 1014, 4.5, 4.6, 4.2, 'Good flavours, fresh ingredients. Kerala food done with real care.', '2026-08-17 12:30:00'),
-
--- === Restaurant 1015 — Aaroha Millets (Aaroha Reddy) ===
-(8091, 2030, 1015, 4.7, 4.8, 4.5, 'So refreshing to find nutritious millet-based food that actually tastes wonderful.', '2026-09-07 11:00:00'),
-(8092, 2040, 1015, 4.6, 4.7, 4.3, 'The ragi laddoo was perfectly sweet and dense. Ancient grains, modern flavour.', '2026-09-07 11:30:00'),
-(8093, 2045, 1015, 4.8, 5.0, 4.6, 'Jowar bhakri with peanut chutney was a revelation. I will never buy supermarket bread again.', '2026-09-07 10:30:00');
-
--- ============================================================
--- SECTION 13: NOTIFICATIONS
--- Types: DROP_ANNOUNCED, DROP_OPEN, DROP_CLOSING_SOON,
---        ORDER_CONFIRMED, ORDER_READY, ORDER_CANCELLED,
---        NEW_FOLLOWER, LOW_STOCK
--- reference_type: DROP | ORDER | USER
--- ============================================================
-INSERT INTO notifications (notification_id, user_id, type, title, message, reference_type, reference_id, is_read, created_at) VALUES
--- === NEW_FOLLOWER notifications to creators ===
-(9001, 1001, 'NEW_FOLLOWER', 'New follower!', 'Arjun Mehta is now following The Artisan Oven.',             'USER', 2001, TRUE,  '2026-07-05 09:00:00'),
-(9002, 1001, 'NEW_FOLLOWER', 'New follower!', 'Sneha Desai is now following The Artisan Oven.',             'USER', 2002, TRUE,  '2026-07-06 09:00:00'),
-(9003, 1001, 'NEW_FOLLOWER', 'New follower!', 'Rahul Verma is now following The Artisan Oven.',             'USER', 2003, TRUE,  '2026-07-07 09:00:00'),
-(9004, 1001, 'NEW_FOLLOWER', 'New follower!', 'Pooja Iyer is now following The Artisan Oven.',              'USER', 2004, TRUE,  '2026-07-08 09:00:00'),
-(9005, 1001, 'NEW_FOLLOWER', 'New follower!', 'Vikram Singh is now following The Artisan Oven.',            'USER', 2005, TRUE,  '2026-07-09 09:00:00'),
-(9006, 1004, 'NEW_FOLLOWER', 'New follower!', 'Arjun Mehta is now following Hyderabadi Dum House.',        'USER', 2001, TRUE,  '2026-06-10 09:00:00'),
-(9007, 1004, 'NEW_FOLLOWER', 'New follower!', 'Sneha Desai is now following Hyderabadi Dum House.',        'USER', 2002, TRUE,  '2026-06-11 09:00:00'),
-(9008, 1004, 'NEW_FOLLOWER', 'New follower!', 'Priyanka Joshi is now following Hyderabadi Dum House.',     'USER', 2038, TRUE,  '2026-06-12 09:00:00'),
-(9009, 1004, 'NEW_FOLLOWER', 'New follower!', 'Karan Gupta is now following Hyderabadi Dum House.',        'USER', 2039, TRUE,  '2026-06-13 09:00:00'),
-(9010, 1006, 'NEW_FOLLOWER', 'New follower!', 'Arjun Mehta is now following Keto Kitchen by Ananya.',      'USER', 2001, TRUE,  '2026-07-01 09:00:00'),
-(9011, 1006, 'NEW_FOLLOWER', 'New follower!', 'Sneha Desai is now following Keto Kitchen by Ananya.',      'USER', 2002, TRUE,  '2026-07-02 09:00:00'),
-(9012, 1008, 'NEW_FOLLOWER', 'New follower!', 'Arjun Mehta is now following Nobo''s Sweet Corner.',        'USER', 2001, TRUE,  '2026-07-15 09:00:00'),
-(9013, 1008, 'NEW_FOLLOWER', 'New follower!', 'Rahul Verma is now following Nobo''s Sweet Corner.',        'USER', 2003, TRUE,  '2026-07-16 09:00:00'),
-(9014, 1014, 'NEW_FOLLOWER', 'New follower!', 'Sneha Desai is now following Kerala Kitchen.',              'USER', 2002, TRUE,  '2026-07-20 09:00:00'),
-(9015, 1014, 'NEW_FOLLOWER', 'New follower!', 'Pooja Iyer is now following Kerala Kitchen.',               'USER', 2004, TRUE,  '2026-07-21 09:00:00'),
-
--- === DROP_ANNOUNCED notifications ===
-(9016, 2001, 'DROP_ANNOUNCED', 'Drop Announced: Artisan Bakes Vol. 8', 'The Artisan Oven just announced their next bake drop! Sourdough, croissants and more. Pre-orders open soon.', 'DROP', 4001, TRUE, '2026-08-08 10:00:00'),
-(9017, 2002, 'DROP_ANNOUNCED', 'Drop Announced: Artisan Bakes Vol. 8', 'The Artisan Oven just announced their next bake drop! Sourdough, croissants and more. Pre-orders open soon.', 'DROP', 4001, TRUE, '2026-08-08 10:01:00'),
-(9018, 2003, 'DROP_ANNOUNCED', 'Drop Announced: Artisan Bakes Vol. 8', 'The Artisan Oven just announced their next bake drop! Sourdough, croissants and more. Pre-orders open soon.', 'DROP', 4001, TRUE, '2026-08-08 10:02:00'),
-(9019, 2001, 'DROP_ANNOUNCED', 'Drop Announced: Hyderabad Eid Special Biryani', 'Hyderabadi Dum House is cooking a special Eid biryani! Limited portions — order fast.', 'DROP', 4012, TRUE, '2026-07-01 10:00:00'),
-(9020, 2002, 'DROP_ANNOUNCED', 'Drop Announced: Hyderabad Eid Special Biryani', 'Hyderabadi Dum House is cooking a special Eid biryani! Limited portions — order fast.', 'DROP', 4012, TRUE, '2026-07-01 10:01:00'),
-(9021, 2038, 'DROP_ANNOUNCED', 'Drop Announced: Hyderabad Eid Special Biryani', 'Hyderabadi Dum House is cooking a special Eid biryani! Limited portions — order fast.', 'DROP', 4012, TRUE, '2026-07-01 10:02:00'),
-(9022, 2001, 'DROP_ANNOUNCED', 'Drop Announced: Keto Monday Meal Prep Box', 'Keto Kitchen by Ananya announced a new meal prep drop! Pre-orders open Sunday.', 'DROP', 4019, TRUE, '2026-08-22 10:00:00'),
-(9023, 2002, 'DROP_ANNOUNCED', 'Drop Announced: Keto Monday Meal Prep Box', 'Keto Kitchen by Ananya announced a new meal prep drop! Pre-orders open Sunday.', 'DROP', 4019, TRUE, '2026-08-22 10:01:00'),
-(9024, 2001, 'DROP_ANNOUNCED', 'Drop Announced: Durga Puja Mishti Collection', 'Nobo''s Sweet Corner revealed their festive mishti collection. Pre-orders open soon!', 'DROP', 4027, TRUE, '2026-08-20 10:00:00'),
-(9025, 2003, 'DROP_ANNOUNCED', 'Drop Announced: Durga Puja Mishti Collection', 'Nobo''s Sweet Corner revealed their festive mishti collection. Pre-orders open soon!', 'DROP', 4027, TRUE, '2026-08-20 10:01:00'),
-(9026, 2002, 'DROP_ANNOUNCED', 'Drop Announced: Onam Sadya Experience', 'Kerala Kitchen just announced a full sadya experience for Onam! Very limited slots.', 'DROP', 4043, TRUE, '2026-08-10 10:00:00'),
-(9027, 2004, 'DROP_ANNOUNCED', 'Drop Announced: Onam Sadya Experience', 'Kerala Kitchen just announced a full sadya experience for Onam! Very limited slots.', 'DROP', 4043, TRUE, '2026-08-10 10:01:00'),
-
--- === DROP_OPEN notifications ===
-(9028, 2001, 'DROP_OPEN', 'Now Open: Artisan Bakes Vol. 8', 'The Artisan Oven''s drop is now accepting orders! Grab yours before it sells out.', 'DROP', 4001, TRUE, '2026-08-09 09:00:00'),
-(9029, 2002, 'DROP_OPEN', 'Now Open: Artisan Bakes Vol. 8', 'The Artisan Oven''s drop is now accepting orders! Grab yours before it sells out.', 'DROP', 4001, TRUE, '2026-08-09 09:01:00'),
-(9030, 2003, 'DROP_OPEN', 'Now Open: Artisan Bakes Vol. 8', 'The Artisan Oven''s drop is now accepting orders! Grab yours before it sells out.', 'DROP', 4001, TRUE, '2026-08-09 09:02:00'),
-(9031, 2001, 'DROP_OPEN', 'Now Open: Hyderabad Eid Special Biryani', 'Zubeida''s Eid biryani drop is now open! Order before the 3 July cutoff.', 'DROP', 4012, TRUE, '2026-07-02 09:00:00'),
-(9032, 2038, 'DROP_OPEN', 'Now Open: Hyderabad Eid Special Biryani', 'Zubeida''s Eid biryani drop is now open! Order before the 3 July cutoff.', 'DROP', 4012, TRUE, '2026-07-02 09:01:00'),
-(9033, 2001, 'DROP_OPEN', 'Now Open: Keto Monday Meal Prep Box', 'Ananya''s Keto Monday drop is open! Secure your healthy meals for the week.', 'DROP', 4019, TRUE, '2026-08-23 09:00:00'),
-(9034, 2002, 'DROP_OPEN', 'Now Open: Keto Monday Meal Prep Box', 'Ananya''s Keto Monday drop is open! Secure your healthy meals for the week.', 'DROP', 4019, TRUE, '2026-08-23 09:01:00'),
-(9035, 2001, 'DROP_OPEN', 'Now Open: Durga Puja Mishti Collection', 'Nobo''s festival mishti drop is open! Order your sweets before the cutoff.', 'DROP', 4027, TRUE, '2026-08-21 09:00:00'),
-(9036, 2003, 'DROP_OPEN', 'Now Open: Durga Puja Mishti Collection', 'Nobo''s festival mishti drop is open! Order your sweets before the cutoff.', 'DROP', 4027, TRUE, '2026-08-21 09:01:00'),
-(9037, 2002, 'DROP_OPEN', 'Now Open: Onam Sadya Experience', 'Kerala Kitchen''s Onam sadya is now taking orders. Only 20 sadyas available!', 'DROP', 4043, TRUE, '2026-08-11 09:00:00'),
-(9038, 2004, 'DROP_OPEN', 'Now Open: Onam Sadya Experience', 'Kerala Kitchen''s Onam sadya is now taking orders. Only 20 sadyas available!', 'DROP', 4043, TRUE, '2026-08-11 09:01:00'),
-
--- === DROP_CLOSING_SOON notifications ===
-(9039, 2007, 'DROP_CLOSING_SOON', 'Closing Soon: Artisan Bakes Vol. 8', 'Only 1 hour left to order from The Artisan Oven''s bake drop!', 'DROP', 4001, TRUE, '2026-08-10 20:00:00'),
-(9040, 2013, 'DROP_CLOSING_SOON', 'Closing Soon: Artisan Bakes Vol. 8', 'Only 1 hour left to order from The Artisan Oven''s bake drop!', 'DROP', 4001, TRUE, '2026-08-10 20:01:00'),
-(9041, 2039, 'DROP_CLOSING_SOON', 'Closing Soon: Hyderabad Eid Special Biryani', 'Last chance! Zubeida''s Eid biryani closes in 1 hour.', 'DROP', 4012, TRUE, '2026-07-03 20:00:00'),
-(9042, 2040, 'DROP_CLOSING_SOON', 'Closing Soon: Hyderabad Eid Special Biryani', 'Last chance! Zubeida''s Eid biryani closes in 1 hour.', 'DROP', 4012, TRUE, '2026-07-03 20:01:00'),
-(9043, 2006, 'DROP_CLOSING_SOON', 'Closing Soon: Keto Monday Meal Prep Box', 'Only 1 hour left to order Ananya''s Keto meal prep!', 'DROP', 4019, TRUE, '2026-08-24 20:00:00'),
-(9044, 2011, 'DROP_CLOSING_SOON', 'Closing Soon: Keto Monday Meal Prep Box', 'Only 1 hour left to order Ananya''s Keto meal prep!', 'DROP', 4019, TRUE, '2026-08-24 20:01:00'),
-(9045, 2007, 'DROP_CLOSING_SOON', 'Closing Soon: Durga Puja Mishti Collection', 'Last chance to order Nobo''s festival sweets — closing in 1 hour!', 'DROP', 4027, TRUE, '2026-08-23 20:00:00'),
-(9046, 2009, 'DROP_CLOSING_SOON', 'Closing Soon: Durga Puja Mishti Collection', 'Last chance to order Nobo''s festival sweets — closing in 1 hour!', 'DROP', 4027, TRUE, '2026-08-23 20:01:00'),
-
--- === ORDER_CONFIRMED notifications ===
-(9047, 2001, 'ORDER_CONFIRMED', 'Order Confirmed!', 'Your order #5001 from The Artisan Oven is confirmed. Pickup on 11 Aug around 10:00 AM.', 'ORDER', 5001, TRUE, '2026-08-09 10:15:00'),
-(9048, 2002, 'ORDER_CONFIRMED', 'Order Confirmed!', 'Your order #5002 from The Artisan Oven is confirmed. Pickup on 11 Aug around 10:00 AM.', 'ORDER', 5002, TRUE, '2026-08-09 10:45:00'),
-(9049, 2038, 'ORDER_CONFIRMED', 'Order Confirmed!', 'Your order #5045 from Hyderabadi Dum House is confirmed. Pickup on 6 Jul from 1:00 PM.', 'ORDER', 5045, TRUE, '2026-07-02 11:00:00'),
-(9050, 2039, 'ORDER_CONFIRMED', 'Order Confirmed!', 'Your order #5046 from Hyderabadi Dum House is confirmed. Pickup on 6 Jul from 1:00 PM.', 'ORDER', 5046, TRUE, '2026-07-02 11:30:00'),
-(9051, 2001, 'ORDER_CONFIRMED', 'Order Confirmed!', 'Your order #5082 from Keto Kitchen by Ananya is confirmed. Pickup on 25 Aug from 8:00 AM.', 'ORDER', 5082, TRUE, '2026-08-23 09:30:00'),
-(9052, 2001, 'ORDER_CONFIRMED', 'Order Confirmed!', 'Your order #5106 from Nobo''s Sweet Corner is confirmed. Pickup on 10 Aug from 11:00 AM.', 'ORDER', 5106, TRUE, '2026-08-10 09:00:00'),
-(9053, 2002, 'ORDER_CONFIRMED', 'Order Confirmed!', 'Your order #5175 from Kerala Kitchen is confirmed. Pickup on 17 Aug during Onam sadya window.', 'ORDER', 5175, TRUE, '2026-08-11 10:00:00'),
-(9054, 2004, 'ORDER_CONFIRMED', 'Order Confirmed!', 'Your order #5176 from Kerala Kitchen is confirmed. Pickup on 17 Aug during Onam sadya window.', 'ORDER', 5176, TRUE, '2026-08-11 10:30:00'),
-
--- === ORDER_READY notifications ===
-(9055, 2001, 'ORDER_READY', 'Ready for Pickup!', 'Your order #5001 from The Artisan Oven is ready! Please collect it today between 10:00 AM – 12:00 PM.', 'ORDER', 5001, TRUE, '2026-08-11 10:00:00'),
-(9056, 2002, 'ORDER_READY', 'Ready for Pickup!', 'Your order #5002 from The Artisan Oven is ready! Please collect it today between 10:00 AM – 12:00 PM.', 'ORDER', 5002, TRUE, '2026-08-11 10:00:00'),
-(9057, 2003, 'ORDER_READY', 'Ready for Pickup!', 'Your order #5003 from The Artisan Oven is ready! Please collect it today between 10:00 AM – 12:00 PM.', 'ORDER', 5003, TRUE, '2026-08-11 10:00:00'),
-(9058, 2038, 'ORDER_READY', 'Ready for Pickup!', 'Your order #5045 from Hyderabadi Dum House is ready! Pickup today from 1:00 PM – 3:00 PM.', 'ORDER', 5045, TRUE, '2026-07-06 13:00:00'),
-(9059, 2039, 'ORDER_READY', 'Ready for Pickup!', 'Your order #5046 from Hyderabadi Dum House is ready! Pickup today from 1:00 PM – 3:00 PM.', 'ORDER', 5046, TRUE, '2026-07-06 13:00:00'),
-(9060, 2001, 'ORDER_READY', 'Ready for Pickup!', 'Your order #5082 from Keto Kitchen by Ananya is ready! Pickup 8:00 AM – 9:00 AM.', 'ORDER', 5082, TRUE, '2026-08-25 08:00:00'),
-(9061, 2001, 'ORDER_READY', 'Ready for Pickup!', 'Your order #5106 from Nobo''s Sweet Corner is ready! Pickup 11:00 AM – 1:00 PM.', 'ORDER', 5106, TRUE, '2026-08-10 11:00:00'),
-(9062, 2002, 'ORDER_READY', 'Ready for Pickup!', 'Your order #5175 from Kerala Kitchen is ready! Pickup any time during the sadya window.', 'ORDER', 5175, TRUE, '2026-08-17 11:00:00'),
-
--- === ORDER_CANCELLED notifications ===
-(9063, 2001, 'ORDER_CANCELLED', 'Order Cancelled', 'Your order #5006 from The Artisan Oven was cancelled. Refund will be processed within 3–5 business days.', 'ORDER', 5006, TRUE, '2026-08-10 18:00:00'),
-(9064, 2003, 'ORDER_CANCELLED', 'Order Cancelled', 'Your order #5016 from Maa Ki Rasoi was cancelled. Refund has been initiated.', 'ORDER', 5016, TRUE, '2026-08-24 18:00:00'),
-(9065, 2041, 'ORDER_CANCELLED', 'Order Cancelled', 'Your order #5052 from Hyderabadi Dum House was cancelled. We apologise for the inconvenience.', 'ORDER', 5052, TRUE, '2026-07-04 10:00:00'),
-(9066, 2047, 'ORDER_CANCELLED', 'Order Cancelled', 'Your order #5068 from Hyderabadi Dum House was cancelled. Refund initiated.', 'ORDER', 5068, TRUE, '2026-08-02 10:00:00'),
-(9067, 2001, 'ORDER_CANCELLED', 'Order Cancelled', 'Your order #5130 from Nobo''s Sweet Corner was cancelled. Refund has been initiated.', 'ORDER', 5130, TRUE, '2026-09-01 18:00:00'),
-
--- === LOW_STOCK notifications to creators ===
-(9068, 1001, 'LOW_STOCK', 'Low Stock Alert', 'Sourdough Loaf in Artisan Bakes Vol. 8 is almost sold out — only 2 portions remaining.', 'DROP', 4001, TRUE, '2026-08-10 15:00:00'),
-(9069, 1004, 'LOW_STOCK', 'Low Stock Alert', 'Mutton Dum Biryani in the Eid Special drop is almost sold out — only 3 portions remaining.', 'DROP', 4012, TRUE, '2026-07-03 12:00:00'),
-(9070, 1004, 'LOW_STOCK', 'Low Stock Alert', 'Chicken Biryani in Sunday Biryani Drop is down to last 4 portions. Close orders soon.', 'DROP', 4013, TRUE, '2026-07-19 14:00:00'),
-(9071, 1008, 'LOW_STOCK', 'Low Stock Alert', 'Rasgulla in Bengali Sweets Drop is running low — only 3 boxes remaining.', 'DROP', 4026, TRUE, '2026-08-10 09:00:00'),
-(9072, 1014, 'LOW_STOCK', 'Low Stock Alert', 'Full Onam Sadya (Veg) is almost sold out — only 2 portions left!', 'DROP', 4043, TRUE, '2026-08-14 10:00:00'),
-
--- === Unread notifications for currently OPEN drops ===
-(9073, 2001, 'DROP_OPEN', 'Now Open: Artisan Seasonal Bakes — Autumn', 'The Artisan Oven''s latest autumn drop is now taking orders!', 'DROP', 4005, FALSE, '2026-09-06 09:00:00'),
-(9074, 2002, 'DROP_OPEN', 'Now Open: Artisan Seasonal Bakes — Autumn', 'The Artisan Oven''s latest autumn drop is now taking orders!', 'DROP', 4005, FALSE, '2026-09-06 09:01:00'),
-(9075, 2003, 'DROP_OPEN', 'Now Open: Artisan Seasonal Bakes — Autumn', 'The Artisan Oven''s latest autumn drop is now taking orders!', 'DROP', 4005, FALSE, '2026-09-06 09:02:00'),
-(9076, 2038, 'DROP_OPEN', 'Now Open: Zubeida''s Biryani Express — Weekend Drop', 'Hyderabadi Dum House weekend drop is open. Limited to 30 portions only!', 'DROP', 4015, FALSE, '2026-09-05 09:00:00'),
-(9077, 2039, 'DROP_OPEN', 'Now Open: Zubeida''s Biryani Express — Weekend Drop', 'Hyderabadi Dum House weekend drop is open. Limited to 30 portions only!', 'DROP', 4015, FALSE, '2026-09-05 09:01:00'),
-(9078, 2001, 'DROP_OPEN', 'Now Open: Keto Power Bowl Series', 'Ananya''s new keto power bowl series is open for orders this week!', 'DROP', 4021, FALSE, '2026-09-07 09:00:00'),
-(9079, 2002, 'DROP_OPEN', 'Now Open: Keto Power Bowl Series', 'Ananya''s new keto power bowl series is open for orders this week!', 'DROP', 4021, FALSE, '2026-09-07 09:01:00'),
-(9080, 2002, 'DROP_OPEN', 'Now Open: Kerala Seafood & Biryani Festival', 'Kerala Kitchen is running a seafood festival drop this weekend!', 'DROP', 4047, FALSE, '2026-09-08 09:00:00'),
-(9081, 2004, 'DROP_OPEN', 'Now Open: Kerala Seafood & Biryani Festival', 'Kerala Kitchen is running a seafood festival drop this weekend!', 'DROP', 4047, FALSE, '2026-09-08 09:01:00');
-
--- ============================================================
--- SECTION 14: REELS
--- (restaurant_id, title, media_url, view_count)
--- Each active creator has 2-4 reels promoting their food drops
--- ============================================================
-INSERT INTO reels (reel_id, restaurant_id, title, media_url, view_count, created_at) VALUES
--- === The Artisan Oven (1001) ===
-(10001, 1001, 'How I make my legendary sourdough loaf at home', 'https://storage.foodflow.dev/reels/1001/sourdough_process.mp4', 3420, '2026-08-05 10:00:00'),
-(10002, 1001, 'Croissant lamination in 60 seconds — look at those layers!', 'https://storage.foodflow.dev/reels/1001/croissant_layers.mp4', 5120, '2026-08-07 10:00:00'),
-(10003, 1001, 'Autumn flavours: Cinnamon Apple Galette revealed!', 'https://storage.foodflow.dev/reels/1001/apple_galette.mp4', 2810, '2026-09-04 11:00:00'),
-
--- === Maa Ki Rasoi (1002) ===
-(10004, 1002, 'Slow-cooking dal makhani the traditional way — 8 hours on the chulha', 'https://storage.foodflow.dev/reels/1002/dal_makhani_slow.mp4', 2950, '2026-08-15 09:00:00'),
-(10005, 1002, 'Aloo paratha mornings — watch how I make them flaky!', 'https://storage.foodflow.dev/reels/1002/aloo_paratha.mp4', 1840, '2026-08-22 09:00:00'),
-
--- === Hyderabadi Dum House (1004) ===
-(10006, 1004, 'Dum sealing technique — this is how we trap the steam for perfect biryani', 'https://storage.foodflow.dev/reels/1004/dum_sealing.mp4', 8750, '2026-06-28 11:00:00'),
-(10007, 1004, 'The 3-hour marinade that makes my mutton biryani legendary', 'https://storage.foodflow.dev/reels/1004/mutton_marinade.mp4', 6320, '2026-07-12 10:00:00'),
-(10008, 1004, 'Sunday biryani prep — from raw rice to perfect dum in one reel', 'https://storage.foodflow.dev/reels/1004/sunday_prep.mp4', 4210, '2026-07-16 09:30:00'),
-(10009, 1004, 'Mirchi ka salan — the biryani''s perfect partner', 'https://storage.foodflow.dev/reels/1004/mirchi_salan.mp4', 3150, '2026-07-30 10:00:00'),
-
--- === Mumbai Street Eats (1005) ===
-(10010, 1005, 'Authentic vada pav — garlic chutney is the real hero here', 'https://storage.foodflow.dev/reels/1005/vada_pav_secret.mp4', 4620, '2026-08-22 17:00:00'),
-(10011, 1005, 'Pav bhaji loading — the butter makes all the difference!', 'https://storage.foodflow.dev/reels/1005/pav_bhaji_loading.mp4', 3180, '2026-09-04 16:00:00'),
-
--- === Keto Kitchen by Ananya (1006) ===
-(10012, 1006, 'How to make cauliflower rice that actually tastes amazing', 'https://storage.foodflow.dev/reels/1006/cauli_rice.mp4', 5430, '2026-08-18 08:00:00'),
-(10013, 1006, 'My weekly keto meal prep — 5 days of clean eating in 60 seconds', 'https://storage.foodflow.dev/reels/1006/weekly_prep.mp4', 7890, '2026-08-28 08:00:00'),
-(10014, 1006, 'Keto Power Bowl reveal — new menu for next drop!', 'https://storage.foodflow.dev/reels/1006/power_bowl_reveal.mp4', 3210, '2026-09-05 09:00:00'),
-
--- === Udupi Home Kitchen (1007) ===
-(10015, 1007, 'Paper dosa spreading technique — thin as a crepe, crispy as a chip!', 'https://storage.foodflow.dev/reels/1007/paper_dosa.mp4', 6150, '2026-08-18 07:30:00'),
-(10016, 1007, 'Coconut chutney in 2 minutes — fresh, no preservatives', 'https://storage.foodflow.dev/reels/1007/coconut_chutney.mp4', 3470, '2026-08-25 07:30:00'),
-(10017, 1007, 'Filter coffee the Udupi way — decoction to cup', 'https://storage.foodflow.dev/reels/1007/filter_coffee.mp4', 4920, '2026-09-01 07:30:00'),
-
--- === Nobo's Sweet Corner (1008) ===
-(10018, 1008, 'How to make sandesh with the perfect texture — chena secrets revealed', 'https://storage.foodflow.dev/reels/1008/sandesh_technique.mp4', 4350, '2026-08-03 10:00:00'),
-(10019, 1008, 'The rasgulla sponge test — if it bounces, it''s perfect!', 'https://storage.foodflow.dev/reels/1008/rasgulla_test.mp4', 5620, '2026-08-17 10:00:00'),
-(10020, 1008, 'Durga Puja mishti box — unwrapping the festival collection!', 'https://storage.foodflow.dev/reels/1008/puja_collection.mp4', 7840, '2026-08-21 10:00:00'),
-(10021, 1008, 'Autumn sondesh collection — each one hand-shaped and unique', 'https://storage.foodflow.dev/reels/1008/autumn_sondesh.mp4', 3150, '2026-08-29 10:00:00'),
-
--- === Green Bowl by Meera (1009) ===
-(10022, 1009, 'My detox smoothie bowl prep — no sugar, all nutrition', 'https://storage.foodflow.dev/reels/1009/smoothie_bowl.mp4', 4810, '2026-08-28 08:00:00'),
-(10023, 1009, 'Protein bowl assembly — 35g protein in one bowl!', 'https://storage.foodflow.dev/reels/1009/protein_bowl.mp4', 6230, '2026-09-02 08:00:00'),
-
--- === Pasta e Basta (1010) ===
-(10024, 1010, 'Fresh pasta from scratch — this is how Romans do it!', 'https://storage.foodflow.dev/reels/1010/fresh_pasta.mp4', 7140, '2026-08-20 18:00:00'),
-(10025, 1010, 'Real carbonara — no cream! Just egg, pecorino and guanciale', 'https://storage.foodflow.dev/reels/1010/real_carbonara.mp4', 9320, '2026-08-25 18:00:00'),
-(10026, 1010, 'Tiramisu assembly — ladyfingers and mascarpone magic', 'https://storage.foodflow.dev/reels/1010/tiramisu.mp4', 5450, '2026-09-01 18:00:00'),
-
--- === Jai Ho Kitchen (1011) ===
-(10027, 1011, 'Gujarati Thali reveal — 12 items prepared fresh every Sunday', 'https://storage.foodflow.dev/reels/1011/thali_reveal.mp4', 3680, '2026-08-27 09:00:00'),
-(10028, 1011, 'Undhiyu from scratch — the Surat way', 'https://storage.foodflow.dev/reels/1011/undhiyu.mp4', 2940, '2026-09-04 09:00:00'),
-
--- === Himalayan Dumplings (1012) ===
-(10029, 1012, 'Momo folding technique — 8 pleats in under 10 seconds!', 'https://storage.foodflow.dev/reels/1012/momo_folding.mp4', 8920, '2026-09-01 16:00:00'),
-(10030, 1012, 'Jhol momo broth — the real Kathmandu recipe', 'https://storage.foodflow.dev/reels/1012/jhol_broth.mp4', 5670, '2026-09-05 16:00:00'),
-
--- === Casa de Goa (1013) ===
-(10031, 1013, 'Bebinca — 7 layers of Goan tradition and love', 'https://storage.foodflow.dev/reels/1013/bebinca_layers.mp4', 4120, '2026-08-24 10:00:00'),
-(10032, 1013, 'Dodol making — the most patient recipe in Goa', 'https://storage.foodflow.dev/reels/1013/dodol_making.mp4', 3350, '2026-08-29 10:00:00'),
-
--- === Kerala Kitchen (1014) ===
-(10033, 1014, 'Full Onam Sadya spread — 24 dishes on a banana leaf!', 'https://storage.foodflow.dev/reels/1014/onam_sadya.mp4', 11420, '2026-08-08 09:00:00'),
-(10034, 1014, 'Karimeen Pollichathu — the pearl spot fish wrapped in banana leaf', 'https://storage.foodflow.dev/reels/1014/karimeen.mp4', 6830, '2026-09-01 10:00:00'),
-(10035, 1014, 'Kerala biryani vs Hyderabadi biryani — what''s the difference?', 'https://storage.foodflow.dev/reels/1014/kerala_biryani.mp4', 8950, '2026-09-05 10:00:00'),
-
--- === Aaroha Millets (1015) ===
-(10036, 1015, 'Why I cook only with millets — the ancient grain revolution', 'https://storage.foodflow.dev/reels/1015/millet_why.mp4', 3210, '2026-09-01 09:00:00'),
-(10037, 1015, 'Ragi laddoo — 3 ingredients, zero guilt', 'https://storage.foodflow.dev/reels/1015/ragi_laddoo.mp4', 4680, '2026-09-05 09:00:00');
-
--- ============================================================
--- SECTION 15: UPDATE CREATOR VERIFICATION LEVELS
--- Set current_level based on the verification data inserted in
--- SECTION 4 to keep the denormalised field consistent.
--- ============================================================
-UPDATE creator_verifications SET
-    current_level = 3,
-    level_updated_at = '2026-06-20 10:00:00'
-WHERE creator_id IN (1004, 1006, 1007, 1008, 1014);
-
-UPDATE creator_verifications SET
-    current_level = 2,
-    level_updated_at = '2026-07-10 10:00:00'
-WHERE creator_id IN (1001, 1002, 1005, 1009, 1010, 1011, 1012, 1013, 1015);
-
-UPDATE creator_verifications SET
-    current_level = 1,
-    level_updated_at = '2026-08-01 10:00:00'
-WHERE creator_id IN (1003);
-
--- ============================================================
--- SECTION 16: UPDATE RESTAURANT AVERAGE RATINGS
--- Keep the denormalised avg_rating on the restaurants table
--- consistent with the ratings inserted above.
--- ============================================================
-UPDATE restaurants SET avg_rating = 4.7 WHERE restaurant_id = 1001;
-UPDATE restaurants SET avg_rating = 4.7 WHERE restaurant_id = 1002;
-UPDATE restaurants SET avg_rating = 4.8 WHERE restaurant_id = 1004;
-UPDATE restaurants SET avg_rating = 4.6 WHERE restaurant_id = 1005;
-UPDATE restaurants SET avg_rating = 4.7 WHERE restaurant_id = 1006;
-UPDATE restaurants SET avg_rating = 4.8 WHERE restaurant_id = 1007;
-UPDATE restaurants SET avg_rating = 4.7 WHERE restaurant_id = 1008;
-UPDATE restaurants SET avg_rating = 4.7 WHERE restaurant_id = 1009;
-UPDATE restaurants SET avg_rating = 4.8 WHERE restaurant_id = 1010;
-UPDATE restaurants SET avg_rating = 4.7 WHERE restaurant_id = 1011;
-UPDATE restaurants SET avg_rating = 4.8 WHERE restaurant_id = 1012;
-UPDATE restaurants SET avg_rating = 4.7 WHERE restaurant_id = 1013;
-UPDATE restaurants SET avg_rating = 4.8 WHERE restaurant_id = 1014;
-UPDATE restaurants SET avg_rating = 4.7 WHERE restaurant_id = 1015;
-
--- ============================================================
--- END OF V35__seed_realistic_dev_data.sql
--- Target row counts (approximate):
---   users             : 65  (15 creators + 50 customers)
---   restaurants       : 15
---   creator_verif.    : 15
---   menu_items        : ~172
---   food_drops        : ~49
---   drop_items        : ~125
---   creator_follows   : ~75
---   orders            : ~205
---   order_items       : ~320
---   payments          : ~205
---   ratings           : 93
---   notifications     : 81
---   reels             : 37
--- ============================================================
+-- Realistic interconnected development data population
+
+
+-- 1. Customers
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2001, 'Arjun Mehta', 'arjun.mehta@example.com', '9845395160', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2002, 'Sneha Desai', 'sneha.desai@example.com', '9886908686', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2003, 'Rahul Gupta', 'rahul.gupta@example.com', '9801405342', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2004, 'Sneha Nair', 'sneha.nair@example.com', '9865560668', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2005, 'Vikash Pandey', 'vikash.pandey@example.com', '9853712584', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2006, 'Divya Menon', 'divya.menon@example.com', '9809776761', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2007, 'Kiran Patel', 'kiran.patel@example.com', '9849108778', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2008, 'Aakash Verma', 'aakash.verma@example.com', '9805223410', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2009, 'Riya Shah', 'riya.shah@example.com', '9820637145', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2010, 'Suresh Kumar', 'suresh.kumar@example.com', '9837157921', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2011, 'Pooja Mehta', 'pooja.mehta@example.com', '9853244649', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2012, 'Ankit Joshi', 'ankit.joshi@example.com', '9802898845', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2013, 'Meena Pillai', 'meena.pillai@example.com', '9880341282', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2014, 'Rohit Agarwal', 'rohit.agarwal@example.com', '9804962560', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2015, 'Swathi Krishnan', 'swathi.krishnan@example.com', '9862876825', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2016, 'Abhishek Das', 'abhishek.das@example.com', '9882710403', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2017, 'Kavya Reddy', 'kavya.reddy@example.com', '9806422071', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2018, 'Siddharth Rao', 'siddharth.rao@example.com', '9838626416', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2019, 'Manisha Bose', 'manisha.bose@example.com', '9804623239', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2020, 'Nikhil Tiwari', 'nikhil.tiwari@example.com', '9871666298', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2021, 'Tanvi Shah', 'tanvi.shah@example.com', '9870757854', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2022, 'Deepak Nambiar', 'deepak.nambiar@example.com', '9847777884', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2023, 'Ishita Chatterjee', 'ishita.chatterjee@example.com', '9880167579', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2024, 'Vishal Kumar', 'vishal.kumar@example.com', '9817277486', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2025, 'Shreya Varma', 'shreya.varma@example.com', '9803722404', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2026, 'Gaurav Malhotra', 'gaurav.malhotra@example.com', '9848563436', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2027, 'Lakshmi Subramaniam', 'lakshmi.subramaniam@example.com', '9868175600', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2028, 'Rajiv Kapoor', 'rajiv.kapoor@example.com', '9882310962', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2029, 'Ankita Singh', 'ankita.singh@example.com', '9882924540', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2030, 'Mayur Desai', 'mayur.desai@example.com', '9887051246', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2031, 'Chandni Mishra', 'chandni.mishra@example.com', '9890448009', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2032, 'Aryan Patel', 'aryan.patel@example.com', '9851111718', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2033, 'Preeti Nair', 'preeti.nair@example.com', '9836321809', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2034, 'Saurabh Yadav', 'saurabh.yadav@example.com', '9865741818', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2035, 'Bindu Krishnan', 'bindu.krishnan@example.com', '9894117450', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2036, 'Tushar Shah', 'tushar.shah@example.com', '9883586687', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2037, 'Archana Pillai', 'archana.pillai@example.com', '9893321678', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2038, 'Vivek Menon', 'vivek.menon@example.com', '9884219490', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2039, 'Shalini Gupta', 'shalini.gupta@example.com', '9886788533', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2040, 'Pratik Das', 'pratik.das@example.com', '9826449242', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2041, 'Megha Reddy', 'megha.reddy@example.com', '9831106565', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2042, 'Shivam Jha', 'shivam.jha@example.com', '9845478313', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2043, 'Hema Kiran', 'hema.kiran@example.com', '9884882639', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2044, 'Abhinav Roy', 'abhinav.roy@example.com', '9868779469', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2045, 'Padma Sundaram', 'padma.sundaram@example.com', '9814757696', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2046, 'Kaushal Mehta', 'kaushal.mehta@example.com', '9821370609', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2047, 'Ranjana Iyer', 'ranjana.iyer@example.com', '9815191974', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2048, 'Pavan Kumar', 'pavan.kumar@example.com', '9892896938', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2049, 'Vaishali Shah', 'vaishali.shah@example.com', '9846641692', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (2050, 'Girish Nambiar', 'girish.nambiar@example.com', '9851855732', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'CUSTOMER', TRUE);
+
+-- 2. Creators, Restaurants, Verifications
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1001, 'Priya Sharma', 'thesourdoughstory@creator.com', '9990903223', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1001, 1001, 'The Sourdough Story', 'Bangalore', 'Bakery', TRUE, 'HOME_BAKER', 'Artisan sourdough and pastries.', 'sourdoughstory_blr', 3, TRUE, 'Bangalore Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1001, 3, TRUE, 'FSSAI-1001');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1002, 'Aarti Devi', 'maakirasoi@creator.com', '9980859048', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1002, 1002, 'Maa Ki Rasoi', 'Delhi', 'North Indian', TRUE, 'TIFFIN_SERVICE', 'Authentic homestyle North Indian thalis.', 'maakirasoidelhi', 2, TRUE, 'Delhi Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1002, 2, TRUE, 'FSSAI-1002');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1003, 'Rahul Verma', 'midnightmunchies@creator.com', '9993054125', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1003, 1003, 'Midnight Munchies', 'Mumbai', 'Fast Food', TRUE, 'CLOUD_KITCHEN', 'Late-night cravings sorted.', 'midnightmunchies_mum', 0, TRUE, 'Mumbai Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1003, 0, TRUE, 'FSSAI-1003');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1004, 'Mohammed Hussain', 'sundaybiryaniclub@creator.com', '9930915909', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1004, 1004, 'Sunday Biryani Club', 'Hyderabad', 'Hyderabadi', TRUE, 'WEEKEND_CHEF', 'Authentic Dum Biryani.', 'sundaybiryaniclub', 3, TRUE, 'Hyderabad Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1004, 3, TRUE, 'FSSAI-1004');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1005, 'Sanjay Patil', 'bombayvadapav@creator.com', '9988178840', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1005, 1005, 'Bombay Vada Pav', 'Pune', 'Street Food', TRUE, 'SPECIALTY_DESSERTS', 'Best Vada Pav with secret chutney.', 'bombayvadapav_pune', 1, TRUE, 'Pune Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1005, 1, TRUE, 'FSSAI-1005');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1006, 'Ritu Kapoor', 'ketokitchen@creator.com', '9983443099', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1006, 1006, 'Keto Kitchen', 'Bangalore', 'Healthy', TRUE, 'HEALTHY_MEALS', 'Guilt-free keto meals.', 'ketokitchen_blr', 2, TRUE, 'Bangalore Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1006, 2, TRUE, 'FSSAI-1006');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1007, 'Karthik Iyer', 'chennaispice@creator.com', '9929626756', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1007, 1007, 'Chennai Spice', 'Chennai', 'South Indian', TRUE, 'HOME_BAKER', 'Filter coffee and crispy dosas.', 'chennaispice_chn', 1, TRUE, 'Chennai Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1007, 1, TRUE, 'FSSAI-1007');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1008, 'Amit Das', 'bengalisweetscorner@creator.com', '9953047193', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1008, 1008, 'Bengali Sweets Corner', 'Kolkata', 'Desserts', TRUE, 'SPECIALTY_DESSERTS', 'Authentic Rosogolla and Sandesh.', 'bengalisweetscorner', 3, TRUE, 'Kolkata Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1008, 3, TRUE, 'FSSAI-1008');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1009, 'Neha Singh', 'fitbites@creator.com', '9972066455', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1009, 1009, 'Fit Bites', 'Delhi', 'Salads', TRUE, 'HEALTHY_MEALS', 'Power bowls for fitness enthusiasts.', 'fitbites_delhi', 2, TRUE, 'Delhi Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1009, 2, TRUE, 'FSSAI-1009');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1010, 'Vikram Mehta', 'thepastabar@creator.com', '9909573866', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1010, 1010, 'The Pasta Bar', 'Mumbai', 'Italian', TRUE, 'CLOUD_KITCHEN', 'Handmade pasta.', 'thepastabar_mum', 2, TRUE, 'Mumbai Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1010, 2, TRUE, 'FSSAI-1010');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1011, 'Bhavna Patel', 'gujaratithalihouse@creator.com', '9984627705', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1011, 1011, 'Gujarati Thali House', 'Ahmedabad', 'Gujarati', TRUE, 'TIFFIN_SERVICE', 'Traditional thalis.', 'gujaratithalihouse', 1, TRUE, 'Ahmedabad Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1011, 1, TRUE, 'FSSAI-1011');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1012, 'Tenzin Gyatso', 'momosmore@creator.com', '9950440862', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1012, 1012, 'Momos & More', 'Delhi', 'Tibetan', TRUE, 'WEEKEND_CHEF', 'Steamed and fried momos.', 'momosandmoredelhi', 1, TRUE, 'Delhi Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1012, 1, TRUE, 'FSSAI-1012');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1013, 'Sophia Fernandez', 'bakemyday@creator.com', '9978690726', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1013, 1013, 'Bake My Day', 'Goa', 'Bakery', TRUE, 'HOME_BAKER', 'Custom celebration cakes.', 'bakemyday_goa', 2, TRUE, 'Goa Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1013, 2, TRUE, 'FSSAI-1013');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1014, 'Mathew Thomas', 'keralakitchen@creator.com', '9927105558', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1014, 1014, 'Kerala Kitchen', 'Bangalore', 'Kerala', TRUE, 'CLOUD_KITCHEN', 'Appam and authentic seafood.', 'keralakitchenblr', 3, TRUE, 'Bangalore Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1014, 3, TRUE, 'FSSAI-1014');
+INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (1015, 'Divya Reddy', 'milletmagic@creator.com', '9938481758', '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu', 'SELLER', TRUE);
+INSERT INTO restaurants (restaurant_id, owner_id, name, city, cuisine, is_open, creator_type, bio, instagram_handle, verification_level, is_accepting_orders, pickup_address, avg_rating, follower_count, total_orders_completed) VALUES (1015, 1015, 'Millet Magic', 'Hyderabad', 'Healthy', TRUE, 'HEALTHY_MEALS', 'Gluten-free ancient grain meals.', 'milletmagic_hyd', 1, TRUE, 'Hyderabad Central Area', 0.0, 0, 0);
+INSERT INTO creator_verifications (creator_id, current_level, phone_otp_verified, food_licence_number) VALUES (1015, 1, TRUE, 'FSSAI-1015');
+
+-- 3. Menu Items
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3001, 1001, 'Bakery Side 1', 'Delicious Bakery Side 1', 330, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3002, 1001, 'Bakery Starter 2', 'Delicious Bakery Starter 2', 420, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3003, 1001, 'Bakery Starter 3', 'Delicious Bakery Starter 3', 110, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3004, 1001, 'Bakery Beverage 4', 'Delicious Bakery Beverage 4', 300, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3005, 1001, 'Bakery Beverage 5', 'Delicious Bakery Beverage 5', 460, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3006, 1001, 'Bakery Dessert 6', 'Delicious Bakery Dessert 6', 130, false, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3007, 1001, 'Bakery Beverage 7', 'Delicious Bakery Beverage 7', 210, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3008, 1001, 'Bakery Dessert 8', 'Delicious Bakery Dessert 8', 300, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3009, 1001, 'Bakery Side 9', 'Delicious Bakery Side 9', 470, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3010, 1001, 'Bakery Side 10', 'Delicious Bakery Side 10', 110, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3011, 1001, 'Bakery Main Course 11', 'Delicious Bakery Main Course 11', 460, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3012, 1001, 'Bakery Beverage 12', 'Delicious Bakery Beverage 12', 380, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3013, 1001, 'Bakery Side 13', 'Delicious Bakery Side 13', 460, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3014, 1001, 'Bakery Dessert 14', 'Delicious Bakery Dessert 14', 110, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3015, 1001, 'Bakery Beverage 15', 'Delicious Bakery Beverage 15', 170, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3016, 1002, 'North Indian Beverage 1', 'Delicious North Indian Beverage 1', 230, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3017, 1002, 'North Indian Side 2', 'Delicious North Indian Side 2', 180, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3018, 1002, 'North Indian Dessert 3', 'Delicious North Indian Dessert 3', 200, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3019, 1002, 'North Indian Main Course 4', 'Delicious North Indian Main Course 4', 240, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3020, 1002, 'North Indian Main Course 5', 'Delicious North Indian Main Course 5', 400, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3021, 1002, 'North Indian Main Course 6', 'Delicious North Indian Main Course 6', 430, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3022, 1002, 'North Indian Dessert 7', 'Delicious North Indian Dessert 7', 460, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3023, 1002, 'North Indian Side 8', 'Delicious North Indian Side 8', 270, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3024, 1002, 'North Indian Beverage 9', 'Delicious North Indian Beverage 9', 380, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3025, 1002, 'North Indian Main Course 10', 'Delicious North Indian Main Course 10', 260, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3026, 1002, 'North Indian Side 11', 'Delicious North Indian Side 11', 300, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3027, 1002, 'North Indian Starter 12', 'Delicious North Indian Starter 12', 350, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3028, 1002, 'North Indian Side 13', 'Delicious North Indian Side 13', 460, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3029, 1003, 'Fast Food Side 1', 'Delicious Fast Food Side 1', 240, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3030, 1003, 'Fast Food Beverage 2', 'Delicious Fast Food Beverage 2', 210, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3031, 1003, 'Fast Food Main Course 3', 'Delicious Fast Food Main Course 3', 100, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3032, 1003, 'Fast Food Side 4', 'Delicious Fast Food Side 4', 480, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3033, 1003, 'Fast Food Beverage 5', 'Delicious Fast Food Beverage 5', 200, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3034, 1003, 'Fast Food Side 6', 'Delicious Fast Food Side 6', 100, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3035, 1003, 'Fast Food Main Course 7', 'Delicious Fast Food Main Course 7', 420, false, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3036, 1003, 'Fast Food Beverage 8', 'Delicious Fast Food Beverage 8', 420, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3037, 1004, 'Hyderabadi Main Course 1', 'Delicious Hyderabadi Main Course 1', 480, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3038, 1004, 'Hyderabadi Beverage 2', 'Delicious Hyderabadi Beverage 2', 280, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3039, 1004, 'Hyderabadi Main Course 3', 'Delicious Hyderabadi Main Course 3', 190, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3040, 1004, 'Hyderabadi Main Course 4', 'Delicious Hyderabadi Main Course 4', 200, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3041, 1004, 'Hyderabadi Starter 5', 'Delicious Hyderabadi Starter 5', 310, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3042, 1004, 'Hyderabadi Main Course 6', 'Delicious Hyderabadi Main Course 6', 270, false, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3043, 1004, 'Hyderabadi Dessert 7', 'Delicious Hyderabadi Dessert 7', 200, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3044, 1004, 'Hyderabadi Main Course 8', 'Delicious Hyderabadi Main Course 8', 150, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3045, 1005, 'Street Food Side 1', 'Delicious Street Food Side 1', 450, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3046, 1005, 'Street Food Beverage 2', 'Delicious Street Food Beverage 2', 270, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3047, 1005, 'Street Food Main Course 3', 'Delicious Street Food Main Course 3', 260, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3048, 1005, 'Street Food Starter 4', 'Delicious Street Food Starter 4', 260, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3049, 1005, 'Street Food Dessert 5', 'Delicious Street Food Dessert 5', 170, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3050, 1005, 'Street Food Side 6', 'Delicious Street Food Side 6', 200, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3051, 1005, 'Street Food Dessert 7', 'Delicious Street Food Dessert 7', 370, false, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3052, 1005, 'Street Food Starter 8', 'Delicious Street Food Starter 8', 220, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3053, 1005, 'Street Food Side 9', 'Delicious Street Food Side 9', 430, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3054, 1005, 'Street Food Main Course 10', 'Delicious Street Food Main Course 10', 310, false, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3055, 1005, 'Street Food Side 11', 'Delicious Street Food Side 11', 200, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3056, 1005, 'Street Food Side 12', 'Delicious Street Food Side 12', 230, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3057, 1005, 'Street Food Main Course 13', 'Delicious Street Food Main Course 13', 130, false, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3058, 1005, 'Street Food Main Course 14', 'Delicious Street Food Main Course 14', 200, false, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3059, 1006, 'Healthy Dessert 1', 'Delicious Healthy Dessert 1', 230, false, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3060, 1006, 'Healthy Starter 2', 'Delicious Healthy Starter 2', 390, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3061, 1006, 'Healthy Beverage 3', 'Delicious Healthy Beverage 3', 150, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3062, 1006, 'Healthy Beverage 4', 'Delicious Healthy Beverage 4', 220, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3063, 1006, 'Healthy Starter 5', 'Delicious Healthy Starter 5', 430, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3064, 1006, 'Healthy Beverage 6', 'Delicious Healthy Beverage 6', 300, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3065, 1006, 'Healthy Dessert 7', 'Delicious Healthy Dessert 7', 420, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3066, 1006, 'Healthy Starter 8', 'Delicious Healthy Starter 8', 270, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3067, 1006, 'Healthy Dessert 9', 'Delicious Healthy Dessert 9', 120, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3068, 1007, 'South Indian Beverage 1', 'Delicious South Indian Beverage 1', 240, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3069, 1007, 'South Indian Beverage 2', 'Delicious South Indian Beverage 2', 490, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3070, 1007, 'South Indian Dessert 3', 'Delicious South Indian Dessert 3', 410, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3071, 1007, 'South Indian Starter 4', 'Delicious South Indian Starter 4', 410, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3072, 1007, 'South Indian Starter 5', 'Delicious South Indian Starter 5', 320, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3073, 1007, 'South Indian Main Course 6', 'Delicious South Indian Main Course 6', 140, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3074, 1007, 'South Indian Starter 7', 'Delicious South Indian Starter 7', 120, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3075, 1007, 'South Indian Beverage 8', 'Delicious South Indian Beverage 8', 480, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3076, 1007, 'South Indian Dessert 9', 'Delicious South Indian Dessert 9', 410, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3077, 1007, 'South Indian Starter 10', 'Delicious South Indian Starter 10', 170, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3078, 1007, 'South Indian Dessert 11', 'Delicious South Indian Dessert 11', 370, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3079, 1007, 'South Indian Dessert 12', 'Delicious South Indian Dessert 12', 330, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3080, 1008, 'Desserts Main Course 1', 'Delicious Desserts Main Course 1', 180, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3081, 1008, 'Desserts Side 2', 'Delicious Desserts Side 2', 180, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3082, 1008, 'Desserts Main Course 3', 'Delicious Desserts Main Course 3', 370, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3083, 1008, 'Desserts Starter 4', 'Delicious Desserts Starter 4', 460, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3084, 1008, 'Desserts Dessert 5', 'Delicious Desserts Dessert 5', 290, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3085, 1008, 'Desserts Beverage 6', 'Delicious Desserts Beverage 6', 280, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3086, 1008, 'Desserts Starter 7', 'Delicious Desserts Starter 7', 460, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3087, 1008, 'Desserts Beverage 8', 'Delicious Desserts Beverage 8', 240, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3088, 1008, 'Desserts Main Course 9', 'Delicious Desserts Main Course 9', 360, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3089, 1008, 'Desserts Main Course 10', 'Delicious Desserts Main Course 10', 300, false, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3090, 1008, 'Desserts Side 11', 'Delicious Desserts Side 11', 230, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3091, 1008, 'Desserts Beverage 12', 'Delicious Desserts Beverage 12', 440, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3092, 1008, 'Desserts Side 13', 'Delicious Desserts Side 13', 300, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3093, 1008, 'Desserts Side 14', 'Delicious Desserts Side 14', 370, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3094, 1009, 'Salads Main Course 1', 'Delicious Salads Main Course 1', 130, false, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3095, 1009, 'Salads Side 2', 'Delicious Salads Side 2', 230, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3096, 1009, 'Salads Side 3', 'Delicious Salads Side 3', 400, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3097, 1009, 'Salads Starter 4', 'Delicious Salads Starter 4', 380, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3098, 1009, 'Salads Beverage 5', 'Delicious Salads Beverage 5', 420, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3099, 1009, 'Salads Beverage 6', 'Delicious Salads Beverage 6', 130, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3100, 1009, 'Salads Dessert 7', 'Delicious Salads Dessert 7', 350, false, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3101, 1009, 'Salads Dessert 8', 'Delicious Salads Dessert 8', 150, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3102, 1009, 'Salads Beverage 9', 'Delicious Salads Beverage 9', 140, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3103, 1009, 'Salads Starter 10', 'Delicious Salads Starter 10', 280, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3104, 1009, 'Salads Main Course 11', 'Delicious Salads Main Course 11', 480, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3105, 1009, 'Salads Starter 12', 'Delicious Salads Starter 12', 150, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3106, 1009, 'Salads Side 13', 'Delicious Salads Side 13', 420, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3107, 1010, 'Italian Starter 1', 'Delicious Italian Starter 1', 330, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3108, 1010, 'Italian Side 2', 'Delicious Italian Side 2', 470, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3109, 1010, 'Italian Dessert 3', 'Delicious Italian Dessert 3', 490, false, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3110, 1010, 'Italian Beverage 4', 'Delicious Italian Beverage 4', 180, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3111, 1010, 'Italian Dessert 5', 'Delicious Italian Dessert 5', 270, false, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3112, 1010, 'Italian Main Course 6', 'Delicious Italian Main Course 6', 170, false, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3113, 1010, 'Italian Dessert 7', 'Delicious Italian Dessert 7', 160, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3114, 1010, 'Italian Side 8', 'Delicious Italian Side 8', 180, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3115, 1010, 'Italian Side 9', 'Delicious Italian Side 9', 450, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3116, 1010, 'Italian Dessert 10', 'Delicious Italian Dessert 10', 180, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3117, 1010, 'Italian Dessert 11', 'Delicious Italian Dessert 11', 150, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3118, 1010, 'Italian Dessert 12', 'Delicious Italian Dessert 12', 330, false, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3119, 1010, 'Italian Side 13', 'Delicious Italian Side 13', 180, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3120, 1010, 'Italian Main Course 14', 'Delicious Italian Main Course 14', 360, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3121, 1011, 'Gujarati Beverage 1', 'Delicious Gujarati Beverage 1', 140, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3122, 1011, 'Gujarati Beverage 2', 'Delicious Gujarati Beverage 2', 440, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3123, 1011, 'Gujarati Main Course 3', 'Delicious Gujarati Main Course 3', 250, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3124, 1011, 'Gujarati Dessert 4', 'Delicious Gujarati Dessert 4', 240, false, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3125, 1011, 'Gujarati Starter 5', 'Delicious Gujarati Starter 5', 130, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3126, 1011, 'Gujarati Beverage 6', 'Delicious Gujarati Beverage 6', 480, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3127, 1011, 'Gujarati Beverage 7', 'Delicious Gujarati Beverage 7', 190, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3128, 1011, 'Gujarati Starter 8', 'Delicious Gujarati Starter 8', 410, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3129, 1011, 'Gujarati Beverage 9', 'Delicious Gujarati Beverage 9', 430, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3130, 1011, 'Gujarati Main Course 10', 'Delicious Gujarati Main Course 10', 390, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3131, 1011, 'Gujarati Beverage 11', 'Delicious Gujarati Beverage 11', 470, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3132, 1011, 'Gujarati Beverage 12', 'Delicious Gujarati Beverage 12', 240, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3133, 1012, 'Tibetan Main Course 1', 'Delicious Tibetan Main Course 1', 240, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3134, 1012, 'Tibetan Beverage 2', 'Delicious Tibetan Beverage 2', 300, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3135, 1012, 'Tibetan Beverage 3', 'Delicious Tibetan Beverage 3', 210, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3136, 1012, 'Tibetan Beverage 4', 'Delicious Tibetan Beverage 4', 350, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3137, 1012, 'Tibetan Starter 5', 'Delicious Tibetan Starter 5', 270, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3138, 1012, 'Tibetan Dessert 6', 'Delicious Tibetan Dessert 6', 430, false, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3139, 1012, 'Tibetan Side 7', 'Delicious Tibetan Side 7', 460, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3140, 1012, 'Tibetan Beverage 8', 'Delicious Tibetan Beverage 8', 130, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3141, 1012, 'Tibetan Starter 9', 'Delicious Tibetan Starter 9', 220, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3142, 1012, 'Tibetan Beverage 10', 'Delicious Tibetan Beverage 10', 140, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3143, 1012, 'Tibetan Side 11', 'Delicious Tibetan Side 11', 460, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3144, 1012, 'Tibetan Side 12', 'Delicious Tibetan Side 12', 160, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3145, 1012, 'Tibetan Side 13', 'Delicious Tibetan Side 13', 280, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3146, 1012, 'Tibetan Side 14', 'Delicious Tibetan Side 14', 100, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3147, 1012, 'Tibetan Starter 15', 'Delicious Tibetan Starter 15', 490, true, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3148, 1013, 'Bakery Main Course 1', 'Delicious Bakery Main Course 1', 380, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3149, 1013, 'Bakery Main Course 2', 'Delicious Bakery Main Course 2', 400, false, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3150, 1013, 'Bakery Side 3', 'Delicious Bakery Side 3', 120, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3151, 1013, 'Bakery Beverage 4', 'Delicious Bakery Beverage 4', 250, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3152, 1013, 'Bakery Beverage 5', 'Delicious Bakery Beverage 5', 400, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3153, 1013, 'Bakery Side 6', 'Delicious Bakery Side 6', 180, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3154, 1013, 'Bakery Dessert 7', 'Delicious Bakery Dessert 7', 140, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3155, 1013, 'Bakery Side 8', 'Delicious Bakery Side 8', 270, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3156, 1013, 'Bakery Main Course 9', 'Delicious Bakery Main Course 9', 470, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3157, 1014, 'Kerala Main Course 1', 'Delicious Kerala Main Course 1', 440, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3158, 1014, 'Kerala Beverage 2', 'Delicious Kerala Beverage 2', 170, false, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3159, 1014, 'Kerala Dessert 3', 'Delicious Kerala Dessert 3', 120, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3160, 1014, 'Kerala Main Course 4', 'Delicious Kerala Main Course 4', 140, false, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3161, 1014, 'Kerala Main Course 5', 'Delicious Kerala Main Course 5', 340, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3162, 1014, 'Kerala Side 6', 'Delicious Kerala Side 6', 340, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3163, 1014, 'Kerala Dessert 7', 'Delicious Kerala Dessert 7', 150, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3164, 1014, 'Kerala Side 8', 'Delicious Kerala Side 8', 230, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3165, 1014, 'Kerala Dessert 9', 'Delicious Kerala Dessert 9', 430, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3166, 1014, 'Kerala Side 10', 'Delicious Kerala Side 10', 340, false, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3167, 1015, 'Healthy Side 1', 'Delicious Healthy Side 1', 410, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3168, 1015, 'Healthy Starter 2', 'Delicious Healthy Starter 2', 400, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3169, 1015, 'Healthy Dessert 3', 'Delicious Healthy Dessert 3', 100, true, 'Dessert', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3170, 1015, 'Healthy Starter 4', 'Delicious Healthy Starter 4', 350, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3171, 1015, 'Healthy Beverage 5', 'Delicious Healthy Beverage 5', 170, true, 'Beverage', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3172, 1015, 'Healthy Starter 6', 'Delicious Healthy Starter 6', 280, false, 'Starter', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3173, 1015, 'Healthy Main Course 7', 'Delicious Healthy Main Course 7', 470, true, 'Main Course', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3174, 1015, 'Healthy Side 8', 'Delicious Healthy Side 8', 410, true, 'Side', 50, FALSE);
+INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (3175, 1015, 'Healthy Dessert 9', 'Delicious Healthy Dessert 9', 260, false, 'Dessert', 50, FALSE);
+
+-- 4. Follows
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2001, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2002, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2003, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2004, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2005, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2006, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2007, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2008, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2009, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2010, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2011, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2012, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2013, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2014, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2015, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2016, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2017, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2018, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2019, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2020, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2021, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2022, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2023, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2024, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2025, 1001);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2026, 1004);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2027, 1004);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2028, 1004);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2029, 1004);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2030, 1004);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2031, 1004);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2032, 1004);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2033, 1004);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2034, 1004);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2035, 1004);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2036, 1004);
+INSERT INTO creator_follows (follower_id, creator_id) VALUES (2037, 1004);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2029, 1013);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2001, 1014);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2035, 1005);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2003, 1013);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2006, 1014);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2005, 1005);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2042, 1012);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2022, 1005);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2042, 1013);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2011, 1009);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2003, 1011);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2046, 1002);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2031, 1008);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2015, 1013);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2018, 1014);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2036, 1010);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2021, 1009);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2040, 1006);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2032, 1010);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2013, 1010);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2030, 1005);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2018, 1015);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2007, 1002);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2050, 1008);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2039, 1009);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2007, 1011);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2036, 1011);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2040, 1013);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2027, 1011);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2023, 1005);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2045, 1002);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2034, 1006);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2040, 1015);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2030, 1013);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2036, 1011);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2032, 1009);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2027, 1014);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2029, 1010);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2044, 1015);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2015, 1011);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2006, 1007);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2038, 1002);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2026, 1006);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2005, 1006);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2002, 1012);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2044, 1015);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2003, 1011);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2040, 1008);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2033, 1006);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2022, 1007);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2009, 1014);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2049, 1010);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2008, 1014);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2003, 1013);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2011, 1002);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2011, 1005);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2002, 1009);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2045, 1009);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2020, 1013);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2016, 1007);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2018, 1011);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2038, 1005);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2023, 1009);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2036, 1012);
+INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (2015, 1012);
+
+-- 5. Food Drops & Items
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4001, 1001, 'The Sourdough Story Drop 1', 'Special weekend drop.', CURDATE() - INTERVAL 5 DAY, NOW() - INTERVAL 6 DAY, 'Bangalore Center', '18:00 - 20:00', 15, 15, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4501, 4001, 3001, 30, 30);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4502, 4001, 3002, 30, 30);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4002, 1001, 'The Sourdough Story Drop 2', 'Special weekend drop.', CURDATE() - INTERVAL 1 DAY, NOW() - INTERVAL 2 DAY, 'Bangalore Center', '18:00 - 20:00', 15, 15, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4503, 4002, 3001, 30, 30);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4504, 4002, 3002, 30, 30);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4003, 1001, 'The Sourdough Story Drop 3', 'Special weekend drop.', CURDATE() - INTERVAL 27 DAY, NOW() - INTERVAL 28 DAY, 'Bangalore Center', '18:00 - 20:00', 20, 20, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4505, 4003, 3001, 40, 40);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4506, 4003, 3002, 40, 40);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4507, 4003, 3003, 40, 40);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4508, 4003, 3004, 40, 40);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4004, 1001, 'The Sourdough Story Drop 4', 'Special weekend drop.', CURDATE() - INTERVAL 21 DAY, NOW() - INTERVAL 22 DAY, 'Bangalore Center', '18:00 - 20:00', 38, 38, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4509, 4004, 3001, 76, 76);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4510, 4004, 3002, 76, 76);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4005, 1001, 'The Sourdough Story Drop 5', 'Special weekend drop.', CURDATE() - INTERVAL 12 DAY, NOW() - INTERVAL 13 DAY, 'Bangalore Center', '18:00 - 20:00', 34, 34, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4511, 4005, 3001, 68, 68);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4512, 4005, 3002, 68, 68);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4513, 4005, 3003, 68, 68);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4514, 4005, 3004, 68, 68);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4006, 1001, 'The Sourdough Story Drop 6', 'Special weekend drop.', CURDATE() - INTERVAL 9 DAY, NOW() - INTERVAL 10 DAY, 'Bangalore Center', '18:00 - 20:00', 25, 0, 'CANCELLED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4515, 4006, 3001, 50, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4516, 4006, 3002, 50, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4517, 4006, 3003, 50, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4007, 1001, 'The Sourdough Story Drop 7', 'Special weekend drop.', CURDATE(), NOW(), 'Bangalore Center', '18:00 - 20:00', 36, 36, 'READY', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4518, 4007, 3001, 72, 72);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4519, 4007, 3002, 72, 72);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4520, 4007, 3003, 72, 72);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4008, 1001, 'The Sourdough Story Drop 8', 'Special weekend drop.', CURDATE() - INTERVAL 16 DAY, NOW() - INTERVAL 17 DAY, 'Bangalore Center', '18:00 - 20:00', 24, 24, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4521, 4008, 3001, 48, 48);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4522, 4008, 3002, 48, 48);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4009, 1002, 'Maa Ki Rasoi Drop 1', 'Special weekend drop.', CURDATE() - INTERVAL 9 DAY, NOW() - INTERVAL 10 DAY, 'Delhi Center', '18:00 - 20:00', 13, 0, 'CANCELLED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4523, 4009, 3016, 26, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4524, 4009, 3017, 26, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4010, 1002, 'Maa Ki Rasoi Drop 2', 'Special weekend drop.', CURDATE(), NOW(), 'Delhi Center', '18:00 - 20:00', 24, 24, 'CUTOFF', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4525, 4010, 3016, 48, 48);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4526, 4010, 3017, 48, 48);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4011, 1002, 'Maa Ki Rasoi Drop 3', 'Special weekend drop.', CURDATE() - INTERVAL 18 DAY, NOW() - INTERVAL 19 DAY, 'Delhi Center', '18:00 - 20:00', 13, 13, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4527, 4011, 3016, 26, 26);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4528, 4011, 3017, 26, 26);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4012, 1002, 'Maa Ki Rasoi Drop 4', 'Special weekend drop.', CURDATE(), NOW(), 'Delhi Center', '18:00 - 20:00', 18, 18, 'CUTOFF', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4529, 4012, 3016, 36, 36);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4530, 4012, 3017, 36, 36);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4531, 4012, 3018, 36, 36);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4013, 1004, 'Sunday Biryani Club Drop 1', 'Special weekend drop.', CURDATE() + INTERVAL 2 DAY, NOW() + INTERVAL 1 DAY, 'Hyderabad Center', '18:00 - 20:00', 28, 0, 'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4532, 4013, 3037, 56, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4533, 4013, 3038, 56, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4534, 4013, 3039, 56, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4535, 4013, 3040, 56, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4014, 1004, 'Sunday Biryani Club Drop 2', 'Special weekend drop.', CURDATE(), NOW(), 'Hyderabad Center', '18:00 - 20:00', 33, 0, 'DRAFT', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4536, 4014, 3037, 66, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4537, 4014, 3038, 66, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4538, 4014, 3039, 66, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4539, 4014, 3040, 66, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4015, 1004, 'Sunday Biryani Club Drop 3', 'Special weekend drop.', CURDATE() - INTERVAL 12 DAY, NOW() - INTERVAL 13 DAY, 'Hyderabad Center', '18:00 - 20:00', 14, 14, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4540, 4015, 3037, 28, 28);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4541, 4015, 3038, 28, 28);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4542, 4015, 3039, 28, 28);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4543, 4015, 3040, 28, 28);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4016, 1005, 'Bombay Vada Pav Drop 1', 'Special weekend drop.', CURDATE() + INTERVAL 1 DAY, NOW() + INTERVAL 0 DAY, 'Pune Center', '18:00 - 20:00', 26, 0, 'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4544, 4016, 3045, 52, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4545, 4016, 3046, 52, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4017, 1005, 'Bombay Vada Pav Drop 2', 'Special weekend drop.', CURDATE() - INTERVAL 23 DAY, NOW() - INTERVAL 24 DAY, 'Pune Center', '18:00 - 20:00', 29, 29, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4546, 4017, 3045, 58, 58);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4547, 4017, 3046, 58, 58);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4548, 4017, 3047, 58, 58);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4018, 1006, 'Keto Kitchen Drop 1', 'Special weekend drop.', CURDATE(), NOW(), 'Bangalore Center', '18:00 - 20:00', 13, 13, 'CUTOFF', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4549, 4018, 3059, 26, 26);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4550, 4018, 3060, 26, 26);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4019, 1006, 'Keto Kitchen Drop 2', 'Special weekend drop.', CURDATE() - INTERVAL 28 DAY, NOW() - INTERVAL 29 DAY, 'Bangalore Center', '18:00 - 20:00', 19, 19, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4551, 4019, 3059, 38, 38);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4552, 4019, 3060, 38, 38);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4553, 4019, 3061, 38, 38);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4554, 4019, 3062, 38, 38);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4020, 1006, 'Keto Kitchen Drop 3', 'Special weekend drop.', CURDATE() + INTERVAL 1 DAY, NOW() + INTERVAL 0 DAY, 'Bangalore Center', '18:00 - 20:00', 12, 0, 'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4555, 4020, 3059, 24, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4556, 4020, 3060, 24, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4557, 4020, 3061, 24, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4021, 1006, 'Keto Kitchen Drop 4', 'Special weekend drop.', CURDATE() + INTERVAL 6 DAY, NOW() + INTERVAL 5 DAY, 'Bangalore Center', '18:00 - 20:00', 38, 0, 'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4558, 4021, 3059, 76, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4559, 4021, 3060, 76, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4560, 4021, 3061, 76, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4561, 4021, 3062, 76, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4022, 1007, 'Chennai Spice Drop 1', 'Special weekend drop.', CURDATE() - INTERVAL 24 DAY, NOW() - INTERVAL 25 DAY, 'Chennai Center', '18:00 - 20:00', 33, 0, 'CANCELLED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4562, 4022, 3068, 66, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4563, 4022, 3069, 66, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4564, 4022, 3070, 66, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4565, 4022, 3071, 66, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4023, 1007, 'Chennai Spice Drop 2', 'Special weekend drop.', CURDATE(), NOW(), 'Chennai Center', '18:00 - 20:00', 33, 33, 'READY', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4566, 4023, 3068, 66, 66);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4567, 4023, 3069, 66, 66);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4024, 1007, 'Chennai Spice Drop 3', 'Special weekend drop.', CURDATE() + INTERVAL 2 DAY, NOW() + INTERVAL 1 DAY, 'Chennai Center', '18:00 - 20:00', 34, 0, 'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4568, 4024, 3068, 68, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4569, 4024, 3069, 68, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4025, 1007, 'Chennai Spice Drop 4', 'Special weekend drop.', CURDATE() + INTERVAL 5 DAY, NOW() + INTERVAL 4 DAY, 'Chennai Center', '18:00 - 20:00', 32, 0, 'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4570, 4025, 3068, 64, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4571, 4025, 3069, 64, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4026, 1008, 'Bengali Sweets Corner Drop 1', 'Special weekend drop.', CURDATE() - INTERVAL 18 DAY, NOW() - INTERVAL 19 DAY, 'Kolkata Center', '18:00 - 20:00', 28, 0, 'CANCELLED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4572, 4026, 3080, 56, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4573, 4026, 3081, 56, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4027, 1008, 'Bengali Sweets Corner Drop 2', 'Special weekend drop.', CURDATE() - INTERVAL 26 DAY, NOW() - INTERVAL 27 DAY, 'Kolkata Center', '18:00 - 20:00', 21, 0, 'CANCELLED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4574, 4027, 3080, 42, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4575, 4027, 3081, 42, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4576, 4027, 3082, 42, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4577, 4027, 3083, 42, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4028, 1008, 'Bengali Sweets Corner Drop 3', 'Special weekend drop.', CURDATE() - INTERVAL 26 DAY, NOW() - INTERVAL 27 DAY, 'Kolkata Center', '18:00 - 20:00', 34, 34, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4578, 4028, 3080, 68, 68);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4579, 4028, 3081, 68, 68);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4580, 4028, 3082, 68, 68);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4029, 1008, 'Bengali Sweets Corner Drop 4', 'Special weekend drop.', CURDATE(), NOW(), 'Kolkata Center', '18:00 - 20:00', 14, 14, 'CUTOFF', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4581, 4029, 3080, 28, 28);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4582, 4029, 3081, 28, 28);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4583, 4029, 3082, 28, 28);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4584, 4029, 3083, 28, 28);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4030, 1009, 'Fit Bites Drop 1', 'Special weekend drop.', CURDATE(), NOW(), 'Delhi Center', '18:00 - 20:00', 11, 11, 'READY', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4585, 4030, 3094, 22, 22);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4586, 4030, 3095, 22, 22);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4587, 4030, 3096, 22, 22);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4031, 1009, 'Fit Bites Drop 2', 'Special weekend drop.', CURDATE() - INTERVAL 24 DAY, NOW() - INTERVAL 25 DAY, 'Delhi Center', '18:00 - 20:00', 34, 0, 'CANCELLED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4588, 4031, 3094, 68, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4589, 4031, 3095, 68, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4590, 4031, 3096, 68, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4032, 1009, 'Fit Bites Drop 3', 'Special weekend drop.', CURDATE(), NOW(), 'Delhi Center', '18:00 - 20:00', 10, 10, 'READY', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4591, 4032, 3094, 20, 20);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4592, 4032, 3095, 20, 20);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4033, 1009, 'Fit Bites Drop 4', 'Special weekend drop.', CURDATE() + INTERVAL 3 DAY, NOW() + INTERVAL 2 DAY, 'Delhi Center', '18:00 - 20:00', 29, 9, 'OPEN', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4593, 4033, 3094, 58, 18);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4594, 4033, 3095, 58, 18);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4034, 1010, 'The Pasta Bar Drop 1', 'Special weekend drop.', CURDATE() - INTERVAL 27 DAY, NOW() - INTERVAL 28 DAY, 'Mumbai Center', '18:00 - 20:00', 31, 31, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4595, 4034, 3107, 62, 62);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4596, 4034, 3108, 62, 62);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4597, 4034, 3109, 62, 62);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4035, 1010, 'The Pasta Bar Drop 2', 'Special weekend drop.', CURDATE() + INTERVAL 7 DAY, NOW() + INTERVAL 6 DAY, 'Mumbai Center', '18:00 - 20:00', 29, 6, 'OPEN', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4598, 4035, 3107, 58, 12);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4599, 4035, 3108, 58, 12);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4600, 4035, 3109, 58, 12);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4601, 4035, 3110, 58, 12);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4036, 1010, 'The Pasta Bar Drop 3', 'Special weekend drop.', CURDATE() - INTERVAL 19 DAY, NOW() - INTERVAL 20 DAY, 'Mumbai Center', '18:00 - 20:00', 26, 26, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4602, 4036, 3107, 52, 52);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4603, 4036, 3108, 52, 52);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4037, 1010, 'The Pasta Bar Drop 4', 'Special weekend drop.', CURDATE() - INTERVAL 13 DAY, NOW() - INTERVAL 14 DAY, 'Mumbai Center', '18:00 - 20:00', 30, 0, 'CANCELLED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4604, 4037, 3107, 60, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4605, 4037, 3108, 60, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4038, 1011, 'Gujarati Thali House Drop 1', 'Special weekend drop.', CURDATE() + INTERVAL 6 DAY, NOW() + INTERVAL 5 DAY, 'Ahmedabad Center', '18:00 - 20:00', 24, 0, 'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4606, 4038, 3121, 48, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4607, 4038, 3122, 48, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4608, 4038, 3123, 48, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4039, 1011, 'Gujarati Thali House Drop 2', 'Special weekend drop.', CURDATE() - INTERVAL 24 DAY, NOW() - INTERVAL 25 DAY, 'Ahmedabad Center', '18:00 - 20:00', 38, 0, 'CANCELLED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4609, 4039, 3121, 76, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4610, 4039, 3122, 76, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4040, 1011, 'Gujarati Thali House Drop 3', 'Special weekend drop.', CURDATE() + INTERVAL 6 DAY, NOW() + INTERVAL 5 DAY, 'Ahmedabad Center', '18:00 - 20:00', 31, 0, 'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4611, 4040, 3121, 62, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4612, 4040, 3122, 62, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4613, 4040, 3123, 62, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4614, 4040, 3124, 62, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4041, 1011, 'Gujarati Thali House Drop 4', 'Special weekend drop.', CURDATE(), NOW(), 'Ahmedabad Center', '18:00 - 20:00', 21, 21, 'READY', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4615, 4041, 3121, 42, 42);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4616, 4041, 3122, 42, 42);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4617, 4041, 3123, 42, 42);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4042, 1012, 'Momos & More Drop 1', 'Special weekend drop.', CURDATE() + INTERVAL 7 DAY, NOW() + INTERVAL 6 DAY, 'Delhi Center', '18:00 - 20:00', 24, 0, 'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4618, 4042, 3133, 48, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4619, 4042, 3134, 48, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4620, 4042, 3135, 48, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4043, 1012, 'Momos & More Drop 2', 'Special weekend drop.', CURDATE() + INTERVAL 7 DAY, NOW() + INTERVAL 6 DAY, 'Delhi Center', '18:00 - 20:00', 33, 7, 'OPEN', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4621, 4043, 3133, 66, 14);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4622, 4043, 3134, 66, 14);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4623, 4043, 3135, 66, 14);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4044, 1012, 'Momos & More Drop 3', 'Special weekend drop.', CURDATE() - INTERVAL 2 DAY, NOW() - INTERVAL 3 DAY, 'Delhi Center', '18:00 - 20:00', 19, 19, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4624, 4044, 3133, 38, 38);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4625, 4044, 3134, 38, 38);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4626, 4044, 3135, 38, 38);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4045, 1013, 'Bake My Day Drop 1', 'Special weekend drop.', CURDATE(), NOW(), 'Goa Center', '18:00 - 20:00', 29, 0, 'DRAFT', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4627, 4045, 3148, 58, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4628, 4045, 3149, 58, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4629, 4045, 3150, 58, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4630, 4045, 3151, 58, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4046, 1013, 'Bake My Day Drop 2', 'Special weekend drop.', CURDATE() - INTERVAL 10 DAY, NOW() - INTERVAL 11 DAY, 'Goa Center', '18:00 - 20:00', 32, 32, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4631, 4046, 3148, 64, 64);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4632, 4046, 3149, 64, 64);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4633, 4046, 3150, 64, 64);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4047, 1013, 'Bake My Day Drop 3', 'Special weekend drop.', CURDATE() + INTERVAL 7 DAY, NOW() + INTERVAL 6 DAY, 'Goa Center', '18:00 - 20:00', 22, 9, 'OPEN', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4634, 4047, 3148, 44, 18);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4635, 4047, 3149, 44, 18);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4048, 1014, 'Kerala Kitchen Drop 1', 'Special weekend drop.', CURDATE() - INTERVAL 23 DAY, NOW() - INTERVAL 24 DAY, 'Bangalore Center', '18:00 - 20:00', 29, 29, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4636, 4048, 3157, 58, 58);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4637, 4048, 3158, 58, 58);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4638, 4048, 3159, 58, 58);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4049, 1014, 'Kerala Kitchen Drop 2', 'Special weekend drop.', CURDATE(), NOW(), 'Bangalore Center', '18:00 - 20:00', 11, 0, 'DRAFT', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4639, 4049, 3157, 22, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4640, 4049, 3158, 22, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4641, 4049, 3159, 22, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4642, 4049, 3160, 22, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4050, 1014, 'Kerala Kitchen Drop 3', 'Special weekend drop.', CURDATE() - INTERVAL 8 DAY, NOW() - INTERVAL 9 DAY, 'Bangalore Center', '18:00 - 20:00', 31, 0, 'CANCELLED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4643, 4050, 3157, 62, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4644, 4050, 3158, 62, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4645, 4050, 3159, 62, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4646, 4050, 3160, 62, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4051, 1014, 'Kerala Kitchen Drop 4', 'Special weekend drop.', CURDATE() + INTERVAL 6 DAY, NOW() + INTERVAL 5 DAY, 'Bangalore Center', '18:00 - 20:00', 30, 11, 'OPEN', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4647, 4051, 3157, 60, 22);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4648, 4051, 3158, 60, 22);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4052, 1014, 'Kerala Kitchen Drop 5', 'Special weekend drop.', CURDATE() - INTERVAL 7 DAY, NOW() - INTERVAL 8 DAY, 'Bangalore Center', '18:00 - 20:00', 23, 0, 'CANCELLED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4649, 4052, 3157, 46, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4650, 4052, 3158, 46, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4651, 4052, 3159, 46, 0);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4053, 1014, 'Kerala Kitchen Drop 6', 'Special weekend drop.', CURDATE() - INTERVAL 19 DAY, NOW() - INTERVAL 20 DAY, 'Bangalore Center', '18:00 - 20:00', 19, 19, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4652, 4053, 3157, 38, 38);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4653, 4053, 3158, 38, 38);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4654, 4053, 3159, 38, 38);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4054, 1014, 'Kerala Kitchen Drop 7', 'Special weekend drop.', CURDATE(), NOW(), 'Bangalore Center', '18:00 - 20:00', 23, 23, 'READY', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4655, 4054, 3157, 46, 46);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4656, 4054, 3158, 46, 46);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4055, 1014, 'Kerala Kitchen Drop 8', 'Special weekend drop.', CURDATE() - INTERVAL 17 DAY, NOW() - INTERVAL 18 DAY, 'Bangalore Center', '18:00 - 20:00', 35, 35, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4657, 4055, 3157, 70, 70);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4658, 4055, 3158, 70, 70);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4056, 1015, 'Millet Magic Drop 1', 'Special weekend drop.', CURDATE() - INTERVAL 24 DAY, NOW() - INTERVAL 25 DAY, 'Hyderabad Center', '18:00 - 20:00', 30, 30, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4659, 4056, 3167, 60, 60);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4660, 4056, 3168, 60, 60);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4661, 4056, 3169, 60, 60);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4662, 4056, 3170, 60, 60);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4057, 1015, 'Millet Magic Drop 2', 'Special weekend drop.', CURDATE() - INTERVAL 28 DAY, NOW() - INTERVAL 29 DAY, 'Hyderabad Center', '18:00 - 20:00', 37, 37, 'COMPLETED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4663, 4057, 3167, 74, 74);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4664, 4057, 3168, 74, 74);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4665, 4057, 3169, 74, 74);
+INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (4058, 1015, 'Millet Magic Drop 3', 'Special weekend drop.', CURDATE() + INTERVAL 3 DAY, NOW() + INTERVAL 2 DAY, 'Hyderabad Center', '18:00 - 20:00', 27, 0, 'ANNOUNCED', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4666, 4058, 3167, 54, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4667, 4058, 3168, 54, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4668, 4058, 3169, 54, 0);
+INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (4669, 4058, 3170, 54, 0);
+
+-- 6. Orders, Items, Payments, Ratings
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5001, 2020, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6001, 5001, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7001, 5001, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5002, 2010, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 750, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6002, 5002, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6003, 5002, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7002, 5002, 'CASH', 750, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5003, 2039, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6004, 5003, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7003, 5003, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2039, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5004, 2044, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6005, 5004, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7004, 5004, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5005, 2014, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6006, 5005, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7005, 5005, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5006, 2024, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6007, 5006, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7006, 5006, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2024, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5007, 2022, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6008, 5007, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7007, 5007, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2022, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5008, 2031, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 1720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6009, 5008, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6010, 5008, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6011, 5008, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7008, 5008, 'CASH', 1720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5009, 2010, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 1500, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6012, 5009, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6013, 5009, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6014, 5009, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7009, 5009, 'CASH', 1500, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5010, 2007, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 860, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6015, 5010, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6016, 5010, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6017, 5010, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7010, 5010, 'CASH', 860, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5011, 2007, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 1920, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6018, 5011, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6019, 5011, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7011, 5011, 'CASH', 1920, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5012, 2046, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6020, 5012, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6021, 5012, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7012, 5012, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2046, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5013, 2018, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 1630, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6022, 5013, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6023, 5013, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6024, 5013, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7013, 5013, 'CASH', 1630, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2018, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5014, 2023, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 1920, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6025, 5014, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6026, 5014, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7014, 5014, 'CASH', 1920, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5015, 2015, 1001, 4001, 'DROP_PREORDER', '19:00', 'COMPLETED', 2250, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6027, 5015, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6028, 5015, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7015, 5015, 'CASH', 2250, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5016, 2010, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 1520, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6029, 5016, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6030, 5016, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6031, 5016, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7016, 5016, 'CASH', 1520, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2010, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5017, 2038, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6032, 5017, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7017, 5017, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2038, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5018, 2001, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6033, 5018, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7018, 5018, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2001, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5019, 2008, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6034, 5019, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6035, 5019, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6036, 5019, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7019, 5019, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2008, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5020, 2025, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6037, 5020, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7020, 5020, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5021, 2014, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 1590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6038, 5021, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6039, 5021, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7021, 5021, 'CASH', 1590, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2014, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5022, 2019, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 1920, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6040, 5022, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6041, 5022, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6042, 5022, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7022, 5022, 'CASH', 1920, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2019, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5023, 2007, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6043, 5023, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7023, 5023, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5024, 2042, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 1920, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6044, 5024, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6045, 5024, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7024, 5024, 'CASH', 1920, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2042, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5025, 2017, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6046, 5025, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6047, 5025, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7025, 5025, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2017, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5026, 2034, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 1720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6048, 5026, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6049, 5026, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6050, 5026, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7026, 5026, 'CASH', 1720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2034, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5027, 2050, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6051, 5027, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7027, 5027, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5028, 2003, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 1810, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6052, 5028, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6053, 5028, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6054, 5028, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7028, 5028, 'CASH', 1810, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2003, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5029, 2003, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6055, 5029, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7029, 5029, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2003, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5030, 2044, 1001, 4002, 'DROP_PREORDER', '19:00', 'COMPLETED', 1520, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6056, 5030, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6057, 5030, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6058, 5030, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7030, 5030, 'CASH', 1520, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2044, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5031, 2045, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 1390, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6059, 5031, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6060, 5031, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6061, 5031, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7031, 5031, 'CASH', 1390, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5032, 2014, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6062, 5032, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7032, 5032, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2014, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5033, 2016, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6063, 5033, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7033, 5033, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5034, 2047, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 1410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6064, 5034, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6065, 5034, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7034, 5034, 'CASH', 1410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2047, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5035, 2027, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6066, 5035, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7035, 5035, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5036, 2014, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 2250, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6067, 5036, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6068, 5036, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7036, 5036, 'CASH', 2250, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2014, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5037, 2027, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 1500, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6069, 5037, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6070, 5037, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6071, 5037, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7037, 5037, 'CASH', 1500, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2027, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5038, 2039, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 750, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6072, 5038, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6073, 5038, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7038, 5038, 'CASH', 750, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2039, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5039, 2007, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6074, 5039, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7039, 5039, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5040, 2005, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6075, 5040, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7040, 5040, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2005, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5041, 2045, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 1630, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6076, 5041, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6077, 5041, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6078, 5041, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7041, 5041, 'CASH', 1630, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2045, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5042, 2041, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 2250, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6079, 5042, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6080, 5042, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7042, 5042, 'CASH', 2250, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2041, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5043, 2007, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 1590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6081, 5043, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6082, 5043, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7043, 5043, 'CASH', 1590, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5044, 2020, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 2050, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6083, 5044, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6084, 5044, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6085, 5044, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7044, 5044, 'CASH', 2050, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2020, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5045, 2030, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 1920, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6086, 5045, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6087, 5045, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7045, 5045, 'CASH', 1920, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2030, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5046, 2034, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 1920, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6088, 5046, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6089, 5046, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6090, 5046, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7046, 5046, 'CASH', 1920, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5047, 2044, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 2160, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6091, 5047, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6092, 5047, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6093, 5047, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7047, 5047, 'CASH', 2160, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2044, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5048, 2014, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 1590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6094, 5048, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6095, 5048, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7048, 5048, 'CASH', 1590, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5049, 2005, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 2250, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6096, 5049, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6097, 5049, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7049, 5049, 'CASH', 2250, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5050, 2033, 1001, 4003, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6098, 5050, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6099, 5050, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7050, 5050, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2033, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5051, 2011, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6100, 5051, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7051, 5051, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2011, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5052, 2013, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1500, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6101, 5052, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6102, 5052, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6103, 5052, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7052, 5052, 'CASH', 1500, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5053, 2020, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6104, 5053, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7053, 5053, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5054, 2025, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6105, 5054, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7054, 5054, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2025, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5055, 2045, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6106, 5055, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6107, 5055, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7055, 5055, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5056, 2019, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1520, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6108, 5056, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6109, 5056, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6110, 5056, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7056, 5056, 'CASH', 1520, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2019, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5057, 2018, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6111, 5057, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7057, 5057, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2018, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5058, 2005, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6112, 5058, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7058, 5058, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2005, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5059, 2024, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6113, 5059, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7059, 5059, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5060, 2029, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6114, 5060, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7060, 5060, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2029, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5061, 2041, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6115, 5061, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7061, 5061, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5062, 2011, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1190, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6116, 5062, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6117, 5062, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6118, 5062, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7062, 5062, 'CASH', 1190, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2011, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5063, 2044, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6119, 5063, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6120, 5063, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7063, 5063, 'CASH', 1410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2044, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5064, 2043, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 2360, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6121, 5064, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6122, 5064, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6123, 5064, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7064, 5064, 'CASH', 2360, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5065, 2047, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1940, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6124, 5065, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6125, 5065, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6126, 5065, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7065, 5065, 'CASH', 1940, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2047, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5066, 2022, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 2140, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6127, 5066, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6128, 5066, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6129, 5066, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7066, 5066, 'CASH', 2140, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2022, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5067, 2020, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 970, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6130, 5067, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6131, 5067, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6132, 5067, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7067, 5067, 'CASH', 970, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2020, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5068, 2011, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1920, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6133, 5068, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6134, 5068, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7068, 5068, 'CASH', 1920, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5069, 2023, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6135, 5069, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6136, 5069, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7069, 5069, 'CASH', 1590, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2023, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5070, 2005, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6137, 5070, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7070, 5070, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2005, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5071, 2033, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6138, 5071, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6139, 5071, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7071, 5071, 'CASH', 1590, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2033, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5072, 2046, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6140, 5072, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7072, 5072, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2046, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5073, 2022, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6141, 5073, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6142, 5073, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7073, 5073, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2022, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5074, 2041, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 2050, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6143, 5074, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6144, 5074, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6145, 5074, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7074, 5074, 'CASH', 2050, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2041, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5075, 2007, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6146, 5075, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6147, 5075, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6148, 5075, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7075, 5075, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5076, 2021, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1810, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6149, 5076, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6150, 5076, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6151, 5076, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7076, 5076, 'CASH', 1810, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2021, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5077, 2018, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 2360, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6152, 5077, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6153, 5077, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6154, 5077, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7077, 5077, 'CASH', 2360, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5078, 2048, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6155, 5078, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7078, 5078, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5079, 2021, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6156, 5079, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6157, 5079, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7079, 5079, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2021, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5080, 2048, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6158, 5080, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7080, 5080, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2048, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5081, 2018, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6159, 5081, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7081, 5081, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2018, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5082, 2047, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6160, 5082, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7082, 5082, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2047, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5083, 2045, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6161, 5083, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7083, 5083, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2045, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5084, 2008, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6162, 5084, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7084, 5084, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2008, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5085, 2046, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 2250, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6163, 5085, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6164, 5085, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6165, 5085, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7085, 5085, 'CASH', 2250, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5086, 2042, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1190, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6166, 5086, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6167, 5086, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6168, 5086, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7086, 5086, 'CASH', 1190, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5087, 2041, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1300, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6169, 5087, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6170, 5087, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6171, 5087, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7087, 5087, 'CASH', 1300, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5088, 2027, 1001, 4004, 'DROP_PREORDER', '19:00', 'COMPLETED', 1590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6172, 5088, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6173, 5088, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7088, 5088, 'CASH', 1590, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2027, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5089, 2023, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6174, 5089, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6175, 5089, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7089, 5089, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5090, 2022, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6176, 5090, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7090, 5090, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2022, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5091, 2015, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 2580, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6177, 5091, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6178, 5091, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6179, 5091, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7091, 5091, 'CASH', 2580, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5092, 2009, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 860, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6180, 5092, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6181, 5092, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6182, 5092, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7092, 5092, 'CASH', 860, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2009, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5093, 2042, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 2250, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6183, 5093, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6184, 5093, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6185, 5093, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7093, 5093, 'CASH', 2250, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2042, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5094, 2014, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6186, 5094, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6187, 5094, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7094, 5094, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2014, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5095, 2032, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6188, 5095, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6189, 5095, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6190, 5095, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7095, 5095, 'CASH', 1720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2032, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5096, 2009, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6191, 5096, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7096, 5096, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5097, 2048, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6192, 5097, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6193, 5097, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7097, 5097, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2048, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5098, 2020, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1520, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6194, 5098, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6195, 5098, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6196, 5098, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7098, 5098, 'CASH', 1520, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5099, 2048, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6197, 5099, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7099, 5099, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5100, 2014, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1520, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6198, 5100, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6199, 5100, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6200, 5100, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7100, 5100, 'CASH', 1520, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2014, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5101, 2032, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6201, 5101, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7101, 5101, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2032, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5102, 2010, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1920, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6202, 5102, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6203, 5102, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7102, 5102, 'CASH', 1920, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2010, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5103, 2001, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6204, 5103, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6205, 5103, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7103, 5103, 'CASH', 1590, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2001, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5104, 2038, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1920, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6206, 5104, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6207, 5104, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7104, 5104, 'CASH', 1920, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5105, 2008, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6208, 5105, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6209, 5105, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6210, 5105, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7105, 5105, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5106, 2037, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 2360, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6211, 5106, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6212, 5106, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6213, 5106, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7106, 5106, 'CASH', 2360, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2037, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5107, 2025, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6214, 5107, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7107, 5107, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2025, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5108, 2015, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1940, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6215, 5108, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6216, 5108, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6217, 5108, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7108, 5108, 'CASH', 1940, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2015, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5109, 2007, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 2470, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6218, 5109, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6219, 5109, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6220, 5109, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7109, 5109, 'CASH', 2470, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5110, 2045, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1700, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6221, 5110, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6222, 5110, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6223, 5110, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7110, 5110, 'CASH', 1700, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2045, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5111, 2048, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6224, 5111, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6225, 5111, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7111, 5111, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2048, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5112, 2030, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6226, 5112, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6227, 5112, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7112, 5112, 'CASH', 1590, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5113, 2045, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6228, 5113, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6229, 5113, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7113, 5113, 'CASH', 1590, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5114, 2003, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1810, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6230, 5114, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6231, 5114, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6232, 5114, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7114, 5114, 'CASH', 1810, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2003, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5115, 2041, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6233, 5115, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6234, 5115, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6235, 5115, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7115, 5115, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2041, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5116, 2020, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1630, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6236, 5116, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6237, 5116, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6238, 5116, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7116, 5116, 'CASH', 1630, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2020, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5117, 2003, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 2140, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6239, 5117, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6240, 5117, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6241, 5117, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7117, 5117, 'CASH', 2140, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5118, 2015, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 750, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6242, 5118, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6243, 5118, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7118, 5118, 'CASH', 750, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2015, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5119, 2005, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 2580, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6244, 5119, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6245, 5119, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6246, 5119, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7119, 5119, 'CASH', 2580, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2005, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5120, 2019, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6247, 5120, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7120, 5120, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5121, 2007, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 2250, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6248, 5121, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6249, 5121, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7121, 5121, 'CASH', 2250, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5122, 2030, 1001, 4005, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6250, 5122, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6251, 5122, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6252, 5122, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7122, 5122, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5123, 2014, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1920, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6253, 5123, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6254, 5123, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7123, 5123, 'CASH', 1920, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5124, 2026, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6255, 5124, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6256, 5124, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7124, 5124, 'CASH', 1830, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5125, 2030, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6257, 5125, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6258, 5125, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6259, 5125, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7125, 5125, 'CASH', 1410, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5126, 2044, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1500, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6260, 5126, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6261, 5126, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7126, 5126, 'CASH', 1500, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5127, 2005, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1280, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6262, 5127, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6263, 5127, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6264, 5127, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7127, 5127, 'CASH', 1280, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5128, 2039, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1300, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6265, 5128, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6266, 5128, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6267, 5128, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7128, 5128, 'CASH', 1300, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5129, 2042, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6268, 5129, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7129, 5129, 'CASH', 330, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5130, 2004, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 2250, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6269, 5130, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6270, 5130, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7130, 5130, 'CASH', 2250, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5131, 2029, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1920, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6271, 5131, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6272, 5131, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7131, 5131, 'CASH', 1920, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5132, 2036, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6273, 5132, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7132, 5132, 'CASH', 990, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5133, 2042, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6274, 5133, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7133, 5133, 'CASH', 330, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5134, 2001, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1630, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6275, 5134, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6276, 5134, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6277, 5134, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7134, 5134, 'CASH', 1630, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5135, 2011, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6278, 5135, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6279, 5135, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7135, 5135, 'CASH', 1830, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5136, 2042, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1500, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6280, 5136, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6281, 5136, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7136, 5136, 'CASH', 1500, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5137, 2050, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 2030, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6282, 5137, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6283, 5137, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6284, 5137, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7137, 5137, 'CASH', 2030, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5138, 2006, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6285, 5138, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7138, 5138, 'CASH', 660, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5139, 2004, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1700, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6286, 5139, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6287, 5139, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6288, 5139, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7139, 5139, 'CASH', 1700, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5140, 2029, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1520, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6289, 5140, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6290, 5140, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6291, 5140, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7140, 5140, 'CASH', 1520, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5141, 2043, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6292, 5141, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6293, 5141, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6294, 5141, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7141, 5141, 'CASH', 1830, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5142, 2005, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6295, 5142, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6296, 5142, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7142, 5142, 'CASH', 1830, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5143, 2046, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 750, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6297, 5143, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6298, 5143, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7143, 5143, 'CASH', 750, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5144, 2049, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6299, 5144, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7144, 5144, 'CASH', 990, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5145, 2025, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 2360, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6300, 5145, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6301, 5145, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6302, 5145, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7145, 5145, 'CASH', 2360, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5146, 2049, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6303, 5146, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6304, 5146, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6305, 5146, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7146, 5146, 'CASH', 1720, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5147, 2001, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6306, 5147, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7147, 5147, 'CASH', 990, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5148, 2029, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6307, 5148, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7148, 5148, 'CASH', 990, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5149, 2012, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6308, 5149, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6309, 5149, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7149, 5149, 'CASH', 1410, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5150, 2010, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 750, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6310, 5150, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6311, 5150, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7150, 5150, 'CASH', 750, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5151, 2050, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6312, 5151, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6313, 5151, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7151, 5151, 'CASH', 1830, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5152, 2030, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6314, 5152, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7152, 5152, 'CASH', 330, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5153, 2028, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6315, 5153, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7153, 5153, 'CASH', 660, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5154, 2022, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6316, 5154, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7154, 5154, 'CASH', 660, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5155, 2014, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 750, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6317, 5155, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6318, 5155, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7155, 5155, 'CASH', 750, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5156, 2042, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 2470, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6319, 5156, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6320, 5156, 3002, 3, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6321, 5156, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7156, 5156, 'CASH', 2470, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5157, 2037, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6322, 5157, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7157, 5157, 'CASH', 990, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5158, 2013, 1001, 4007, 'DROP_PREORDER', '19:00', 'PLACED', 2250, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6323, 5158, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6324, 5158, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7158, 5158, 'CASH', 2250, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5159, 2028, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6325, 5159, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6326, 5159, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6327, 5159, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7159, 5159, 'CASH', 1410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5160, 2030, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1170, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6328, 5160, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6329, 5160, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7160, 5160, 'CASH', 1170, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5161, 2018, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6330, 5161, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6331, 5161, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7161, 5161, 'CASH', 1410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5162, 2020, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6332, 5162, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6333, 5162, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6334, 5162, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7162, 5162, 'CASH', 1720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5163, 2017, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6335, 5163, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7163, 5163, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2017, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5164, 2037, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6336, 5164, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7164, 5164, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2037, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5165, 2024, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6337, 5165, 3001, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7165, 5165, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2024, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5166, 2012, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6338, 5166, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7166, 5166, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2012, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5167, 2008, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6339, 5167, 3001, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7167, 5167, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5168, 2011, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6340, 5168, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6341, 5168, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6342, 5168, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7168, 5168, 'CASH', 1720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5169, 2019, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6343, 5169, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6344, 5169, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6345, 5169, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7169, 5169, 'CASH', 1410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5170, 2001, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6346, 5170, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6347, 5170, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7170, 5170, 'CASH', 1410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2001, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5171, 2050, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1940, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6348, 5171, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6349, 5171, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6350, 5171, 3003, 1, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7171, 5171, 'CASH', 1940, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2050, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5172, 2045, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6351, 5172, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6352, 5172, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6353, 5172, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7172, 5172, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5173, 2050, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6354, 5173, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7173, 5173, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5174, 2008, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1300, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6355, 5174, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6356, 5174, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6357, 5174, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7174, 5174, 'CASH', 1300, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2008, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5175, 2041, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 2050, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6358, 5175, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6359, 5175, 3002, 2, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6360, 5175, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7175, 5175, 'CASH', 2050, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2041, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5176, 2006, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1300, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6361, 5176, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6362, 5176, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6363, 5176, 3003, 2, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7176, 5176, 'CASH', 1300, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5177, 2047, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 750, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6364, 5177, 3001, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6365, 5177, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7177, 5177, 'CASH', 750, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2047, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5178, 2006, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6366, 5178, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6367, 5178, 3002, 1, 420);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6368, 5178, 3003, 3, 110);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7178, 5178, 'CASH', 1410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2006, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5179, 2032, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6369, 5179, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6370, 5179, 3002, 1, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7179, 5179, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2032, 1001, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5180, 2044, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 2250, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6371, 5180, 3001, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6372, 5180, 3002, 3, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7180, 5180, 'CASH', 2250, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5181, 2027, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 1500, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6373, 5181, 3001, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6374, 5181, 3002, 2, 420);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7181, 5181, 'CASH', 1500, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5182, 2030, 1001, 4008, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6375, 5182, 3001, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7182, 5182, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2030, 1001, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5183, 2030, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6376, 5183, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6377, 5183, 3017, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6378, 5183, 3018, 1, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7183, 5183, 'CASH', 1070, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5184, 2006, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1040, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6379, 5184, 3016, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6380, 5184, 3017, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6381, 5184, 3018, 2, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7184, 5184, 'CASH', 1040, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5185, 2027, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 770, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6382, 5185, 3016, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6383, 5185, 3017, 3, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7185, 5185, 'CASH', 770, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5186, 2033, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6384, 5186, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6385, 5186, 3017, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6386, 5186, 3018, 3, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7186, 5186, 'CASH', 1830, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5187, 2036, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 690, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6387, 5187, 3016, 3, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7187, 5187, 'CASH', 690, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5188, 2044, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1010, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6388, 5188, 3016, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6389, 5188, 3017, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6390, 5188, 3018, 3, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7188, 5188, 'CASH', 1010, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5189, 2026, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6391, 5189, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6392, 5189, 3017, 3, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7189, 5189, 'CASH', 1230, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5190, 2031, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6393, 5190, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6394, 5190, 3017, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6395, 5190, 3018, 1, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7190, 5190, 'CASH', 1070, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5191, 2025, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1400, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6396, 5191, 3016, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6397, 5191, 3017, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6398, 5191, 3018, 2, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7191, 5191, 'CASH', 1400, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5192, 2049, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6399, 5192, 3016, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7192, 5192, 'CASH', 230, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5193, 2022, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 640, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6400, 5193, 3016, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6401, 5193, 3017, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7193, 5193, 'CASH', 640, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5194, 2030, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6402, 5194, 3016, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6403, 5194, 3017, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7194, 5194, 'CASH', 590, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5195, 2029, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6404, 5195, 3016, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7195, 5195, 'CASH', 230, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5196, 2048, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6405, 5196, 3016, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6406, 5196, 3017, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7196, 5196, 'CASH', 820, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5197, 2005, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1370, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6407, 5197, 3016, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6408, 5197, 3017, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6409, 5197, 3018, 3, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7197, 5197, 'CASH', 1370, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5198, 2015, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1020, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6410, 5198, 3016, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6411, 5198, 3017, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6412, 5198, 3018, 1, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7198, 5198, 'CASH', 1020, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5199, 2002, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1420, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6413, 5199, 3016, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6414, 5199, 3017, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6415, 5199, 3018, 3, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7199, 5199, 'CASH', 1420, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5200, 2035, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 870, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6416, 5200, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6417, 5200, 3017, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7200, 5200, 'CASH', 870, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5201, 2017, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6418, 5201, 3016, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6419, 5201, 3017, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7201, 5201, 'CASH', 410, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5202, 2029, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1200, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6420, 5202, 3016, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6421, 5202, 3017, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6422, 5202, 3018, 1, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7202, 5202, 'CASH', 1200, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5203, 2006, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6423, 5203, 3016, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6424, 5203, 3017, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7203, 5203, 'CASH', 410, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5204, 2011, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6425, 5204, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6426, 5204, 3017, 3, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7204, 5204, 'CASH', 1230, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5205, 2018, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6427, 5205, 3016, 2, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7205, 5205, 'CASH', 460, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5206, 2039, 1002, 4010, 'DROP_PREORDER', '19:00', 'PLACED', 1070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6428, 5206, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6429, 5206, 3017, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6430, 5206, 3018, 1, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7206, 5206, 'CASH', 1070, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5207, 2026, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6431, 5207, 3016, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6432, 5207, 3017, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7207, 5207, 'CASH', 820, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2026, 1002, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5208, 2029, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6433, 5208, 3016, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7208, 5208, 'CASH', 230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5209, 2008, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 1420, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6434, 5209, 3016, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6435, 5209, 3017, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6436, 5209, 3018, 3, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7209, 5209, 'CASH', 1420, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5210, 2035, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6437, 5210, 3016, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7210, 5210, 'CASH', 230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2035, 1002, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5211, 2027, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 690, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6438, 5211, 3016, 3, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7211, 5211, 'CASH', 690, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2027, 1002, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5212, 2003, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 690, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6439, 5212, 3016, 3, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7212, 5212, 'CASH', 690, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2003, 1002, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5213, 2010, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6440, 5213, 3016, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7213, 5213, 'CASH', 230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2010, 1002, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5214, 2016, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6441, 5214, 3016, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7214, 5214, 'CASH', 230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2016, 1002, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5215, 2012, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6442, 5215, 3016, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7215, 5215, 'CASH', 230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2012, 1002, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5216, 2015, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6443, 5216, 3016, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7216, 5216, 'CASH', 230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2015, 1002, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5217, 2004, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6444, 5217, 3016, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6445, 5217, 3017, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7217, 5217, 'CASH', 410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5218, 2049, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 1070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6446, 5218, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6447, 5218, 3017, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6448, 5218, 3018, 1, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7218, 5218, 'CASH', 1070, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2049, 1002, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5219, 2037, 1002, 4011, 'DROP_PREORDER', '19:00', 'COMPLETED', 1650, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6449, 5219, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6450, 5219, 3017, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6451, 5219, 3018, 3, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7219, 5219, 'CASH', 1650, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2037, 1002, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5220, 2004, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6452, 5220, 3016, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6453, 5220, 3017, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7220, 5220, 'CASH', 590, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5221, 2008, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 870, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6454, 5221, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6455, 5221, 3017, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7221, 5221, 'CASH', 870, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5222, 2025, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6456, 5222, 3016, 2, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7222, 5222, 'CASH', 460, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5223, 2040, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6457, 5223, 3016, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7223, 5223, 'CASH', 230, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5224, 2026, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 970, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6458, 5224, 3016, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6459, 5224, 3017, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6460, 5224, 3018, 1, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7224, 5224, 'CASH', 970, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5225, 2043, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 690, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6461, 5225, 3016, 3, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7225, 5225, 'CASH', 690, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5226, 2034, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6462, 5226, 3016, 2, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7226, 5226, 'CASH', 460, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5227, 2024, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 870, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6463, 5227, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6464, 5227, 3017, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7227, 5227, 'CASH', 870, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5228, 2038, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6465, 5228, 3016, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7228, 5228, 'CASH', 230, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5229, 2030, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6466, 5229, 3016, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7229, 5229, 'CASH', 230, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5230, 2004, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6467, 5230, 3016, 2, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7230, 5230, 'CASH', 460, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5231, 2032, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 1240, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6468, 5231, 3016, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6469, 5231, 3017, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6470, 5231, 3018, 3, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7231, 5231, 'CASH', 1240, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5232, 2041, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 1040, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6471, 5232, 3016, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6472, 5232, 3017, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6473, 5232, 3018, 2, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7232, 5232, 'CASH', 1040, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5233, 2009, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6474, 5233, 3016, 2, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7233, 5233, 'CASH', 460, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5234, 2031, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6475, 5234, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6476, 5234, 3017, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6477, 5234, 3018, 3, 200);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7234, 5234, 'CASH', 1830, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5235, 2019, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 1050, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6478, 5235, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6479, 5235, 3017, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7235, 5235, 'CASH', 1050, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5236, 2023, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6480, 5236, 3016, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6481, 5236, 3017, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7236, 5236, 'CASH', 820, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5237, 2024, 1002, 4012, 'DROP_PREORDER', '19:00', 'PLACED', 1050, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6482, 5237, 3016, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6483, 5237, 3017, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7237, 5237, 'CASH', 1050, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5238, 2046, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 1240, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6484, 5238, 3037, 2, 480);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6485, 5238, 3038, 1, 280);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7238, 5238, 'CASH', 1240, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2046, 1004, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5239, 2027, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 950, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6486, 5239, 3037, 1, 480);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6487, 5239, 3038, 1, 280);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6488, 5239, 3039, 1, 190);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7239, 5239, 'CASH', 950, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2027, 1004, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5240, 2013, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 1700, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6489, 5240, 3037, 1, 480);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6490, 5240, 3038, 3, 280);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6491, 5240, 3039, 2, 190);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7240, 5240, 'CASH', 1700, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5241, 2013, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6492, 5241, 3037, 1, 480);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6493, 5241, 3038, 3, 280);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7241, 5241, 'CASH', 1320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2013, 1004, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5242, 2018, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 2290, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6494, 5242, 3037, 3, 480);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6495, 5242, 3038, 1, 280);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6496, 5242, 3039, 3, 190);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7242, 5242, 'CASH', 2290, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2018, 1004, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5243, 2042, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 1700, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6497, 5243, 3037, 1, 480);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6498, 5243, 3038, 3, 280);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6499, 5243, 3039, 2, 190);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7243, 5243, 'CASH', 1700, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5244, 2044, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 960, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6500, 5244, 3037, 2, 480);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7244, 5244, 'CASH', 960, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2044, 1004, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5245, 2007, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 2380, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6501, 5245, 3037, 3, 480);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6502, 5245, 3038, 2, 280);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6503, 5245, 3039, 2, 190);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7245, 5245, 'CASH', 2380, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1004, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5246, 2018, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6504, 5246, 3037, 1, 480);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6505, 5246, 3038, 3, 280);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7246, 5246, 'CASH', 1320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5247, 2031, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 1440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6506, 5247, 3037, 3, 480);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7247, 5247, 'CASH', 1440, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5248, 2020, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 480, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6507, 5248, 3037, 1, 480);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7248, 5248, 'CASH', 480, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5249, 2003, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 760, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6508, 5249, 3037, 1, 480);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6509, 5249, 3038, 1, 280);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7249, 5249, 'CASH', 760, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5250, 2022, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 1040, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6510, 5250, 3037, 1, 480);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6511, 5250, 3038, 2, 280);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7250, 5250, 'CASH', 1040, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5251, 2037, 1004, 4015, 'DROP_PREORDER', '19:00', 'COMPLETED', 2280, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6512, 5251, 3037, 3, 480);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6513, 5251, 3038, 3, 280);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7251, 5251, 'CASH', 2280, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5252, 2007, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1710, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6514, 5252, 3045, 2, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6515, 5252, 3046, 3, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7252, 5252, 'CASH', 1710, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5253, 2035, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1520, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6516, 5253, 3045, 1, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6517, 5253, 3046, 3, 270);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6518, 5253, 3047, 1, 260);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7253, 5253, 'CASH', 1520, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2035, 1005, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5254, 2041, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1520, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6519, 5254, 3045, 1, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6520, 5254, 3046, 3, 270);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6521, 5254, 3047, 1, 260);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7254, 5254, 'CASH', 1520, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2041, 1005, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5255, 2018, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6522, 5255, 3045, 1, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6523, 5255, 3046, 1, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7255, 5255, 'CASH', 720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5256, 2043, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6524, 5256, 3045, 3, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6525, 5256, 3046, 1, 270);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6526, 5256, 3047, 1, 260);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7256, 5256, 'CASH', 1880, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2043, 1005, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5257, 2011, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6527, 5257, 3045, 1, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6528, 5257, 3046, 1, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7257, 5257, 'CASH', 720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5258, 2030, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 2400, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6529, 5258, 3045, 3, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6530, 5258, 3046, 1, 270);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6531, 5258, 3047, 3, 260);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7258, 5258, 'CASH', 2400, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2030, 1005, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5259, 2047, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6532, 5259, 3045, 2, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6533, 5259, 3046, 2, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7259, 5259, 'CASH', 1440, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5260, 2024, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 450, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6534, 5260, 3045, 1, 450);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7260, 5260, 'CASH', 450, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5261, 2048, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1510, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6535, 5261, 3045, 1, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6536, 5261, 3046, 2, 270);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6537, 5261, 3047, 2, 260);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7261, 5261, 'CASH', 1510, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2048, 1005, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5262, 2022, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1260, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6538, 5262, 3045, 1, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6539, 5262, 3046, 3, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7262, 5262, 'CASH', 1260, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2022, 1005, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5263, 2048, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1520, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6540, 5263, 3045, 1, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6541, 5263, 3046, 3, 270);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6542, 5263, 3047, 1, 260);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7263, 5263, 'CASH', 1520, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5264, 2030, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6543, 5264, 3045, 1, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6544, 5264, 3046, 2, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7264, 5264, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5265, 2043, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6545, 5265, 3045, 1, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6546, 5265, 3046, 2, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7265, 5265, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2043, 1005, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5266, 2025, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1170, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6547, 5266, 3045, 2, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6548, 5266, 3046, 1, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7266, 5266, 'CASH', 1170, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5267, 2045, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1510, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6549, 5267, 3045, 1, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6550, 5267, 3046, 2, 270);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6551, 5267, 3047, 2, 260);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7267, 5267, 'CASH', 1510, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2045, 1005, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5268, 2043, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1350, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6552, 5268, 3045, 3, 450);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7268, 5268, 'CASH', 1350, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2043, 1005, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5269, 2008, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1890, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6553, 5269, 3045, 3, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6554, 5269, 3046, 2, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7269, 5269, 'CASH', 1890, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5270, 2008, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1350, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6555, 5270, 3045, 3, 450);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7270, 5270, 'CASH', 1350, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5271, 2050, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1620, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6556, 5271, 3045, 3, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6557, 5271, 3046, 1, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7271, 5271, 'CASH', 1620, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2050, 1005, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5272, 2031, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1710, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6558, 5272, 3045, 2, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6559, 5272, 3046, 3, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7272, 5272, 'CASH', 1710, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5273, 2037, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1710, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6560, 5273, 3045, 2, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6561, 5273, 3046, 3, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7273, 5273, 'CASH', 1710, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2037, 1005, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5274, 2005, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 450, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6562, 5274, 3045, 1, 450);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7274, 5274, 'CASH', 450, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5275, 2047, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1960, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6563, 5275, 3045, 2, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6564, 5275, 3046, 2, 270);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6565, 5275, 3047, 2, 260);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7275, 5275, 'CASH', 1960, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2047, 1005, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5276, 2026, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 900, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6566, 5276, 3045, 2, 450);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7276, 5276, 'CASH', 900, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2026, 1005, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5277, 2041, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 1170, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6567, 5277, 3045, 2, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6568, 5277, 3046, 1, 270);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7277, 5277, 'CASH', 1170, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2041, 1005, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5278, 2004, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 450, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6569, 5278, 3045, 1, 450);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7278, 5278, 'CASH', 450, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5279, 2002, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 980, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6570, 5279, 3045, 1, 450);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6571, 5279, 3046, 1, 270);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6572, 5279, 3047, 1, 260);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7279, 5279, 'CASH', 980, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5280, 2017, 1005, 4017, 'DROP_PREORDER', '19:00', 'COMPLETED', 900, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6573, 5280, 3045, 2, 450);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7280, 5280, 'CASH', 900, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2017, 1005, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5281, 2032, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6574, 5281, 3059, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7281, 5281, 'CASH', 230, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5282, 2022, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 1310, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6575, 5282, 3059, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6576, 5282, 3060, 2, 390);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6577, 5282, 3061, 2, 150);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7282, 5282, 'CASH', 1310, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5283, 2039, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 690, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6578, 5283, 3059, 3, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7283, 5283, 'CASH', 690, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5284, 2041, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 1850, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6579, 5284, 3059, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6580, 5284, 3060, 3, 390);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6581, 5284, 3061, 3, 150);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7284, 5284, 'CASH', 1850, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5285, 2047, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 690, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6582, 5285, 3059, 3, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7285, 5285, 'CASH', 690, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5286, 2050, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 2080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6583, 5286, 3059, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6584, 5286, 3060, 3, 390);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6585, 5286, 3061, 3, 150);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7286, 5286, 'CASH', 2080, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5287, 2021, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 1150, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6586, 5287, 3059, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6587, 5287, 3060, 1, 390);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6588, 5287, 3061, 2, 150);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7287, 5287, 'CASH', 1150, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5288, 2037, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 620, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6589, 5288, 3059, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6590, 5288, 3060, 1, 390);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7288, 5288, 'CASH', 620, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5289, 2042, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 1470, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6591, 5289, 3059, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6592, 5289, 3060, 2, 390);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7289, 5289, 'CASH', 1470, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5290, 2046, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 1700, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6593, 5290, 3059, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6594, 5290, 3060, 3, 390);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6595, 5290, 3061, 2, 150);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7290, 5290, 'CASH', 1700, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5291, 2008, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 690, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6596, 5291, 3059, 3, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7291, 5291, 'CASH', 690, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5292, 2019, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 690, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6597, 5292, 3059, 3, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7292, 5292, 'CASH', 690, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5293, 2049, 1006, 4018, 'DROP_PREORDER', '19:00', 'PLACED', 1860, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6598, 5293, 3059, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6599, 5293, 3060, 3, 390);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7293, 5293, 'CASH', 1860, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5294, 2020, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 1240, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6600, 5294, 3059, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6601, 5294, 3060, 2, 390);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7294, 5294, 'CASH', 1240, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2020, 1006, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5295, 2002, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 850, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6602, 5295, 3059, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6603, 5295, 3060, 1, 390);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7295, 5295, 'CASH', 850, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2002, 1006, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5296, 2028, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 690, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6604, 5296, 3059, 3, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7296, 5296, 'CASH', 690, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2028, 1006, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5297, 2013, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 1400, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6605, 5297, 3059, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6606, 5297, 3060, 3, 390);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7297, 5297, 'CASH', 1400, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2013, 1006, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5298, 2033, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 1700, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6607, 5298, 3059, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6608, 5298, 3060, 3, 390);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6609, 5298, 3061, 2, 150);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7298, 5298, 'CASH', 1700, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5299, 2026, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6610, 5299, 3059, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6611, 5299, 3060, 1, 390);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7299, 5299, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2026, 1006, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5300, 2016, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6612, 5300, 3059, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7300, 5300, 'CASH', 230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2016, 1006, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5301, 2045, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 1380, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6613, 5301, 3059, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6614, 5301, 3060, 1, 390);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6615, 5301, 3061, 2, 150);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7301, 5301, 'CASH', 1380, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2045, 1006, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5302, 2025, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6616, 5302, 3059, 2, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7302, 5302, 'CASH', 460, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5303, 2035, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 1380, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6617, 5303, 3059, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6618, 5303, 3060, 1, 390);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6619, 5303, 3061, 2, 150);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7303, 5303, 'CASH', 1380, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5304, 2025, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6620, 5304, 3059, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7304, 5304, 'CASH', 230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5305, 2040, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 620, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6621, 5305, 3059, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6622, 5305, 3060, 1, 390);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7305, 5305, 'CASH', 620, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5306, 2012, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6623, 5306, 3059, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7306, 5306, 'CASH', 230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2012, 1006, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5307, 2034, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 1240, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6624, 5307, 3059, 2, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6625, 5307, 3060, 2, 390);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7307, 5307, 'CASH', 1240, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2034, 1006, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5308, 2036, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 1530, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6626, 5308, 3059, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6627, 5308, 3060, 1, 390);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6628, 5308, 3061, 3, 150);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7308, 5308, 'CASH', 1530, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5309, 2020, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 1010, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6629, 5309, 3059, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6630, 5309, 3060, 2, 390);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7309, 5309, 'CASH', 1010, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5310, 2038, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 1010, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6631, 5310, 3059, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6632, 5310, 3060, 2, 390);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7310, 5310, 'CASH', 1010, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2038, 1006, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5311, 2040, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6633, 5311, 3059, 2, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7311, 5311, 'CASH', 460, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2040, 1006, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5312, 2050, 1006, 4019, 'DROP_PREORDER', '19:00', 'COMPLETED', 460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6634, 5312, 3059, 2, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7312, 5312, 'CASH', 460, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2050, 1006, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5313, 2045, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 2200, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6635, 5313, 3068, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6636, 5313, 3069, 1, 490);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6637, 5313, 3070, 3, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7313, 5313, 'CASH', 2200, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5314, 2049, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 1790, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6638, 5314, 3068, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6639, 5314, 3069, 1, 490);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6640, 5314, 3070, 2, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7314, 5314, 'CASH', 1790, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5315, 2032, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 1460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6641, 5315, 3068, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6642, 5315, 3069, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7315, 5315, 'CASH', 1460, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5316, 2045, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 2200, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6643, 5316, 3068, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6644, 5316, 3069, 1, 490);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6645, 5316, 3070, 3, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7316, 5316, 'CASH', 2200, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5317, 2014, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 1460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6646, 5317, 3068, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6647, 5317, 3069, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7317, 5317, 'CASH', 1460, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5318, 2040, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 2040, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6648, 5318, 3068, 1, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6649, 5318, 3069, 2, 490);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6650, 5318, 3070, 2, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7318, 5318, 'CASH', 2040, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5319, 2043, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 2030, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6651, 5319, 3068, 3, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6652, 5319, 3069, 1, 490);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6653, 5319, 3070, 2, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7319, 5319, 'CASH', 2030, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5320, 2048, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 480, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6654, 5320, 3068, 2, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7320, 5320, 'CASH', 480, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5321, 2023, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 480, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6655, 5321, 3068, 2, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7321, 5321, 'CASH', 480, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5322, 2021, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 3010, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6656, 5322, 3068, 3, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6657, 5322, 3069, 3, 490);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6658, 5322, 3070, 2, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7322, 5322, 'CASH', 3010, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5323, 2018, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 240, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6659, 5323, 3068, 1, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7323, 5323, 'CASH', 240, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5324, 2027, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 730, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6660, 5324, 3068, 1, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6661, 5324, 3069, 1, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7324, 5324, 'CASH', 730, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5325, 2015, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 240, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6662, 5325, 3068, 1, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7325, 5325, 'CASH', 240, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5326, 2015, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 240, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6663, 5326, 3068, 1, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7326, 5326, 'CASH', 240, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5327, 2005, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 240, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6664, 5327, 3068, 1, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7327, 5327, 'CASH', 240, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5328, 2049, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 2600, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6665, 5328, 3068, 3, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6666, 5328, 3069, 3, 490);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6667, 5328, 3070, 1, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7328, 5328, 'CASH', 2600, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5329, 2036, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 1950, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6668, 5329, 3068, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6669, 5329, 3069, 3, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7329, 5329, 'CASH', 1950, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5330, 2041, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 2360, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6670, 5330, 3068, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6671, 5330, 3069, 3, 490);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6672, 5330, 3070, 1, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7330, 5330, 'CASH', 2360, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5331, 2001, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 2110, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6673, 5331, 3068, 3, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6674, 5331, 3069, 2, 490);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6675, 5331, 3070, 1, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7331, 5331, 'CASH', 2110, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5332, 2024, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 480, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6676, 5332, 3068, 2, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7332, 5332, 'CASH', 480, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5333, 2035, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 730, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6677, 5333, 3068, 1, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6678, 5333, 3069, 1, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7333, 5333, 'CASH', 730, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5334, 2047, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 970, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6679, 5334, 3068, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6680, 5334, 3069, 1, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7334, 5334, 'CASH', 970, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5335, 2015, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 240, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6681, 5335, 3068, 1, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7335, 5335, 'CASH', 240, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5336, 2045, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 480, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6682, 5336, 3068, 2, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7336, 5336, 'CASH', 480, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5337, 2046, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 2930, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6683, 5337, 3068, 3, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6684, 5337, 3069, 2, 490);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6685, 5337, 3070, 3, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7337, 5337, 'CASH', 2930, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5338, 2050, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 1460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6686, 5338, 3068, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6687, 5338, 3069, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7338, 5338, 'CASH', 1460, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5339, 2033, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 970, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6688, 5339, 3068, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6689, 5339, 3069, 1, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7339, 5339, 'CASH', 970, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5340, 2050, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 730, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6690, 5340, 3068, 1, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6691, 5340, 3069, 1, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7340, 5340, 'CASH', 730, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5341, 2049, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 1460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6692, 5341, 3068, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6693, 5341, 3069, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7341, 5341, 'CASH', 1460, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5342, 2032, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 480, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6694, 5342, 3068, 2, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7342, 5342, 'CASH', 480, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5343, 2027, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 1950, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6695, 5343, 3068, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6696, 5343, 3069, 3, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7343, 5343, 'CASH', 1950, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5344, 2022, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6697, 5344, 3068, 3, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7344, 5344, 'CASH', 720, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5345, 2022, 1007, 4023, 'DROP_PREORDER', '19:00', 'PLACED', 480, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6698, 5345, 3068, 2, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7345, 5345, 'CASH', 480, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5346, 2004, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 360, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6699, 5346, 3080, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7346, 5346, 'CASH', 360, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5347, 2046, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 900, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6700, 5347, 3080, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6701, 5347, 3081, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7347, 5347, 'CASH', 900, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5348, 2026, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 360, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6702, 5348, 3080, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7348, 5348, 'CASH', 360, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5349, 2041, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1100, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6703, 5349, 3080, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6704, 5349, 3081, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6705, 5349, 3082, 2, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7349, 5349, 'CASH', 1100, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2041, 1008, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5350, 2034, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1090, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6706, 5350, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6707, 5350, 3081, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6708, 5350, 3082, 1, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7350, 5350, 'CASH', 1090, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2034, 1008, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5351, 2012, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 180, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6709, 5351, 3080, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7351, 5351, 'CASH', 180, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5352, 2006, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6710, 5352, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6711, 5352, 3081, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6712, 5352, 3082, 2, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7352, 5352, 'CASH', 1460, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5353, 2012, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 540, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6713, 5353, 3080, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6714, 5353, 3081, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7353, 5353, 'CASH', 540, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2012, 1008, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5354, 2024, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1280, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6715, 5354, 3080, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6716, 5354, 3081, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6717, 5354, 3082, 2, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7354, 5354, 'CASH', 1280, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2024, 1008, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5355, 2010, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 540, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6718, 5355, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6719, 5355, 3081, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7355, 5355, 'CASH', 540, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5356, 2012, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6720, 5356, 3080, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6721, 5356, 3081, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6722, 5356, 3082, 2, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7356, 5356, 'CASH', 1460, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2012, 1008, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5357, 2024, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 540, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6723, 5357, 3080, 3, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7357, 5357, 'CASH', 540, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2024, 1008, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5358, 2031, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 540, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6724, 5358, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6725, 5358, 3081, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7358, 5358, 'CASH', 540, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2031, 1008, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5359, 2016, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 180, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6726, 5359, 3080, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7359, 5359, 'CASH', 180, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2016, 1008, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5360, 2049, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6727, 5360, 3080, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6728, 5360, 3081, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6729, 5360, 3082, 2, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7360, 5360, 'CASH', 1820, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2049, 1008, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5361, 2019, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 360, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6730, 5361, 3080, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7361, 5361, 'CASH', 360, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5362, 2029, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6731, 5362, 3080, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6732, 5362, 3081, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6733, 5362, 3082, 3, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7362, 5362, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5363, 2039, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 360, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6734, 5363, 3080, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7363, 5363, 'CASH', 360, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5364, 2049, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6735, 5364, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6736, 5364, 3081, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6737, 5364, 3082, 3, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7364, 5364, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5365, 2044, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6738, 5365, 3080, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6739, 5365, 3081, 3, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7365, 5365, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2044, 1008, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5366, 2006, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 180, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6740, 5366, 3080, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7366, 5366, 'CASH', 180, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2006, 1008, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5367, 2040, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 360, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6741, 5367, 3080, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7367, 5367, 'CASH', 360, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2040, 1008, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5368, 2042, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6742, 5368, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6743, 5368, 3081, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6744, 5368, 3082, 3, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7368, 5368, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5369, 2019, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6745, 5369, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6746, 5369, 3081, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7369, 5369, 'CASH', 720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2019, 1008, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5370, 2001, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6747, 5370, 3080, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6748, 5370, 3081, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6749, 5370, 3082, 2, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7370, 5370, 'CASH', 1820, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2001, 1008, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5371, 2043, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 540, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6750, 5371, 3080, 3, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7371, 5371, 'CASH', 540, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2043, 1008, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5372, 2037, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 180, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6751, 5372, 3080, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7372, 5372, 'CASH', 180, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5373, 2012, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1650, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6752, 5373, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6753, 5373, 3081, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6754, 5373, 3082, 3, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7373, 5373, 'CASH', 1650, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2012, 1008, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5374, 2007, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 910, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6755, 5374, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6756, 5374, 3081, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6757, 5374, 3082, 1, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7374, 5374, 'CASH', 910, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1008, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5375, 2002, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 1450, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6758, 5375, 3080, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6759, 5375, 3081, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6760, 5375, 3082, 1, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7375, 5375, 'CASH', 1450, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2002, 1008, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5376, 2014, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 540, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6761, 5376, 3080, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6762, 5376, 3081, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7376, 5376, 'CASH', 540, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2014, 1008, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5377, 2046, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 2190, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6763, 5377, 3080, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6764, 5377, 3081, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6765, 5377, 3082, 3, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7377, 5377, 'CASH', 2190, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2046, 1008, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5378, 2036, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 540, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6766, 5378, 3080, 3, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7378, 5378, 'CASH', 540, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2036, 1008, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5379, 2039, 1008, 4028, 'DROP_PREORDER', '19:00', 'COMPLETED', 910, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6767, 5379, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6768, 5379, 3081, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6769, 5379, 3082, 1, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7379, 5379, 'CASH', 910, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2039, 1008, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5380, 2034, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 180, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6770, 5380, 3080, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7380, 5380, 'CASH', 180, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5381, 2046, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 540, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6771, 5381, 3080, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6772, 5381, 3081, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7381, 5381, 'CASH', 540, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5382, 2014, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6773, 5382, 3080, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6774, 5382, 3081, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6775, 5382, 3082, 3, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7382, 5382, 'CASH', 1830, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5383, 2029, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 180, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6776, 5383, 3080, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7383, 5383, 'CASH', 180, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5384, 2049, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6777, 5384, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6778, 5384, 3081, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6779, 5384, 3082, 3, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7384, 5384, 'CASH', 1830, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5385, 2031, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6780, 5385, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6781, 5385, 3081, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6782, 5385, 3082, 3, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7385, 5385, 'CASH', 1830, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5386, 2039, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6783, 5386, 3080, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6784, 5386, 3081, 3, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7386, 5386, 'CASH', 1080, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5387, 2015, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 1650, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6785, 5387, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6786, 5387, 3081, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6787, 5387, 3082, 3, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7387, 5387, 'CASH', 1650, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5388, 2010, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 900, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6788, 5388, 3080, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6789, 5388, 3081, 3, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7388, 5388, 'CASH', 900, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5389, 2045, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 1640, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6790, 5389, 3080, 3, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6791, 5389, 3081, 2, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6792, 5389, 3082, 2, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7389, 5389, 'CASH', 1640, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5390, 2003, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 180, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6793, 5390, 3080, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7390, 5390, 'CASH', 180, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5391, 2022, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 540, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6794, 5391, 3080, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6795, 5391, 3081, 2, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7391, 5391, 'CASH', 540, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5392, 2046, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 730, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6796, 5392, 3080, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6797, 5392, 3081, 1, 180);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6798, 5392, 3082, 1, 370);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7392, 5392, 'CASH', 730, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5393, 2016, 1008, 4029, 'DROP_PREORDER', '19:00', 'PLACED', 180, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6799, 5393, 3080, 1, 180);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7393, 5393, 'CASH', 180, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5394, 2022, 1009, 4030, 'DROP_PREORDER', '19:00', 'PLACED', 1750, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6800, 5394, 3094, 2, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6801, 5394, 3095, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6802, 5394, 3096, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7394, 5394, 'CASH', 1750, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5395, 2046, 1009, 4030, 'DROP_PREORDER', '19:00', 'PLACED', 1480, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6803, 5395, 3094, 3, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6804, 5395, 3095, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6805, 5395, 3096, 1, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7395, 5395, 'CASH', 1480, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5396, 2013, 1009, 4030, 'DROP_PREORDER', '19:00', 'PLACED', 1620, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6806, 5396, 3094, 1, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6807, 5396, 3095, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6808, 5396, 3096, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7396, 5396, 'CASH', 1620, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5397, 2028, 1009, 4030, 'DROP_PREORDER', '19:00', 'PLACED', 1820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6809, 5397, 3094, 3, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6810, 5397, 3095, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6811, 5397, 3096, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7397, 5397, 'CASH', 1820, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5398, 2041, 1009, 4030, 'DROP_PREORDER', '19:00', 'PLACED', 390, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6812, 5398, 3094, 3, 130);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7398, 5398, 'CASH', 390, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5399, 2003, 1009, 4030, 'DROP_PREORDER', '19:00', 'PLACED', 360, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6813, 5399, 3094, 1, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6814, 5399, 3095, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7399, 5399, 'CASH', 360, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5400, 2023, 1009, 4030, 'DROP_PREORDER', '19:00', 'PLACED', 130, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6815, 5400, 3094, 1, 130);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7400, 5400, 'CASH', 130, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5401, 2030, 1009, 4030, 'DROP_PREORDER', '19:00', 'PLACED', 130, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6816, 5401, 3094, 1, 130);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7401, 5401, 'CASH', 130, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5402, 2031, 1009, 4030, 'DROP_PREORDER', '19:00', 'PLACED', 1290, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6817, 5402, 3094, 2, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6818, 5402, 3095, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6819, 5402, 3096, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7402, 5402, 'CASH', 1290, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5403, 2017, 1009, 4030, 'DROP_PREORDER', '19:00', 'PLACED', 1290, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6820, 5403, 3094, 2, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6821, 5403, 3095, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6822, 5403, 3096, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7403, 5403, 'CASH', 1290, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5404, 2009, 1009, 4030, 'DROP_PREORDER', '19:00', 'PLACED', 1480, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6823, 5404, 3094, 3, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6824, 5404, 3095, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6825, 5404, 3096, 1, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7404, 5404, 'CASH', 1480, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5405, 2033, 1009, 4032, 'DROP_PREORDER', '19:00', 'PLACED', 130, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6826, 5405, 3094, 1, 130);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7405, 5405, 'CASH', 130, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5406, 2008, 1009, 4032, 'DROP_PREORDER', '19:00', 'PLACED', 760, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6827, 5406, 3094, 1, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6828, 5406, 3095, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6829, 5406, 3096, 1, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7406, 5406, 'CASH', 760, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5407, 2021, 1009, 4032, 'DROP_PREORDER', '19:00', 'PLACED', 490, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6830, 5407, 3094, 2, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6831, 5407, 3095, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7407, 5407, 'CASH', 490, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5408, 2039, 1009, 4032, 'DROP_PREORDER', '19:00', 'PLACED', 590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6832, 5408, 3094, 1, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6833, 5408, 3095, 2, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7408, 5408, 'CASH', 590, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5409, 2028, 1009, 4032, 'DROP_PREORDER', '19:00', 'PLACED', 590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6834, 5409, 3094, 1, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6835, 5409, 3095, 2, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7409, 5409, 'CASH', 590, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5410, 2028, 1009, 4032, 'DROP_PREORDER', '19:00', 'PLACED', 820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6836, 5410, 3094, 1, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6837, 5410, 3095, 3, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7410, 5410, 'CASH', 820, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5411, 2004, 1009, 4032, 'DROP_PREORDER', '19:00', 'PLACED', 590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6838, 5411, 3094, 1, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6839, 5411, 3095, 2, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7411, 5411, 'CASH', 590, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5412, 2048, 1009, 4032, 'DROP_PREORDER', '19:00', 'PLACED', 620, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6840, 5412, 3094, 3, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6841, 5412, 3095, 1, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7412, 5412, 'CASH', 620, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5413, 2035, 1009, 4032, 'DROP_PREORDER', '19:00', 'PLACED', 130, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6842, 5413, 3094, 1, 130);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7413, 5413, 'CASH', 130, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5414, 2014, 1009, 4032, 'DROP_PREORDER', '19:00', 'PLACED', 390, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6843, 5414, 3094, 3, 130);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7414, 5414, 'CASH', 390, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5415, 2003, 1009, 4033, 'DROP_PREORDER', '19:00', 'PLACED', 1560, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6844, 5415, 3094, 1, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6845, 5415, 3095, 1, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6846, 5415, 3096, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7415, 5415, 'CASH', 1560, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5416, 2033, 1009, 4033, 'DROP_PREORDER', '19:00', 'PLACED', 1750, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6847, 5416, 3094, 2, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6848, 5416, 3095, 3, 230);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6849, 5416, 3096, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7416, 5416, 'CASH', 1750, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5417, 2017, 1009, 4033, 'DROP_PREORDER', '19:00', 'PLACED', 260, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6850, 5417, 3094, 2, 130);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7417, 5417, 'CASH', 260, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5418, 2023, 1009, 4033, 'DROP_PREORDER', '19:00', 'PLACED', 390, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6851, 5418, 3094, 3, 130);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7418, 5418, 'CASH', 390, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5419, 2031, 1009, 4033, 'DROP_PREORDER', '19:00', 'PLACED', 130, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6852, 5419, 3094, 1, 130);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7419, 5419, 'CASH', 130, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5420, 2039, 1009, 4033, 'DROP_PREORDER', '19:00', 'PLACED', 950, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6853, 5420, 3094, 2, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6854, 5420, 3095, 3, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7420, 5420, 'CASH', 950, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5421, 2039, 1009, 4033, 'DROP_PREORDER', '19:00', 'PLACED', 850, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6855, 5421, 3094, 3, 130);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6856, 5421, 3095, 2, 230);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7421, 5421, 'CASH', 850, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5422, 2047, 1009, 4033, 'DROP_PREORDER', '19:00', 'PLACED', 130, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6857, 5422, 3094, 1, 130);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7422, 5422, 'CASH', 130, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5423, 2020, 1009, 4033, 'DROP_PREORDER', '19:00', 'PLACED', 130, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6858, 5423, 3094, 1, 130);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7423, 5423, 'CASH', 130, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5424, 2034, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 2230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6859, 5424, 3107, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6860, 5424, 3108, 3, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6861, 5424, 3109, 1, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7424, 5424, 'CASH', 2230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5425, 2043, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6862, 5425, 3107, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7425, 5425, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2043, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5426, 2010, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6863, 5426, 3107, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7426, 5426, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5427, 2009, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 2400, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6864, 5427, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6865, 5427, 3108, 3, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7427, 5427, 'CASH', 2400, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2009, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5428, 2036, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 2400, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6866, 5428, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6867, 5428, 3108, 3, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7428, 5428, 'CASH', 2400, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2036, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5429, 2020, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 2110, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6868, 5429, 3107, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6869, 5429, 3108, 1, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6870, 5429, 3109, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7429, 5429, 'CASH', 2110, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2020, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5430, 2007, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6871, 5430, 3107, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7430, 5430, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5431, 2035, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 2890, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6872, 5431, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6873, 5431, 3108, 3, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6874, 5431, 3109, 1, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7431, 5431, 'CASH', 2890, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2035, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5432, 2034, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 2070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6875, 5432, 3107, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6876, 5432, 3108, 3, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7432, 5432, 'CASH', 2070, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2034, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5433, 2020, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6877, 5433, 3107, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7433, 5433, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5434, 2011, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6878, 5434, 3107, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7434, 5434, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2011, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5435, 2047, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6879, 5435, 3107, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7435, 5435, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5436, 2026, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 2930, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6880, 5436, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6881, 5436, 3108, 1, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6882, 5436, 3109, 3, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7436, 5436, 'CASH', 2930, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5437, 2015, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 1460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6883, 5437, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6884, 5437, 3108, 1, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7437, 5437, 'CASH', 1460, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5438, 2001, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 2070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6885, 5438, 3107, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6886, 5438, 3108, 3, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7438, 5438, 'CASH', 2070, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2001, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5439, 2001, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 2230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6887, 5439, 3107, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6888, 5439, 3108, 3, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6889, 5439, 3109, 1, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7439, 5439, 'CASH', 2230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2001, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5440, 2005, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6890, 5440, 3107, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7440, 5440, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5441, 2036, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 2580, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6891, 5441, 3107, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6892, 5441, 3108, 2, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6893, 5441, 3109, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7441, 5441, 'CASH', 2580, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2036, 1010, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5442, 2031, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 3540, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6894, 5442, 3107, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6895, 5442, 3108, 3, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6896, 5442, 3109, 3, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7442, 5442, 'CASH', 3540, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5443, 2014, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6897, 5443, 3107, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7443, 5443, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5444, 2007, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6898, 5444, 3107, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7444, 5444, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1010, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5445, 2008, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6899, 5445, 3107, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7445, 5445, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2008, 1010, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5446, 2015, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 2400, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6900, 5446, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6901, 5446, 3108, 3, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7446, 5446, 'CASH', 2400, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5447, 2044, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6902, 5447, 3107, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7447, 5447, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2044, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5448, 2041, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 1930, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6903, 5448, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6904, 5448, 3108, 2, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7448, 5448, 'CASH', 1930, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2041, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5449, 2027, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6905, 5449, 3107, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7449, 5449, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2027, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5450, 2001, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6906, 5450, 3107, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7450, 5450, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2001, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5451, 2033, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 2440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6907, 5451, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6908, 5451, 3108, 1, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6909, 5451, 3109, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7451, 5451, 'CASH', 2440, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5452, 2024, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 1460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6910, 5452, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6911, 5452, 3108, 1, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7452, 5452, 'CASH', 1460, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2024, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5453, 2037, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 1620, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6912, 5453, 3107, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6913, 5453, 3108, 1, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6914, 5453, 3109, 1, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7453, 5453, 'CASH', 1620, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5454, 2034, 1010, 4034, 'DROP_PREORDER', '19:00', 'COMPLETED', 1930, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6915, 5454, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6916, 5454, 3108, 2, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7454, 5454, 'CASH', 1930, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2034, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5455, 2019, 1010, 4035, 'DROP_PREORDER', '19:00', 'PLACED', 3870, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6917, 5455, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6918, 5455, 3108, 3, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6919, 5455, 3109, 3, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7455, 5455, 'CASH', 3870, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5456, 2014, 1010, 4035, 'DROP_PREORDER', '19:00', 'PLACED', 3380, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6920, 5456, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6921, 5456, 3108, 3, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6922, 5456, 3109, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7456, 5456, 'CASH', 3380, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5457, 2028, 1010, 4035, 'DROP_PREORDER', '19:00', 'PLACED', 2110, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6923, 5457, 3107, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6924, 5457, 3108, 1, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6925, 5457, 3109, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7457, 5457, 'CASH', 2110, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5458, 2047, 1010, 4035, 'DROP_PREORDER', '19:00', 'PLACED', 2890, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6926, 5458, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6927, 5458, 3108, 3, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6928, 5458, 3109, 1, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7458, 5458, 'CASH', 2890, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5459, 2016, 1010, 4035, 'DROP_PREORDER', '19:00', 'PLACED', 1780, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6929, 5459, 3107, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6930, 5459, 3108, 1, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6931, 5459, 3109, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7459, 5459, 'CASH', 1780, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5460, 2021, 1010, 4035, 'DROP_PREORDER', '19:00', 'PLACED', 800, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6932, 5460, 3107, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6933, 5460, 3108, 1, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7460, 5460, 'CASH', 800, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5461, 2001, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6934, 5461, 3107, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7461, 5461, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5462, 2032, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6935, 5462, 3107, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7462, 5462, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2032, 1010, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5463, 2038, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6936, 5463, 3107, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7463, 5463, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2038, 1010, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5464, 2001, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6937, 5464, 3107, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7464, 5464, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2001, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5465, 2034, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6938, 5465, 3107, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7465, 5465, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2034, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5466, 2002, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6939, 5466, 3107, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7466, 5466, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5467, 2022, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 1740, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6940, 5467, 3107, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6941, 5467, 3108, 3, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7467, 5467, 'CASH', 1740, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2022, 1010, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5468, 2027, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 1740, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6942, 5468, 3107, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6943, 5468, 3108, 3, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7468, 5468, 'CASH', 1740, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2027, 1010, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5469, 2005, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 2440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6944, 5469, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6945, 5469, 3108, 1, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6946, 5469, 3109, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7469, 5469, 'CASH', 2440, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5470, 2042, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6947, 5470, 3107, 2, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7470, 5470, 'CASH', 660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2042, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5471, 2032, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 2910, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6948, 5471, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6949, 5471, 3108, 2, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6950, 5471, 3109, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7471, 5471, 'CASH', 2910, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2032, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5472, 2011, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6951, 5472, 3107, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7472, 5472, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2011, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5473, 2032, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6952, 5473, 3107, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7473, 5473, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5474, 2009, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6953, 5474, 3107, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7474, 5474, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2009, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5475, 2032, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 1760, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6954, 5475, 3107, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6955, 5475, 3108, 2, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6956, 5475, 3109, 1, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7475, 5475, 'CASH', 1760, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5476, 2038, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6957, 5476, 3107, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7476, 5476, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2038, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5477, 2025, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 2070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6958, 5477, 3107, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6959, 5477, 3108, 3, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7477, 5477, 'CASH', 2070, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5478, 2035, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 2070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6960, 5478, 3107, 2, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6961, 5478, 3108, 3, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7478, 5478, 'CASH', 2070, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5479, 2024, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6962, 5479, 3107, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7479, 5479, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5480, 2030, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 1290, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6963, 5480, 3107, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6964, 5480, 3108, 1, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6965, 5480, 3109, 1, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7480, 5480, 'CASH', 1290, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5481, 2027, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6966, 5481, 3107, 3, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7481, 5481, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5482, 2006, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 3380, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6967, 5482, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6968, 5482, 3108, 3, 470);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6969, 5482, 3109, 2, 490);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7482, 5482, 'CASH', 3380, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5483, 2016, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6970, 5483, 3107, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7483, 5483, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2016, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5484, 2025, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 800, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6971, 5484, 3107, 1, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6972, 5484, 3108, 1, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7484, 5484, 'CASH', 800, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2025, 1010, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5485, 2033, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 330, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6973, 5485, 3107, 1, 330);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7485, 5485, 'CASH', 330, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2033, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5486, 2010, 1010, 4036, 'DROP_PREORDER', '19:00', 'COMPLETED', 1460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6974, 5486, 3107, 3, 330);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6975, 5486, 3108, 1, 470);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7486, 5486, 'CASH', 1460, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2010, 1010, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5487, 2002, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 1160, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6976, 5487, 3121, 2, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6977, 5487, 3122, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7487, 5487, 'CASH', 1160, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5488, 2045, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 2490, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6978, 5488, 3121, 3, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6979, 5488, 3122, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6980, 5488, 3123, 3, 250);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7488, 5488, 'CASH', 2490, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5489, 2013, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6981, 5489, 3121, 2, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6982, 5489, 3122, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7489, 5489, 'CASH', 720, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5490, 2043, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 420, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6983, 5490, 3121, 3, 140);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7490, 5490, 'CASH', 420, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5491, 2038, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 1020, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6984, 5491, 3121, 1, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6985, 5491, 3122, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7491, 5491, 'CASH', 1020, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5492, 2016, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 1020, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6986, 5492, 3121, 1, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6987, 5492, 3122, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7492, 5492, 'CASH', 1020, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5493, 2020, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 280, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6988, 5493, 3121, 2, 140);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7493, 5493, 'CASH', 280, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5494, 2005, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 580, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6989, 5494, 3121, 1, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6990, 5494, 3122, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7494, 5494, 'CASH', 580, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5495, 2050, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6991, 5495, 3121, 2, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6992, 5495, 3122, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7495, 5495, 'CASH', 720, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5496, 2040, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 140, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6993, 5496, 3121, 1, 140);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7496, 5496, 'CASH', 140, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5497, 2014, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 420, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6994, 5497, 3121, 3, 140);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7497, 5497, 'CASH', 420, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5498, 2021, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 420, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6995, 5498, 3121, 3, 140);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7498, 5498, 'CASH', 420, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5499, 2030, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 420, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6996, 5499, 3121, 3, 140);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7499, 5499, 'CASH', 420, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5500, 2009, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 860, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6997, 5500, 3121, 3, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6998, 5500, 3122, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7500, 5500, 'CASH', 860, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5501, 2013, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 1300, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (6999, 5501, 3121, 3, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7000, 5501, 3122, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7501, 5501, 'CASH', 1300, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5502, 2011, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 1270, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7001, 5502, 3121, 1, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7002, 5502, 3122, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7003, 5502, 3123, 1, 250);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7502, 5502, 'CASH', 1270, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5503, 2043, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7004, 5503, 3121, 2, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7005, 5503, 3122, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7503, 5503, 'CASH', 720, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5504, 2005, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 1020, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7006, 5504, 3121, 1, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7007, 5504, 3122, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7504, 5504, 'CASH', 1020, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5505, 2008, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 140, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7008, 5505, 3121, 1, 140);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7505, 5505, 'CASH', 140, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5506, 2030, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 280, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7009, 5506, 3121, 2, 140);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7506, 5506, 'CASH', 280, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5507, 2002, 1011, 4041, 'DROP_PREORDER', '19:00', 'PLACED', 1800, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7010, 5507, 3121, 3, 140);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7011, 5507, 3122, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7012, 5507, 3123, 2, 250);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7507, 5507, 'CASH', 1800, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5508, 2020, 1012, 4043, 'DROP_PREORDER', '19:00', 'PLACED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7013, 5508, 3133, 3, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7508, 5508, 'CASH', 720, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5509, 2015, 1012, 4043, 'DROP_PREORDER', '19:00', 'PLACED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7014, 5509, 3133, 3, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7509, 5509, 'CASH', 720, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5510, 2029, 1012, 4043, 'DROP_PREORDER', '19:00', 'PLACED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7015, 5510, 3133, 3, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7510, 5510, 'CASH', 720, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5511, 2045, 1012, 4043, 'DROP_PREORDER', '19:00', 'PLACED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7016, 5511, 3133, 3, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7017, 5511, 3134, 3, 300);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7018, 5511, 3135, 1, 210);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7511, 5511, 'CASH', 1830, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5512, 2017, 1012, 4043, 'DROP_PREORDER', '19:00', 'PLACED', 1590, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7019, 5512, 3133, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7020, 5512, 3134, 3, 300);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7021, 5512, 3135, 1, 210);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7512, 5512, 'CASH', 1590, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5513, 2038, 1012, 4043, 'DROP_PREORDER', '19:00', 'PLACED', 240, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7022, 5513, 3133, 1, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7513, 5513, 'CASH', 240, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5514, 2031, 1012, 4043, 'DROP_PREORDER', '19:00', 'PLACED', 480, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7023, 5514, 3133, 2, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7514, 5514, 'CASH', 480, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5515, 2034, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7024, 5515, 3133, 3, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7025, 5515, 3134, 2, 300);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7515, 5515, 'CASH', 1320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2034, 1012, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5516, 2025, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 1470, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7026, 5516, 3133, 1, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7027, 5516, 3134, 2, 300);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7028, 5516, 3135, 3, 210);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7516, 5516, 'CASH', 1470, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5517, 2030, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7029, 5517, 3133, 3, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7517, 5517, 'CASH', 720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2030, 1012, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5518, 2007, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7030, 5518, 3133, 3, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7518, 5518, 'CASH', 720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1012, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5519, 2020, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 1140, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7031, 5519, 3133, 1, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7032, 5519, 3134, 3, 300);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7519, 5519, 'CASH', 1140, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5520, 2017, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7033, 5520, 3133, 3, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7520, 5520, 'CASH', 720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2017, 1012, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5521, 2028, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7034, 5521, 3133, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7035, 5521, 3134, 2, 300);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7521, 5521, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5522, 2048, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 840, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7036, 5522, 3133, 1, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7037, 5522, 3134, 2, 300);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7522, 5522, 'CASH', 840, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5523, 2048, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 990, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7038, 5523, 3133, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7039, 5523, 3134, 1, 300);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7040, 5523, 3135, 1, 210);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7523, 5523, 'CASH', 990, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2048, 1012, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5524, 2023, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 1080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7041, 5524, 3133, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7042, 5524, 3134, 2, 300);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7524, 5524, 'CASH', 1080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2023, 1012, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5525, 2042, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7043, 5525, 3133, 3, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7044, 5525, 3134, 2, 300);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7525, 5525, 'CASH', 1320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2042, 1012, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5526, 2027, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 780, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7045, 5526, 3133, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7046, 5526, 3134, 1, 300);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7526, 5526, 'CASH', 780, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2027, 1012, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5527, 2014, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7047, 5527, 3133, 3, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7527, 5527, 'CASH', 720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5528, 2017, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 1620, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7048, 5528, 3133, 3, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7049, 5528, 3134, 3, 300);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7528, 5528, 'CASH', 1620, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5529, 2012, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 1410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7050, 5529, 3133, 2, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7051, 5529, 3134, 1, 300);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7052, 5529, 3135, 3, 210);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7529, 5529, 'CASH', 1410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2012, 1012, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5530, 2003, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 1050, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7053, 5530, 3133, 1, 240);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7054, 5530, 3134, 2, 300);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7055, 5530, 3135, 1, 210);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7530, 5530, 'CASH', 1050, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5531, 2005, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7056, 5531, 3133, 3, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7531, 5531, 'CASH', 720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2005, 1012, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5532, 2037, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7057, 5532, 3133, 3, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7532, 5532, 'CASH', 720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5533, 2029, 1012, 4044, 'DROP_PREORDER', '19:00', 'COMPLETED', 240, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7058, 5533, 3133, 1, 240);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7533, 5533, 'CASH', 240, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5534, 2036, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1900, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7059, 5534, 3148, 3, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7060, 5534, 3149, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7061, 5534, 3150, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7534, 5534, 'CASH', 1900, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2036, 1013, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5535, 2020, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1140, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7062, 5535, 3148, 3, 380);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7535, 5535, 'CASH', 1140, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5536, 2015, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 760, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7063, 5536, 3148, 2, 380);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7536, 5536, 'CASH', 760, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2015, 1013, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5537, 2032, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1140, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7064, 5537, 3148, 3, 380);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7537, 5537, 'CASH', 1140, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2032, 1013, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5538, 2007, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 2080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7065, 5538, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7066, 5538, 3149, 3, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7067, 5538, 3150, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7538, 5538, 'CASH', 2080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1013, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5539, 2043, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1560, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7068, 5539, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7069, 5539, 3149, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7539, 5539, 'CASH', 1560, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2043, 1013, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5540, 2049, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1540, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7070, 5540, 3148, 1, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7071, 5540, 3149, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7072, 5540, 3150, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7540, 5540, 'CASH', 1540, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2049, 1013, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5541, 2031, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1160, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7073, 5541, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7074, 5541, 3149, 1, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7541, 5541, 'CASH', 1160, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5542, 2025, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1780, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7075, 5542, 3148, 3, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7076, 5542, 3149, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7077, 5542, 3150, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7542, 5542, 'CASH', 1780, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2025, 1013, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5543, 2013, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 2180, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7078, 5543, 3148, 3, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7079, 5543, 3149, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7080, 5543, 3150, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7543, 5543, 'CASH', 2180, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5544, 2002, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 2080, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7081, 5544, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7082, 5544, 3149, 3, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7083, 5544, 3150, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7544, 5544, 'CASH', 2080, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2002, 1013, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5545, 2020, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1140, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7084, 5545, 3148, 3, 380);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7545, 5545, 'CASH', 1140, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2020, 1013, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5546, 2018, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 380, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7085, 5546, 3148, 1, 380);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7546, 5546, 'CASH', 380, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2018, 1013, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5547, 2027, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1540, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7086, 5547, 3148, 3, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7087, 5547, 3149, 1, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7547, 5547, 'CASH', 1540, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5548, 2048, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1560, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7088, 5548, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7089, 5548, 3149, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7548, 5548, 'CASH', 1560, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5549, 2017, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1900, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7090, 5549, 3148, 3, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7091, 5549, 3149, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7092, 5549, 3150, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7549, 5549, 'CASH', 1900, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5550, 2044, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1960, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7093, 5550, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7094, 5550, 3149, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7550, 5550, 'CASH', 1960, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5551, 2011, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1680, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7095, 5551, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7096, 5551, 3149, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7097, 5551, 3150, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7551, 5551, 'CASH', 1680, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2011, 1013, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5552, 2044, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 380, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7098, 5552, 3148, 1, 380);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7552, 5552, 'CASH', 380, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2044, 1013, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5553, 2024, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1800, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7099, 5553, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7100, 5553, 3149, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7101, 5553, 3150, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7553, 5553, 'CASH', 1800, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5554, 2006, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1140, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7102, 5554, 3148, 3, 380);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7554, 5554, 'CASH', 1140, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5555, 2037, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1180, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7103, 5555, 3148, 1, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7104, 5555, 3149, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7555, 5555, 'CASH', 1180, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2037, 1013, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5556, 2046, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 760, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7105, 5556, 3148, 2, 380);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7556, 5556, 'CASH', 760, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2046, 1013, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5557, 2017, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1180, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7106, 5557, 3148, 1, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7107, 5557, 3149, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7557, 5557, 'CASH', 1180, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2017, 1013, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5558, 2024, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 2340, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7108, 5558, 3148, 3, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7109, 5558, 3149, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7558, 5558, 'CASH', 2340, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5559, 2019, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1560, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7110, 5559, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7111, 5559, 3149, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7559, 5559, 'CASH', 1560, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5560, 2045, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1780, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7112, 5560, 3148, 3, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7113, 5560, 3149, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7114, 5560, 3150, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7560, 5560, 'CASH', 1780, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5561, 2003, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1160, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7115, 5561, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7116, 5561, 3149, 1, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7561, 5561, 'CASH', 1160, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2003, 1013, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5562, 2028, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1580, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7117, 5562, 3148, 1, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7118, 5562, 3149, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7562, 5562, 'CASH', 1580, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5563, 2037, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1140, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7119, 5563, 3148, 3, 380);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7563, 5563, 'CASH', 1140, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2037, 1013, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5564, 2012, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1780, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7120, 5564, 3148, 3, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7121, 5564, 3149, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7122, 5564, 3150, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7564, 5564, 'CASH', 1780, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2012, 1013, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5565, 2015, 1013, 4046, 'DROP_PREORDER', '19:00', 'COMPLETED', 1920, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7123, 5565, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7124, 5565, 3149, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7125, 5565, 3150, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7565, 5565, 'CASH', 1920, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2015, 1013, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5566, 2008, 1013, 4047, 'DROP_PREORDER', '19:00', 'PLACED', 1700, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7126, 5566, 3148, 1, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7127, 5566, 3149, 3, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7128, 5566, 3150, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7566, 5566, 'CASH', 1700, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5567, 2009, 1013, 4047, 'DROP_PREORDER', '19:00', 'PLACED', 1140, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7129, 5567, 3148, 3, 380);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7567, 5567, 'CASH', 1140, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5568, 2032, 1013, 4047, 'DROP_PREORDER', '19:00', 'PLACED', 1940, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7130, 5568, 3148, 3, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7131, 5568, 3149, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7568, 5568, 'CASH', 1940, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5569, 2042, 1013, 4047, 'DROP_PREORDER', '19:00', 'PLACED', 2180, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7132, 5569, 3148, 3, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7133, 5569, 3149, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7134, 5569, 3150, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7569, 5569, 'CASH', 2180, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5570, 2036, 1013, 4047, 'DROP_PREORDER', '19:00', 'PLACED', 1680, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7135, 5570, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7136, 5570, 3149, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7137, 5570, 3150, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7570, 5570, 'CASH', 1680, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5571, 2033, 1013, 4047, 'DROP_PREORDER', '19:00', 'PLACED', 1140, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7138, 5571, 3148, 3, 380);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7571, 5571, 'CASH', 1140, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5572, 2014, 1013, 4047, 'DROP_PREORDER', '19:00', 'PLACED', 760, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7139, 5572, 3148, 2, 380);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7572, 5572, 'CASH', 760, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5573, 2049, 1013, 4047, 'DROP_PREORDER', '19:00', 'PLACED', 2320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7140, 5573, 3148, 2, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7141, 5573, 3149, 3, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7142, 5573, 3150, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7573, 5573, 'CASH', 2320, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5574, 2046, 1013, 4047, 'DROP_PREORDER', '19:00', 'PLACED', 1020, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7143, 5574, 3148, 1, 380);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7144, 5574, 3149, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7145, 5574, 3150, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7574, 5574, 'CASH', 1020, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5575, 2009, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7146, 5575, 3157, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7575, 5575, 'CASH', 880, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5576, 2033, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1610, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7147, 5576, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7148, 5576, 3158, 1, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7149, 5576, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7576, 5576, 'CASH', 1610, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5577, 2035, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1050, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7150, 5577, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7151, 5577, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7577, 5577, 'CASH', 1050, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2035, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5578, 2048, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 950, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7152, 5578, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7153, 5578, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7578, 5578, 'CASH', 950, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2048, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5579, 2017, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7154, 5579, 3157, 3, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7579, 5579, 'CASH', 1320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5580, 2030, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7155, 5580, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7156, 5580, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7580, 5580, 'CASH', 1220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2030, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5581, 2031, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1580, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7157, 5581, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7158, 5581, 3158, 2, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7159, 5581, 3159, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7581, 5581, 'CASH', 1580, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2031, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5582, 2028, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 780, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7160, 5582, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7161, 5582, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7582, 5582, 'CASH', 780, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5583, 2008, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1510, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7162, 5583, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7163, 5583, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7164, 5583, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7583, 5583, 'CASH', 1510, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5584, 2001, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7165, 5584, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7166, 5584, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7584, 5584, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2001, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5585, 2045, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1750, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7167, 5585, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7168, 5585, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7169, 5585, 3159, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7585, 5585, 'CASH', 1750, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2045, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5586, 2007, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 610, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7170, 5586, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7171, 5586, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7586, 5586, 'CASH', 610, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5587, 2023, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1490, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7172, 5587, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7173, 5587, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7587, 5587, 'CASH', 1490, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2023, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5588, 2021, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7174, 5588, 3157, 3, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7588, 5588, 'CASH', 1320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5589, 2040, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7175, 5589, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7176, 5589, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7589, 5589, 'CASH', 1220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5590, 2035, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 610, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7177, 5590, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7178, 5590, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7590, 5590, 'CASH', 610, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5591, 2023, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7179, 5591, 3157, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7591, 5591, 'CASH', 440, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2023, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5592, 2042, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7180, 5592, 3157, 3, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7592, 5592, 'CASH', 1320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2042, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5593, 2007, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 2070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7181, 5593, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7182, 5593, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7183, 5593, 3159, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7593, 5593, 'CASH', 2070, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5594, 2006, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 780, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7184, 5594, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7185, 5594, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7594, 5594, 'CASH', 780, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2006, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5595, 2026, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7186, 5595, 3157, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7595, 5595, 'CASH', 440, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2026, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5596, 2017, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7187, 5596, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7188, 5596, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7189, 5596, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7596, 5596, 'CASH', 1070, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2017, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5597, 2012, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1190, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7190, 5597, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7191, 5597, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7192, 5597, 3159, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7597, 5597, 'CASH', 1190, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2012, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5598, 2041, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7193, 5598, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7194, 5598, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7598, 5598, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2041, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5599, 2020, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7195, 5599, 3157, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7599, 5599, 'CASH', 440, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2020, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5600, 2033, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7196, 5600, 3157, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7600, 5600, 'CASH', 880, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2033, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5601, 2003, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7197, 5601, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7198, 5601, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7601, 5601, 'CASH', 1220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2003, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5602, 2015, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1850, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7199, 5602, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7200, 5602, 3158, 1, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7201, 5602, 3159, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7602, 5602, 'CASH', 1850, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2015, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5603, 2043, 1014, 4048, 'DROP_PREORDER', '19:00', 'COMPLETED', 1410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7202, 5603, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7203, 5603, 3158, 1, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7204, 5603, 3159, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7603, 5603, 'CASH', 1410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2043, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5604, 2050, 1014, 4051, 'DROP_PREORDER', '19:00', 'PLACED', 1660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7205, 5604, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7206, 5604, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7604, 5604, 'CASH', 1660, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5605, 2012, 1014, 4051, 'DROP_PREORDER', '19:00', 'PLACED', 440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7207, 5605, 3157, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7605, 5605, 'CASH', 440, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5606, 2025, 1014, 4051, 'DROP_PREORDER', '19:00', 'PLACED', 610, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7208, 5606, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7209, 5606, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7606, 5606, 'CASH', 610, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5607, 2012, 1014, 4051, 'DROP_PREORDER', '19:00', 'PLACED', 1460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7210, 5607, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7211, 5607, 3158, 2, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7212, 5607, 3159, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7607, 5607, 'CASH', 1460, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5608, 2030, 1014, 4051, 'DROP_PREORDER', '19:00', 'PLACED', 880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7213, 5608, 3157, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7608, 5608, 'CASH', 880, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5609, 2044, 1014, 4051, 'DROP_PREORDER', '19:00', 'PLACED', 1490, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7214, 5609, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7215, 5609, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7609, 5609, 'CASH', 1490, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5610, 2028, 1014, 4051, 'DROP_PREORDER', '19:00', 'PLACED', 610, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7216, 5610, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7217, 5610, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7610, 5610, 'CASH', 610, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5611, 2017, 1014, 4051, 'DROP_PREORDER', '19:00', 'PLACED', 1510, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7218, 5611, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7219, 5611, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7220, 5611, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7611, 5611, 'CASH', 1510, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5612, 2002, 1014, 4051, 'DROP_PREORDER', '19:00', 'PLACED', 880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7221, 5612, 3157, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7612, 5612, 'CASH', 880, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5613, 2025, 1014, 4051, 'DROP_PREORDER', '19:00', 'PLACED', 780, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7222, 5613, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7223, 5613, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7613, 5613, 'CASH', 780, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5614, 2003, 1014, 4051, 'DROP_PREORDER', '19:00', 'PLACED', 1390, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7224, 5614, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7225, 5614, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7614, 5614, 'CASH', 1390, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5615, 2006, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7226, 5615, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7227, 5615, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7615, 5615, 'CASH', 1660, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2006, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5616, 2020, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1750, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7228, 5616, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7229, 5616, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7230, 5616, 3159, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7616, 5616, 'CASH', 1750, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2020, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5617, 2006, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 780, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7231, 5617, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7232, 5617, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7617, 5617, 'CASH', 780, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5618, 2033, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7233, 5618, 3157, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7618, 5618, 'CASH', 440, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5619, 2031, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1390, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7234, 5619, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7235, 5619, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7619, 5619, 'CASH', 1390, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2031, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5620, 2026, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1580, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7236, 5620, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7237, 5620, 3158, 2, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7238, 5620, 3159, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7620, 5620, 'CASH', 1580, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5621, 2031, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7239, 5621, 3157, 3, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7621, 5621, 'CASH', 1320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2031, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5622, 2030, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 610, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7240, 5622, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7241, 5622, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7622, 5622, 'CASH', 610, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5623, 2021, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7242, 5623, 3157, 3, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7623, 5623, 'CASH', 1320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2021, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5624, 2037, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7243, 5624, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7244, 5624, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7624, 5624, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2037, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5625, 2014, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1730, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7245, 5625, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7246, 5625, 3158, 1, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7247, 5625, 3159, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7625, 5625, 'CASH', 1730, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5626, 2050, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1630, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7248, 5626, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7249, 5626, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7250, 5626, 3159, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7626, 5626, 'CASH', 1630, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2050, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5627, 2029, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1490, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7251, 5627, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7252, 5627, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7627, 5627, 'CASH', 1490, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2029, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5628, 2050, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1490, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7253, 5628, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7254, 5628, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7628, 5628, 'CASH', 1490, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2050, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5629, 2034, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1950, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7255, 5629, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7256, 5629, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7257, 5629, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7629, 5629, 'CASH', 1950, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2034, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5630, 2028, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7258, 5630, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7259, 5630, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7630, 5630, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2028, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5631, 2046, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7260, 5631, 3157, 3, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7631, 5631, 'CASH', 1320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5632, 2035, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 1390, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7261, 5632, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7262, 5632, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7632, 5632, 'CASH', 1390, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5633, 2033, 1014, 4053, 'DROP_PREORDER', '19:00', 'COMPLETED', 730, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7263, 5633, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7264, 5633, 3158, 1, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7265, 5633, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7633, 5633, 'CASH', 730, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2033, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5634, 2037, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 1490, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7266, 5634, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7267, 5634, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7634, 5634, 'CASH', 1490, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5635, 2014, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7268, 5635, 3157, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7635, 5635, 'CASH', 440, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5636, 2007, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7269, 5636, 3157, 3, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7636, 5636, 'CASH', 1320, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5637, 2020, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 1900, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7270, 5637, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7271, 5637, 3158, 2, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7272, 5637, 3159, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7637, 5637, 'CASH', 1900, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5638, 2034, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 1390, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7273, 5638, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7274, 5638, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7638, 5638, 'CASH', 1390, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5639, 2012, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 950, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7275, 5639, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7276, 5639, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7639, 5639, 'CASH', 950, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5640, 2050, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7277, 5640, 3157, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7640, 5640, 'CASH', 440, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5641, 2004, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 850, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7278, 5641, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7279, 5641, 3158, 1, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7280, 5641, 3159, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7641, 5641, 'CASH', 850, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5642, 2047, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 1660, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7281, 5642, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7282, 5642, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7642, 5642, 'CASH', 1660, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5643, 2008, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 1220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7283, 5643, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7284, 5643, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7643, 5643, 'CASH', 1220, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5644, 2036, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7285, 5644, 3157, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7644, 5644, 'CASH', 880, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5645, 2003, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7286, 5645, 3157, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7645, 5645, 'CASH', 880, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5646, 2011, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7287, 5646, 3157, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7646, 5646, 'CASH', 880, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5647, 2042, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7288, 5647, 3157, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7647, 5647, 'CASH', 440, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5648, 2018, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 1170, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7289, 5648, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7290, 5648, 3158, 1, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7291, 5648, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7648, 5648, 'CASH', 1170, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5649, 2024, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7292, 5649, 3157, 3, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7649, 5649, 'CASH', 1320, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5650, 2044, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 950, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7293, 5650, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7294, 5650, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7650, 5650, 'CASH', 950, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5651, 2011, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 1070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7295, 5651, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7296, 5651, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7297, 5651, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7651, 5651, 'CASH', 1070, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5652, 2020, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7298, 5652, 3157, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7652, 5652, 'CASH', 440, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5653, 2024, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 1170, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7299, 5653, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7300, 5653, 3158, 1, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7301, 5653, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7653, 5653, 'CASH', 1170, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5654, 2012, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 1490, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7302, 5654, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7303, 5654, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7654, 5654, 'CASH', 1490, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5655, 2050, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7304, 5655, 3157, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7655, 5655, 'CASH', 880, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5656, 2019, 1014, 4054, 'DROP_PREORDER', '19:00', 'PLACED', 2020, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7305, 5656, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7306, 5656, 3158, 2, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7307, 5656, 3159, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7656, 5656, 'CASH', 2020, 'PENDING', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5657, 2005, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 2190, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7308, 5657, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7309, 5657, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7310, 5657, 3159, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7657, 5657, 'CASH', 2190, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5658, 2031, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7311, 5658, 3157, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7658, 5658, 'CASH', 880, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2031, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5659, 2010, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7312, 5659, 3157, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7659, 5659, 'CASH', 880, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2010, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5660, 2002, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7313, 5660, 3157, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7660, 5660, 'CASH', 880, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2002, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5661, 2012, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1390, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7314, 5661, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7315, 5661, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7661, 5661, 'CASH', 1390, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5662, 2038, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7316, 5662, 3157, 3, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7662, 5662, 'CASH', 1320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5663, 2032, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7317, 5663, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7318, 5663, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7663, 5663, 'CASH', 1220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2032, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5664, 2021, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1310, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7319, 5664, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7320, 5664, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7321, 5664, 3159, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7664, 5664, 'CASH', 1310, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2021, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5665, 2020, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7322, 5665, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7323, 5665, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7665, 5665, 'CASH', 1220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2020, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5666, 2004, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7324, 5666, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7325, 5666, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7326, 5666, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7666, 5666, 'CASH', 1070, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2004, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5667, 2047, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1390, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7327, 5667, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7328, 5667, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7667, 5667, 'CASH', 1390, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2047, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5668, 2039, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1050, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7329, 5668, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7330, 5668, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7668, 5668, 'CASH', 1050, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2039, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5669, 2005, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7331, 5669, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7332, 5669, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7669, 5669, 'CASH', 1220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2005, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5670, 2016, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1610, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7333, 5670, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7334, 5670, 3158, 1, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7335, 5670, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7670, 5670, 'CASH', 1610, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2016, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5671, 2018, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1490, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7336, 5671, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7337, 5671, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7671, 5671, 'CASH', 1490, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5672, 2028, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1170, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7338, 5672, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7339, 5672, 3158, 1, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7340, 5672, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7672, 5672, 'CASH', 1170, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2028, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5673, 2047, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7341, 5673, 3157, 3, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7673, 5673, 'CASH', 1320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2047, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5674, 2031, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 850, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7342, 5674, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7343, 5674, 3158, 1, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7344, 5674, 3159, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7674, 5674, 'CASH', 850, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2031, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5675, 2043, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7345, 5675, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7346, 5675, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7675, 5675, 'CASH', 1220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5676, 2048, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 950, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7347, 5676, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7348, 5676, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7676, 5676, 'CASH', 950, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2048, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5677, 2015, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1340, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7349, 5677, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7350, 5677, 3158, 2, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7351, 5677, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7677, 5677, 'CASH', 1340, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2015, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5678, 2002, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 970, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7352, 5678, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7353, 5678, 3158, 1, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7354, 5678, 3159, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7678, 5678, 'CASH', 970, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5679, 2009, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1050, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7355, 5679, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7356, 5679, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7679, 5679, 'CASH', 1050, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2009, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5680, 2009, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7357, 5680, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7358, 5680, 3158, 2, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7680, 5680, 'CASH', 1220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5681, 2037, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7359, 5681, 3157, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7681, 5681, 'CASH', 440, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2037, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5682, 2032, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1460, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7360, 5682, 3157, 2, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7361, 5682, 3158, 2, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7362, 5682, 3159, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7682, 5682, 'CASH', 1460, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2032, 1014, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5683, 2011, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1900, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7363, 5683, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7364, 5683, 3158, 2, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7365, 5683, 3159, 2, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7683, 5683, 'CASH', 1900, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2011, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5684, 2006, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7366, 5684, 3157, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7684, 5684, 'CASH', 440, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5685, 2012, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 440, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7367, 5685, 3157, 1, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7685, 5685, 'CASH', 440, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2012, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5686, 2031, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7368, 5686, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7369, 5686, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7686, 5686, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2031, 1014, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5687, 2025, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7370, 5687, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7371, 5687, 3158, 3, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7687, 5687, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5688, 2035, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1070, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7372, 5688, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7373, 5688, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7374, 5688, 3159, 1, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7688, 5688, 'CASH', 1070, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5689, 2008, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1490, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7375, 5689, 3157, 3, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7376, 5689, 3158, 1, 170);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7689, 5689, 'CASH', 1490, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5690, 2033, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 880, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7377, 5690, 3157, 2, 440);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7690, 5690, 'CASH', 880, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5691, 2016, 1014, 4055, 'DROP_PREORDER', '19:00', 'COMPLETED', 1310, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7378, 5691, 3157, 1, 440);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7379, 5691, 3158, 3, 170);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7380, 5691, 3159, 3, 120);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7691, 5691, 'CASH', 1310, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5692, 2007, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 2230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7381, 5692, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7382, 5692, 3168, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7383, 5692, 3169, 2, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7692, 5692, 'CASH', 2230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2007, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5693, 2045, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 2130, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7384, 5693, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7385, 5693, 3168, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7386, 5693, 3169, 1, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7693, 5693, 'CASH', 2130, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2045, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5694, 2041, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1630, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7387, 5694, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7388, 5694, 3168, 1, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7694, 5694, 'CASH', 1630, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5695, 2046, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7389, 5695, 3167, 2, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7390, 5695, 3168, 1, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7695, 5695, 'CASH', 1220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2046, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5696, 2016, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7391, 5696, 3167, 3, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7696, 5696, 'CASH', 1230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5697, 2026, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7392, 5697, 3167, 2, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7697, 5697, 'CASH', 820, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5698, 2044, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1310, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7393, 5698, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7394, 5698, 3168, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7395, 5698, 3169, 1, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7698, 5698, 'CASH', 1310, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5699, 2003, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7396, 5699, 3167, 1, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7699, 5699, 'CASH', 410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2003, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5700, 2013, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1420, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7397, 5700, 3167, 2, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7398, 5700, 3168, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7399, 5700, 3169, 2, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7700, 5700, 'CASH', 1420, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2013, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5701, 2031, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1910, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7400, 5701, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7401, 5701, 3168, 3, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7402, 5701, 3169, 3, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7701, 5701, 'CASH', 1910, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5702, 2049, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 2430, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7403, 5702, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7404, 5702, 3168, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7702, 5702, 'CASH', 2430, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2049, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5703, 2036, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1630, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7405, 5703, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7406, 5703, 3168, 1, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7703, 5703, 'CASH', 1630, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5704, 2004, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1610, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7407, 5704, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7408, 5704, 3168, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7704, 5704, 'CASH', 1610, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5705, 2013, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 2220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7409, 5705, 3167, 2, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7410, 5705, 3168, 3, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7411, 5705, 3169, 2, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7705, 5705, 'CASH', 2220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2013, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5706, 2038, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7412, 5706, 3167, 2, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7413, 5706, 3168, 1, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7706, 5706, 'CASH', 1220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2038, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5707, 2006, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1010, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7414, 5707, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7415, 5707, 3168, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7416, 5707, 3169, 2, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7707, 5707, 'CASH', 1010, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2006, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5708, 2025, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 2430, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7417, 5708, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7418, 5708, 3168, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7708, 5708, 'CASH', 2430, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5709, 2011, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1730, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7419, 5709, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7420, 5709, 3168, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7421, 5709, 3169, 1, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7709, 5709, 'CASH', 1730, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2011, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5710, 2041, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7422, 5710, 3167, 2, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7423, 5710, 3168, 1, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7710, 5710, 'CASH', 1220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5711, 2050, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1620, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7424, 5711, 3167, 2, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7425, 5711, 3168, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7711, 5711, 'CASH', 1620, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2050, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5712, 2019, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 2430, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7426, 5712, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7427, 5712, 3168, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7712, 5712, 'CASH', 2430, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2019, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5713, 2047, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7428, 5713, 3167, 2, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7713, 5713, 'CASH', 820, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5714, 2002, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 2320, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7429, 5714, 3167, 2, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7430, 5714, 3168, 3, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7431, 5714, 3169, 3, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7714, 5714, 'CASH', 2320, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2002, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5715, 2049, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1610, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7432, 5715, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7433, 5715, 3168, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7715, 5715, 'CASH', 1610, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2049, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5716, 2025, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1210, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7434, 5716, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7435, 5716, 3168, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7716, 5716, 'CASH', 1210, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5717, 2003, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7436, 5717, 3167, 3, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7717, 5717, 'CASH', 1230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2003, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5718, 2035, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 1610, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7437, 5718, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7438, 5718, 3168, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7718, 5718, 'CASH', 1610, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5719, 2045, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 2030, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7439, 5719, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7440, 5719, 3168, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7719, 5719, 'CASH', 2030, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5720, 2001, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7441, 5720, 3167, 1, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7720, 5720, 'CASH', 410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2001, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5721, 2026, 1015, 4056, 'DROP_PREORDER', '19:00', 'COMPLETED', 410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7442, 5721, 3167, 1, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7721, 5721, 'CASH', 410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2026, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5722, 2032, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 2430, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7443, 5722, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7444, 5722, 3168, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7722, 5722, 'CASH', 2430, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5723, 2033, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7445, 5723, 3167, 2, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7723, 5723, 'CASH', 820, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2033, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5724, 2049, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7446, 5724, 3167, 2, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7724, 5724, 'CASH', 820, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2049, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5725, 2007, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1210, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7447, 5725, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7448, 5725, 3168, 2, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7725, 5725, 'CASH', 1210, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5726, 2034, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7449, 5726, 3167, 3, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7726, 5726, 'CASH', 1230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2034, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5727, 2036, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1510, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7450, 5727, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7451, 5727, 3168, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7452, 5727, 3169, 3, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7727, 5727, 'CASH', 1510, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5728, 2038, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 2220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7453, 5728, 3167, 2, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7454, 5728, 3168, 3, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7455, 5728, 3169, 2, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7728, 5728, 'CASH', 2220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2038, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5729, 2050, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7456, 5729, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7457, 5729, 3168, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7458, 5729, 3169, 2, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7729, 5729, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2050, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5730, 2031, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 810, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7459, 5730, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7460, 5730, 3168, 1, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7730, 5730, 'CASH', 810, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2031, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5731, 2006, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1420, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7461, 5731, 3167, 2, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7462, 5731, 3168, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7463, 5731, 3169, 2, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7731, 5731, 'CASH', 1420, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5732, 2040, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1510, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7464, 5732, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7465, 5732, 3168, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7466, 5732, 3169, 3, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7732, 5732, 'CASH', 1510, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2040, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5733, 2016, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 2020, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7467, 5733, 3167, 2, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7468, 5733, 3168, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7733, 5733, 'CASH', 2020, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2016, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5734, 2016, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1730, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7469, 5734, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7470, 5734, 3168, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7471, 5734, 3169, 1, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7734, 5734, 'CASH', 1730, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2016, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5735, 2003, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 910, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7472, 5735, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7473, 5735, 3168, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7474, 5735, 3169, 1, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7735, 5735, 'CASH', 910, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5736, 2023, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7475, 5736, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7476, 5736, 3168, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7477, 5736, 3169, 2, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7736, 5736, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2023, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5737, 2033, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7478, 5737, 3167, 1, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7737, 5737, 'CASH', 410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2033, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5738, 2037, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7479, 5738, 3167, 3, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7738, 5738, 'CASH', 1230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2037, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5739, 2005, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 2530, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7480, 5739, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7481, 5739, 3168, 3, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7482, 5739, 3169, 1, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7739, 5739, 'CASH', 2530, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2005, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5740, 2023, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 2430, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7483, 5740, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7484, 5740, 3168, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7740, 5740, 'CASH', 2430, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5741, 2039, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1730, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7485, 5741, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7486, 5741, 3168, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7487, 5741, 3169, 1, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7741, 5741, 'CASH', 1730, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2039, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5742, 2034, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 2530, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7488, 5742, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7489, 5742, 3168, 3, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7490, 5742, 3169, 1, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7742, 5742, 'CASH', 2530, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5743, 2001, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1720, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7491, 5743, 3167, 2, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7492, 5743, 3168, 2, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7493, 5743, 3169, 1, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7743, 5743, 'CASH', 1720, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5744, 2008, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7494, 5744, 3167, 2, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7744, 5744, 'CASH', 820, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2008, 1015, 4.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5745, 2027, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7495, 5745, 3167, 1, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7745, 5745, 'CASH', 410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2027, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5746, 2030, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7496, 5746, 3167, 2, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7746, 5746, 'CASH', 820, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5747, 2040, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1830, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7497, 5747, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7498, 5747, 3168, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7499, 5747, 3169, 2, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7747, 5747, 'CASH', 1830, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5748, 2042, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7500, 5748, 3167, 1, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7748, 5748, 'CASH', 410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2042, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5749, 2044, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 2220, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7501, 5749, 3167, 2, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7502, 5749, 3168, 3, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7503, 5749, 3169, 2, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7749, 5749, 'CASH', 2220, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5750, 2029, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7504, 5750, 3167, 3, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7750, 5750, 'CASH', 1230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2029, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5751, 2045, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 410, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7505, 5751, 3167, 1, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7751, 5751, 'CASH', 410, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5752, 2039, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 820, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7506, 5752, 3167, 2, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7752, 5752, 'CASH', 820, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5753, 2050, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1910, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7507, 5753, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7508, 5753, 3168, 3, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7509, 5753, 3169, 3, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7753, 5753, 'CASH', 1910, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2050, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5754, 2044, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1110, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7510, 5754, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7511, 5754, 3168, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7512, 5754, 3169, 3, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7754, 5754, 'CASH', 1110, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5755, 2030, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 2430, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7513, 5755, 3167, 3, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7514, 5755, 3168, 3, 400);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7755, 5755, 'CASH', 2430, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2030, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5756, 2015, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 910, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7515, 5756, 3167, 1, 410);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7516, 5756, 3168, 1, 400);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7517, 5756, 3169, 1, 100);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7756, 5756, 'CASH', 910, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (2015, 1015, 5.0, 'Excellent food!');
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5757, 2003, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7518, 5757, 3167, 3, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7757, 5757, 'CASH', 1230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+INSERT INTO orders (order_id, user_id, restaurant_id, drop_id, order_type, pickup_time, status, total_amount, order_date) VALUES (5758, 2040, 1015, 4057, 'DROP_PREORDER', '19:00', 'COMPLETED', 1230, CURDATE() - INTERVAL 2 DAY);
+INSERT INTO order_items (order_item_id, order_id, item_id, quantity, price_each) VALUES (7519, 5758, 3167, 3, 410);
+INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (7758, 5758, 'CASH', 1230, 'COLLECTED', CURDATE() - INTERVAL 2 DAY);
+
+-- 7. Update Analytics
+UPDATE restaurants SET total_orders_completed = (SELECT COUNT(*) FROM orders WHERE orders.restaurant_id = restaurants.restaurant_id AND orders.status = 'COMPLETED');
+UPDATE restaurants SET avg_rating = COALESCE((SELECT AVG(rating_value) FROM ratings WHERE ratings.restaurant_id = restaurants.restaurant_id), 0.0);
+UPDATE restaurants SET follower_count = (SELECT COUNT(*) FROM creator_follows WHERE creator_follows.creator_id = restaurants.restaurant_id);
+
+-- 8. Reels
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10001, 1001, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10002, 1001, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10003, 1002, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10004, 1002, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10005, 1004, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10006, 1004, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10007, 1005, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10008, 1005, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10009, 1006, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10010, 1006, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10011, 1007, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10012, 1007, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10013, 1008, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10014, 1008, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10015, 1009, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10016, 1009, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10017, 1010, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10018, 1010, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10019, 1011, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10020, 1011, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10021, 1012, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10022, 1012, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10023, 1013, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10024, 1013, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10025, 1014, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10026, 1014, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10027, 1015, 'Kitchen BTS', 'https://www.w3schools.com/html/mov_bbb.mp4');
+INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (10028, 1015, 'Our Story', 'https://www.w3schools.com/html/mov_bbb.mp4');

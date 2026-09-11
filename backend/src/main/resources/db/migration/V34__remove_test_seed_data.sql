@@ -28,7 +28,7 @@ DELETE FROM creator_follows WHERE follower_id IN (99991, 99992)
     OR creator_id = 99991;
 
 -- 7. Remove any creator_verifications for the test creator
-DELETE FROM creator_verifications WHERE restaurant_id = 99991;
+DELETE FROM creator_verifications WHERE creator_id = 99991;
 
 -- 8. Remove test food drops
 DELETE FROM food_drops WHERE drop_id IN (99901,99902,99903,99904,99905,99906,99907,99908,99909);
