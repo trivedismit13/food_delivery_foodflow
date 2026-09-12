@@ -1,10 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 
-const outputPath = path.join('c:', 'dev', 'food_deliveery_food_flow', 'backend', 'src', 'main', 'resources', 'db', 'dev_migration', 'V35__seed_realistic_dev_data.sql');
+const outputPath = path.join(__dirname, '..', 'backend', 'src', 'main', 'resources', 'db', 'dev_migration', 'V35__seed_realistic_dev_data.sql');
 
 // Seed Hash
 const BCRYPT_HASH = '$2b$10$.hHOrkusrCLciRXEQu6D8eUmtfpTHWSMoe3YMhA08NcA32cPPvHCu'; // FoodFlow@2024
+
+let seed = 12345;
+function random() {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
+}
 
 let sql = `-- V35__seed_realistic_dev_data.sql\n`;
 sql += `-- Realistic interconnected development data population\n\n`;
@@ -94,7 +100,7 @@ customers.forEach((name, i) => {
     let id = 2001 + i;
     customerIds.push(id);
     let email = name.toLowerCase().replace(/ /g, '.') + '@example.com';
-    let phone = '98' + String(Math.floor(Math.random() * 100000000)).padStart(8, '0');
+    let phone = '98' + String(10000000 + i).padStart(8, '0');
     sql += `INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (${id}, ${escape(name)}, ${escape(email)}, ${escape(phone)}, ${escape(BCRYPT_HASH)}, 'CUSTOMER', TRUE);\n`;
 });
 
@@ -103,7 +109,7 @@ sql += `\n-- 2. Creators, Restaurants, Verifications\n`;
 creatorProfiles.forEach((c) => {
     creatorIds.push(c.id);
     let email = c.name.toLowerCase().replace(/ /g, '').replace(/&/g,'') + '@creator.com';
-    let phone = '99' + String(Math.floor(Math.random() * 100000000)).padStart(8, '0');
+    let phone = '99' + String(20000000 + creatorIds.length).padStart(8, '0');
     
     sql += `INSERT INTO users (user_id, name, email, phone, password, role, is_active) VALUES (${c.id}, ${escape(c.owner)}, ${escape(email)}, ${escape(phone)}, ${escape(BCRYPT_HASH)}, 'SELLER', TRUE);\n`;
     
@@ -124,7 +130,7 @@ creatorProfiles.forEach(c => {
         else if (dishName.toLowerCase().includes('fries') || dishName.toLowerCase().includes('wings') || dishName.toLowerCase().includes('vada')) category = 'Starter';
         else if (dishName.toLowerCase().includes('coffee') || dishName.toLowerCase().includes('shake') || dishName.toLowerCase().includes('buttermilk')) category = 'Beverage';
         
-        let price = (Math.floor(Math.random() * 30) + 8) * 10; 
+        let price = (Math.floor(random() * 30) + 8) * 10; 
         
         sql += `INSERT INTO menu_items (item_id, restaurant_id, name, description, price, is_veg, category, available_qty, is_deleted) VALUES (${nextMenuId}, ${c.id}, ${escape(dishName)}, ${escape('Freshly prepared ' + dishName)}, ${price}, ${isVeg}, ${escape(category)}, 50, FALSE);\n`;
         menuItems.push({ id: nextMenuId, rId: c.id, name: dishName, price });
@@ -140,8 +146,8 @@ customerIds.slice(25, 37).forEach(custId => {
     sql += `INSERT INTO creator_follows (follower_id, creator_id) VALUES (${custId}, 1004);\n`;
 });
 for(let i=0; i<80; i++) {
-    let custId = customerIds[Math.floor(Math.random() * customerIds.length)];
-    let crId = creatorIds[Math.floor(Math.random() * creatorIds.length)];
+    let custId = customerIds[Math.floor(random() * customerIds.length)];
+    let crId = creatorIds[Math.floor(random() * creatorIds.length)];
     if(crId !== 1001 && crId !== 1004 && crId !== 1003) {
         sql += `INSERT IGNORE INTO creator_follows (follower_id, creator_id) VALUES (${custId}, ${crId});\n`;
     }
@@ -155,11 +161,11 @@ let drops = [];
 
 creatorProfiles.forEach(c => {
     if(c.id === 1003) return; 
-    let numDrops = (c.id === 1001 || c.id === 1014) ? 8 : Math.floor(Math.random() * 3) + 2;
+    let numDrops = (c.id === 1001 || c.id === 1014) ? 8 : Math.floor(random() * 3) + 2;
     let cMenuItems = menuItems.filter(m => m.rId === c.id);
     
     for(let i=0; i<numDrops; i++) {
-        let status = dropStatuses[Math.floor(Math.random() * dropStatuses.length)];
+        let status = dropStatuses[Math.floor(random() * dropStatuses.length)];
         if(c.id === 1001 && i < 5) status = 'COMPLETED';
         
         let dId = nextDropId++;
@@ -167,25 +173,25 @@ creatorProfiles.forEach(c => {
         let cutoffTimeStr = 'NOW()';
         
         if (status === 'COMPLETED' || status === 'CANCELLED') {
-             let daysAgo = Math.floor(Math.random() * 30) + 1;
+             let daysAgo = Math.floor(random() * 30) + 1;
              dropDateStr = `CURDATE() - INTERVAL ${daysAgo} DAY`;
              cutoffTimeStr = `NOW() - INTERVAL ${daysAgo + 1} DAY`;
         } else if (status === 'OPEN' || status === 'ANNOUNCED') {
-             let daysAhead = Math.floor(Math.random() * 7) + 1;
+             let daysAhead = Math.floor(random() * 7) + 1;
              dropDateStr = `CURDATE() + INTERVAL ${daysAhead} DAY`;
              cutoffTimeStr = `NOW() + INTERVAL ${daysAhead - 1} DAY`;
         }
         
-        let maxOrders = Math.floor(Math.random() * 30) + 10;
+        let maxOrders = Math.floor(random() * 30) + 10;
         let currentOrders = 0;
         if (status === 'COMPLETED') currentOrders = maxOrders;
-        if (status === 'OPEN') currentOrders = Math.floor(Math.random() * (maxOrders/2));
+        if (status === 'OPEN') currentOrders = Math.floor(random() * (maxOrders/2));
         if (status === 'CUTOFF' || status === 'READY') currentOrders = maxOrders;
 
         sql += `INSERT INTO food_drops (drop_id, creator_id, title, description, drop_date, order_cutoff_time, pickup_location, pickup_time, max_orders, current_orders, status, drop_photo_url) VALUES (${dId}, ${c.id}, '${c.name} Weekly Drop ${i+1}', 'Exclusive limited portion menu. Pre-order now!', ${dropDateStr}, ${cutoffTimeStr}, '${c.city} Center', '18:00 - 20:00', ${maxOrders}, ${currentOrders}, '${status}', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg');\n`;
         drops.push({ id: dId, cId: c.id, status: status, dateStr: dropDateStr, currentOrders: currentOrders });
         
-        let numDropItems = Math.floor(Math.random() * 3) + 2;
+        let numDropItems = Math.floor(random() * 3) + 2;
         for(let j=0; j<numDropItems; j++) {
              let mItem = cMenuItems[j % cMenuItems.length];
              sql += `INSERT INTO drop_items (drop_item_id, drop_id, item_id, quantity_available, quantity_ordered) VALUES (${nextDropItemId++}, ${dId}, ${mItem.id}, ${maxOrders * 2}, ${currentOrders * 2});\n`;
@@ -206,11 +212,11 @@ function createOrder(cId, rId, cName, dId, status, dateStr) {
     let items = [];
     
     let rMenuItems = menuItems.filter(m => m.rId === rId);
-    let numItems = Math.floor(Math.random() * 3) + 1;
+    let numItems = Math.floor(random() * 3) + 1;
     
     for(let i=0; i<numItems; i++) {
         let mItem = rMenuItems[i % rMenuItems.length];
-        let qty = Math.floor(Math.random() * 3) + 1;
+        let qty = Math.floor(random() * 3) + 1;
         totalAmt += (mItem.price * qty);
         items.push({ mId: mItem.id, name: mItem.name, qty: qty, price: mItem.price });
     }
@@ -230,12 +236,12 @@ function createOrder(cId, rId, cName, dId, status, dateStr) {
     // payments.method is ENUM('CASH'). No transaction_id, no collected_at!
     sql += `INSERT INTO payments (payment_id, order_id, method, amount, status, payment_date) VALUES (${nextPaymentId++}, ${orderId}, 'CASH', ${totalAmt}, '${pStatus}', ${dateStr});\n`;
     
-    if(status === 'COMPLETED' && Math.random() > 0.4) {
+    if(status === 'COMPLETED' && random() > 0.4) {
         let key = `${cId}-${rId}`;
         if (!ratedMap[key]) {
             ratedMap[key] = true;
-            let reviewObj = reviewTemplates[Math.floor(Math.random() * reviewTemplates.length)];
-            let rating = reviewObj.r[Math.floor(Math.random() * reviewObj.r.length)];
+            let reviewObj = reviewTemplates[Math.floor(random() * reviewTemplates.length)];
+            let rating = reviewObj.r[Math.floor(random() * reviewObj.r.length)];
             let reviewText = reviewObj.t.replace('{dish}', items[0].name);
             sql += `INSERT IGNORE INTO ratings (user_id, restaurant_id, rating_value, review_text) VALUES (${cId}, ${rId}, ${rating}.0, ${escape(reviewText)});\n`;
         }
@@ -255,13 +261,13 @@ drops.forEach(d => {
     
     // Drop Notifications
     if (d.status !== 'DRAFT' && d.status !== 'CANCELLED') {
-         let notifyUserId = customerIds[Math.floor(Math.random() * customerIds.length)];
+         let notifyUserId = customerIds[Math.floor(random() * customerIds.length)];
          sql += `INSERT INTO notifications (notification_id, user_id, type, title, message, reference_type, reference_id, is_read, created_at, event_key) VALUES (${nextNotificationId++}, ${notifyUserId}, 'DROP_ANNOUNCED', 'New Drop by ${escape(crName).replace(/'/g, "")}', 'Get your pre-orders in for the upcoming drop!', 'DROP', ${d.id}, FALSE, ${d.dateStr}, 'DROP_ANNOUNCED_${d.id}_${notifyUserId}');\n`;
     }
 
     if (d.currentOrders > 0) {
         for(let i=0; i<d.currentOrders; i++) {
-            let custId = customerIds[Math.floor(Math.random() * customerIds.length)];
+            let custId = customerIds[Math.floor(random() * customerIds.length)];
             let oStatus = d.status === 'COMPLETED' ? 'COMPLETED' : 'PLACED';
             createOrder(custId, d.cId, crName, d.id, oStatus, `CURDATE() - INTERVAL 2 DAY`);
         }
@@ -280,12 +286,12 @@ let nextReelId = 10001;
 creatorProfiles.forEach(c => {
     if(c.id === 1003) return;
     
-    let t1 = reelTitles[Math.floor(Math.random() * reelTitles.length)];
-    let t2 = reelTitles[Math.floor(Math.random() * reelTitles.length)];
+    let t1 = reelTitles[Math.floor(random() * reelTitles.length)];
+    let t2 = reelTitles[Math.floor(random() * reelTitles.length)];
     if(t1 === t2) t2 = reelTitles[0]; // avoid duplicate
     
-    let v1 = sampleVideos[Math.floor(Math.random() * sampleVideos.length)];
-    let v2 = sampleVideos[Math.floor(Math.random() * sampleVideos.length)];
+    let v1 = sampleVideos[Math.floor(random() * sampleVideos.length)];
+    let v2 = sampleVideos[Math.floor(random() * sampleVideos.length)];
 
     sql += `INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (${nextReelId++}, ${c.id}, ${escape(t1)}, ${escape(v1)});\n`;
     sql += `INSERT INTO reels (reel_id, restaurant_id, title, media_url) VALUES (${nextReelId++}, ${c.id}, ${escape(t2)}, ${escape(v2)});\n`;
