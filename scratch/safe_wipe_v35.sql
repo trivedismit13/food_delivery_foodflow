@@ -1,0 +1,16 @@
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM reels WHERE reel_id >= 10000;
+DELETE FROM payments WHERE payment_id >= 7000;
+DELETE FROM order_items WHERE order_item_id >= 6000;
+DELETE FROM orders WHERE order_id >= 5000;
+DELETE FROM drop_items WHERE drop_item_id >= 4500;
+DELETE FROM food_drops WHERE drop_id >= 4000;
+DELETE FROM menu_items WHERE item_id >= 3000;
+DELETE FROM creator_verifications WHERE creator_id >= 1000;
+DELETE FROM restaurants WHERE restaurant_id >= 1000;
+DELETE FROM users WHERE user_id >= 1000 AND role != 'ADMIN';
+DELETE FROM creator_follows;
+DELETE FROM ratings;
+DELETE FROM notifications;
+DELETE FROM flyway_schema_history WHERE version='35';
+SET FOREIGN_KEY_CHECKS = 1;
