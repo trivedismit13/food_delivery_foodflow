@@ -71,6 +71,7 @@ export default function ReelViewer({ reel }: ReelViewerProps) {
         <video
           ref={videoRef}
           src={reel.mediaUrl}
+          autoPlay
           loop
           muted
           playsInline

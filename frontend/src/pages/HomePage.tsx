@@ -237,7 +237,7 @@ export default function HomePage() {
                   <Link to="/reels" key={reel.reelId} className="group relative flex-shrink-0 w-40 h-60 rounded-2xl overflow-hidden shadow-sm hover:shadow-orange-500/20 transition-all hover:scale-[1.02]">
                     <div className="absolute inset-0 bg-gradient-to-br from-stone-700 to-stone-800">
                       {isVideo ? (
-                        <video src={reel.mediaUrl} className="w-full h-full object-cover" muted loop playsInline />
+                        <video src={reel.mediaUrl} className="w-full h-full object-cover" autoPlay muted loop playsInline />
                       ) : (
                         <img src={reel.mediaUrl} alt={reel.title} className="w-full h-full object-cover" />
                       )}
