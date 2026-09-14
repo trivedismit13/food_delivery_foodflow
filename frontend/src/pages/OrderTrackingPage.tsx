@@ -17,9 +17,9 @@ const steps: { id: OrderStatus, label: string, time?: string }[] = [
 ]
 
 export default function OrderTrackingPage() {
-  const { id } = useParams<{ id: string }>()
-  const { data: order, isLoading, error } = useOrderById(Number(id))
-  const { data: payment, isLoading: isPaymentLoading } = usePaymentByOrder(Number(id))
+  const { orderId } = useParams<{ orderId: string }>()
+  const { data: order, isLoading, error } = useOrderById(Number(orderId))
+  const { data: payment, isLoading: isPaymentLoading } = usePaymentByOrder(Number(orderId))
   
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false)
   const [hasRatedLocal, setHasRatedLocal] = useState(false)
