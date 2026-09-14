@@ -356,6 +356,54 @@ public class CreatorController {
         res.setDropDate(drop.getDropDate());
         res.setOrderCutoffTime(drop.getOrderCutoffTime());
         res.setStatus(drop.getStatus().name());
+        
+        res.setPickupTime(drop.getPickupTime());
+        res.setPickupLocation(drop.getPickupLocation());
+        res.setMaxOrders(drop.getMaxOrders());
+        res.setCurrentOrders(drop.getCurrentOrders());
+        res.setAvailableSlots(drop.availableSlots());
+        res.setIsSoldOut(drop.isSoldOut());
+        res.setDropPhotoUrl(drop.getDropPhotoUrl());
+        res.setSpecialNotes(drop.getSpecialNotes());
+
+        if (drop.getOrderCutoffTime() != null && drop.getOrderCutoffTime().isAfter(java.time.LocalDateTime.now())) {
+            res.setMinutesUntilCutoff(java.time.temporal.ChronoUnit.MINUTES.between(java.time.LocalDateTime.now(), drop.getOrderCutoffTime()));
+        } else {
+            res.setMinutesUntilCutoff(0L);
+        }
+
+        if (drop.getCreator() != null) {
+            Restaurant r = drop.getCreator();
+            CreatorSummary cs = new CreatorSummary();
+            cs.setRestaurantId(r.getRestaurantId());
+            cs.setName(r.getName());
+            cs.setVerificationLevel(r.getVerificationLevel());
+            cs.setCreatorType(r.getCreatorType());
+            cs.setAvgRating(r.getAvgRating());
+            cs.setFollowerCount(r.getFollowerCount());
+            cs.setTotalOrdersCompleted(r.getTotalOrdersCompleted());
+            cs.setIsAcceptingOrders(r.getIsAcceptingOrders());
+            res.setCreator(cs);
+        }
+
+        if (drop.getDropItems() != null) {
+            res.setItems(drop.getDropItems().stream().map(item -> {
+                com.foodflow.dto.response.DropItemResponse ir = new com.foodflow.dto.response.DropItemResponse();
+                ir.setItemId(item.getDropItemId());
+                if (item.getMenuItem() != null) {
+                    ir.setName(item.getMenuItem().getName());
+                    ir.setDescription(item.getMenuItem().getDescription());
+                    ir.setIsVeg(item.getMenuItem().getIsVeg());
+                    ir.setPrice(item.getMenuItem().getPrice());
+                }
+                ir.setDropPrice(item.getDropPrice());
+                ir.setQuantityAvailable(item.getQuantityAvailable());
+                ir.setQuantityOrdered(item.getQuantityOrdered());
+                ir.setIsSoldOut(item.isSoldOut());
+                return ir;
+            }).collect(java.util.stream.Collectors.toList()));
+        }
+        
         return res;
     }
 }
