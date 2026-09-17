@@ -347,7 +347,7 @@ public class DropServiceImpl implements DropService {
         response.setTitle(drop.getTitle());
         response.setDescription(drop.getDescription());
         response.setDropDate(drop.getDropDate());
-        response.setOrderCutoffTime(drop.getOrderCutoffTime());
+        response.setOrderCutoffTime(drop.getOrderCutoffTime() != null ? drop.getOrderCutoffTime().atOffset(java.time.ZoneOffset.UTC) : null);
         response.setPickupTime(drop.getPickupTime());
         response.setPickupLocation(drop.getPickupLocation());
         response.setMaxOrders(drop.getMaxOrders());

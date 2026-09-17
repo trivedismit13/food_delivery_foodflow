@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
@@ -18,7 +19,7 @@ public class FoodDropResponse {
     private String title;
     private String description;
     private LocalDate dropDate;
-    private LocalDateTime orderCutoffTime;
+    private OffsetDateTime orderCutoffTime;
     private String pickupTime;
     private String pickupLocation;
     private Integer maxOrders;

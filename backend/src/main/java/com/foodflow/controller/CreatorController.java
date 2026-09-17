@@ -354,7 +354,7 @@ public class CreatorController {
         res.setTitle(drop.getTitle());
         res.setDescription(drop.getDescription());
         res.setDropDate(drop.getDropDate());
-        res.setOrderCutoffTime(drop.getOrderCutoffTime());
+        res.setOrderCutoffTime(drop.getOrderCutoffTime() != null ? drop.getOrderCutoffTime().atOffset(java.time.ZoneOffset.UTC) : null);
         res.setStatus(drop.getStatus().name());
         
         res.setPickupTime(drop.getPickupTime());
