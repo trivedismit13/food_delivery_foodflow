@@ -290,7 +290,10 @@ export default function CreatorProfilePage() {
                     {isVideo(reel.mediaUrl) ? (
                       <video 
                         src={reel.mediaUrl} 
-                        controls
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
                         className="w-full h-full object-cover"
                       />
                     ) : (
