@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface CreatorVerificationRepository extends JpaRepository<CreatorVerification, Long> {
     Optional<CreatorVerification> findByCreatorRestaurantId(Long creatorId);
     List<CreatorVerification> findByCurrentLevelLessThan(Integer level);
+    List<CreatorVerification> findByCurrentLevelLessThanAndFoodLicenceNumberIsNotNull(Integer level);
 }

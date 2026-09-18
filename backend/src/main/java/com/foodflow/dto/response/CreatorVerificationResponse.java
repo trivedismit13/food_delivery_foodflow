@@ -29,4 +29,5 @@ public class CreatorVerificationResponse {
     private String rejectionReason;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private CreatorSummary creator;
 }

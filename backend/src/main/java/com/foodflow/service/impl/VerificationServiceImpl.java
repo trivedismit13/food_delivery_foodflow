@@ -86,7 +86,7 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     public List<CreatorVerification> listPendingVerifications() {
-        return verificationRepository.findByCurrentLevelLessThan(2);
+        return verificationRepository.findByCurrentLevelLessThanAndFoodLicenceNumberIsNotNull(2);
     }
 
     @Override
