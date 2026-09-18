@@ -7,6 +7,13 @@ import { toast } from 'sonner';
 import { useCreateDrop } from '@/queries/drops';
 import { useMenu } from '@/queries/menu';
 import { ValidationError } from '@/lib/api';
+import type { MenuItemResponse, FoodDropResponse } from '@/types/api';
+
+type DropItemRequest = MenuItemResponse & {
+  itemId: number;
+  dropPrice: string;
+  availableQty: string;
+};
 
 export default function CreateDropPage() {
 
@@ -34,14 +41,14 @@ export default function CreateDropPage() {
 
   const normalizedMenuItems = (menuItems as MenuItemResponse[]).map((item) => ({
     ...item,
-    itemId: item.itemId ?? item.menuItemId,
+    itemId: (item as any).itemId ?? item.menuItemId,
     price: item.price ?? 0,
   }));
 
   const handleAddItem = (menuItem: MenuItemResponse) => {
     const normalizedItem = {
       ...menuItem,
-      itemId: menuItem.itemId ?? menuItem.menuItemId,
+      itemId: (menuItem as any).itemId ?? menuItem.menuItemId,
       dropPrice: String(menuItem.price ?? ''),
       availableQty: '1',
     };
@@ -108,7 +115,7 @@ export default function CreateDropPage() {
     pickupLocation: pickupLocation || "TBD",
     pickupTime: pickupTime || "TBD",
     minPrice: selectedItems.length > 0 
-      ? Math.min(...selectedItems.map(i => parseInt(i.dropPrice || i.price))) 
+      ? Math.min(...selectedItems.map(i => parseInt(i.dropPrice || String(i.price)))) 
       : 0,
     description: description || "Drop description will appear here.",
     dropPhotoUrl: photoUrl || null,
@@ -129,7 +136,7 @@ export default function CreateDropPage() {
 
     const invalidItem = selectedItems.find(item => {
       const qty = parseInt(item.availableQty || '1', 10);
-      const price = parseFloat(item.dropPrice || item.price || '0');
+      const price = parseFloat(item.dropPrice || String(item.price) || '0');
       return isNaN(qty) || qty <= 0 || isNaN(price) || price < 0;
     });
 
@@ -159,9 +166,9 @@ export default function CreateDropPage() {
         dropPhotoUrl: photoUrl || undefined,
         specialNotes,
         items: selectedItems.map((item) => ({
-          itemId: item.itemId ?? item.menuItemId,
+          itemId: (item as any).itemId ?? item.menuItemId,
           quantityAvailable: parseInt(item.availableQty || '1', 10),
-          dropPrice: parseFloat(item.dropPrice || item.price || '0')
+          dropPrice: parseFloat(item.dropPrice || String(item.price) || '0')
         }))
       });
       // Navigate is handled in onSuccess in the query hook

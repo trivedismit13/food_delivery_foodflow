@@ -15,6 +15,19 @@ export default function CreatorDropsPage() {
 
   const { data: drops = [], isLoading, isError } = useCreatorDrops(creatorProfile?.restaurantId);
 
+  const formatDropDate = (date: string | null | undefined) => {
+    if (!date) return 'TBD';
+    try {
+      return new Date(date).toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      });
+    } catch {
+      return date;
+    }
+  };
+
   const normalizedDrops = useMemo(() =>
     drops.map((drop) => ({
       id: drop.dropId,
@@ -56,18 +69,7 @@ export default function CreatorDropsPage() {
     return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
   };
 
-  const formatDropDate = (date: string | null | undefined) => {
-    if (!date) return 'TBD';
-    try {
-      return new Date(date).toLocaleDateString('en-IN', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-      });
-    } catch {
-      return date;
-    }
-  };
+
 
   if (!creatorProfile?.restaurantId) {
     return (
