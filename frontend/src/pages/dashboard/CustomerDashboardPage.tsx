@@ -106,7 +106,8 @@ export default function CustomerDashboardPage() {
       case 'DROP_ANNOUNCED': return <div className="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center text-base shrink-0">📢</div>;
       case 'DROP_OPEN': return <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center text-base shrink-0">🟢</div>;
       case 'ORDER_CONFIRMED': return <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-base shrink-0">✅</div>;
-      case 'ORDER_READY': return <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center text-base shrink-0">🎉</div>;
+      case 'ORDER_READY': return <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center text-base shrink-0">🛍️</div>;
+      case 'ORDER_COMPLETED': return <div className="w-9 h-9 rounded-full bg-stone-200 flex items-center justify-center text-base shrink-0">✨</div>;
       case 'ORDER_CANCELLED': return <div className="w-9 h-9 rounded-full bg-red-100 flex items-center justify-center text-base shrink-0">❌</div>;
       default: return <div className="w-9 h-9 rounded-full bg-stone-100 flex items-center justify-center shrink-0"><Bell className="w-4 h-4 text-stone-500" /></div>;
     }

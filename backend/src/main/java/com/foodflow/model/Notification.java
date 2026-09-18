@@ -50,7 +50,7 @@ public class Notification {
 
     public enum NotificationType {
         DROP_ANNOUNCED, DROP_OPEN, DROP_CLOSING_SOON,
-        ORDER_CONFIRMED, ORDER_READY, ORDER_CANCELLED,
+        ORDER_CONFIRMED, ORDER_READY, ORDER_COMPLETED, ORDER_CANCELLED,
         NEW_FOLLOWER, LOW_STOCK
     }
 

@@ -194,4 +194,76 @@ class DropServiceImplTest {
             dropService.updateDropStatus(dropId, FoodDrop.DropStatus.OPEN);
         });
     }
+
+    @Test
+    void dropReadyTransitionSendsNotification() {
+        Long dropId = 1L;
+        FoodDrop drop = new FoodDrop();
+        drop.setDropId(dropId);
+        drop.setStatus(FoodDrop.DropStatus.CUTOFF);
+        drop.setTitle("Test Drop");
+        drop.setMaxOrders(10);
+        
+        Restaurant restaurant = new Restaurant();
+        restaurant.setRestaurantId(2L);
+        drop.setCreator(restaurant);
+
+        com.foodflow.model.Order order = new com.foodflow.model.Order();
+        order.setOrderId(10L);
+        com.foodflow.model.User user = new com.foodflow.model.User();
+        user.setUserId(99L);
+        order.setUser(user);
+
+        org.mockito.Mockito.doNothing().when(authorizationService).assertCreatorOwnsDrop(dropId);
+        when(dropRepository.findById(dropId)).thenReturn(Optional.of(drop));
+        when(dropRepository.save(any(FoodDrop.class))).thenAnswer(i -> i.getArgument(0));
+        when(orderRepository.findByDropDropIdAndStatusNot(dropId, com.foodflow.model.OrderStatus.CANCELLED)).thenReturn(List.of(order));
+
+        dropService.updateDropStatus(dropId, FoodDrop.DropStatus.READY);
+
+        org.mockito.Mockito.verify(notificationService).sendNotification(
+            org.mockito.ArgumentMatchers.eq(99L),
+            org.mockito.ArgumentMatchers.eq(com.foodflow.model.Notification.NotificationType.ORDER_READY),
+            org.mockito.ArgumentMatchers.anyString(),
+            org.mockito.ArgumentMatchers.anyString(),
+            org.mockito.ArgumentMatchers.eq(com.foodflow.model.Notification.ReferenceType.ORDER),
+            org.mockito.ArgumentMatchers.eq(10L)
+        );
+    }
+
+    @Test
+    void dropCompletedTransitionSendsNotification() {
+        Long dropId = 1L;
+        FoodDrop drop = new FoodDrop();
+        drop.setDropId(dropId);
+        drop.setStatus(FoodDrop.DropStatus.READY);
+        drop.setTitle("Test Drop");
+        drop.setMaxOrders(10);
+        
+        Restaurant restaurant = new Restaurant();
+        restaurant.setRestaurantId(2L);
+        drop.setCreator(restaurant);
+
+        com.foodflow.model.Order order = new com.foodflow.model.Order();
+        order.setOrderId(10L);
+        com.foodflow.model.User user = new com.foodflow.model.User();
+        user.setUserId(99L);
+        order.setUser(user);
+
+        org.mockito.Mockito.doNothing().when(authorizationService).assertCreatorOwnsDrop(dropId);
+        when(dropRepository.findById(dropId)).thenReturn(Optional.of(drop));
+        when(dropRepository.save(any(FoodDrop.class))).thenAnswer(i -> i.getArgument(0));
+        when(orderRepository.findByDropDropIdAndStatusNot(dropId, com.foodflow.model.OrderStatus.CANCELLED)).thenReturn(List.of(order));
+
+        dropService.updateDropStatus(dropId, FoodDrop.DropStatus.COMPLETED);
+
+        org.mockito.Mockito.verify(notificationService).sendNotification(
+            org.mockito.ArgumentMatchers.eq(99L),
+            org.mockito.ArgumentMatchers.eq(com.foodflow.model.Notification.NotificationType.ORDER_COMPLETED),
+            org.mockito.ArgumentMatchers.anyString(),
+            org.mockito.ArgumentMatchers.anyString(),
+            org.mockito.ArgumentMatchers.eq(com.foodflow.model.Notification.ReferenceType.ORDER),
+            org.mockito.ArgumentMatchers.eq(10L)
+        );
+    }
 }

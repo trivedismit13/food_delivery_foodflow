@@ -228,4 +228,73 @@ public class OrderServiceImplTest {
         // Metric remains unchanged because it rolls back (or fails before increment fallback)
         org.junit.jupiter.api.Assertions.assertEquals(0, meterRegistry.counter("foodflow.orders.cancelled").count());
     }
+
+    @Test
+    void testUpdateOrderStatus_Ready_SendsNotification() {
+        Order order = createTestOrder(1L, OrderStatus.PREPARING);
+        
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+        when(orderRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+        
+        orderService.updateOrderStatus(1L, OrderStatus.READY);
+        
+        verify(notificationService).sendNotification(
+                eq(1L),
+                eq(com.foodflow.model.Notification.NotificationType.ORDER_READY),
+                anyString(),
+                anyString(),
+                eq(com.foodflow.model.Notification.ReferenceType.ORDER),
+                eq(1L)
+        );
+    }
+
+    @Test
+    void testUpdateOrderStatus_Completed_SendsNotification() {
+        Order order = createTestOrder(1L, OrderStatus.READY);
+        
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+        when(orderRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+        
+        orderService.updateOrderStatus(1L, OrderStatus.COMPLETED);
+        
+        verify(notificationService).sendNotification(
+                eq(1L),
+                eq(com.foodflow.model.Notification.NotificationType.ORDER_COMPLETED),
+                anyString(),
+                anyString(),
+                eq(com.foodflow.model.Notification.ReferenceType.ORDER),
+                eq(1L)
+        );
+    }
+
+    @Test
+    void testUpdateOrderStatus_Cancelled_SendsNotification() {
+        Order order = createTestOrder(1L, OrderStatus.PLACED);
+        
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+        when(orderRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+        
+        orderService.updateOrderStatus(1L, OrderStatus.CANCELLED);
+        
+        verify(notificationService).sendNotification(
+                eq(1L),
+                eq(com.foodflow.model.Notification.NotificationType.ORDER_CANCELLED),
+                anyString(),
+                anyString(),
+                eq(com.foodflow.model.Notification.ReferenceType.ORDER),
+                eq(1L)
+        );
+    }
+
+    @Test
+    void testUpdateOrderStatus_Preparing_NoNotification() {
+        Order order = createTestOrder(1L, OrderStatus.PLACED);
+        
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+        when(orderRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+        
+        orderService.updateOrderStatus(1L, OrderStatus.PREPARING);
+        
+        verify(notificationService, never()).sendNotification(anyLong(), any(), anyString(), anyString(), any(), anyLong());
+    }
 }

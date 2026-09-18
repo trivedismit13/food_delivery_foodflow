@@ -29,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
     private final PaymentService paymentService;
+    private final NotificationService notificationService;
     private final MeterRegistry meterRegistry;
 
     @Override
@@ -144,7 +145,46 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(status);
         order = orderRepository.save(order);
         
-        if (status == OrderStatus.CANCELLED) {
+        if (status == OrderStatus.READY) {
+            String title = "Your food is ready! 🎉";
+            String message = order.getDrop() != null 
+                    ? order.getDrop().getTitle() + " is ready for collection."
+                    : "Your order from " + order.getRestaurant().getName() + " is ready for collection.";
+            notificationService.sendNotification(
+                    order.getUser().getUserId(),
+                    Notification.NotificationType.ORDER_READY,
+                    title,
+                    message,
+                    Notification.ReferenceType.ORDER,
+                    order.getOrderId()
+            );
+        } else if (status == OrderStatus.COMPLETED) {
+            String title = "Order completed";
+            String message = order.getDrop() != null
+                    ? "Your order from " + order.getDrop().getTitle() + " has been completed."
+                    : "Your order from " + order.getRestaurant().getName() + " has been completed.";
+            notificationService.sendNotification(
+                    order.getUser().getUserId(),
+                    Notification.NotificationType.ORDER_COMPLETED,
+                    title,
+                    message,
+                    Notification.ReferenceType.ORDER,
+                    order.getOrderId()
+            );
+        } else if (status == OrderStatus.CANCELLED) {
+            String title = "Order cancelled";
+            String message = order.getDrop() != null
+                    ? "Your order from " + order.getDrop().getTitle() + " was cancelled."
+                    : "Your order from " + order.getRestaurant().getName() + " was cancelled.";
+            notificationService.sendNotification(
+                    order.getUser().getUserId(),
+                    Notification.NotificationType.ORDER_CANCELLED,
+                    title,
+                    message,
+                    Notification.ReferenceType.ORDER,
+                    order.getOrderId()
+            );
+            
             Payment payment = paymentService.getPaymentByOrderId(orderId).orElse(null);
             if (payment != null) {
                 paymentService.cancelPayment(payment.getPaymentId());

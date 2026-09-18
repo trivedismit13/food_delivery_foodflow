@@ -233,6 +233,15 @@ public class DropServiceImpl implements DropService {
             for (com.foodflow.model.Order o : orders) {
                 o.setStatus(com.foodflow.model.OrderStatus.COMPLETED);
                 orderRepository.save(o);
+                
+                notificationService.sendNotification(
+                    o.getUser().getUserId(),
+                    Notification.NotificationType.ORDER_COMPLETED,
+                    "Order completed",
+                    "Your order from " + drop.getTitle() + " has been completed.",
+                    Notification.ReferenceType.ORDER,
+                    o.getOrderId()
+                );
             }
         }
         
