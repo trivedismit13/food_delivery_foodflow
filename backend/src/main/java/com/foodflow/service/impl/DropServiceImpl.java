@@ -392,7 +392,7 @@ public class DropServiceImpl implements DropService {
 
     private DropItemResponse mapItemToResponse(DropItem item) {
         DropItemResponse response = new DropItemResponse();
-        response.setItemId(item.getDropItemId());
+        response.setItemId(item.getMenuItem() != null ? item.getMenuItem().getItemId() : null);
         if (item.getMenuItem() != null) {
             response.setName(item.getMenuItem().getName());
             response.setDescription(item.getMenuItem().getDescription());

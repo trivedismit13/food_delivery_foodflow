@@ -394,7 +394,7 @@ public class CreatorController {
         if (drop.getDropItems() != null) {
             res.setItems(drop.getDropItems().stream().map(item -> {
                 com.foodflow.dto.response.DropItemResponse ir = new com.foodflow.dto.response.DropItemResponse();
-                ir.setItemId(item.getDropItemId());
+                ir.setItemId(item.getMenuItem() != null ? item.getMenuItem().getItemId() : null);
                 if (item.getMenuItem() != null) {
                     ir.setName(item.getMenuItem().getName());
                     ir.setDescription(item.getMenuItem().getDescription());
