@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
@@ -10,6 +10,7 @@ import { Shield, Star, Clock, MapPin, Loader2, Minus, Plus, Banknote, AlertCircl
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
 import { useDropById, usePlaceDropOrder } from '@/queries/drops';
+import { useFollowCreator, useUnfollowCreator, useFollowStatus, useCreatorRatings } from '@/queries/creators';
 
 
 export default function DropDetailPage() {
@@ -21,6 +22,24 @@ export default function DropDetailPage() {
 
   const { data: drop, isLoading: isDropLoading } = useDropById(Number(dropId));
   const placeOrderMutation = usePlaceDropOrder();
+
+  const followMutation = useFollowCreator();
+  const unfollowMutation = useUnfollowCreator();
+  const { data: followStatus } = useFollowStatus(drop?.creator?.restaurantId);
+  const { data: creatorRatings } = useCreatorRatings(drop?.creator?.restaurantId);
+  
+  const isFollowing = followStatus?.isFollowing;
+  const handleFollow = () => {
+    if (!isAuthenticated) {
+      navigate('/auth/login?redirect=/drops/' + dropId);
+      return;
+    }
+    if (isFollowing) {
+      unfollowMutation.mutate(drop!.creator!.restaurantId);
+    } else {
+      followMutation.mutate(drop!.creator!.restaurantId);
+    }
+  };
 
   type CheckoutState = 'idle' | 'loading' | 'success' | 'error' | 'sold_out';
   const [checkoutState, setCheckoutState] = useState<CheckoutState>('idle');
@@ -36,19 +55,16 @@ export default function DropDetailPage() {
 
   const now = new Date();
   
-  // Create a safe default for reviews (since they aren't provided by the backend endpoint yet)
-  const reviews = [
-    { id: 1, name: "Rahul S.", rating: 5, text: "The best biryani I've had in Mumbai, hands down. The meat was so tender it fell off the bone.", date: "2 weeks ago" },
-    { id: 2, name: "Neha K.", rating: 4, text: "Amazing flavor and portion size. Packaging was very neat and eco-friendly.", date: "1 month ago" },
-    { id: 3, name: "Amit V.", rating: 5, text: "Consistent quality every single time. The salan is exceptionally good.", date: "1 month ago" }
-  ];
+  const reviews = creatorRatings?.content || [];
 
-  const isSoldOut = drop.status !== 'OPEN' || drop.isSoldOut;
+  const isSoldOut = drop.isSoldOut;
   const percentFilled = Math.min((drop.currentOrders / drop.maxOrders) * 100, 100);
   const timeToCutoffMs = drop.minutesUntilCutoff != null 
     ? drop.minutesUntilCutoff * 60 * 1000 
     : new Date(drop.orderCutoffTime).getTime() - now.getTime();
+  
   const isClosingSoon = timeToCutoffMs > 0 && timeToCutoffMs < 1000 * 60 * 60 * 2;
+  const isOrderable = drop.status === 'OPEN' && !isSoldOut && (drop.minutesUntilCutoff == null || drop.minutesUntilCutoff > 0);
 
   // Order Calculations
   const itemTotal = drop.items?.reduce((total, item) => {
@@ -107,7 +123,7 @@ export default function DropDetailPage() {
         // paymentMethod: 'CASH',
         pickupTime: drop.pickupTime,
         specialInstructions: specialInstructions || undefined
-      } as unknown as Record<string, number>);
+      });
 
       setCheckoutState('success');
 
@@ -169,8 +185,8 @@ export default function DropDetailPage() {
                   <div className="w-full h-full flex items-center justify-center text-6xl text-orange-400">🍽️</div>
                 )}
                 <div className="absolute top-4 left-4">
-                  {drop.status === 'OPEN' && !isSoldOut && <span className="px-3 py-1.5 text-sm font-bold rounded-full bg-green-500 text-white shadow-sm">🟢 Accepting Orders</span>}
-                  {drop.status === 'OPEN' && isSoldOut && <span className="px-3 py-1.5 text-sm font-bold rounded-full bg-stone-500 text-white shadow-sm">Sold Out</span>}
+                  {isOrderable && <span className="px-3 py-1.5 text-sm font-bold rounded-full bg-green-500 text-white shadow-sm">🟢 Accepting Orders</span>}
+                  {!isOrderable && drop.status === 'OPEN' && <span className="px-3 py-1.5 text-sm font-bold rounded-full bg-stone-500 text-white shadow-sm">{isSoldOut ? 'Sold Out' : 'Order Window Closed'}</span>}
                   {drop.status === 'ANNOUNCED' && <span className="px-3 py-1.5 text-sm font-bold rounded-full bg-blue-500 text-white shadow-sm">📢 Coming Soon</span>}
                   {drop.status === 'CUTOFF' && <span className="px-3 py-1.5 text-sm font-bold rounded-full bg-amber-500 text-white shadow-sm">🍳 Cooking Now</span>}
                 </div>
@@ -260,7 +276,7 @@ export default function DropDetailPage() {
                           </div>
                         </div>
 
-                        {drop.status === 'OPEN' && !isSoldOut && (
+                        {isOrderable && (
                           <div className="flex items-center gap-3 bg-white border border-stone-200 rounded-xl p-1 shadow-sm">
                             <button 
                               onClick={() => handleQtyChange(item.itemId, -1, available)}
@@ -302,19 +318,27 @@ export default function DropDetailPage() {
                     </div>
                   </div>
                   
-                  <button className="w-full sm:w-auto px-6 py-2.5 rounded-full font-semibold border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white transition-colors">
-                    Follow {drop.creator?.name?.split(' ')[0]}
+                  <button 
+                    onClick={handleFollow}
+                    disabled={followMutation.isPending || unfollowMutation.isPending}
+                    className={`w-full sm:w-auto px-6 py-2.5 rounded-full font-semibold border-2 transition-colors ${
+                      isFollowing 
+                        ? 'border-stone-500 text-stone-500 hover:bg-stone-500 hover:text-white' 
+                        : 'border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white'
+                    }`}>
+                    {isFollowing ? 'Following' : `Follow ${drop.creator?.name?.split(' ')[0] || ''}`}
                   </button>
                 </div>
 
-                <p className="text-stone-300 leading-relaxed mb-8">This creator is passionate about bringing the best homemade food to your table.</p>
+                <p className="text-stone-300 leading-relaxed mb-8">{drop.creator?.bio || "This creator is passionate about bringing the best homemade food to your table."}</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-stone-800">
                   <div>
                     <h4 className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">Verification</h4>
                     <ul className="space-y-2">
-                      <li className="flex items-center gap-2 text-sm text-emerald-400"><Shield size={16} /> Identity Verified</li>
-                      <li className="flex items-center gap-2 text-sm text-emerald-400"><Shield size={16} /> Food Licence on File</li>
+                      <li className="flex items-center gap-2 text-sm text-emerald-400">
+                        <VerificationBadge level={drop.creator?.verificationLevel || 1} size="sm" />
+                      </li>
                     </ul>
                   </div>
                   
@@ -342,28 +366,32 @@ export default function DropDetailPage() {
             {/* SECTION 5: Reviews */}
             <section className="bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
               <div className="flex justify-between items-end mb-6">
-                <h2 className="font-display text-2xl font-bold text-stone-900">Recent Reviews</h2>
-                <button className="text-orange-500 font-medium text-sm hover:text-orange-600">View all →</button>
+                <h2 className="font-display text-2xl font-bold text-stone-900">Recent Creator Reviews</h2>
+                <Link to={`/creators/${drop.creator?.restaurantId}?tab=reviews`} className="text-orange-500 font-medium text-sm hover:text-orange-600">View all →</Link>
               </div>
               
               <div className="grid gap-4">
-                {reviews.map(review => (
-                  <div key={review.id} className="p-4 rounded-2xl bg-stone-50 border border-stone-100">
+                {reviews.length === 0 ? (
+                  <div className="text-center py-8 text-stone-500 bg-stone-50 rounded-2xl border border-stone-100">
+                    No reviews available yet.
+                  </div>
+                ) : reviews.map((review: any) => (
+                  <div key={review.ratingId || review.id} className="p-4 rounded-2xl bg-stone-50 border border-stone-100">
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-stone-200 flex items-center justify-center text-xs font-bold text-stone-600">
-                          {(review.name || 'U').charAt(0).toUpperCase()}
+                          {(review.customerName || review.name || 'U').charAt(0).toUpperCase()}
                         </div>
-                        <span className="font-medium text-stone-900">{review.name}</span>
+                        <span className="font-medium text-stone-900">{review.customerName || review.name}</span>
                       </div>
-                      <span className="text-xs text-stone-400">{review.date}</span>
+                      <span className="text-xs text-stone-400">{review.createdAt ? new Date(review.createdAt).toLocaleDateString() : review.date}</span>
                     </div>
                     <div className="flex gap-1 mb-2">
                       {[1,2,3,4,5].map(star => (
-                        <Star key={star} size={14} className={star <= review.rating ? "fill-orange-400 text-orange-400" : "text-stone-300"} />
+                        <Star key={star} size={14} className={star <= (review.score || review.rating) ? "fill-orange-400 text-orange-400" : "text-stone-300"} />
                       ))}
                     </div>
-                    <p className="text-sm text-stone-600">{review.text}</p>
+                    <p className="text-sm text-stone-600">{review.reviewText || review.text}</p>
                   </div>
                 ))}
               </div>
@@ -500,7 +528,7 @@ export default function DropDetailPage() {
                 >
                   Sign in to Pre-order
                 </button>
-              ) : drop.status === 'OPEN' && !isSoldOut ? (
+              ) : isOrderable ? (
                 <button 
                   onClick={handlePlaceOrder}
                   disabled={totalItems === 0 || checkoutState === 'loading'}
@@ -509,9 +537,12 @@ export default function DropDetailPage() {
                   {checkoutState === 'loading' ? <><Loader2 className="animate-spin" size={20}/> Confirming...</> : `Confirm Pre-order — ₹${orderTotal}`}
                 </button>
               ) : drop.status === 'ANNOUNCED' ? (
-                <button className="w-full bg-white border-2 border-orange-500 text-orange-500 hover:bg-orange-50 font-bold rounded-xl py-4 transition-colors">
-                  Notify Me When Open
-                </button>
+                <div className="text-center">
+                  <button disabled className="w-full bg-stone-100 border-2 border-stone-200 text-stone-500 font-bold rounded-xl py-4 mb-2 cursor-not-allowed">
+                    Coming Soon
+                  </button>
+                  <p className="text-xs text-stone-500">Follow the creator to get notified of new drops.</p>
+                </div>
               ) : (
                 <div className="text-center">
                   <button disabled className="w-full bg-stone-100 text-stone-400 font-bold rounded-xl py-4 cursor-not-allowed mb-2">

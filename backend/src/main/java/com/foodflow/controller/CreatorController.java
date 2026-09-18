@@ -340,8 +340,8 @@ public class CreatorController {
                 .build()); 
         });
         
-        List<FoodDrop> activeDrops = foodDropRepository.findByCreatorRestaurantIdAndStatusIn(
-            r.getRestaurantId(), List.of(FoodDrop.DropStatus.ANNOUNCED, FoodDrop.DropStatus.OPEN), org.springframework.data.domain.Pageable.unpaged()).getContent();
+        List<FoodDrop> activeDrops = foodDropRepository.findByCreatorRestaurantIdAndStatusInAndOrderCutoffTimeAfter(
+            r.getRestaurantId(), List.of(FoodDrop.DropStatus.ANNOUNCED, FoodDrop.DropStatus.OPEN), java.time.LocalDateTime.now(), org.springframework.data.domain.Pageable.unpaged()).getContent();
             
         cr.setActiveDrops(activeDrops.stream().map(this::mapToFoodDropResponse).collect(Collectors.toList()));
         

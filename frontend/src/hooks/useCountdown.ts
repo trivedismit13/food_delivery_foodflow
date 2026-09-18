@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 export function calculateTimeLeft(targetTime: string | number) {
   let difference = 0;
@@ -23,29 +23,36 @@ export function calculateTimeLeft(targetTime: string | number) {
 }
 
 export function useCountdown(targetTime: string, serverMinutesUntilCutoff?: number | null) {
-  // If server provided minutesUntilCutoff, compute target absolute timestamp based on it
-  const initialTarget = serverMinutesUntilCutoff != null 
-    ? Date.now() + (serverMinutesUntilCutoff * 60 * 1000) 
-    : targetTime;
+  // Use useMemo to prevent recomputing the target (and thus Date.now()) on every render.
+  // Since targetTime is now explicitly offset-aware from the API (e.g. ...Z or ...+05:30),
+  // we prefer it for absolute countdowns. We fallback to serverMinutes if needed.
+  const stableTarget = useMemo(() => {
+    if (targetTime) return targetTime;
+    return serverMinutesUntilCutoff != null 
+      ? Date.now() + (serverMinutesUntilCutoff * 60 * 1000) 
+      : targetTime;
+  }, [targetTime, serverMinutesUntilCutoff]);
 
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(initialTarget));
+  const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(stableTarget));
   
   useEffect(() => {
-    // Avoid running interval if already past
-    if (calculateTimeLeft(initialTarget).isPast) {
-      setTimeLeft(calculateTimeLeft(initialTarget));
+    const initialCalc = calculateTimeLeft(stableTarget);
+    if (initialCalc.isPast) {
+      setTimeLeft(initialCalc);
       return;
     }
 
+    setTimeLeft(initialCalc);
+
     const timer = setInterval(() => {
-      const nextTimeLeft = calculateTimeLeft(initialTarget);
+      const nextTimeLeft = calculateTimeLeft(stableTarget);
       setTimeLeft(nextTimeLeft);
       if (nextTimeLeft.isPast) {
         clearInterval(timer);
       }
     }, 1000);
     return () => clearInterval(timer);
-  }, [initialTarget]);
+  }, [stableTarget]);
   
   return timeLeft;
 }

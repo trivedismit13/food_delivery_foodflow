@@ -27,6 +27,11 @@ public interface FoodDropRepository extends JpaRepository<FoodDrop, Long>, JpaSp
     org.springframework.data.domain.Page<FoodDrop> findByCreatorRestaurantIdAndStatusIn(
         Long creatorId, List<FoodDrop.DropStatus> statuses, org.springframework.data.domain.Pageable pageable);
 
+    // Find by restaurant ID and cutoff time in future
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = {"creator", "dropItems"})
+    org.springframework.data.domain.Page<FoodDrop> findByCreatorRestaurantIdAndStatusInAndOrderCutoffTimeAfter(
+        Long creatorId, List<FoodDrop.DropStatus> statuses, LocalDateTime now, org.springframework.data.domain.Pageable pageable);
+
     // Discovery feed: all open drops, ordered by cutoff time ascending
     // Shows most urgent (closing soonest) first
     @org.springframework.data.jpa.repository.EntityGraph(attributePaths = {"creator", "dropItems"})
