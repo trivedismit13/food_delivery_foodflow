@@ -4,6 +4,7 @@ import { Search, MapPin, ChefHat, Star, ArrowRight, ActivitySquare } from 'lucid
 import { useCreators } from '@/queries/creators';
 import { CreatorSummary } from '@/types/api';
 import { cn } from '@/lib/utils';
+import { VerificationBadge } from '@/components/creators/VerificationBadge';
 
 export default function CreatorsListPage() {
   const [cuisine, setCuisine] = useState('');
@@ -20,7 +21,7 @@ export default function CreatorsListPage() {
     <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-[60vh] flex flex-col">
       <div className="mb-8">
         <h1 className="font-display text-4xl font-bold text-stone-900 mb-3">Food Creators</h1>
-        <p className="text-stone-500 text-lg">Discover verified home chefs and independent creators.</p>
+        <p className="text-stone-500 text-lg">Discover independent home chefs and food creators.</p>
       </div>
 
       {/* Filters */}
@@ -142,11 +143,9 @@ function CreatorCard({ creator }: { creator: CreatorSummary }) {
           <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-stone-500 border-stone-200 bg-stone-50">
             {creator.creatorType.replace('_', ' ')}
           </span>
-          {creator.verificationLevel > 0 && (
-             <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-blue-600 border-blue-200 bg-blue-50">
-               L{creator.verificationLevel} Verified
-             </span>
-          )}
+            {creator.verificationLevel > 0 && (
+               <VerificationBadge level={creator.verificationLevel} size="sm" />
+            )}
         </div>
         
         <div className="grid grid-cols-2 gap-4 mb-6 text-sm">

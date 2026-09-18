@@ -17,10 +17,10 @@ export function VerificationBadge({ level, size = 'sm', className }: Verificatio
     return (
       <div 
         className={cn("inline-flex items-center gap-1 bg-stone-100 text-stone-600 rounded-full font-medium whitespace-nowrap", sizeClasses, className)}
-        title="Phone and ID verified"
+        title="Verified Creator"
       >
         <ShieldCheck size={iconSize} />
-        <span>Identity Verified</span>
+        <span>Verified Creator</span>
       </div>
     );
   }
@@ -29,10 +29,10 @@ export function VerificationBadge({ level, size = 'sm', className }: Verificatio
     return (
       <div 
         className={cn("inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 rounded-full font-medium whitespace-nowrap", sizeClasses, className)}
-        title="Government food registration verified"
+        title="Food License Verified"
       >
         <CheckCircle2 size={iconSize} />
-        <span>✓✓ Food Licensed</span>
+        <span>Food Licensed</span>
       </div>
     );
   }
@@ -41,10 +41,10 @@ export function VerificationBadge({ level, size = 'sm', className }: Verificatio
     return (
       <div 
         className={cn("inline-flex items-center gap-1 bg-orange-50 text-orange-600 rounded-full font-medium whitespace-nowrap", sizeClasses, className)}
-        title="Physical kitchen inspection passed"
+        title="Kitchen Verified"
       >
         <Award size={iconSize} />
-        <span>Kitchen Inspected</span>
+        <span>Kitchen Verified</span>
       </div>
     );
   }

@@ -21,6 +21,7 @@ export interface CreatorSummary {
   totalOrdersCompleted: number;
   isAcceptingOrders: boolean;
   activeDrop?: FoodDropResponse;
+  bio?: string | null;
 }
 
 export interface CreatorResponse {

@@ -32,6 +32,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import com.foodflow.security.UserDetailsImpl;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.Map;
@@ -301,8 +303,9 @@ public class CreatorController {
         cs.setIsAcceptingOrders(r.getIsAcceptingOrders());
         
         // Fetch active drop
-        List<FoodDrop> openDrops = foodDropRepository.findByCreatorRestaurantIdAndStatusIn(
-            r.getRestaurantId(), List.of(FoodDrop.DropStatus.OPEN), org.springframework.data.domain.Pageable.unpaged()).getContent();
+        List<FoodDrop> openDrops = foodDropRepository.findByCreatorRestaurantIdAndStatusInAndOrderCutoffTimeAfter(
+            r.getRestaurantId(), List.of(FoodDrop.DropStatus.OPEN), 
+            java.time.LocalDateTime.now(), org.springframework.data.domain.Pageable.unpaged()).getContent();
             
         if (!openDrops.isEmpty()) {
             cs.setActiveDrop(mapToFoodDropResponse(openDrops.get(0)));
@@ -327,8 +330,16 @@ public class CreatorController {
         cr.setCuisine(r.getCuisine());
         cr.setInstagramHandle(r.getInstagramHandle());
         cr.setOffersPickup(r.getPickupAddress() != null && !r.getPickupAddress().isEmpty());
-        cr.setPickupAddress(r.getPickupAddress());
-
+        
+        // Expose actual pickup address ONLY to the owner for profile management
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !(auth instanceof org.springframework.security.authentication.AnonymousAuthenticationToken)) {
+            String email = auth.getName();
+            if (r.getOwner().getEmail().equals(email)) {
+                cr.setPickupAddress(r.getPickupAddress());
+            }
+        }
+        
         verificationRepository.findByCreatorRestaurantId(r.getRestaurantId()).ifPresent(v -> {
             cr.setVerification(CreatorVerificationResponse.builder()
                 .verificationId(v.getVerificationId())

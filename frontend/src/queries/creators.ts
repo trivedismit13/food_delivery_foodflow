@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { apiClient } from '@/lib/api'
 import { handleApiError } from '@/lib/errorHandler'
-import type { PageResponse, CreatorResponse } from '@/types/api'
+import type { CreatorSummary, CreatorResponse, PageResponse, RatingResponse } from '@/types/api'
 
 export interface CreatorFilters {
   cuisine?: string
@@ -81,7 +81,7 @@ export function useCreatorRatings(creatorId: number | undefined) {
   return useQuery({
     queryKey: ['creator-ratings', creatorId],
     queryFn: async () => {
-      const response = await apiClient.get<PageResponse<any>>(`/creators/${creatorId}/ratings`)
+      const response = await apiClient.get<PageResponse<RatingResponse>>(`/creators/${creatorId}/ratings`)
       return response.data
     },
     enabled: !!creatorId,

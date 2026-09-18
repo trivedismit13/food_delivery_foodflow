@@ -247,6 +247,10 @@ public class DropOrderServiceImpl implements DropOrderService {
             throw new InvalidOrderException("Order cannot be cancelled in its current state");
         }
         
+        if (!isCreator && java.time.LocalDateTime.now().isAfter(lockedDrop.getOrderCutoffTime())) {
+            throw new InvalidOrderException("Order cannot be cancelled after the drop cutoff time");
+        }
+        
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
         

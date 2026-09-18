@@ -37,7 +37,7 @@ public interface FoodDropRepository extends JpaRepository<FoodDrop, Long>, JpaSp
     @org.springframework.data.jpa.repository.EntityGraph(attributePaths = {"creator", "dropItems"})
     @Query("""
         SELECT d FROM FoodDrop d 
-        WHERE d.status = 'OPEN' 
+        WHERE d.status IN ('OPEN', 'ANNOUNCED') 
         AND d.orderCutoffTime > :now
         ORDER BY d.orderCutoffTime ASC
         """)
@@ -67,7 +67,7 @@ public interface FoodDropRepository extends JpaRepository<FoodDrop, Long>, JpaSp
     @Query(value = """
         SELECT fd.* FROM food_drops fd
         JOIN restaurants r ON fd.creator_id = r.restaurant_id
-        WHERE fd.status = 'OPEN' 
+        WHERE fd.status IN ('OPEN', 'ANNOUNCED') 
         AND fd.order_cutoff_time > NOW()
         AND (:type IS NULL OR r.creator_type = :type)
         AND (:dateStr IS NULL OR DATE(fd.drop_date) = :dateStr)
@@ -77,7 +77,7 @@ public interface FoodDropRepository extends JpaRepository<FoodDrop, Long>, JpaSp
         countQuery = """
         SELECT count(*) FROM food_drops fd
         JOIN restaurants r ON fd.creator_id = r.restaurant_id
-        WHERE fd.status = 'OPEN' 
+        WHERE fd.status IN ('OPEN', 'ANNOUNCED') 
         AND fd.order_cutoff_time > NOW()
         AND (:type IS NULL OR r.creator_type = :type)
         AND (:dateStr IS NULL OR DATE(fd.drop_date) = :dateStr)

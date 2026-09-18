@@ -26,7 +26,7 @@ export default function HomePage() {
           
           <div className="w-full md:w-[60%] flex flex-col z-10 text-center md:text-left mt-8 md:mt-0">
             <span className="text-sm font-semibold text-orange-600 uppercase tracking-widest mb-4 inline-flex items-center justify-center md:justify-start gap-2">
-              🧑‍🍳 Verified Home Chefs & Independent Creators
+              🍽️ Home Chefs & Independent Creators
             </span>
             <h1 className="font-display text-5xl lg:text-6xl font-bold text-stone-900 leading-[1.15] mb-6">
               Pre-order food made<br />
@@ -49,7 +49,7 @@ export default function HomePage() {
             {/* Trust Indicators */}
             <div className="flex flex-col sm:flex-row items-center gap-x-6 gap-y-2 justify-center md:justify-start">
               <span className="text-sm text-stone-500 flex items-center gap-1.5">
-                <Check size={16} className="text-emerald-500" /> Identity Verified Creators
+                <Check size={16} className="text-emerald-500" /> Independent Food Creators
               </span>
               <span className="text-sm text-stone-500 flex items-center gap-1.5">
                 <Check size={16} className="text-emerald-500" /> Pre-order before they sell out
@@ -70,7 +70,7 @@ export default function HomePage() {
             >
               <div className="h-32 bg-gradient-to-br from-orange-200 to-amber-200 rounded-xl mb-3"></div>
               <h4 className="font-display font-bold text-stone-800">Signature Dish</h4>
-              <p className="text-xs text-stone-500">Verified Local Creator</p>
+              <p className="text-xs text-stone-500">Local Creator</p>
             </motion.div>
             
             <motion.div 
@@ -81,7 +81,7 @@ export default function HomePage() {
             >
               <div className="h-28 bg-gradient-to-br from-amber-200 to-yellow-100 rounded-xl mb-3"></div>
               <h4 className="font-display font-bold text-stone-800">Freshly Baked</h4>
-              <p className="text-xs text-stone-500">Verified Artisan</p>
+              <p className="text-xs text-stone-500">Independent Artisan</p>
             </motion.div>
           </div>
         </div>
@@ -167,7 +167,7 @@ export default function HomePage() {
               <h2 className="font-display text-3xl font-bold text-stone-900">
                 Discover independent creators
               </h2>
-              <p className="text-stone-500 mt-1">Verified chefs, bakers, and food entrepreneurs</p>
+              <p className="text-stone-500 mt-1">Independent chefs, bakers, and food entrepreneurs</p>
             </div>
           </div>
 

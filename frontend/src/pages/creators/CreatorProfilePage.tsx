@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Loader2, Bell, Check } from 'lucide-react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
 import { VerificationBadge } from '@/components/creators/VerificationBadge';
@@ -21,17 +21,30 @@ import type { Reel } from '@/types/reel';
 export default function CreatorProfilePage() {
   const { creatorId } = useParams();
   const id = Number(creatorId);
-  const { user } = useAuthStore();
-  const [activeTab, setActiveTab] = useState('Drops');
-  const [dropsSubFilter, setDropsSubFilter] = useState<'Active' | 'Past'>('Active');
+  const { user, isAuthenticated, creatorProfile } = useAuthStore();
   
-  const isOwner = user?.role === 'SELLER' && user?.userId === id;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  
+  const tabParam = searchParams.get('tab');
+  const validTabs = ['drops', 'menu', 'reviews', 'reels'];
+  const initialTab = (tabParam && validTabs.includes(tabParam.toLowerCase())) 
+    ? tabParam.charAt(0).toUpperCase() + tabParam.slice(1).toLowerCase() 
+    : 'Drops';
+    
+  const activeTab = initialTab;
+  const setActiveTab = (tab: string) => {
+    setSearchParams({ tab: tab.toLowerCase() });
+  };
+  
+  const isOwner = isAuthenticated && creatorProfile?.restaurantId === id;
   
   const { data: creator, isLoading } = useCreatorById(id);
   const { data: menuItems = [], isLoading: isLoadingMenu } = useMenu(id);
   const { data: ratings, isLoading: isLoadingRatings } = useCreatorRatings(id);
   const { data: reels, isLoading: isLoadingReels } = useRestaurantReels(id);
-  const { data: isFollowing } = useFollowStatus(user ? id : undefined);
+  const followStatusQuery = useFollowStatus(isAuthenticated && !isOwner ? id : undefined);
+  const isFollowing = !!followStatusQuery.data;
   
   const followMutation = useFollowCreator();
   const unfollowMutation = useUnfollowCreator();
@@ -53,11 +66,11 @@ export default function CreatorProfilePage() {
   const tabs = ['Drops', 'Menu', 'Reviews', 'Reels'];
   
   // Assuming activeDrops from backend contains both OPEN and ANNOUNCED drops
-  const activeDrops = creator.activeDrops || [];
+  const activeDrops = creator?.activeDrops || [];
 
   const handleFollowToggle = () => {
-    if (!user) {
-      // should redirect to login but for now just ignore or toast
+    if (!isAuthenticated) {
+      navigate('/auth/login?redirect=/creators/' + id);
       return;
     }
     if (isFollowing) {
@@ -165,45 +178,20 @@ export default function CreatorProfilePage() {
         {/* DROPS TAB */}
         {activeTab === 'Drops' && (
           <div>
-            <div className="flex gap-2 mb-8">
-              {['Active', 'Past'].map(filter => (
-                <button
-                  key={filter}
-                  onClick={() => setDropsSubFilter(filter as any)}
-                  className={cn(
-                    "px-5 py-2 rounded-full text-sm font-semibold transition-colors border",
-                    dropsSubFilter === filter 
-                      ? "bg-stone-800 text-white border-stone-800" 
-                      : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50"
-                  )}
-                >
-                  {filter}
-                </button>
-              ))}
+            <div className="space-y-6">
+              {activeDrops.length === 0 ? (
+                <div className="bg-white rounded-2xl p-12 text-center border border-stone-100">
+                  <p className="text-lg font-semibold text-stone-800 mb-2">No active drops right now</p>
+                  <p className="text-stone-500">Follow {creator.name} to get notified when they announce one.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {activeDrops.map(drop => (
+                    <DropCard key={drop.dropId} {...drop} />
+                  ))}
+                </div>
+              )}
             </div>
-
-            {dropsSubFilter === 'Active' && (
-              <div className="space-y-6">
-                {activeDrops.length === 0 ? (
-                  <div className="bg-white rounded-2xl p-12 text-center border border-stone-100">
-                    <p className="text-lg font-semibold text-stone-800 mb-2">No active drops right now</p>
-                    <p className="text-stone-500">Follow {creator.name} to get notified when they announce one.</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {activeDrops.map(drop => (
-                      <DropCard key={drop.dropId} {...drop} />
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-            
-            {dropsSubFilter === 'Past' && (
-              <div className="bg-white rounded-2xl p-12 text-center border border-stone-100">
-                <p className="text-stone-500">Past drops will appear here.</p>
-              </div>
-            )}
           </div>
         )}
 

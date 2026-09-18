@@ -56,6 +56,7 @@ export default function DropsPage() {
   let filteredDrops = drops;
   if (activeStatus === 'Open Now') filteredDrops = filteredDrops.filter(d => d.status === 'OPEN');
   if (activeStatus === 'Coming Soon') filteredDrops = filteredDrops.filter(d => d.status === 'ANNOUNCED');
+  if (activeStatus === 'Closing Soon') filteredDrops = closingSoonDrops;
 
   const handleTypeChange = (type: string) => {
     setActiveType(type);
@@ -68,7 +69,7 @@ export default function DropsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen bg-[#faf9f7] pb-24">
       
       {/* Search Header Info */}
       {query && (
@@ -81,18 +82,16 @@ export default function DropsPage() {
         </div>
       )}
 
-      {/* Discovery Filters Header */}
-      <div className="bg-white border-b border-stone-200 sticky top-16 z-40">
+      {/* HERO SECTION */}
+      <div className="bg-white border-b border-stone-200 pt-8 pb-8">
         <div className="container mx-auto px-4">
-          <h1 className="font-display text-4xl font-bold text-stone-900 mb-2">Food Drops Near You</h1>
-          <p className="text-stone-500 mb-6">Pre-order from verified home chefs before they sell out</p>
+          <h1 className="font-display text-4xl font-bold text-stone-900 mb-2">Explore Food Drops</h1>
+          <p className="text-stone-500 mb-6">Pre-order from independent food creators before they sell out</p>
           
           <div className="flex items-center gap-2 text-sm font-medium text-stone-600">
             <span><span className="text-stone-900 font-bold">{drops.filter(d=>d.status==='OPEN').length}</span> drops open</span>
             <span className="text-stone-300">•</span>
             <span><span className="text-stone-900 font-bold">{closingSoonDrops.length}</span> closing today</span>
-            <span className="text-stone-300">•</span>
-            <span><span className="text-stone-900 font-bold">24</span> creators</span>
           </div>
         </div>
       </div>
@@ -156,9 +155,11 @@ export default function DropsPage() {
         {/* PERSONALIZED FEED (Auth only) */}
         {isAuthenticated && followedDrops.length > 0 && (
           <section>
-            <div className="mb-4">
-              <h2 className="font-display text-2xl font-bold text-stone-900">From creators you follow</h2>
-              <p className="text-stone-500 text-sm mt-1">You follow 5 creators</p>
+            <div className="mb-6 flex items-center justify-between">
+              <div>
+                <h2 className="font-display text-2xl font-bold text-stone-900">From creators you follow</h2>
+                <p className="text-stone-500 text-sm mt-1">Active drops from your followed creators</p>
+              </div>
             </div>
             <div className="flex overflow-x-auto gap-6 pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
               {followedDrops.map(drop => (

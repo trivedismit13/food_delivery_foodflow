@@ -54,14 +54,14 @@ export default function RegisterPage() {
             Join thousands of food lovers
           </h1>
           <p className="text-stone-600 text-xl mb-12">
-            Discover pre-order drops from verified home chefs
+            Discover pre-order drops from independent home chefs
           </p>
           
           <div className="space-y-4">
             {[
-              "🧑‍🍳 200+ verified creators",
-              "⭐ Highly rated creators",
-              "🎯 2x better average review than restaurants"
+              "🍽️ Independent food creators",
+              "🌟 Highly rated creators",
+              "✨ 2x better average review than restaurants"
             ].map((text, i) => (
               <motion.div
                 key={i}

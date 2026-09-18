@@ -16,19 +16,23 @@ import { useFollowCreator, useUnfollowCreator, useFollowStatus, useCreatorRating
 export default function DropDetailPage() {
   const { dropId } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, creatorProfile } = useAuthStore();
   const [selectedItems, setSelectedItems] = useState<Record<number, number>>({});
   const [specialInstructions, setSpecialInstructions] = useState('');
 
   const { data: drop, isLoading: isDropLoading } = useDropById(Number(dropId));
   const placeOrderMutation = usePlaceDropOrder();
 
+  const isOwner = isAuthenticated && creatorProfile?.restaurantId === drop?.creator?.restaurantId;
+
   const followMutation = useFollowCreator();
   const unfollowMutation = useUnfollowCreator();
-  const { data: followStatus } = useFollowStatus(drop?.creator?.restaurantId);
+  const { data: followStatus } = useFollowStatus(
+    isAuthenticated && !isOwner ? drop?.creator?.restaurantId : undefined
+  );
   const { data: creatorRatings } = useCreatorRatings(drop?.creator?.restaurantId);
   
-  const isFollowing = followStatus?.isFollowing;
+  const isFollowing = !!followStatus;
   const handleFollow = () => {
     if (!isAuthenticated) {
       navigate('/auth/login?redirect=/drops/' + dropId);
@@ -121,7 +125,6 @@ export default function DropDetailPage() {
           quantity
         })),
         // paymentMethod: 'CASH',
-        pickupTime: drop.pickupTime,
         specialInstructions: specialInstructions || undefined
       });
 
@@ -155,7 +158,7 @@ export default function DropDetailPage() {
 
       toast.success("Pre-order confirmed! 🎉");
       
-    } catch (e: unknown) {
+    } catch (e: any) {
       const status = e?.response?.status;
       const msg = e?.response?.data?.message || e?.message || '';
       
@@ -314,30 +317,34 @@ export default function DropDetailPage() {
                     </div>
                     <div>
                       <h3 className="font-display text-2xl font-bold">{drop.creator?.name}</h3>
-                      <p className="text-stone-400">{drop.creator?.creatorType} • Local Area</p>
+                      <p className="text-stone-400">{drop.creator?.creatorType}</p>
                     </div>
                   </div>
                   
-                  <button 
-                    onClick={handleFollow}
-                    disabled={followMutation.isPending || unfollowMutation.isPending}
-                    className={`w-full sm:w-auto px-6 py-2.5 rounded-full font-semibold border-2 transition-colors ${
-                      isFollowing 
-                        ? 'border-stone-500 text-stone-500 hover:bg-stone-500 hover:text-white' 
-                        : 'border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white'
-                    }`}>
-                    {isFollowing ? 'Following' : `Follow ${drop.creator?.name?.split(' ')[0] || ''}`}
-                  </button>
+                  {!isOwner && (
+                    <button 
+                      onClick={handleFollow}
+                      disabled={followMutation.isPending || unfollowMutation.isPending}
+                      className={`w-full sm:w-auto px-6 py-2.5 rounded-full font-semibold border-2 transition-colors ${
+                        isFollowing 
+                          ? 'border-stone-500 text-stone-500 hover:bg-stone-500 hover:text-white' 
+                          : 'border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white'
+                      }`}>
+                      {isFollowing ? 'Following' : `Follow ${drop.creator?.name?.split(' ')[0] || ''}`}
+                    </button>
+                  )}
                 </div>
 
-                <p className="text-stone-300 leading-relaxed mb-8">{drop.creator?.bio || "This creator is passionate about bringing the best homemade food to your table."}</p>
+                {drop.creator?.bio && (
+                  <p className="text-stone-300 leading-relaxed mb-8">{drop.creator.bio}</p>
+                )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-stone-800">
                   <div>
                     <h4 className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">Verification</h4>
                     <ul className="space-y-2">
                       <li className="flex items-center gap-2 text-sm text-emerald-400">
-                        <VerificationBadge level={drop.creator?.verificationLevel || 1} size="sm" />
+                        <VerificationBadge level={drop.creator?.verificationLevel ?? 0} size="sm" />
                       </li>
                     </ul>
                   </div>
@@ -367,7 +374,7 @@ export default function DropDetailPage() {
             <section className="bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
               <div className="flex justify-between items-end mb-6">
                 <h2 className="font-display text-2xl font-bold text-stone-900">Recent Creator Reviews</h2>
-                <Link to={`/creators/${drop.creator?.restaurantId}?tab=reviews`} className="text-orange-500 font-medium text-sm hover:text-orange-600">View all →</Link>
+                <Link to={`/creators/${drop.creator?.restaurantId}?tab=reviews`} className="text-orange-500 font-medium text-sm hover:text-orange-600">View reviews →</Link>
               </div>
               
               <div className="grid gap-4">
@@ -375,23 +382,24 @@ export default function DropDetailPage() {
                   <div className="text-center py-8 text-stone-500 bg-stone-50 rounded-2xl border border-stone-100">
                     No reviews available yet.
                   </div>
-                ) : reviews.map((review: any) => (
-                  <div key={review.ratingId || review.id} className="p-4 rounded-2xl bg-stone-50 border border-stone-100">
+                ) : reviews.map((review) => (
+                  <div key={review.ratingId} className="p-4 rounded-2xl bg-stone-50 border border-stone-100">
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-stone-200 flex items-center justify-center text-xs font-bold text-stone-600">
-                          {(review.customerName || review.name || 'U').charAt(0).toUpperCase()}
+                          {(review.customerName || 'U').charAt(0).toUpperCase()}
                         </div>
-                        <span className="font-medium text-stone-900">{review.customerName || review.name}</span>
+                        <div>
+                          <p className="font-semibold text-sm text-stone-900">{review.customerName}</p>
+                          <p className="text-xs text-stone-400">{new Date(review.createdAt).toLocaleDateString()}</p>
+                        </div>
                       </div>
-                      <span className="text-xs text-stone-400">{review.createdAt ? new Date(review.createdAt).toLocaleDateString() : review.date}</span>
+                      <div className="flex items-center gap-1 bg-white px-2 py-1 rounded-full shadow-sm border border-stone-100 text-xs font-bold">
+                        <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                        <span>{review.score}</span>
+                      </div>
                     </div>
-                    <div className="flex gap-1 mb-2">
-                      {[1,2,3,4,5].map(star => (
-                        <Star key={star} size={14} className={star <= (review.score || review.rating) ? "fill-orange-400 text-orange-400" : "text-stone-300"} />
-                      ))}
-                    </div>
-                    <p className="text-sm text-stone-600">{review.reviewText || review.text}</p>
+                    <p className="text-stone-600 text-sm leading-relaxed mt-2">{review.reviewText}</p>
                   </div>
                 ))}
               </div>
@@ -553,7 +561,7 @@ export default function DropDetailPage() {
               )}
 
               <p className="text-center text-xs text-stone-400 mt-4 flex items-center justify-center gap-2">
-                <span>🔒 Secure payment</span> • <span>No cancellation after cutoff</span>
+                <span>💵 Cash payment at pickup</span> • <span>No cancellation after cutoff</span>
               </p>
                 </>
               )}

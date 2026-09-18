@@ -43,6 +43,5 @@ export interface PlaceDropOrderRequest {
     itemId: number;
     quantity: number;
   }[];
-  pickupTime?: string;
   specialInstructions?: string;
 }

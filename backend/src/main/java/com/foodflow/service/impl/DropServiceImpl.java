@@ -267,9 +267,9 @@ public class DropServiceImpl implements DropService {
     public org.springframework.data.domain.Page<FoodDropResponse> getCreatorDrops(Long creatorId, List<FoodDrop.DropStatus> statuses, org.springframework.data.domain.Pageable pageable) {
         org.springframework.data.domain.Page<FoodDrop> drops;
         if (statuses != null && !statuses.isEmpty()) {
-            drops = dropRepository.findByCreatorOwnerUserIdAndStatusIn(creatorId, statuses, pageable);
+            drops = dropRepository.findByCreatorRestaurantIdAndStatusIn(creatorId, statuses, pageable);
         } else {
-            drops = dropRepository.findByCreatorOwnerUserIdAndStatusIn(creatorId, 
+            drops = dropRepository.findByCreatorRestaurantIdAndStatusIn(creatorId, 
                 List.of(FoodDrop.DropStatus.values()), pageable);
         }
         return drops.map(this::mapToResponse);
