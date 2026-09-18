@@ -68,7 +68,7 @@ public interface FoodDropRepository extends JpaRepository<FoodDrop, Long>, JpaSp
         SELECT fd.* FROM food_drops fd
         JOIN restaurants r ON fd.creator_id = r.restaurant_id
         WHERE fd.status IN ('OPEN', 'ANNOUNCED') 
-        AND fd.order_cutoff_time > NOW()
+        AND fd.order_cutoff_time > :now
         AND (:type IS NULL OR r.creator_type = :type)
         AND (:dateStr IS NULL OR DATE(fd.drop_date) = :dateStr)
         AND (:searchQuery IS NULL OR LOWER(fd.title) LIKE LOWER(CONCAT('%', :searchQuery, '%')) OR LOWER(fd.description) LIKE LOWER(CONCAT('%', :searchQuery, '%')) OR LOWER(r.name) LIKE LOWER(CONCAT('%', :searchQuery, '%')))
@@ -78,7 +78,7 @@ public interface FoodDropRepository extends JpaRepository<FoodDrop, Long>, JpaSp
         SELECT count(*) FROM food_drops fd
         JOIN restaurants r ON fd.creator_id = r.restaurant_id
         WHERE fd.status IN ('OPEN', 'ANNOUNCED') 
-        AND fd.order_cutoff_time > NOW()
+        AND fd.order_cutoff_time > :now
         AND (:type IS NULL OR r.creator_type = :type)
         AND (:dateStr IS NULL OR DATE(fd.drop_date) = :dateStr)
         AND (:searchQuery IS NULL OR LOWER(fd.title) LIKE LOWER(CONCAT('%', :searchQuery, '%')) OR LOWER(fd.description) LIKE LOWER(CONCAT('%', :searchQuery, '%')) OR LOWER(r.name) LIKE LOWER(CONCAT('%', :searchQuery, '%')))
@@ -88,6 +88,7 @@ public interface FoodDropRepository extends JpaRepository<FoodDrop, Long>, JpaSp
         @Param("type") String type, 
         @Param("dateStr") String dateStr, 
         @Param("searchQuery") String searchQuery, 
+        @Param("now") java.time.LocalDateTime now,
         org.springframework.data.domain.Pageable pageable
     );
 }

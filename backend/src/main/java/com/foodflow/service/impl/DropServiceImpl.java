@@ -293,7 +293,7 @@ public class DropServiceImpl implements DropService {
 
         // Use native query to fetch active drops
         org.springframework.data.domain.Page<FoodDrop> drops = dropRepository.findActiveDrops(
-            creatorType, date, query, sortedPageable
+            creatorType, date, query, LocalDateTime.now(java.time.ZoneOffset.UTC), sortedPageable
         );
         return drops.map(this::mapToResponse);
     }

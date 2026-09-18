@@ -363,8 +363,9 @@ public class CreatorController {
         res.setPickupLocation(drop.getPickupLocation());
         res.setMaxOrders(drop.getMaxOrders());
         res.setCurrentOrders(drop.getCurrentOrders());
+        res.setAvailableSlots(drop.availableSlots());
+        res.setIsSoldOut(drop.isSoldOut());
         res.setStatus(drop.getStatus().name());
-        res.setIsSoldOut(drop.getCurrentOrders() >= drop.getMaxOrders());
         res.setDropPhotoUrl(drop.getDropPhotoUrl());
         res.setSpecialNotes(drop.getSpecialNotes());
 
