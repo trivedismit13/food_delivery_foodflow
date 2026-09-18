@@ -163,7 +163,7 @@ public class DropOrderServiceImplTest {
 
     @Test
     void testDropAtOrAfterCutoff() {
-        testDrop.setOrderCutoffTime(LocalDateTime.now().minusMinutes(1));
+        testDrop.setOrderCutoffTime(LocalDateTime.now(java.time.ZoneOffset.UTC).minusMinutes(1));
         when(dropRepository.findByIdWithLock(1L)).thenReturn(Optional.of(testDrop));
         assertThrows(InvalidOrderException.class, () -> dropOrderService.placeDropOrder(2L, testRequest));
     }

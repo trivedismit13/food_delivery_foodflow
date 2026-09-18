@@ -22,6 +22,7 @@ export interface CreatorSummary {
   isAcceptingOrders: boolean;
   activeDrop?: FoodDropResponse;
   bio?: string | null;
+  cuisine?: string | null;
 }
 
 export interface CreatorResponse {

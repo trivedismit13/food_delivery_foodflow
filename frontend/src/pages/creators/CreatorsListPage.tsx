@@ -12,6 +12,7 @@ export default function CreatorsListPage() {
   const [page, setPage] = useState(0);
 
   const { data, isLoading } = useCreators({
+    cuisine,
     creatorType,
     page,
     size: 20
@@ -67,12 +68,12 @@ export default function CreatorsListPage() {
           <div className="w-20 h-20 bg-stone-50 rounded-full flex items-center justify-center text-stone-400 mb-6">
             <Search size={32} />
           </div>
-          <h2 className="text-2xl font-bold text-stone-900 mb-2">No creators found</h2>
-          <p className="text-stone-500 max-w-md mx-auto mb-8">
-            Try adjusting your filters to discover more food creators in your area.
+          <h3 className="font-display text-2xl font-bold text-stone-900 mb-2">No creators found</h3>
+          <p className="text-stone-500 mb-8 max-w-md mx-auto">
+            Try adjusting your filters to discover more food creators.
           </p>
           <button 
-            onClick={() => { setCuisine(''); setCreatorType(''); }}
+            onClick={() => { setCuisine(''); setCreatorType(''); setPage(0); }}
             className="bg-stone-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-stone-800 transition-colors"
           >
             Clear Filters

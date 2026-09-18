@@ -21,7 +21,7 @@ export function useCreators(filters?: CreatorFilters) {
       if (filters?.page !== undefined) params.append('page', String(filters.page))
       if (filters?.size !== undefined) params.append('size', String(filters.size))
       
-      const response = await apiClient.get<PageResponse<CreatorResponse>>(
+      const response = await apiClient.get<PageResponse<CreatorSummary>>(
         `/creators?${params.toString()}`
       )
       return response.data

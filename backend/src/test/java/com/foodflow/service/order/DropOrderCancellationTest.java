@@ -113,7 +113,7 @@ public class DropOrderCancellationTest {
             testDrop.setDescription("Test Drop Desc");
             testDrop.setDropDate(LocalDate.now().plusDays(1));
             // Cutoff in the future for ordering
-            testDrop.setOrderCutoffTime(LocalDateTime.now().plusHours(1)); 
+            testDrop.setOrderCutoffTime(LocalDateTime.now(java.time.ZoneOffset.UTC).plusHours(1)); 
             testDrop.setPickupTime("18:00");
             testDrop.setPickupLocation("Test Location");
             testDrop.setMaxOrders(10);
@@ -140,7 +140,8 @@ public class DropOrderCancellationTest {
         PlaceDropOrderRequest request = new PlaceDropOrderRequest();
         request.setDropId(testDrop.getDropId());
         PlaceDropOrderRequest.ItemRequest itemReq = new PlaceDropOrderRequest.ItemRequest();
-        itemReq.setItemId(testDrop.getDropItems().get(0).getMenuItem().getItemId());
+        FoodDrop reloadedDrop = dropRepository.findById(testDrop.getDropId()).orElseThrow();
+        itemReq.setItemId(reloadedDrop.getDropItems().get(0).getMenuItem().getItemId());
         itemReq.setQuantity(1);
         request.setItems(List.of(itemReq));
 
@@ -162,7 +163,8 @@ public class DropOrderCancellationTest {
         FoodDrop dropBefore = dropRepository.findById(testDrop.getDropId()).orElseThrow();
         DropItem dropItemBefore = dropBefore.getDropItems().get(0);
         int currentOrdersBefore = dropBefore.getCurrentOrders();
-        int itemQuantityBefore = dropItemBefore.getQuantityAvailable();
+        int itemQtyAvailableBefore = dropItemBefore.getQuantityAvailable();
+        int itemQtyOrderedBefore = dropItemBefore.getQuantityOrdered();
         Payment paymentBefore = paymentRepository.findByOrderOrderId(orderBefore.getOrderId()).orElseThrow();
 
         // Attempt cancellation
@@ -175,11 +177,13 @@ public class DropOrderCancellationTest {
         transactionTemplate.execute(status -> {
             Order orderAfter = orderRepository.findById(placedOrder.getOrderId()).orElseThrow();
             FoodDrop dropAfter = dropRepository.findById(testDrop.getDropId()).orElseThrow();
+            DropItem dropItemAfter = dropAfter.getDropItems().get(0);
             Payment paymentAfter = paymentRepository.findByOrderOrderId(orderAfter.getOrderId()).orElseThrow();
 
             assertEquals(OrderStatus.PLACED, orderAfter.getStatus(), "Order status should remain PLACED");
             assertEquals(currentOrdersBefore, dropAfter.getCurrentOrders(), "Drop current orders should remain unchanged");
-            assertEquals(itemQuantityBefore, dropAfter.getDropItems().get(0).getQuantityAvailable(), "Drop item quantity should remain unchanged");
+            assertEquals(itemQtyAvailableBefore, dropItemAfter.getQuantityAvailable(), "Drop item quantityAvailable should remain unchanged");
+            assertEquals(itemQtyOrderedBefore, dropItemAfter.getQuantityOrdered(), "Drop item quantityOrdered should remain unchanged");
             assertEquals(paymentBefore.getStatus(), paymentAfter.getStatus(), "Payment status should remain unchanged");
             return null;
         });

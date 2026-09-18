@@ -102,7 +102,7 @@ export function DropCard(drop: FoodDropResponse) {
             {creator?.name?.charAt(0).toUpperCase()}
           </div>
           <span className="text-sm font-medium text-stone-600 truncate">{creator?.name}</span>
-          <VerificationBadge level={creator?.verificationLevel || 1} size="sm" />
+          <VerificationBadge level={creator?.verificationLevel ?? 0} size="sm" />
         </Link>
 
         <p className="text-sm text-stone-500 line-clamp-2 mb-4 flex-1">
@@ -150,8 +150,10 @@ export function DropCard(drop: FoodDropResponse) {
             <div className="mt-2 mb-1">
               {status === 'OPEN' && !isSoldOut ? (
                 <CountdownTimer cutoffTime={orderCutoffTime} size="sm" />
+              ) : status === 'ANNOUNCED' ? (
+                <span className="text-xs text-blue-500 font-medium">Coming Soon</span>
               ) : (
-                <span className="text-xs text-stone-400 font-medium">Ordering closed</span>
+                <span className="text-xs text-stone-400 font-medium">{isSoldOut && status === 'OPEN' ? 'Sold out' : 'Ordering closed'}</span>
               )}
             </div>
           </div>

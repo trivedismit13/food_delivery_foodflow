@@ -173,7 +173,7 @@ public class ConcurrencyAdversarialTest {
     @Test
     void test4_Cutoff() {
         FoodDrop drop = dropRepository.findById(testDropId).orElseThrow();
-        drop.setOrderCutoffTime(LocalDateTime.now().minusHours(1));
+        drop.setOrderCutoffTime(LocalDateTime.now(java.time.ZoneOffset.UTC).minusHours(1));
         dropRepository.save(drop);
         
         PlaceDropOrderRequest request = new PlaceDropOrderRequest();

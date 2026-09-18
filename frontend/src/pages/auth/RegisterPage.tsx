@@ -61,7 +61,7 @@ export default function RegisterPage() {
             {[
               "🍽️ Independent food creators",
               "🌟 Highly rated creators",
-              "✨ 2x better average review than restaurants"
+              "⭐ Discover food creators with customer reviews"
             ].map((text, i) => (
               <motion.div
                 key={i}

@@ -301,6 +301,8 @@ public class CreatorController {
         cs.setFollowerCount(r.getFollowerCount());
         cs.setTotalOrdersCompleted(r.getTotalOrdersCompleted());
         cs.setIsAcceptingOrders(r.getIsAcceptingOrders());
+        cs.setBio(r.getBio());
+        cs.setCuisine(r.getCuisine());
         
         // Fetch active drop
         List<FoodDrop> openDrops = foodDropRepository.findByCreatorRestaurantIdAndStatusInAndOrderCutoffTimeAfter(

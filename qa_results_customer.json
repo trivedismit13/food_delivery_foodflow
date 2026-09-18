@@ -1,0 +1,17 @@
+{
+  "errors": [],
+  "consoleLogs": [],
+  "networkErrors": [],
+  "defects": [
+    {
+      "sev": "P2",
+      "desc": "Creator Profile Drops missing Pickup location (Regression)",
+      "route": "/creators/1002"
+    },
+    {
+      "sev": "P0",
+      "desc": "QA Script aborted: Waiting for selector `div.cursor-pointer` failed",
+      "route": "http://localhost:5173/drops"
+    }
+  ]
+}

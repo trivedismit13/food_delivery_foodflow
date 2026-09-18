@@ -152,7 +152,7 @@ export default function HomePage() {
                 We couldn't find any active drops. Check back later.
               </p>
               <Link to="/drops" className="inline-block bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold rounded-lg px-6 py-2.5 transition-colors">
-                Browse all locations
+                Browse all drops
               </Link>
             </div>
           )}
@@ -187,7 +187,7 @@ export default function HomePage() {
                     followerCount={creator.followerCount}
                     totalOrders={creator.totalOrdersCompleted}
                     verificationLevel={creator.verificationLevel}
-                    hasActiveDrop={creator.isAcceptingOrders}
+                    hasActiveDrop={!!creator.activeDrop}
                     topCategories={creator.cuisine ? creator.cuisine.split(',') : undefined}
                   />
                 </div>

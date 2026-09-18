@@ -42,7 +42,7 @@ public class DropOrderServiceImpl implements DropOrderService {
         FoodDrop drop = dropRepository.findByIdWithLock(request.getDropId())
             .orElseThrow(() -> new ResourceNotFoundException("Drop not found"));
         
-        if (LocalDateTime.now().isAfter(drop.getOrderCutoffTime())) {
+        if (LocalDateTime.now(java.time.ZoneOffset.UTC).isAfter(drop.getOrderCutoffTime())) {
             throw new InvalidOrderException(
                 "Order window has closed for this drop. " +
                 "Cutoff was " + drop.getOrderCutoffTime().toString()
@@ -247,7 +247,7 @@ public class DropOrderServiceImpl implements DropOrderService {
             throw new InvalidOrderException("Order cannot be cancelled in its current state");
         }
         
-        if (!isCreator && java.time.LocalDateTime.now().isAfter(lockedDrop.getOrderCutoffTime())) {
+        if (!isCreator && java.time.LocalDateTime.now(java.time.ZoneOffset.UTC).isAfter(lockedDrop.getOrderCutoffTime())) {
             throw new InvalidOrderException("Order cannot be cancelled after the drop cutoff time");
         }
         

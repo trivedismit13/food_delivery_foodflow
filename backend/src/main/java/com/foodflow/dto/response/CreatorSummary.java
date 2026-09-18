@@ -21,4 +21,6 @@ public class CreatorSummary {
     private Integer totalOrdersCompleted;
     private Boolean isAcceptingOrders;
     private FoodDropResponse activeDrop;
+    private String bio;
+    private String cuisine;
 }
