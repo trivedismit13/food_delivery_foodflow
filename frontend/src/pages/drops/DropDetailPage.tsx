@@ -70,7 +70,7 @@ export default function DropDetailPage() {
     : 0;
   
   const CLOSING_SOON_MS = 4 * 60 * 60 * 1000;
-  const isClosingSoon = timeToCutoffMs > 0 && timeToCutoffMs < CLOSING_SOON_MS;
+  const isClosingSoon = drop.status === 'OPEN' && timeToCutoffMs > 0 && timeToCutoffMs < CLOSING_SOON_MS;
   const isOrderable = drop.status === 'OPEN' && !isSoldOut && timeToCutoffMs > 0;
 
   // Order Calculations
@@ -209,7 +209,7 @@ export default function DropDetailPage() {
               <Link to={`/creators/${drop.creator?.restaurantId}`} className="inline-flex items-center gap-2 hover:bg-stone-100 p-1.5 -ml-1.5 rounded-lg transition-colors">
                 <span className="text-stone-500">by</span>
                 <span className="font-semibold text-stone-800">{drop.creator?.name}</span>
-                <VerificationBadge level={drop.creator?.verificationLevel || 1} size="sm" />
+                <VerificationBadge level={drop.creator?.verificationLevel ?? 0} size="sm" />
               </Link>
 
               <div className="mt-8 bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col md:flex-row gap-6 md:items-center justify-between">

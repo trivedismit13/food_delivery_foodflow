@@ -52,7 +52,7 @@ export default function CustomerDashboardPage() {
   const { data: followedDropsData, isLoading: isFollowedDropsLoading } = useFollowedCreatorDrops();
   const followedDrops = Array.isArray(followedDropsData)
     ? followedDropsData
-    : (followedDropsData as any)?.content || [];
+    : followedDropsData?.content || [];
 
   // Notifications
   const { data: notifData, isLoading: isNotifsLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useNotifications();

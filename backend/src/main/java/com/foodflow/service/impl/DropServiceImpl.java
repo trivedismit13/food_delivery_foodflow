@@ -300,7 +300,7 @@ public class DropServiceImpl implements DropService {
 
     @Override
     public org.springframework.data.domain.Page<FoodDropResponse> getFollowedCreatorDrops(Long userId, org.springframework.data.domain.Pageable pageable) {
-        org.springframework.data.domain.Page<FoodDrop> drops = dropRepository.findDropsFromFollowedCreators(userId, pageable);
+        org.springframework.data.domain.Page<FoodDrop> drops = dropRepository.findDropsFromFollowedCreators(userId, LocalDateTime.now(java.time.ZoneOffset.UTC), pageable);
         return drops.map(this::mapToResponse);
     }
 
@@ -359,8 +359,8 @@ public class DropServiceImpl implements DropService {
         response.setSpecialNotes(drop.getSpecialNotes());
 
         // Minutes until cutoff
-        if (drop.getOrderCutoffTime() != null && drop.getOrderCutoffTime().isAfter(LocalDateTime.now())) {
-            response.setMinutesUntilCutoff(ChronoUnit.MINUTES.between(LocalDateTime.now(), drop.getOrderCutoffTime()));
+        if (drop.getOrderCutoffTime() != null && drop.getOrderCutoffTime().isAfter(LocalDateTime.now(java.time.ZoneOffset.UTC))) {
+            response.setMinutesUntilCutoff(ChronoUnit.MINUTES.between(LocalDateTime.now(java.time.ZoneOffset.UTC), drop.getOrderCutoffTime()));
         } else {
             response.setMinutesUntilCutoff(0L);
         }
@@ -377,6 +377,8 @@ public class DropServiceImpl implements DropService {
             cs.setFollowerCount(r.getFollowerCount());
             cs.setTotalOrdersCompleted(r.getTotalOrdersCompleted());
             cs.setIsAcceptingOrders(r.getIsAcceptingOrders());
+            cs.setBio(r.getBio());
+            cs.setCuisine(r.getCuisine());
             response.setCreator(cs);
         }
 

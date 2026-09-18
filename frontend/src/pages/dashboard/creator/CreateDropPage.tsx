@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DropCard } from '@/components/drops/DropCard';
@@ -100,7 +99,7 @@ export default function CreateDropPage() {
     title: title || "Your Drop Title",
     creatorId: user?.userId || 1,
     creatorName: user?.name || "Creator",
-    creatorVerificationLevel: creatorProfile?.verificationLevel || 1,
+    creatorVerificationLevel: creatorProfile?.verificationLevel ?? 0,
     status: 'ANNOUNCED' as const,
     maxOrders: parseInt(maxOrders) || 0,
     currentOrders: 0,

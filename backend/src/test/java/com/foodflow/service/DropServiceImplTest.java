@@ -92,7 +92,7 @@ class DropServiceImplTest {
         request.setTitle("Weekend Special");
         request.setDescription("A lovely test drop");
         request.setDropDate(LocalDate.now().plusDays(1));
-        request.setOrderCutoffTime(LocalDateTime.now().plusHours(2));
+        request.setOrderCutoffTime(LocalDateTime.now(java.time.ZoneOffset.UTC).plusHours(2));
         request.setMaxOrders(10);
         request.setPickupLocation("Near VIT Main Gate");
         request.setPickupTime("12:00 PM - 2:00 PM");
@@ -131,7 +131,7 @@ class DropServiceImplTest {
         CreateDropRequest request = new CreateDropRequest();
         request.setTitle("Weekend Special");
         request.setDropDate(LocalDate.now().plusDays(1));
-        request.setOrderCutoffTime(LocalDateTime.now().plusHours(2));
+        request.setOrderCutoffTime(LocalDateTime.now(java.time.ZoneOffset.UTC).plusHours(2));
         request.setMaxOrders(10);
         request.setPickupLocation("Near VIT Main Gate");
         request.setPickupTime("12:00 PM - 2:00 PM");
@@ -160,7 +160,7 @@ class DropServiceImplTest {
         restaurant.setRestaurantId(2L);
         drop.setCreator(restaurant);
         drop.setTitle("Title");
-        drop.setOrderCutoffTime(LocalDateTime.now().plusHours(1));
+        drop.setOrderCutoffTime(LocalDateTime.now(java.time.ZoneOffset.UTC).plusHours(1));
 
         org.mockito.Mockito.doNothing().when(authorizationService).assertCreatorOwnsDrop(dropId);
         when(dropRepository.findById(dropId)).thenReturn(Optional.of(drop));

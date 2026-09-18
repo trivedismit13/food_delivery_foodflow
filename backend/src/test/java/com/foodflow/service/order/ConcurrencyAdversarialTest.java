@@ -78,7 +78,7 @@ public class ConcurrencyAdversarialTest {
         drop.setCreator(restaurant);
         drop.setTitle("Concurrent Drop");
         drop.setDropDate(LocalDate.now().plusDays(1));
-        drop.setOrderCutoffTime(LocalDateTime.now().plusHours(2));
+        drop.setOrderCutoffTime(LocalDateTime.now(java.time.ZoneOffset.UTC).plusHours(2));
         drop.setMaxOrders(2);
         drop.setCurrentOrders(0);
         drop.setStatus(FoodDrop.DropStatus.OPEN);

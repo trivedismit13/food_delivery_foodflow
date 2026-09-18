@@ -140,8 +140,8 @@ public class DropOrderCancellationTest {
         PlaceDropOrderRequest request = new PlaceDropOrderRequest();
         request.setDropId(testDrop.getDropId());
         PlaceDropOrderRequest.ItemRequest itemReq = new PlaceDropOrderRequest.ItemRequest();
-        FoodDrop reloadedDrop = dropRepository.findById(testDrop.getDropId()).orElseThrow();
-        itemReq.setItemId(reloadedDrop.getDropItems().get(0).getMenuItem().getItemId());
+        DropItem testDropItem = dropItemRepository.findByDropDropId(testDrop.getDropId()).get(0);
+        itemReq.setItemId(testDropItem.getMenuItem().getItemId());
         itemReq.setQuantity(1);
         request.setItems(List.of(itemReq));
 
@@ -153,7 +153,7 @@ public class DropOrderCancellationTest {
         // Move cutoff to past
         transactionTemplate.execute(status -> {
             FoodDrop dropToUpdate = dropRepository.findById(testDrop.getDropId()).orElseThrow();
-            dropToUpdate.setOrderCutoffTime(LocalDateTime.now().minusMinutes(5));
+            dropToUpdate.setOrderCutoffTime(LocalDateTime.now(java.time.ZoneOffset.UTC).minusMinutes(5));
             dropRepository.save(dropToUpdate);
             return null;
         });
@@ -161,7 +161,7 @@ public class DropOrderCancellationTest {
         // Store pre-cancellation state
         Order orderBefore = orderRepository.findById(placedOrder.getOrderId()).orElseThrow();
         FoodDrop dropBefore = dropRepository.findById(testDrop.getDropId()).orElseThrow();
-        DropItem dropItemBefore = dropBefore.getDropItems().get(0);
+        DropItem dropItemBefore = dropItemRepository.findByDropDropId(testDrop.getDropId()).get(0);
         int currentOrdersBefore = dropBefore.getCurrentOrders();
         int itemQtyAvailableBefore = dropItemBefore.getQuantityAvailable();
         int itemQtyOrderedBefore = dropItemBefore.getQuantityOrdered();
@@ -177,7 +177,7 @@ public class DropOrderCancellationTest {
         transactionTemplate.execute(status -> {
             Order orderAfter = orderRepository.findById(placedOrder.getOrderId()).orElseThrow();
             FoodDrop dropAfter = dropRepository.findById(testDrop.getDropId()).orElseThrow();
-            DropItem dropItemAfter = dropAfter.getDropItems().get(0);
+            DropItem dropItemAfter = dropItemRepository.findByDropDropId(testDrop.getDropId()).get(0);
             Payment paymentAfter = paymentRepository.findByOrderOrderId(orderAfter.getOrderId()).orElseThrow();
 
             assertEquals(OrderStatus.PLACED, orderAfter.getStatus(), "Order status should remain PLACED");

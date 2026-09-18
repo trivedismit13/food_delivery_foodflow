@@ -13,7 +13,7 @@ export default function CreatorDropsPage() {
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const { creatorProfile } = useAuthStore();
 
-  const { data: drops = [] as any[], isLoading, isError } = useCreatorDrops(creatorProfile?.restaurantId);
+  const { data: drops = [], isLoading, isError } = useCreatorDrops(creatorProfile?.restaurantId);
 
   const normalizedDrops = useMemo(() =>
     drops.map((drop) => ({

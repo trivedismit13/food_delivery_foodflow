@@ -51,10 +51,10 @@ public interface FoodDropRepository extends JpaRepository<FoodDrop, Long>, JpaSp
         JOIN CreatorFollow cf ON fd.creator = cf.creator
         WHERE cf.follower.userId = :userId
         AND fd.status IN ('ANNOUNCED', 'OPEN')
-        AND fd.orderCutoffTime > CURRENT_TIMESTAMP
+        AND fd.orderCutoffTime > :now
         ORDER BY fd.orderCutoffTime ASC
         """)
-    org.springframework.data.domain.Page<FoodDrop> findDropsFromFollowedCreators(@Param("userId") Long userId, org.springframework.data.domain.Pageable pageable);
+    org.springframework.data.domain.Page<FoodDrop> findDropsFromFollowedCreators(@Param("userId") Long userId, @Param("now") LocalDateTime now, org.springframework.data.domain.Pageable pageable);
 
     @Query(value = """
         SELECT * FROM food_drops

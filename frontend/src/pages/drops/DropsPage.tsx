@@ -48,11 +48,8 @@ export default function DropsPage() {
 
   const followedDrops = Array.isArray(followedDropsData) ? followedDropsData : followedDropsData?.content || [];
 
-  // Backend handles 'type' filtering natively via API now.
-  // We handle 'status' locally if needed, but 'All' includes both OPEN and ANNOUNCED for now.
-  // Wait, backend `getActiveDropsFeed` only returns OPEN Drops by default due to FoodDropSpecification.
-  // Let's filter locally for ANNOUNCED if needed, but since backend only returns OPEN, 'Coming Soon' might be empty unless we change backend.
-  // The plan specified backend filters status=OPEN. So 'Coming Soon' will just be empty for now, which is fine for this activity.
+  // The backend now returns both OPEN and ANNOUNCED drops.
+  // We handle 'status' filtering locally for the tabs.
   let filteredDrops = drops;
   if (activeStatus === 'Open Now') filteredDrops = filteredDrops.filter(d => d.status === 'OPEN');
   if (activeStatus === 'Coming Soon') filteredDrops = filteredDrops.filter(d => d.status === 'ANNOUNCED');

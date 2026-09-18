@@ -97,7 +97,7 @@ public class DropOrderServiceConcurrencyTest {
                     .creator(restaurant)
                     .title("Drop-" + uuid)
                     .status(FoodDrop.DropStatus.OPEN)
-                    .orderCutoffTime(LocalDateTime.now().plusHours(1))
+                    .orderCutoffTime(LocalDateTime.now(java.time.ZoneOffset.UTC).plusHours(1))
                     .maxOrders(maxOrders)
                     .currentOrders(0)
                     .pickupTime("12:00 PM")

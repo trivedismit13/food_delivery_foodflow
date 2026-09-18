@@ -47,11 +47,11 @@ export default function CreatorProfileSettingsPage() {
   // Populate form once data loads
   useEffect(() => {
     if (creatorData) {
-      setBio((creatorData as any).bio || '');
-      setCity((creatorData as any).city || '');
-      setPickupAddress((creatorData as any).pickupAddress || '');
-      setInstagramHandle((creatorData as any).instagramHandle || '');
-      setCuisine((creatorData as any).cuisine || '');
+      setBio(creatorData.bio || '');
+      setCity(creatorData.city || '');
+      setPickupAddress(creatorData.pickupAddress || '');
+      setInstagramHandle(creatorData.instagramHandle || '');
+      setCuisine(creatorData.cuisine || '');
     }
   }, [creatorData]);
 
@@ -111,11 +111,11 @@ export default function CreatorProfileSettingsPage() {
           <div className="bg-white rounded-3xl p-6 md:p-8 border border-stone-100 shadow-sm">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-16 h-16 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl font-bold border border-orange-200 shrink-0">
-                {(creatorData as any)?.name?.charAt(0)?.toUpperCase() || <User className="w-8 h-8" />}
+                {creatorData?.name?.charAt(0)?.toUpperCase() || <User className="w-8 h-8" />}
               </div>
               <div>
-                <h2 className="text-xl font-bold text-stone-900">{(creatorData as any)?.name || 'Your Creator Name'}</h2>
-                <p className="text-sm text-stone-500 capitalize">{(creatorData as any)?.creatorType?.replace('_', ' ').toLowerCase() || 'Creator'}</p>
+                <h2 className="text-xl font-bold text-stone-900">{creatorData?.name || 'Your Creator Name'}</h2>
+                <p className="text-sm text-stone-500 capitalize">{creatorData?.creatorType?.replace('_', ' ').toLowerCase() || 'Creator'}</p>
               </div>
             </div>
             <p className="text-xs text-stone-400">

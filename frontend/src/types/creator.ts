@@ -29,7 +29,7 @@ export interface CreatorResponse {
   restaurantId: number;
   name: string;
   creatorType: CreatorType;
-  bio: string;
+  bio: string | null;
   instagramHandle: string | null;
   city: string;
   cuisine: string;

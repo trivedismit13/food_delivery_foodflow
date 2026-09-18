@@ -9,8 +9,14 @@ import { useDiscoveryReels } from '@/queries/reels';
 import { DropCardSkeleton } from '@/components/skeletons/DropCardSkeleton';
 import { CreatorCardSkeleton } from '@/components/skeletons/CreatorCardSkeleton';
 export default function HomePage() {
-  const { data: dropsPage, isLoading: isLoadingDrops } = useActiveDropsFeed({ size: 4 });
-  const drops = dropsPage?.content;
+  const { data: dropsPage, isLoading: isLoadingDrops } = useActiveDropsFeed({ size: 10 });
+  const CLOSING_SOON_MS = 4 * 60 * 60 * 1000;
+  const now = Date.now();
+  const closingSoonDrops = dropsPage?.content?.filter(drop => {
+    if (drop.status !== 'OPEN') return false;
+    const timeToCutoff = drop.orderCutoffTime ? new Date(drop.orderCutoffTime).getTime() - now : 0;
+    return timeToCutoff > 0 && timeToCutoff < CLOSING_SOON_MS;
+  }).slice(0, 4) || [];
 
   const { data: creatorsPage, isLoading: isLoadingCreators } = useCreators({ size: 6 });
   const creators = creatorsPage?.content;
@@ -133,9 +139,9 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[1,2,3,4].map(i => <DropCardSkeleton key={i} />)}
             </div>
-          ) : drops && drops.length > 0 ? (
+          ) : closingSoonDrops && closingSoonDrops.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {drops.map(drop => (
+              {closingSoonDrops.map(drop => (
                 <DropCard 
                   key={drop.dropId}
                   {...drop}

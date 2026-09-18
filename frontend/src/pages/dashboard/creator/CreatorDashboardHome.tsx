@@ -24,7 +24,7 @@ export default function CreatorDashboardHome() {
   const { mutate: cancelDrop, isPending: isCancelling } = useCancelDrop();
 
   // Verification
-  const verificationLevel = creatorProfile?.verificationLevel || 1;
+  const verificationLevel = creatorProfile?.verificationLevel ?? 0;
 
   const percentFilled = activeDrop ? (activeDrop.currentOrders / activeDrop.maxOrders) * 100 : 0;
   const activeDropRevenue = activeDrop ? activeDrop.items.reduce((sum, item) => sum + (item.quantityOrdered * (item.dropPrice ?? item.price)), 0) : 0;

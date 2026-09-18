@@ -93,7 +93,7 @@ public class FoodDrop {
 
     public boolean isAcceptingOrders() {
         return status == DropStatus.OPEN 
-            && LocalDateTime.now().isBefore(orderCutoffTime)
+            && LocalDateTime.now(java.time.ZoneOffset.UTC).isBefore(orderCutoffTime)
             && currentOrders < maxOrders;
     }
 

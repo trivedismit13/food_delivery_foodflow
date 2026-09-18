@@ -36,7 +36,7 @@ export default function CreatorDashboardLayout() {
               <p className="text-sm text-stone-500">Home Chef</p>
             </div>
           </div>
-          <VerificationBadge level={creatorProfile?.verificationLevel || 1} />
+          <VerificationBadge level={creatorProfile?.verificationLevel ?? 0} />
         </div>
 
         {/* Navigation Links */}

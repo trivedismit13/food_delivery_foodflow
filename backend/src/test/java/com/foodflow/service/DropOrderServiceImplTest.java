@@ -77,7 +77,7 @@ public class DropOrderServiceImplTest {
         testDrop = new FoodDrop();
         testDrop.setDropId(1L);
         testDrop.setStatus(FoodDrop.DropStatus.OPEN);
-        testDrop.setOrderCutoffTime(LocalDateTime.now().plusHours(1));
+        testDrop.setOrderCutoffTime(LocalDateTime.now(java.time.ZoneOffset.UTC).plusHours(1));
         testDrop.setMaxOrders(10);
         testDrop.setCurrentOrders(0);
         testDrop.setCreator(rest);

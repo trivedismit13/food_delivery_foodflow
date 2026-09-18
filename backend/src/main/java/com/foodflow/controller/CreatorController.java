@@ -205,16 +205,7 @@ public class CreatorController {
         return ResponseEntity.ok(ApiResponse.success(responses));
     }
 
-    // @GetMapping("/{creatorId}/analytics/insight/auto")
-    public ResponseEntity<ApiResponse<List<String>>> getAutoInsights(@PathVariable Long creatorId) {
-        // Simple rule-based insights
-        List<String> insights = List.of(
-            "Customer retention is up 12% this month.",
-            "Vegetarian options are selling 3x faster than last week.",
-            "Consider offering pre-orders on weekends to capture more evening demand."
-        );
-        return ResponseEntity.ok(ApiResponse.success(insights));
-    }
+
 
     // --- Follow System ---
 
@@ -307,7 +298,7 @@ public class CreatorController {
         // Fetch active drop
         List<FoodDrop> openDrops = foodDropRepository.findByCreatorRestaurantIdAndStatusInAndOrderCutoffTimeAfter(
             r.getRestaurantId(), List.of(FoodDrop.DropStatus.OPEN), 
-            java.time.LocalDateTime.now(), org.springframework.data.domain.Pageable.unpaged()).getContent();
+            java.time.LocalDateTime.now(java.time.ZoneOffset.UTC), org.springframework.data.domain.Pageable.unpaged()).getContent();
             
         if (!openDrops.isEmpty()) {
             cs.setActiveDrop(mapToFoodDropResponse(openDrops.get(0)));
@@ -354,7 +345,7 @@ public class CreatorController {
         });
         
         List<FoodDrop> activeDrops = foodDropRepository.findByCreatorRestaurantIdAndStatusInAndOrderCutoffTimeAfter(
-            r.getRestaurantId(), List.of(FoodDrop.DropStatus.ANNOUNCED, FoodDrop.DropStatus.OPEN), java.time.LocalDateTime.now(), org.springframework.data.domain.Pageable.unpaged()).getContent();
+            r.getRestaurantId(), List.of(FoodDrop.DropStatus.ANNOUNCED, FoodDrop.DropStatus.OPEN), java.time.LocalDateTime.now(java.time.ZoneOffset.UTC), org.springframework.data.domain.Pageable.unpaged()).getContent();
             
         cr.setActiveDrops(activeDrops.stream().map(this::mapToFoodDropResponse).collect(Collectors.toList()));
         
@@ -368,19 +359,17 @@ public class CreatorController {
         res.setDescription(drop.getDescription());
         res.setDropDate(drop.getDropDate());
         res.setOrderCutoffTime(drop.getOrderCutoffTime() != null ? drop.getOrderCutoffTime().atOffset(java.time.ZoneOffset.UTC) : null);
-        res.setStatus(drop.getStatus().name());
-        
         res.setPickupTime(drop.getPickupTime());
         res.setPickupLocation(drop.getPickupLocation());
         res.setMaxOrders(drop.getMaxOrders());
         res.setCurrentOrders(drop.getCurrentOrders());
-        res.setAvailableSlots(drop.availableSlots());
-        res.setIsSoldOut(drop.isSoldOut());
+        res.setStatus(drop.getStatus().name());
+        res.setIsSoldOut(drop.getCurrentOrders() >= drop.getMaxOrders());
         res.setDropPhotoUrl(drop.getDropPhotoUrl());
         res.setSpecialNotes(drop.getSpecialNotes());
 
-        if (drop.getOrderCutoffTime() != null && drop.getOrderCutoffTime().isAfter(java.time.LocalDateTime.now())) {
-            res.setMinutesUntilCutoff(java.time.temporal.ChronoUnit.MINUTES.between(java.time.LocalDateTime.now(), drop.getOrderCutoffTime()));
+        if (drop.getOrderCutoffTime() != null && drop.getOrderCutoffTime().isAfter(java.time.LocalDateTime.now(java.time.ZoneOffset.UTC))) {
+            res.setMinutesUntilCutoff(java.time.temporal.ChronoUnit.MINUTES.between(java.time.LocalDateTime.now(java.time.ZoneOffset.UTC), drop.getOrderCutoffTime()));
         } else {
             res.setMinutesUntilCutoff(0L);
         }
@@ -396,6 +385,8 @@ public class CreatorController {
             cs.setFollowerCount(r.getFollowerCount());
             cs.setTotalOrdersCompleted(r.getTotalOrdersCompleted());
             cs.setIsAcceptingOrders(r.getIsAcceptingOrders());
+            cs.setBio(r.getBio());
+            cs.setCuisine(r.getCuisine());
             res.setCreator(cs);
         }
 

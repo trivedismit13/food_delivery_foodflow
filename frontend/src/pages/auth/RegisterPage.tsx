@@ -51,7 +51,7 @@ export default function RegisterPage() {
           </div>
           
           <h1 className="font-display text-4xl lg:text-5xl font-bold text-stone-900 mb-6 leading-tight">
-            Join thousands of food lovers
+            Join food lovers discovering independent creators
           </h1>
           <p className="text-stone-600 text-xl mb-12">
             Discover pre-order drops from independent home chefs
