@@ -29,7 +29,7 @@ export default function CreatorAnalyticsPage() {
   
   const { mutate: askInsight, isPending: isAskInsightPending } = useAskInsight();
 
-  const trendChartData = weeklyTrendData ? [...weeklyTrendData].reverse().map(trend => ({
+  const trendChartData = weeklyTrendData ? [...weeklyTrendData].map(trend => ({
     week: trend.week,
     revenue: trend.revenue,
     orders: trend.orders
@@ -50,10 +50,9 @@ export default function CreatorAnalyticsPage() {
     
     return {
       name: item.itemName,
-      frequency: item.totalOrders,
-      avgOrderValue: avgValue,
-      totalRevenue: item.totalRevenue,
-      category
+      revenue: item.totalRevenue,
+      orders: item.totalOrders,
+      category,
     };
   }) || [];
 
@@ -128,7 +127,7 @@ export default function CreatorAnalyticsPage() {
         
         {/* Weekly Trend & Best Day */}
         <div className="bg-white rounded-3xl p-6 md:p-8 border border-stone-100 shadow-sm flex flex-col">
-          <h2 className="font-display text-xl font-bold text-stone-900 mb-6">Revenue Trend (12 Weeks)</h2>
+          <h2 className="font-display text-xl font-bold text-stone-900 mb-6">Revenue Trend (Last {weeklyTrendData?.length || 12} Active Weeks)</h2>
           <div className="h-48 mb-6 flex-1">
             {isTrendLoading ? (
               <div className="w-full h-full flex items-center justify-center">

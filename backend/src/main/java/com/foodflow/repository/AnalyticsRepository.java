@@ -169,7 +169,7 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
                    "    fd.drop_date " +
                    "FROM food_drops fd " +
                    "WHERE fd.creator_id = :creatorId " +
-                   "AND fd.status IN ('CUTOFF', 'COMPLETED') " +
+                   "AND fd.status != 'CANCELLED' " +
                    "ORDER BY hours_to_sellout ASC " +
                    "LIMIT 5", nativeQuery = true)
     List<Object[]> findFastestSellingDrops(@Param("creatorId") Long creatorId);
@@ -199,7 +199,7 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
                    "FROM orders o " +
                    "WHERE o.restaurant_id = :creatorId " +
                    "AND o.status != 'CANCELLED' " +
-                   "AND o.order_date >= DATE_SUB(CURDATE(), INTERVAL :weeks WEEK) " +
+                   "AND o.order_date >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :weeks WEEK) " +
                    "GROUP BY YEARWEEK(o.order_date) " +
                    "ORDER BY week ASC", nativeQuery = true)
     List<Object[]> findWeeklyRevenueTrend(
@@ -211,7 +211,7 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
                    "FROM orders o " +
                    "WHERE o.restaurant_id = :creatorId " +
                    "AND o.status != 'CANCELLED' " +
-                   "AND o.order_date >= DATE_SUB(CURDATE(), INTERVAL :days DAY)", nativeQuery = true)
+                   "AND o.order_date >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :days DAY)", nativeQuery = true)
     Integer findTotalUniqueCustomers(@Param("creatorId") Long creatorId, @Param("days") int days);
 
     @Query(value = "SELECT " +
@@ -228,8 +228,17 @@ public interface AnalyticsRepository extends Repository<Restaurant, Long> {
                    "FROM orders " +
                    "WHERE restaurant_id = :creatorId " +
                    "AND status != 'CANCELLED' " +
-                   "AND order_date >= DATE_SUB(CURDATE(), INTERVAL :prevDays DAY) " +
-                   "AND order_date < DATE_SUB(CURDATE(), INTERVAL :days DAY)", nativeQuery = true)
+                   "AND order_date >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :days DAY)", nativeQuery = true)
+    Object[] findCurrentPeriodStats(@Param("creatorId") Long creatorId, @Param("days") int days);
+
+    @Query(value = "SELECT " +
+                   "  SUM(total_amount) AS revenue, " +
+                   "  COUNT(*) AS orders " +
+                   "FROM orders " +
+                   "WHERE restaurant_id = :creatorId " +
+                   "AND status != 'CANCELLED' " +
+                   "AND order_date >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :prevDays DAY) " +
+                   "AND order_date < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :days DAY)", nativeQuery = true)
     Object[] findPreviousPeriodStats(@Param("creatorId") Long creatorId, @Param("days") int days, @Param("prevDays") int prevDays);
 
     // 18. Best day of week for a creator

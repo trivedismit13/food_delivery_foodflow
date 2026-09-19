@@ -104,12 +104,11 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         int totalOrders = 0;
         Integer uniqueCustomersResult = analyticsRepository.findTotalUniqueCustomers(creatorId, days);
         int uniqueCustomers = uniqueCustomersResult != null ? uniqueCustomersResult : 0;
-
-        for (Object[] row : weeklyTrend) {
-            totalOrders += row[1] != null ? ((Number) row[1]).intValue() : 0;
-            if (row[2] != null) {
-                totalRev = totalRev.add(new java.math.BigDecimal(row[2].toString()));
-            }
+        
+        Object[] currentStatsRow = analyticsRepository.findCurrentPeriodStats(creatorId, days);
+        if (currentStatsRow != null && currentStatsRow.length > 0) {
+            if (currentStatsRow.length > 0 && currentStatsRow[0] != null) totalRev = new java.math.BigDecimal(currentStatsRow[0].toString());
+            if (currentStatsRow.length > 1 && currentStatsRow[1] != null) totalOrders = ((Number) currentStatsRow[1]).intValue();
         }
 
         res.setTotalRevenue(totalRev);

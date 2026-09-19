@@ -53,6 +53,13 @@ export function useUpdateOrderStatus() {
       if (data.dropId) {
         queryClient.invalidateQueries({ queryKey: ['dropOrders', data.dropId] })
       }
+      // Invalidate analytics queries to ensure creator dashboard stays fresh
+      queryClient.invalidateQueries({ queryKey: ['creator-dashboard'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-weekly-trend'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-top-items'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-drop-performance'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-best-day'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-repeat-customers'] })
     },
   })
 }
@@ -70,6 +77,14 @@ export function usePlaceDropOrder() {
       queryClient.invalidateQueries({ queryKey: ['drop', variables.dropId] })
       queryClient.invalidateQueries({ queryKey: ['dropOrders', variables.dropId] })
       queryClient.invalidateQueries({ queryKey: ['drops'] })
+      
+      // Invalidate analytics queries to ensure creator dashboard stays fresh
+      queryClient.invalidateQueries({ queryKey: ['creator-dashboard'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-weekly-trend'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-top-items'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-drop-performance'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-best-day'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-repeat-customers'] })
     },
   })
 }
