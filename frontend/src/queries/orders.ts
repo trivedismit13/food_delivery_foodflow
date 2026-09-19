@@ -64,27 +64,4 @@ export function useUpdateOrderStatus() {
   })
 }
 
-export function usePlaceDropOrder() {
-  const queryClient = useQueryClient()
-  
-  return useMutation({
-    mutationFn: async (request: PlaceDropOrderRequest) => {
-      const { data } = await apiClient.post<OrderResponse>(`/drops/${request.dropId}/orders`, request)
-      return data
-    },
-    onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] })
-      queryClient.invalidateQueries({ queryKey: ['drop', variables.dropId] })
-      queryClient.invalidateQueries({ queryKey: ['dropOrders', variables.dropId] })
-      queryClient.invalidateQueries({ queryKey: ['drops'] })
-      
-      // Invalidate analytics queries to ensure creator dashboard stays fresh
-      queryClient.invalidateQueries({ queryKey: ['creator-dashboard'] })
-      queryClient.invalidateQueries({ queryKey: ['creator-weekly-trend'] })
-      queryClient.invalidateQueries({ queryKey: ['creator-top-items'] })
-      queryClient.invalidateQueries({ queryKey: ['creator-drop-performance'] })
-      queryClient.invalidateQueries({ queryKey: ['creator-best-day'] })
-      queryClient.invalidateQueries({ queryKey: ['creator-repeat-customers'] })
-    },
-  })
-}
+

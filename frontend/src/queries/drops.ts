@@ -107,6 +107,15 @@ export function usePlaceDropOrder() {
       queryClient.invalidateQueries({ queryKey: ['dropOrders', orderResponse.dropId] })
       queryClient.invalidateQueries({ queryKey: ['orders'] })
       queryClient.invalidateQueries({ queryKey: ['drops'] })
+
+      // Invalidate analytics queries to ensure creator dashboard stays fresh
+      queryClient.invalidateQueries({ queryKey: ['creator-dashboard'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-weekly-trend'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-top-items'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-drop-performance'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-best-day'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-repeat-customers'] })
+      queryClient.invalidateQueries({ queryKey: ['creator-auto-insights'] })
       
       navigate(`/orders/${orderResponse.orderId}/track`)
     },
