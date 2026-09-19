@@ -1,7 +1,7 @@
 import { useStore } from '@/store/useStore';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, Minus, Plus, Loader2 } from 'lucide-react';
-import { usePlaceDropOrder } from '@/queries/orders';
+import { usePlaceDropOrder } from '@/queries/drops';
 import { toast } from 'sonner';
 
 export default function CartPage() {
@@ -28,7 +28,7 @@ export default function CartPage() {
       // removed paymentMethod since it's hardcoded on backend
       },
       {
-        onSuccess: (data) => {
+        onSuccess: (data: any) => {
           toast.success('Order placed successfully!');
           clearCart();
           navigate(`/orders/${data.orderId}/track`);
